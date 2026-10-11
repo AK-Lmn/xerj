@@ -23,6 +23,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Unit-test the generator (regression guard, issue #1279)
+        run: python3 tools/corpus-hub-site/test_gen.py
       - name: Generate site from registry
         run: python3 tools/corpus-hub-site/gen.py
       - name: Validate registry (site must not ship from a red registry)

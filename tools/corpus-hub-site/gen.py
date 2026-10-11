@@ -111,7 +111,14 @@ def parse_graded_suites():
             data = json.loads(p.read_text())
         except json.JSONDecodeError:
             continue
-        for slug, suite in data.get("graded", data.get("suites", data.get("corpora", {}))).items():
+        # A graded file may carry a non-dict "graded" value (e.g. a timestamp
+        # string describing when it was graded); it then is not a slug->suite
+        # map. Skip it rather than crashing the whole site build on .items() -
+        # one odd file must not freeze every corpus page in the deploy.
+        container = data.get("graded", data.get("suites", data.get("corpora", {})))
+        if not isinstance(container, dict):
+            continue
+        for slug, suite in container.items():
             if isinstance(suite, dict) and "queries" in suite:
                 if "median" not in suite or suite["median"] is None:
                     suite["median"] = suite_median(suite["queries"])
