@@ -360,15 +360,17 @@ line-height:.95;letter-spacing:-.005em;margin:0 0 var(--sp-6)}
 p.lead{font-family:var(--font-prose);color:var(--z-mute);font-size:var(--fs-20);
 line-height:1.5;max-width:56ch}
 .note{color:var(--z-mute);font-size:var(--fs-13)}
-/* hero stats: display numerals, 1px rules */
-.stats{display:flex;flex-wrap:wrap;border-block:1px solid var(--z-line);margin:var(--sp-8) 0}
-.stats>div{padding:var(--sp-4) var(--sp-8) var(--sp-4) 0;margin-right:var(--sp-8);
-border-right:1px solid var(--z-line)}
-.stats>div:last-child{border-right:0;margin-right:0}
-.stats b{display:block;font-family:var(--font-display);font-weight:800;font-size:var(--fs-56);
-line-height:1;color:var(--z-ink)}
-.stats span{font-family:var(--font-data);font-size:var(--fs-11);font-weight:500;
-text-transform:uppercase;letter-spacing:var(--track-ui);color:var(--z-mute)}
+/* stats: one compact line, data font, 1px separators */
+.statline{display:flex;flex-wrap:wrap;align-items:baseline;
+border-block:1px solid var(--z-line);margin:var(--sp-6) 0 0;
+font-family:var(--font-data);font-size:var(--fs-13);font-weight:500;color:var(--z-mute);
+text-transform:uppercase;letter-spacing:var(--track-ui)}
+.statline span{padding:var(--sp-3) var(--sp-5);border-right:1px solid var(--z-line)}
+.statline span:first-child{padding-left:0}
+.statline span:last-child{border-right:0}
+.statline b{color:var(--z-ink);font-weight:700;font-size:var(--fs-16);margin-right:.35em}
+.count{font-family:var(--font-data);font-size:var(--fs-11);font-weight:500;
+text-transform:uppercase;letter-spacing:var(--track-ui);color:var(--z-mute);margin-left:auto}
 /* domains: the front page centrepiece, giant display words */
 .domains{margin:var(--sp-8) 0}
 .domain{display:grid;grid-template-columns:110px 1fr auto 40px;align-items:center;gap:var(--sp-6);
@@ -387,7 +389,7 @@ font-weight:600;text-transform:uppercase;letter-spacing:var(--track-label);color
 .domain:hover .dword{color:var(--z-accent)}
 .domain:hover .dgo{color:var(--z-accent)}
 /* toolbar: square 1px inputs and chips, no radius */
-.toolbar{display:flex;flex-direction:column;gap:var(--sp-3);margin:var(--sp-8) 0 var(--sp-4)}
+.toolbar{display:flex;flex-direction:column;gap:var(--sp-3);margin:var(--sp-4) 0}
 .toolbar .row{display:flex;gap:var(--sp-2);flex-wrap:wrap;align-items:center}
 .toolbar input{font-family:var(--font-prose);font-size:var(--fs-13);padding:.5em .8em;
 border:1px solid var(--z-line);background:transparent;color:var(--z-ink);min-width:22rem}
@@ -476,7 +478,6 @@ background:transparent;color:var(--z-mute);padding:.3em .7em;cursor:pointer}
 .toolbar input{min-width:100%}
 .domain{grid-template-columns:1fr;gap:var(--sp-2)}
 .domain .dinfo{text-align:left;max-width:none}
-.stats>div{border-right:0;margin-right:0;padding-right:0;width:50%}
 }
 """
 
@@ -612,17 +613,15 @@ downloads per task and searches in seconds. No waiting for the next model
 retrain. No fighting website blocks and rate limits. Every corpus names its
 sources, its pins, its licence verdict, and what the retrieval tests scored.</p>
 <section id="domains">
-<div class="kicker"><span class="accent">01</span><span class="dash">·</span><span>DOMAINS &amp; CORPORA</span> <span id="count" style="text-transform:none"></span></div>
-<p class="note" style="margin:var(--sp-3) 0 0;max-width:78ch">Every tile is a corpus; its size tracks how much text it holds, grouped into a treemap by domain. Open one for its sources, pins, licence verdict and retrieval scores. Each domain has one <b>COPY PROMPT</b> that installs XERJ and sets up all of its corpora for your agent's tools.</p>
-<div class="stats">
-<div><b>{len(live)}</b><span>live corpora</span></div>
-<div><b>{len(CATS)}</b><span>domains</span></div>
-<div><b>{len(corpora)}</b><span>registry rows</span></div>
-<div><b>{human_bytes(total_bytes)}</b><span>pinned text</span></div>
-<div><b>{n_imp}</b><span>with agent A/B results</span></div>
+<div class="statline">
+<span><b>{len(live)}</b> live corpora</span>
+<span><b>{len(CATS)}</b> domains</span>
+<span><b>{len(corpora)}</b> registry rows</span>
+<span><b>{human_bytes(total_bytes)}</b> pinned text</span>
+<span><b>{n_imp}</b> with agent A/B results</span>
 </div>
 <div class="toolbar">
-<div class="row"><input id="q" type="search" placeholder="filter by name, topic, use-case, licence"></div>
+<div class="row"><input id="q" type="search" placeholder="filter by name, topic, use-case, licence"><span id="count" class="count"></span></div>
 <div class="row"><span class="kicker">DOMAIN</span><button class="chip on" data-cat=""></button>{cat_chips}</div>
 <div class="row"><span class="kicker">REGION</span>{region_chips}</div>
 </div>
