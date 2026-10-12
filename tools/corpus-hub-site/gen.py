@@ -17,6 +17,7 @@ Copy: plain short sentences, no em-dashes, no filler intros (user directive
 registry change.
 """
 import datetime as dt
+import hashlib
 import html
 import json
 import pathlib
@@ -351,8 +352,8 @@ main{max-width:var(--max-w);margin:0 auto;padding:var(--sp-8) var(--page-x) var(
 letter-spacing:var(--track-ui);text-transform:uppercase;color:var(--z-mute)}
 .kicker .accent{color:var(--z-accent)}
 .kicker .dash{opacity:.4;margin:0 6px}
-h1.hero{font-family:var(--font-display);font-weight:900;font-size:clamp(64px,10vw,var(--fs-160));
-line-height:.88;letter-spacing:-.02em;margin:0 0 var(--sp-8);color:var(--z-ink)}
+h1.hero{font-family:var(--font-display);font-weight:900;font-size:clamp(40px,6vw,var(--fs-96));
+line-height:.9;letter-spacing:-.02em;margin:0 0 var(--sp-6);color:var(--z-ink)}
 h1.hero .accent{color:var(--z-accent)}
 h2.scene{font-family:var(--font-display);font-weight:900;font-size:var(--fs-56);
 line-height:.95;letter-spacing:-.005em;margin:0 0 var(--sp-6)}
@@ -487,7 +488,7 @@ PAGE = """<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{title}</title><meta name="description" content="{desc}">
 {fonts}
-<link rel="stylesheet" href="{rel}assets/style.css"></head>
+<link rel="stylesheet" href="{rel}assets/style.css?v={ver}"></head>
 <body><nav class="nav"><a class="brand" href="https://xerj.org">XERJ<b>·</b>HUB</a>
 <a href="{rel}index.html">CORPORA</a><a href="{rel}index.html#domains">DOMAINS</a>
 <a href="{rel}about.html">ABOUT</a>
@@ -501,9 +502,14 @@ PAGE = """<!doctype html><html lang="en"><head><meta charset="utf-8">
 </body></html>"""
 
 
+# Content hash of the stylesheet: appended as ?v= on every page's CSS link so a
+# changed stylesheet always busts the browser cache (assets carry a long max-age).
+STYLE_VER = hashlib.sha1(STYLE.encode("utf-8")).hexdigest()[:8]
+
+
 def page(title, desc, body, rel=""):
     return PAGE.format(title=esc(title), desc=esc(desc), body=body, rel=rel,
-                       fonts=FONTS, stamp=STAMP)
+                       fonts=FONTS, stamp=STAMP, ver=STYLE_VER)
 
 
 FILTER_JS = """<script>
@@ -598,13 +604,16 @@ def render_index(corpora, g7, graded, impact, prov):
     cat_chips = "".join(f'<button class="chip" data-cat="{k}">{k}</button>' for k in CATS)
     region_chips = "".join(f'<button class="chip" data-region="{esc(r)}">{esc(r)}</button>' for r in regions)
     body = f'''<main>
-<div class="kicker"><span class="accent">HUB.XERJ.ORG</span><span class="dash">·</span><span>REFERENCE MEMORY FOR AI AGENTS</span></div>
-<h1 class="hero">REFERENCE<br>MEMORY FOR<br><span class="accent">AI AGENTS</span></h1>
+<div class="kicker"><span class="accent">HUB.XERJ.ORG</span><span class="dash">·</span><span>REFERENCE MEMORY HUB FOR AI AGENTS</span></div>
+<h1 class="hero">REFERENCE MEMORY HUB<br><span class="accent">for AI agents</span></h1>
 <p class="lead">An agent with the right text at hand beats an agent guessing from memory.
 Each corpus here is a pinned, licence-checked slice of one domain that the agent
 downloads per task and searches in seconds. No waiting for the next model
 retrain. No fighting website blocks and rate limits. Every corpus names its
 sources, its pins, its licence verdict, and what the retrieval tests scored.</p>
+<section id="domains">
+<div class="kicker"><span class="accent">01</span><span class="dash">·</span><span>DOMAINS &amp; CORPORA</span> <span id="count" style="text-transform:none"></span></div>
+<p class="note" style="margin:var(--sp-3) 0 0;max-width:78ch">Every tile is a corpus; its size tracks how much text it holds, grouped into a treemap by domain. Open one for its sources, pins, licence verdict and retrieval scores. Each domain has one <b>COPY PROMPT</b> that installs XERJ and sets up all of its corpora for your agent's tools.</p>
 <div class="stats">
 <div><b>{len(live)}</b><span>live corpora</span></div>
 <div><b>{len(CATS)}</b><span>domains</span></div>
@@ -612,9 +621,6 @@ sources, its pins, its licence verdict, and what the retrieval tests scored.</p>
 <div><b>{human_bytes(total_bytes)}</b><span>pinned text</span></div>
 <div><b>{n_imp}</b><span>with agent A/B results</span></div>
 </div>
-<section id="domains">
-<div class="kicker"><span class="accent">01</span><span class="dash">·</span><span>DOMAINS &amp; CORPORA</span> <span id="count" style="text-transform:none"></span></div>
-<p class="note" style="margin:var(--sp-3) 0 0;max-width:78ch">Every tile is a corpus; its size tracks how much text it holds, grouped into a treemap by domain. Open one for its sources, pins, licence verdict and retrieval scores. Each domain has one <b>COPY PROMPT</b> that installs XERJ and sets up all of its corpora for your agent's tools.</p>
 <div class="toolbar">
 <div class="row"><input id="q" type="search" placeholder="filter by name, topic, use-case, licence"></div>
 <div class="row"><span class="kicker">DOMAIN</span><button class="chip on" data-cat=""></button>{cat_chips}</div>
