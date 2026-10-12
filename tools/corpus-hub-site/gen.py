@@ -244,6 +244,65 @@ def card(c, g7, graded, impact):
 </a>'''
 
 
+# Raw manifest base on the corpus-hub branch (what `xerj corpus add --from`
+# fetches). Lane-A manifests live directly here; lane-B packs do not, so a
+# copy-prompt is only offered for an installable (live, lane-A) corpus.
+HUB_RAW = "https://raw.githubusercontent.com/xerj-org/xerj/corpus-hub/tools/xerj-code/hub"
+
+
+def install_prompt(c):
+    """A paste-ready instruction an agent runs through its shell/MCP tools:
+    install XERJ if missing, add + index THIS corpus, then query it before it
+    writes code. Verbatim from landing/llms.txt (install one-liner, the
+    `corpus add/index/code` sequence, `xerj init` for MCP registration)."""
+    slug = c["slug"]
+    return (
+        "If the `xerj` CLI is not installed, install it: "
+        "curl -fsSL https://xerj.org/get | sh\n"
+        f"Add and index the {slug} reference corpus from the XERJ Corpus Hub, "
+        "then query it before writing code:\n"
+        f"xerj corpus add --from {HUB_RAW}/{slug}.json\n"
+        f"xerj corpus index {slug}\n"
+        f'xerj code {slug} "<your question>"\n'
+        "Retrieve the mechanism and cite file:line before you implement. "
+        "(To expose these as MCP tools in your agent, run: xerj init)"
+    )
+
+
+def tile_weight(files):
+    """Treemap size bucket from file count: bigger corpora get a bigger tile.
+    Four buckets keep one 1.2M-file corpus from swamping the row while still
+    reading as a treemap (areas roughly track content)."""
+    if files >= 200_000:
+        return 4
+    if files >= 20_000:
+        return 3
+    if files >= 2_000:
+        return 2
+    return 1
+
+
+def tile(c, impact):
+    """One treemap cell: a corpus. Links to its page; a live, lane-A corpus
+    also carries a COPY button with the install-and-use prompt."""
+    files, nbytes, _ = corpus_stats(c)
+    st, stcls = STATUSES.get(c["status"], (c["status"], "mute"))
+    installable = c["status"] == "live" and c["lane"] == "A" and not c.get("merged_into")
+    meta = (f"{human_bytes(nbytes)} · {human_files(files)}" if c["status"] == "live"
+            else st)
+    copy = (f'<button class="copy" data-copy="{esc(install_prompt(c))}" '
+            f'title="Copy a prompt that installs XERJ and uses this corpus">COPY PROMPT</button>'
+            if installable else "")
+    w = tile_weight(files) if c["status"] == "live" else 1
+    return (f'<div class="tile g{w}" data-cat="{esc(c["cat"])}" '
+            f'data-region="{esc(region(c))}" data-name="{esc(c["slug"])}">'
+            f'<span class="tdot {stcls}" title="{esc(st)}"></span>'
+            f'<a class="tlink" href="corpus/{esc(c["slug"])}.html">'
+            f'<span class="tn">{esc(c["slug"])}</span>'
+            f'<span class="ts">{esc(meta)}</span></a>'
+            f'{copy}</div>')
+
+
 # Brandbook tokens from xerj.org (landing/style.css), day palette only.
 # White schema is the one scheme: no dark variant, no prefers-color-scheme
 # override (user directive 2026-10-06).
@@ -372,12 +431,44 @@ font-family:var(--font-data);font-size:var(--fs-11);font-weight:500;text-transfo
 letter-spacing:var(--track-ui);display:flex;gap:var(--sp-8);flex-wrap:wrap}
 footer a{color:var(--z-mute);text-decoration:none}
 footer a:hover{color:var(--z-ink)}
+/* treemap: domains as tiled groups, corpora as size-weighted tiles.
+   1px lines, square, day palette — same brandbook as the cards. */
+.treemap{display:flex;flex-wrap:wrap;gap:1px;background:var(--z-line);
+border:1px solid var(--z-line);margin-top:var(--sp-4)}
+.tgroup{flex:1 1 380px;min-width:300px;display:flex;flex-direction:column;background:var(--z-bg)}
+.thead{display:flex;align-items:baseline;justify-content:space-between;gap:var(--sp-3);
+padding:var(--sp-4) var(--sp-4) var(--sp-3);text-decoration:none;border-bottom:1px solid var(--z-line)}
+.thead .tword{font-family:var(--font-display);font-weight:900;
+font-size:clamp(32px,4vw,var(--fs-56));line-height:.9;letter-spacing:-.01em;
+color:var(--z-ink);text-transform:uppercase}
+.thead:hover .tword{color:var(--z-accent)}
+.thead .tgmeta{font-family:var(--font-data);font-size:var(--fs-11);font-weight:500;
+text-transform:uppercase;letter-spacing:var(--track-label);color:var(--z-mute);text-align:right}
+.thead .tgmeta b{color:var(--z-ink)}
+.tiles{display:flex;flex-wrap:wrap;gap:1px;background:var(--z-line);flex:1;align-content:flex-start}
+.tile{display:flex;flex-direction:column;gap:var(--sp-2);background:var(--z-bg);
+padding:var(--sp-3);min-width:150px;position:relative}
+.tile.g1{flex:1 1 150px}.tile.g2{flex:2 1 190px}.tile.g3{flex:3 1 230px}.tile.g4{flex:5 1 280px}
+.tile:hover{background:var(--z-faint)}
+.tile .tdot{position:absolute;top:var(--sp-3);right:var(--sp-3);width:.6em;height:.6em;border-radius:50%}
+.tile .tlink{display:flex;flex-direction:column;gap:2px;text-decoration:none;padding-right:var(--sp-4)}
+.tile .tn{font-family:var(--font-mono);font-weight:600;font-size:var(--fs-13);
+word-break:break-word;color:var(--z-ink)}
+.tile:hover .tn{color:var(--z-accent)}
+.tile .ts{font-family:var(--font-mono);font-size:var(--fs-11);color:var(--z-mute)}
+.copy{font-family:var(--font-data);font-size:var(--fs-11);font-weight:600;
+letter-spacing:var(--track-label);text-transform:uppercase;border:1px solid var(--z-line);
+background:transparent;color:var(--z-mute);padding:.3em .7em;cursor:pointer}
+.copy:hover{border-color:var(--z-accent);color:var(--z-accent)}
+.copy.done{color:var(--ok);border-color:var(--ok)}
+.tile .copy{align-self:flex-start;margin-top:auto}
 @media (max-width:900px){
 :root{--page-x:18px;--sp-12:40px;--sp-16:56px}
 .toolbar input{min-width:100%}
 .domain{grid-template-columns:1fr;gap:var(--sp-2)}
 .domain .dinfo{text-align:left;max-width:none}
 .stats>div{border-right:0;margin-right:0;padding-right:0;width:50%}
+.tgroup{flex:1 1 100%}
 }
 """
 
@@ -409,7 +500,7 @@ def page(title, desc, body, rel=""):
 
 
 FILTER_JS = """<script>
-var cards=[...document.querySelectorAll('.card')];
+var cards=[...document.querySelectorAll('.tile')];
 var st={q:'',cat:'',region:''};
 function apply(){
   cards.forEach(function(c){
@@ -445,24 +536,45 @@ document.querySelectorAll('.chip[data-region]').forEach(function(b){
 </script>"""
 
 
+COPY_JS = """<script>
+document.querySelectorAll('.copy').forEach(function(b){
+  b.addEventListener('click',function(e){
+    e.preventDefault();e.stopPropagation();
+    var t=b.getAttribute('data-copy')||'';
+    function done(){var o=b.textContent;b.textContent='COPIED';b.classList.add('done');
+      setTimeout(function(){b.textContent=o;b.classList.remove('done');},1400);}
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t).then(done,function(){});
+    }else{
+      var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);
+      ta.select();try{document.execCommand('copy');done();}catch(_){}document.body.removeChild(ta);
+    }
+  });
+});
+</script>"""
+
+
 def render_index(corpora, g7, graded, impact, prov):
     live = [c for c in corpora if c["status"] == "live"]
     total_bytes = sum(sum(r.get("bytes") or 0 for r in c["repos"]) for c in live)
     n_imp = sum(1 for c in live if impact.get(c["slug"], {}).get("status") == "measured")
     regions = sorted({region(c) for c in corpora if region(c)} - {""}, key=lambda r: (r == "GLOBAL", r))
-    cards = "\n".join(card(c, g7, graded, impact) for c in corpora)
-    dom_rows = []
-    for k, (title, what) in CATS.items():
+    # Treemap: one group per domain, corpora as size-weighted tiles. Within a
+    # group live (installable) corpora lead, largest first, so a domain opens
+    # with what an agent can use today.
+    groups = []
+    for k, (title, _what) in CATS.items():
         cs = [c for c in corpora if c["cat"] == k]
+        if not cs:
+            continue
+        cs.sort(key=lambda c: (c["status"] != "live", -corpus_stats(c)[0], c["slug"]))
         n_live = sum(1 for c in cs if c["status"] == "live")
-        more = f" + {len(cs) - n_live} more" if len(cs) > n_live else ""
-        dom_rows.append(f'''<a class="domain" href="category/{k}.html">
-<span class="dcount"><b>{n_live}</b>{esc(more)}</span>
-<span class="dword">{esc(k)}</span>
-<span class="dinfo"><b>{esc(title)}</b><span>{esc(what)}</span></span>
-<span class="dgo">&rarr;</span>
-</a>''')
-    domains = "\n".join(dom_rows)
+        tiles = "".join(tile(c, impact) for c in cs)
+        groups.append(f'''<div class="tgroup">
+<a class="thead" href="category/{k}.html"><span class="tword">{esc(k)}</span>
+<span class="tgmeta"><b>{n_live}</b> live<br>{esc(title)}</span></a>
+<div class="tiles">{tiles}</div></div>''')
+    treemap = "\n".join(groups)
     cat_chips = "".join(f'<button class="chip" data-cat="{k}">{k}</button>' for k in CATS)
     region_chips = "".join(f'<button class="chip" data-region="{esc(r)}">{esc(r)}</button>' for r in regions)
     body = f'''<main>
@@ -480,19 +592,19 @@ sources, its pins, its licence verdict, and what the retrieval tests scored.</p>
 <div><b>{human_bytes(total_bytes)}</b><span>pinned text</span></div>
 <div><b>{n_imp}</b><span>with agent A/B results</span></div>
 </div>
-<section class="domains" id="domains">
-<div class="kicker"><span class="accent">01</span><span class="dash">·</span><span>DOMAINS</span></div>
-{domains}
-</section>
-<div class="kicker"><span class="accent">02</span><span class="dash">·</span><span>ALL CORPORA</span> <span id="count" style="text-transform:none"></span></div>
+<section id="domains">
+<div class="kicker"><span class="accent">01</span><span class="dash">·</span><span>DOMAINS &amp; CORPORA</span> <span id="count" style="text-transform:none"></span></div>
+<p class="note" style="margin:var(--sp-3) 0 0;max-width:74ch">Every tile is a corpus, grouped by domain; its size tracks how much it holds. Open one for its sources, pins, licence verdict and retrieval scores. Or hit <b>COPY PROMPT</b> for a paste-ready instruction that installs XERJ and uses that corpus through your agent's tools.</p>
 <div class="toolbar">
 <div class="row"><input id="q" type="search" placeholder="filter by name, topic, use-case, licence"></div>
 <div class="row"><span class="kicker">DOMAIN</span><button class="chip on" data-cat=""></button>{cat_chips}</div>
 <div class="row"><span class="kicker">REGION</span>{region_chips}</div>
 </div>
-<div class="grid" id="grid">{cards}</div>
+<div class="treemap" id="grid">{treemap}</div>
+</section>
 </main>
-{FILTER_JS}'''
+{FILTER_JS}
+{COPY_JS}'''
     return page("XERJ Corpus Hub: reference memory for AI agents",
                 "Pinned, licence-checked, measured corpora an agent downloads per task and searches instead of guessing",
                 body)
@@ -540,12 +652,24 @@ def detail_body(c, g7, graded, impact, prov):
 <p class="note">snapshot {esc(prov.get("date",""))} from <code>{esc(prov.get("branch",""))}</code>; protocol: benchmarks/corpus-tasks/PROTOCOL.md</p></section>'''
     else:
         impsec = ""
+    if c.get("merged_into"):
+        useit = (f'<div class="kbox"><b>Withdrawn</b><br>Merged into '
+                 f'<a href="{esc(c["merged_into"])}.html"><code>{esc(c["merged_into"])}</code></a>. '
+                 f'Use that corpus.</div>')
+    else:
+        copybtn = (f' <button class="copy" data-copy="{esc(install_prompt(c))}" '
+                   f'title="Copy a prompt that installs XERJ and uses this corpus">COPY PROMPT</button>'
+                   if (c["status"] == "live" and c["lane"] == "A") else "")
+        useit = (f'<div class="kbox"><b>Use it</b>{copybtn}<br>'
+                 f'<code>xerj corpus add --from {HUB_RAW}/{esc(c["slug"])}.json</code><br>'
+                 f'<code>xerj corpus index {esc(c["slug"])}</code> then '
+                 f'<code>xerj code {esc(c["slug"])} "your question"</code></div>')
     return f'''<main>
 <p><a class="backlink" href="../index.html">&larr; all corpora</a></p>
 <h1 class="slug">{esc(c['slug'])} <span class="dot {stcls}"></span></h1>
 <p class="note">{esc(c['kind'])} · status <b>{st}</b> · domain <b>{esc(c['cat'])}</b> ({esc(cat_desc[0])}) · lane {esc(c['lane'])} · refresh {esc(c['refresh'])} · tags <b>{esc(tags_txt)}</b></p>
 <section class="detail"><h2>What an agent uses it for</h2><p>{esc(c['usecase'] or 'n/a')}</p></section>
-{f'<div class="kbox"><b>Withdrawn</b><br>Merged into <a href="{esc(c["merged_into"])}.html"><code>{esc(c["merged_into"])}</code></a>. Use that corpus.</div>' if c.get('merged_into') else f'<div class="kbox"><b>Use it</b><br><code>xerj corpus add --from https://raw.githubusercontent.com/xerj-org/xerj/corpus-hub/tools/xerj-code/hub/{esc(c["slug"])}.json</code><br><code>xerj corpus index {esc(c["slug"])}</code> then <code>xerj code {esc(c["slug"])} "your question"</code></div>'}
+{useit}
 <section class="detail"><h2>Sources and pins</h2><table>
 <tr><th>source</th><th>pin</th><th>licence</th><th>size</th><th>review note</th></tr>{''.join(rows)}</table>
 <p class="note">{human_bytes(nbytes)} across {human_files(files)}. Added {esc(c['added'][:10] or 'n/a')}.</p></section>
@@ -553,7 +677,8 @@ def detail_body(c, g7, graded, impact, prov):
 {esc('Redistribution permitted with attribution per the licence review' if any(r.get('review',{}).get('use')=='adapt-with-attribution' for r in c['repos']) else 'See per-source review blocks')}.
 The review block records a human opening each licence file at the pin. Detector output is a hint, never the verdict.</p></section>
 {g7sec}{impsec}
-</main>'''
+</main>
+{COPY_JS}'''
 
 
 def category_body(k, cs, g7, graded, impact):
