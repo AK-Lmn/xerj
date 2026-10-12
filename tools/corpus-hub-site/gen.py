@@ -554,7 +554,7 @@ function _layoutBand(container){
   var tiles=[].slice.call(container.querySelectorAll('.tile')).filter(function(t){return t.style.display!=='none';});
   if(!tiles.length)return;
   var raw=tiles.map(function(t){return Math.max(0,parseFloat(t.dataset.bytes)||0);});
-  var mx=Math.max.apply(null,raw)||1, floor=mx*0.012;   // tiny/not-yet-built corpora keep a small cell
+  var mx=Math.max.apply(null,raw)||1, floor=mx*0.1;   // readability cap: no cell below 1/10 of the band's largest, so max:min area <= 10x
   var items=tiles.map(function(t,i){return {el:t,value:Math.max(raw[i],floor)};});
   var total=0;items.forEach(function(it){total+=it.value;});
   var scale=(W*H)/total,out=[];
@@ -636,8 +636,8 @@ def render_index(corpora, g7, graded, impact, prov):
     # Real, space-filling treemap: one band per domain (biggest domain first).
     # Each band is a squarified treemap (treemap.js) of its corpora that fills
     # the band with NO gaps, every cell's AREA proportional to the corpus's
-    # bytes. Band HEIGHT scales with the domain's total bytes (sqrt, floored so
-    # the header stays readable), so the page as a whole stays proportional too.
+    # bytes, but capped so the biggest cell is at most 10x the smallest (set in
+    # treemap.js) — readability wins over exact proportion once the ratio is huge.
     # Each domain carries ONE copy-prompt that sets up all its live corpora.
     groups = []
     dstats = {k: sum(corpus_stats(c)[1]
@@ -652,7 +652,10 @@ def render_index(corpora, g7, graded, impact, prov):
         live_cs = [c for c in cs if c["status"] == "live"]
         n_live = len(live_cs)
         cat_bytes = dstats[k]
-        band_h = round(180 + 330 * (cat_bytes / dmax) ** 0.5)  # ~180..510px
+        # Height gives every cell room to be readable: grows with the corpus
+        # count (crowded domains are taller) with a byte nudge so the biggest
+        # domain still leads. Clamped 240..540px.
+        band_h = max(240, min(540, round(120 + 12 * len(cs) + 110 * (cat_bytes / dmax) ** 0.5)))
         copy = (f'<button class="copy" data-copy="{esc(category_prompt(k, title, [c["slug"] for c in live_cs]))}" '
                 f'title="Copy a prompt that installs XERJ and sets up the whole {esc(k)} domain">COPY PROMPT</button>'
                 if n_live else "")
