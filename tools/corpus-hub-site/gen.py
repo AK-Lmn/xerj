@@ -288,18 +288,22 @@ def category_prompt(k, title, live_slugs):
     )
 
 
-def tile(c, max_bytes):
-    """One treemap cell: a corpus, sized by its content. flex-grow tracks the
-    corpus's byte size (real treemap, proportional to GB); a floor min-width in
-    CSS keeps a tiny or not-yet-built corpus readable, so the giants fill rows
-    while the small ones stay a legible square. Links to the corpus page; the
-    copy-prompt is now per-domain (on the group header), not per tile."""
+def tile(c, cat_max):
+    """One treemap cell: a corpus. Its WIDTH (flex-basis) is proportional to the
+    corpus's byte total relative to its DOMAIN's largest corpus, so each domain
+    band reads as its own treemap: the biggest corpus is the widest tile, down a
+    floor that keeps a tiny or not-yet-built corpus legible. Tiles share a height,
+    so width tracks area. grow lets the last (partial) row fill the band. Links
+    to the corpus page; the copy-prompt is per-domain (on the group header)."""
     files, nbytes, _ = corpus_stats(c)
     st, stcls = STATUSES.get(c["status"], (c["status"], "mute"))
     meta = (f"{human_bytes(nbytes)} · {human_files(files)}" if c["status"] == "live"
             else st)
-    grow = max(1, round(1000 * nbytes / max_bytes)) if (max_bytes and c["status"] == "live") else 1
-    return (f'<div class="tile" style="flex:{grow} 1 0" data-cat="{esc(c["cat"])}" '
+    FLOOR, SPAN = 96, 540  # px: narrowest tile, extra width at the domain's largest
+    frac = (nbytes / cat_max) if (cat_max and c["status"] == "live") else 0.0
+    basis = round(FLOOR + SPAN * frac)
+    grow = round(100 * frac)  # row slack goes to the bigger corpora, keeping proportion
+    return (f'<div class="tile" style="flex:{grow} 1 {basis}px" data-cat="{esc(c["cat"])}" '
             f'data-region="{esc(region(c))}" data-name="{esc(c["slug"])}" data-bytes="{nbytes}">'
             f'<span class="tdot {stcls}" title="{esc(st)}"></span>'
             f'<a class="tlink" href="corpus/{esc(c["slug"])}.html">'
@@ -437,9 +441,9 @@ footer a{color:var(--z-mute);text-decoration:none}
 footer a:hover{color:var(--z-ink)}
 /* treemap: domains as tiled groups, corpora as size-weighted tiles.
    1px lines, square, day palette — same brandbook as the cards. */
-.treemap{display:flex;flex-wrap:wrap;gap:1px;background:var(--z-line);
+.treemap{display:flex;flex-direction:column;gap:1px;background:var(--z-line);
 border:1px solid var(--z-line);margin-top:var(--sp-4)}
-.tgroup{flex:1 1 380px;min-width:300px;display:flex;flex-direction:column;background:var(--z-bg)}
+.tgroup{display:flex;flex-direction:column;background:var(--z-bg)}
 .thead{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3);
 flex-wrap:wrap;padding:var(--sp-4) var(--sp-4) var(--sp-3);border-bottom:1px solid var(--z-line)}
 .thword{font-family:var(--font-display);font-weight:900;
@@ -450,9 +454,9 @@ color:var(--z-ink);text-transform:uppercase;text-decoration:none}
 .tgmeta{font-family:var(--font-data);font-size:var(--fs-11);font-weight:500;
 text-transform:uppercase;letter-spacing:var(--track-label);color:var(--z-mute);text-align:right}
 .tgmeta b{color:var(--z-ink)}
-.tiles{display:flex;flex-wrap:wrap;gap:1px;background:var(--z-line);flex:1;align-content:flex-start}
+.tiles{display:flex;flex-wrap:wrap;gap:1px;background:var(--z-line);align-content:flex-start}
 .tile{display:flex;flex-direction:column;gap:var(--sp-2);background:var(--z-bg);
-padding:var(--sp-3);min-width:150px;min-height:76px;position:relative}
+padding:var(--sp-3);min-width:96px;min-height:84px;position:relative;overflow:hidden}
 .tile:hover{background:var(--z-faint)}
 .tile .tdot{position:absolute;top:var(--sp-3);right:var(--sp-3);width:.6em;height:.6em;border-radius:50%}
 .tile .tlink{display:flex;flex-direction:column;gap:2px;text-decoration:none;padding-right:var(--sp-4)}
@@ -472,7 +476,6 @@ background:transparent;color:var(--z-mute);padding:.3em .7em;cursor:pointer}
 .domain{grid-template-columns:1fr;gap:var(--sp-2)}
 .domain .dinfo{text-align:left;max-width:none}
 .stats>div{border-right:0;margin-right:0;padding-right:0;width:50%}
-.tgroup{flex:1 1 100%}
 }
 """
 
@@ -563,26 +566,31 @@ def render_index(corpora, g7, graded, impact, prov):
     total_bytes = sum(sum(r.get("bytes") or 0 for r in c["repos"]) for c in live)
     n_imp = sum(1 for c in live if impact.get(c["slug"], {}).get("status") == "measured")
     regions = sorted({region(c) for c in corpora if region(c)} - {""}, key=lambda r: (r == "GLOBAL", r))
-    # Real treemap. Tile size tracks the corpus's bytes (GB); domain blocks are
-    # sized by their total bytes too, so the whole page is a nested treemap.
-    # `max_bytes` normalises the grow; each domain carries ONE copy-prompt that
-    # sets up all its live corpora. Live-first, biggest-first within a domain.
-    max_bytes = max((corpus_stats(c)[1] for c in live), default=1) or 1
+    # Real treemap, one band per domain (biggest domain first). Each band is a
+    # full-width treemap of its own corpora: a tile's width is proportional to
+    # its bytes RELATIVE TO THAT DOMAIN's largest corpus, so the proportion reads
+    # inside every domain, not just the one holding the global giant. Each domain
+    # carries ONE copy-prompt that sets up all its live corpora. Live-first,
+    # biggest-first within a band.
     groups = []
-    for k, (title, _what) in CATS.items():
+    dstats = {}
+    for k in CATS:
+        lc = [c for c in corpora if c["cat"] == k and c["status"] == "live"]
+        dstats[k] = (sum(corpus_stats(c)[1] for c in lc),
+                     max((corpus_stats(c)[1] for c in lc), default=0))
+    for k, (title, _what) in sorted(CATS.items(), key=lambda kv: -dstats[kv[0]][0]):
         cs = [c for c in corpora if c["cat"] == k]
         if not cs:
             continue
         cs.sort(key=lambda c: (c["status"] != "live", -corpus_stats(c)[1], c["slug"]))
         live_cs = [c for c in cs if c["status"] == "live"]
         n_live = len(live_cs)
-        cat_bytes = sum(corpus_stats(c)[1] for c in live_cs)
-        cat_grow = max(1, round(1000 * cat_bytes / max_bytes)) if cat_bytes else 1
+        cat_bytes, cat_max = dstats[k]
         copy = (f'<button class="copy" data-copy="{esc(category_prompt(k, title, [c["slug"] for c in live_cs]))}" '
                 f'title="Copy a prompt that installs XERJ and sets up the whole {esc(k)} domain">COPY PROMPT</button>'
                 if n_live else "")
-        tiles = "".join(tile(c, max_bytes) for c in cs)
-        groups.append(f'''<div class="tgroup" style="flex:{cat_grow} 1 340px">
+        tiles = "".join(tile(c, cat_max) for c in cs)
+        groups.append(f'''<div class="tgroup">
 <div class="thead"><a class="thword" href="category/{k}.html">{esc(k)}</a>
 <div class="tgright">{copy}<span class="tgmeta"><b>{n_live}</b> live · {esc(title)} · {human_bytes(cat_bytes)}</span></div></div>
 <div class="tiles">{tiles}</div></div>''')
