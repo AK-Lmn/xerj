@@ -269,38 +269,42 @@ def install_prompt(c):
     )
 
 
-def tile_weight(files):
-    """Treemap size bucket from file count: bigger corpora get a bigger tile.
-    Four buckets keep one 1.2M-file corpus from swamping the row while still
-    reading as a treemap (areas roughly track content)."""
-    if files >= 200_000:
-        return 4
-    if files >= 20_000:
-        return 3
-    if files >= 2_000:
-        return 2
-    return 1
+def category_prompt(k, title, live_slugs):
+    """One paste-ready prompt PER DOMAIN: install XERJ if missing, then add +
+    index every live corpus in the domain and query them. Verbatim commands
+    from landing/llms.txt; `xerj init` for MCP registration."""
+    adds = "\n".join(
+        f"xerj corpus add --from {HUB_RAW}/{s}.json && xerj corpus index {s}"
+        for s in live_slugs
+    )
+    return (
+        f"Set up the XERJ Corpus Hub {k} domain ({title}) for this agent. "
+        "If the `xerj` CLI is not installed, install it: "
+        "curl -fsSL https://xerj.org/get | sh\n"
+        "Add and index these reference corpora, then query them before you write code:\n"
+        f"{adds}\n"
+        'Query any of them with: xerj code <corpus> "<your question>" and cite file:line. '
+        "(Run `xerj init` to expose these as MCP tools.)"
+    )
 
 
-def tile(c, impact):
-    """One treemap cell: a corpus. Links to its page; a live, lane-A corpus
-    also carries a COPY button with the install-and-use prompt."""
+def tile(c, max_bytes):
+    """One treemap cell: a corpus, sized by its content. flex-grow tracks the
+    corpus's byte size (real treemap, proportional to GB); a floor min-width in
+    CSS keeps a tiny or not-yet-built corpus readable, so the giants fill rows
+    while the small ones stay a legible square. Links to the corpus page; the
+    copy-prompt is now per-domain (on the group header), not per tile."""
     files, nbytes, _ = corpus_stats(c)
     st, stcls = STATUSES.get(c["status"], (c["status"], "mute"))
-    installable = c["status"] == "live" and c["lane"] == "A" and not c.get("merged_into")
     meta = (f"{human_bytes(nbytes)} · {human_files(files)}" if c["status"] == "live"
             else st)
-    copy = (f'<button class="copy" data-copy="{esc(install_prompt(c))}" '
-            f'title="Copy a prompt that installs XERJ and uses this corpus">COPY PROMPT</button>'
-            if installable else "")
-    w = tile_weight(files) if c["status"] == "live" else 1
-    return (f'<div class="tile g{w}" data-cat="{esc(c["cat"])}" '
-            f'data-region="{esc(region(c))}" data-name="{esc(c["slug"])}">'
+    grow = max(1, round(1000 * nbytes / max_bytes)) if (max_bytes and c["status"] == "live") else 1
+    return (f'<div class="tile" style="flex:{grow} 1 0" data-cat="{esc(c["cat"])}" '
+            f'data-region="{esc(region(c))}" data-name="{esc(c["slug"])}" data-bytes="{nbytes}">'
             f'<span class="tdot {stcls}" title="{esc(st)}"></span>'
             f'<a class="tlink" href="corpus/{esc(c["slug"])}.html">'
             f'<span class="tn">{esc(c["slug"])}</span>'
-            f'<span class="ts">{esc(meta)}</span></a>'
-            f'{copy}</div>')
+            f'<span class="ts">{esc(meta)}</span></a></div>')
 
 
 # Brandbook tokens from xerj.org (landing/style.css), day palette only.
@@ -436,19 +440,19 @@ footer a:hover{color:var(--z-ink)}
 .treemap{display:flex;flex-wrap:wrap;gap:1px;background:var(--z-line);
 border:1px solid var(--z-line);margin-top:var(--sp-4)}
 .tgroup{flex:1 1 380px;min-width:300px;display:flex;flex-direction:column;background:var(--z-bg)}
-.thead{display:flex;align-items:baseline;justify-content:space-between;gap:var(--sp-3);
-padding:var(--sp-4) var(--sp-4) var(--sp-3);text-decoration:none;border-bottom:1px solid var(--z-line)}
-.thead .tword{font-family:var(--font-display);font-weight:900;
+.thead{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3);
+flex-wrap:wrap;padding:var(--sp-4) var(--sp-4) var(--sp-3);border-bottom:1px solid var(--z-line)}
+.thword{font-family:var(--font-display);font-weight:900;
 font-size:clamp(32px,4vw,var(--fs-56));line-height:.9;letter-spacing:-.01em;
-color:var(--z-ink);text-transform:uppercase}
-.thead:hover .tword{color:var(--z-accent)}
-.thead .tgmeta{font-family:var(--font-data);font-size:var(--fs-11);font-weight:500;
+color:var(--z-ink);text-transform:uppercase;text-decoration:none}
+.thword:hover{color:var(--z-accent)}
+.tgright{display:flex;align-items:center;gap:var(--sp-3);flex-wrap:wrap;justify-content:flex-end}
+.tgmeta{font-family:var(--font-data);font-size:var(--fs-11);font-weight:500;
 text-transform:uppercase;letter-spacing:var(--track-label);color:var(--z-mute);text-align:right}
-.thead .tgmeta b{color:var(--z-ink)}
+.tgmeta b{color:var(--z-ink)}
 .tiles{display:flex;flex-wrap:wrap;gap:1px;background:var(--z-line);flex:1;align-content:flex-start}
 .tile{display:flex;flex-direction:column;gap:var(--sp-2);background:var(--z-bg);
-padding:var(--sp-3);min-width:150px;position:relative}
-.tile.g1{flex:1 1 150px}.tile.g2{flex:2 1 190px}.tile.g3{flex:3 1 230px}.tile.g4{flex:5 1 280px}
+padding:var(--sp-3);min-width:150px;min-height:76px;position:relative}
 .tile:hover{background:var(--z-faint)}
 .tile .tdot{position:absolute;top:var(--sp-3);right:var(--sp-3);width:.6em;height:.6em;border-radius:50%}
 .tile .tlink{display:flex;flex-direction:column;gap:2px;text-decoration:none;padding-right:var(--sp-4)}
@@ -559,20 +563,28 @@ def render_index(corpora, g7, graded, impact, prov):
     total_bytes = sum(sum(r.get("bytes") or 0 for r in c["repos"]) for c in live)
     n_imp = sum(1 for c in live if impact.get(c["slug"], {}).get("status") == "measured")
     regions = sorted({region(c) for c in corpora if region(c)} - {""}, key=lambda r: (r == "GLOBAL", r))
-    # Treemap: one group per domain, corpora as size-weighted tiles. Within a
-    # group live (installable) corpora lead, largest first, so a domain opens
-    # with what an agent can use today.
+    # Real treemap. Tile size tracks the corpus's bytes (GB); domain blocks are
+    # sized by their total bytes too, so the whole page is a nested treemap.
+    # `max_bytes` normalises the grow; each domain carries ONE copy-prompt that
+    # sets up all its live corpora. Live-first, biggest-first within a domain.
+    max_bytes = max((corpus_stats(c)[1] for c in live), default=1) or 1
     groups = []
     for k, (title, _what) in CATS.items():
         cs = [c for c in corpora if c["cat"] == k]
         if not cs:
             continue
-        cs.sort(key=lambda c: (c["status"] != "live", -corpus_stats(c)[0], c["slug"]))
-        n_live = sum(1 for c in cs if c["status"] == "live")
-        tiles = "".join(tile(c, impact) for c in cs)
-        groups.append(f'''<div class="tgroup">
-<a class="thead" href="category/{k}.html"><span class="tword">{esc(k)}</span>
-<span class="tgmeta"><b>{n_live}</b> live<br>{esc(title)}</span></a>
+        cs.sort(key=lambda c: (c["status"] != "live", -corpus_stats(c)[1], c["slug"]))
+        live_cs = [c for c in cs if c["status"] == "live"]
+        n_live = len(live_cs)
+        cat_bytes = sum(corpus_stats(c)[1] for c in live_cs)
+        cat_grow = max(1, round(1000 * cat_bytes / max_bytes)) if cat_bytes else 1
+        copy = (f'<button class="copy" data-copy="{esc(category_prompt(k, title, [c["slug"] for c in live_cs]))}" '
+                f'title="Copy a prompt that installs XERJ and sets up the whole {esc(k)} domain">COPY PROMPT</button>'
+                if n_live else "")
+        tiles = "".join(tile(c, max_bytes) for c in cs)
+        groups.append(f'''<div class="tgroup" style="flex:{cat_grow} 1 340px">
+<div class="thead"><a class="thword" href="category/{k}.html">{esc(k)}</a>
+<div class="tgright">{copy}<span class="tgmeta"><b>{n_live}</b> live · {esc(title)} · {human_bytes(cat_bytes)}</span></div></div>
 <div class="tiles">{tiles}</div></div>''')
     treemap = "\n".join(groups)
     cat_chips = "".join(f'<button class="chip" data-cat="{k}">{k}</button>' for k in CATS)
@@ -594,7 +606,7 @@ sources, its pins, its licence verdict, and what the retrieval tests scored.</p>
 </div>
 <section id="domains">
 <div class="kicker"><span class="accent">01</span><span class="dash">·</span><span>DOMAINS &amp; CORPORA</span> <span id="count" style="text-transform:none"></span></div>
-<p class="note" style="margin:var(--sp-3) 0 0;max-width:74ch">Every tile is a corpus, grouped by domain; its size tracks how much it holds. Open one for its sources, pins, licence verdict and retrieval scores. Or hit <b>COPY PROMPT</b> for a paste-ready instruction that installs XERJ and uses that corpus through your agent's tools.</p>
+<p class="note" style="margin:var(--sp-3) 0 0;max-width:78ch">Every tile is a corpus; its size tracks how much text it holds, grouped into a treemap by domain. Open one for its sources, pins, licence verdict and retrieval scores. Each domain has one <b>COPY PROMPT</b> that installs XERJ and sets up all of its corpora for your agent's tools.</p>
 <div class="toolbar">
 <div class="row"><input id="q" type="search" placeholder="filter by name, topic, use-case, licence"></div>
 <div class="row"><span class="kicker">DOMAIN</span><button class="chip on" data-cat=""></button>{cat_chips}</div>
