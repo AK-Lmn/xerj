@@ -3549,7 +3549,7 @@
    "cat": "SEC",
    "lane": "A",
    "refresh": "pinned",
-   "status": "candidate",
+   "status": "live",
    "domain": "year backfill slice of the exploit-PoC set: 2024 PoC repositories at pinned shas",
    "sources": [
     {
