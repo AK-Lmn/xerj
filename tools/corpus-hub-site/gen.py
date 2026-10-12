@@ -289,23 +289,20 @@ def category_prompt(k, title, live_slugs):
     )
 
 
-def tile(c, cat_max):
-    """One treemap cell: a corpus. Its WIDTH (flex-basis) is proportional to the
-    corpus's byte total relative to its DOMAIN's largest corpus, so each domain
-    band reads as its own treemap: the biggest corpus is the widest tile, down a
-    floor that keeps a tiny or not-yet-built corpus legible. Tiles share a height,
-    so width tracks area. grow lets the last (partial) row fill the band. Links
-    to the corpus page; the copy-prompt is per-domain (on the group header)."""
+def tile(c):
+    """One treemap cell: a corpus. Carries data-bytes; the squarify script
+    (treemap.js) turns each domain band into a gap-free, space-filling treemap
+    where every cell's AREA is proportional to the corpus's byte total. No
+    inline size here: positions are computed client-side and recomputed on
+    resize and on filter, so the layout is fully scalable."""
     files, nbytes, _ = corpus_stats(c)
     st, stcls = STATUSES.get(c["status"], (c["status"], "mute"))
     meta = (f"{human_bytes(nbytes)} · {human_files(files)}" if c["status"] == "live"
             else st)
-    FLOOR, SPAN = 96, 540  # px: narrowest tile, extra width at the domain's largest
-    frac = (nbytes / cat_max) if (cat_max and c["status"] == "live") else 0.0
-    basis = round(FLOOR + SPAN * frac)
-    grow = round(100 * frac)  # row slack goes to the bigger corpora, keeping proportion
-    return (f'<div class="tile" style="flex:{grow} 1 {basis}px" data-cat="{esc(c["cat"])}" '
-            f'data-region="{esc(region(c))}" data-name="{esc(c["slug"])}" data-bytes="{nbytes}">'
+    ttl = f'{c["slug"]} — {meta}'
+    return (f'<div class="tile" data-cat="{esc(c["cat"])}" '
+            f'data-region="{esc(region(c))}" data-name="{esc(c["slug"])}" '
+            f'data-bytes="{nbytes}" title="{esc(ttl)}">'
             f'<span class="tdot {stcls}" title="{esc(st)}"></span>'
             f'<a class="tlink" href="corpus/{esc(c["slug"])}.html">'
             f'<span class="tn">{esc(c["slug"])}</span>'
@@ -360,15 +357,19 @@ line-height:.95;letter-spacing:-.005em;margin:0 0 var(--sp-6)}
 p.lead{font-family:var(--font-prose);color:var(--z-mute);font-size:var(--fs-20);
 line-height:1.5;max-width:56ch}
 .note{color:var(--z-mute);font-size:var(--fs-13)}
-/* stats: one compact line, data font, 1px separators */
-.statline{display:flex;flex-wrap:wrap;align-items:baseline;
-border-block:1px solid var(--z-line);margin:var(--sp-6) 0 0;
-font-family:var(--font-data);font-size:var(--fs-13);font-weight:500;color:var(--z-mute);
-text-transform:uppercase;letter-spacing:var(--track-ui)}
-.statline span{padding:var(--sp-3) var(--sp-5);border-right:1px solid var(--z-line)}
-.statline span:first-child{padding-left:0}
-.statline span:last-child{border-right:0}
-.statline b{color:var(--z-ink);font-weight:700;font-size:var(--fs-16);margin-right:.35em}
+/* hero row: hero text left, stats as an infographic quadrant on the right */
+.herorow{display:flex;flex-wrap:wrap;gap:var(--sp-6) var(--sp-8);
+align-items:flex-start;justify-content:space-between;margin-bottom:var(--sp-6)}
+.heromain{flex:1 1 440px;min-width:0}
+.heromain .hero,.heromain .lead{margin-bottom:0}
+.statgrid{flex:0 1 360px;display:grid;grid-template-columns:1fr 1fr;gap:1px;
+background:var(--z-line);border:1px solid var(--z-line);margin-top:var(--sp-2)}
+.stat{background:var(--z-bg);padding:var(--sp-4) var(--sp-5)}
+.stat.wide{grid-column:1 / -1}
+.stat b{display:block;font-family:var(--font-display);font-weight:800;
+font-size:var(--fs-56);line-height:1;color:var(--z-ink)}
+.stat span{font-family:var(--font-data);font-size:var(--fs-11);font-weight:500;
+text-transform:uppercase;letter-spacing:var(--track-ui);color:var(--z-mute)}
 .count{font-family:var(--font-data);font-size:var(--fs-11);font-weight:500;
 text-transform:uppercase;letter-spacing:var(--track-ui);color:var(--z-mute);margin-left:auto}
 /* domains: the front page centrepiece, giant display words */
@@ -457,10 +458,12 @@ color:var(--z-ink);text-transform:uppercase;text-decoration:none}
 .tgmeta{font-family:var(--font-data);font-size:var(--fs-11);font-weight:500;
 text-transform:uppercase;letter-spacing:var(--track-label);color:var(--z-mute);text-align:right}
 .tgmeta b{color:var(--z-ink)}
-.tiles{display:flex;flex-wrap:wrap;gap:1px;background:var(--z-line);align-content:flex-start}
-.tile{display:flex;flex-direction:column;gap:var(--sp-2);background:var(--z-bg);
-padding:var(--sp-3);min-width:96px;min-height:84px;position:relative;overflow:hidden}
-.tile:hover{background:var(--z-faint)}
+/* space-filling treemap: band is a positioned box (height set per domain),
+   cells are absolutely placed by treemap.js and fill it with no gaps. */
+.tiles{position:relative;background:var(--z-line);width:100%}
+.tile{position:absolute;display:flex;flex-direction:column;gap:2px;background:var(--z-bg);
+padding:var(--sp-3);overflow:hidden;box-shadow:inset 0 0 0 1px var(--z-line)}
+.tile:hover{background:var(--z-faint);z-index:2}
 .tile .tdot{position:absolute;top:var(--sp-3);right:var(--sp-3);width:.6em;height:.6em;border-radius:50%}
 .tile .tlink{display:flex;flex-direction:column;gap:2px;text-decoration:none;padding-right:var(--sp-4)}
 .tile .tn{font-family:var(--font-mono);font-weight:600;font-size:var(--fs-13);
@@ -514,6 +517,57 @@ def page(title, desc, body, rel=""):
 
 
 FILTER_JS = """<script>
+// Squarified treemap (Bruls, Huizing, van Wijk): fills each domain band with
+// zero gaps, every cell's area proportional to its corpus's bytes. Recomputed
+// on load, on resize, and on filter, so the layout is fully scalable.
+function _worst(row,side){
+  var sum=0,mx=0,mn=Infinity,i;
+  for(i=0;i<row.length;i++){var a=row[i].area;sum+=a;if(a>mx)mx=a;if(a<mn)mn=a;}
+  var s2=sum*sum,d2=side*side;
+  return Math.max(d2*mx/s2, s2/(d2*mn));
+}
+function _squarify(items,x,y,w,h,out){
+  items=items.slice().sort(function(a,b){return b.area-a.area;});
+  var rx=x,ry=y,rw=w,rh=h,idx=0;
+  while(idx<items.length){
+    var side=Math.min(rw,rh); if(side<=0)side=0.0001;
+    var row=[];
+    while(idx<items.length){
+      var cand=row.concat([items[idx]]);
+      if(row.length===0||_worst(cand,side)<=_worst(row,side)){row.push(items[idx]);idx++;}
+      else break;
+    }
+    var rsum=0,i; for(i=0;i<row.length;i++)rsum+=row[i].area;
+    var thick=rsum/side;
+    if(rw>=rh){var cy=ry;
+      for(i=0;i<row.length;i++){var hh=row[i].area/thick;out.push({el:row[i].el,x:rx,y:cy,w:thick,h:hh});cy+=hh;}
+      rx+=thick;rw-=thick;
+    }else{var cx=rx;
+      for(i=0;i<row.length;i++){var ww=row[i].area/thick;out.push({el:row[i].el,x:cx,y:ry,w:ww,h:thick});cx+=ww;}
+      ry+=thick;rh-=thick;
+    }
+  }
+}
+function _layoutBand(container){
+  var W=container.clientWidth,H=container.clientHeight;
+  if(!W||!H)return;
+  var tiles=[].slice.call(container.querySelectorAll('.tile')).filter(function(t){return t.style.display!=='none';});
+  if(!tiles.length)return;
+  var raw=tiles.map(function(t){return Math.max(0,parseFloat(t.dataset.bytes)||0);});
+  var mx=Math.max.apply(null,raw)||1, floor=mx*0.012;   // tiny/not-yet-built corpora keep a small cell
+  var items=tiles.map(function(t,i){return {el:t,value:Math.max(raw[i],floor)};});
+  var total=0;items.forEach(function(it){total+=it.value;});
+  var scale=(W*H)/total,out=[];
+  _squarify(items.map(function(it){return {el:it.el,area:it.value*scale};}),0,0,W,H,out);
+  out.forEach(function(r){
+    var s=r.el.style;
+    s.left=(r.x/W*100)+'%';s.top=(r.y/H*100)+'%';
+    s.width=(r.w/W*100)+'%';s.height=(r.h/H*100)+'%';
+    var ts=r.el.querySelector('.ts');if(ts)ts.style.display=(r.h<48||r.w<84)?'none':'';
+    var tn=r.el.querySelector('.tn');if(tn)tn.style.display=(r.h<26||r.w<46)?'none':'';
+  });
+}
+function layoutAll(){[].slice.call(document.querySelectorAll('.tiles')).forEach(_layoutBand);}
 var cards=[...document.querySelectorAll('.tile')];
 var st={q:'',cat:'',region:''};
 function apply(){
@@ -524,13 +578,16 @@ function apply(){
     if(st.region&&c.dataset.region!==st.region)ok=false;
     c.style.display=ok?'':'none';
   });
+  document.querySelectorAll('.tgroup').forEach(function(g){
+    var any=[].slice.call(g.querySelectorAll('.tile')).some(function(t){return t.style.display!=='none';});
+    g.style.display=any?'':'none';
+  });
   var n=0;cards.forEach(function(c){if(c.style.display!=='none')n++;});
   var el=document.getElementById('count');
   if(el)el.textContent=n+' of '+cards.length+' shown';
+  layoutAll();
 }
-document.getElementById('q').addEventListener('input',function(e){
-  st.q=e.target.value.toLowerCase();apply();
-});
+document.getElementById('q').addEventListener('input',function(e){st.q=e.target.value.toLowerCase();apply();});
 document.querySelectorAll('.chip[data-cat]').forEach(function(b){
   b.addEventListener('click',function(){
     var on=b.classList.contains('on');
@@ -547,6 +604,9 @@ document.querySelectorAll('.chip[data-region]').forEach(function(b){
     st.region=on?'':b.dataset.region;apply();
   });
 });
+layoutAll();
+window.addEventListener('load',layoutAll);
+var _rt;window.addEventListener('resize',function(){clearTimeout(_rt);_rt=setTimeout(layoutAll,120);});
 </script>"""
 
 
@@ -573,53 +633,57 @@ def render_index(corpora, g7, graded, impact, prov):
     total_bytes = sum(sum(r.get("bytes") or 0 for r in c["repos"]) for c in live)
     n_imp = sum(1 for c in live if impact.get(c["slug"], {}).get("status") == "measured")
     regions = sorted({region(c) for c in corpora if region(c)} - {""}, key=lambda r: (r == "GLOBAL", r))
-    # Real treemap, one band per domain (biggest domain first). Each band is a
-    # full-width treemap of its own corpora: a tile's width is proportional to
-    # its bytes RELATIVE TO THAT DOMAIN's largest corpus, so the proportion reads
-    # inside every domain, not just the one holding the global giant. Each domain
-    # carries ONE copy-prompt that sets up all its live corpora. Live-first,
-    # biggest-first within a band.
+    # Real, space-filling treemap: one band per domain (biggest domain first).
+    # Each band is a squarified treemap (treemap.js) of its corpora that fills
+    # the band with NO gaps, every cell's AREA proportional to the corpus's
+    # bytes. Band HEIGHT scales with the domain's total bytes (sqrt, floored so
+    # the header stays readable), so the page as a whole stays proportional too.
+    # Each domain carries ONE copy-prompt that sets up all its live corpora.
     groups = []
-    dstats = {}
-    for k in CATS:
-        lc = [c for c in corpora if c["cat"] == k and c["status"] == "live"]
-        dstats[k] = (sum(corpus_stats(c)[1] for c in lc),
-                     max((corpus_stats(c)[1] for c in lc), default=0))
-    for k, (title, _what) in sorted(CATS.items(), key=lambda kv: -dstats[kv[0]][0]):
+    dstats = {k: sum(corpus_stats(c)[1]
+                     for c in corpora if c["cat"] == k and c["status"] == "live")
+              for k in CATS}
+    dmax = max(dstats.values(), default=0) or 1
+    for k, (title, _what) in sorted(CATS.items(), key=lambda kv: -dstats[kv[0]]):
         cs = [c for c in corpora if c["cat"] == k]
         if not cs:
             continue
         cs.sort(key=lambda c: (c["status"] != "live", -corpus_stats(c)[1], c["slug"]))
         live_cs = [c for c in cs if c["status"] == "live"]
         n_live = len(live_cs)
-        cat_bytes, cat_max = dstats[k]
+        cat_bytes = dstats[k]
+        band_h = round(180 + 330 * (cat_bytes / dmax) ** 0.5)  # ~180..510px
         copy = (f'<button class="copy" data-copy="{esc(category_prompt(k, title, [c["slug"] for c in live_cs]))}" '
                 f'title="Copy a prompt that installs XERJ and sets up the whole {esc(k)} domain">COPY PROMPT</button>'
                 if n_live else "")
-        tiles = "".join(tile(c, cat_max) for c in cs)
+        tiles = "".join(tile(c) for c in cs)
         groups.append(f'''<div class="tgroup">
 <div class="thead"><a class="thword" href="category/{k}.html">{esc(k)}</a>
 <div class="tgright">{copy}<span class="tgmeta"><b>{n_live}</b> live · {esc(title)} · {human_bytes(cat_bytes)}</span></div></div>
-<div class="tiles">{tiles}</div></div>''')
+<div class="tiles" style="height:{band_h}px">{tiles}</div></div>''')
     treemap = "\n".join(groups)
     cat_chips = "".join(f'<button class="chip" data-cat="{k}">{k}</button>' for k in CATS)
     region_chips = "".join(f'<button class="chip" data-region="{esc(r)}">{esc(r)}</button>' for r in regions)
     body = f'''<main>
 <div class="kicker"><span class="accent">HUB.XERJ.ORG</span><span class="dash">·</span><span>REFERENCE MEMORY HUB FOR AI AGENTS</span></div>
+<div class="herorow">
+<div class="heromain">
 <h1 class="hero">REFERENCE MEMORY HUB<br><span class="accent">for AI agents</span></h1>
 <p class="lead">An agent with the right text at hand beats an agent guessing from memory.
 Each corpus here is a pinned, licence-checked slice of one domain that the agent
 downloads per task and searches in seconds. No waiting for the next model
 retrain. No fighting website blocks and rate limits. Every corpus names its
 sources, its pins, its licence verdict, and what the retrieval tests scored.</p>
-<section id="domains">
-<div class="statline">
-<span><b>{len(live)}</b> live corpora</span>
-<span><b>{len(CATS)}</b> domains</span>
-<span><b>{len(corpora)}</b> registry rows</span>
-<span><b>{human_bytes(total_bytes)}</b> pinned text</span>
-<span><b>{n_imp}</b> with agent A/B results</span>
 </div>
+<div class="statgrid">
+<div class="stat"><b>{len(live)}</b><span>live corpora</span></div>
+<div class="stat"><b>{len(CATS)}</b><span>domains</span></div>
+<div class="stat"><b>{len(corpora)}</b><span>registry rows</span></div>
+<div class="stat"><b>{human_bytes(total_bytes)}</b><span>pinned text</span></div>
+<div class="stat wide"><b>{n_imp}</b><span>with agent A/B results</span></div>
+</div>
+</div>
+<section id="domains">
 <div class="toolbar">
 <div class="row"><input id="q" type="search" placeholder="filter by name, topic, use-case, licence"><span id="count" class="count"></span></div>
 <div class="row"><span class="kicker">DOMAIN</span><button class="chip on" data-cat=""></button>{cat_chips}</div>
