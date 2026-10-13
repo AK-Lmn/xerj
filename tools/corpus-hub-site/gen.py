@@ -394,16 +394,25 @@ line-height:1.5;max-width:56ch}
 align-items:flex-start;justify-content:space-between;margin-bottom:var(--sp-6)}
 .heromain{flex:1 1 440px;min-width:0}
 .heromain .lead{margin-bottom:0;max-width:52ch}
-.flow{list-style:none;margin:var(--sp-5) 0 0;padding:0;display:flex;flex-direction:column;gap:1px;
-border:1px solid var(--z-line);background:var(--z-line);max-width:52ch}
-.flow li{background:var(--z-bg);display:grid;grid-template-columns:auto 1fr;
-column-gap:var(--sp-4);row-gap:2px;padding:var(--sp-3) var(--sp-4)}
-.flow .n{grid-column:1;grid-row:1 / span 2;align-self:center;font-family:var(--font-display);
-font-weight:900;font-size:var(--fs-32);line-height:1;color:var(--z-accent)}
-.flow b{grid-column:2;grid-row:1;font-family:var(--font-data);font-weight:700;
-text-transform:uppercase;letter-spacing:var(--track-ui);font-size:var(--fs-13);color:var(--z-ink)}
-.flow span{grid-column:2;grid-row:2;font-family:var(--font-prose);color:var(--z-mute);
-font-size:var(--fs-16);line-height:1.45}
+.schema{margin:var(--sp-6) 0 var(--sp-8)}
+.arch{list-style:none;margin:0;padding:0;display:flex;gap:var(--sp-6);align-items:stretch}
+.arch .node{position:relative;flex:1 1 0;min-width:0;border:1px solid var(--z-line);
+background:var(--z-bg);padding:var(--sp-4) var(--sp-5);display:flex;flex-direction:column;gap:6px}
+.arch .node.on{border-color:var(--z-accent);box-shadow:inset 0 0 0 1px var(--z-accent)}
+.arch .node:not(:last-child)::after{content:"\\2192";position:absolute;right:calc(var(--sp-6) / -2 - 5px);
+top:50%;transform:translateY(-50%);font-family:var(--font-display);font-weight:900;
+color:var(--z-accent);font-size:var(--fs-20);line-height:1}
+.arch .nlabel{font-family:var(--font-display);font-weight:800;font-size:var(--fs-20);
+color:var(--z-ink);line-height:1}
+.arch .nsub{font-family:var(--font-prose);color:var(--z-mute);font-size:var(--fs-13);line-height:1.4}
+.queries{margin-top:var(--sp-4);display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.queries .qlab{font-family:var(--font-data);font-size:var(--fs-11);font-weight:600;
+text-transform:uppercase;letter-spacing:var(--track-ui);color:var(--z-mute)}
+.queries code{font-family:var(--font-mono);font-size:var(--fs-13);color:var(--z-ink);
+background:#fff;border:1px solid var(--z-line);padding:3px 8px}
+@media(max-width:720px){.arch{flex-direction:column;gap:var(--sp-6)}
+.arch .node:not(:last-child)::after{content:"\\2193";right:auto;left:50%;top:auto;
+bottom:calc(var(--sp-6) / -2 - 5px);transform:translateX(-50%)}}
 .heroside{flex:0 1 360px;display:flex;flex-direction:column;gap:var(--sp-4);margin-top:var(--sp-2)}
 .statgrid{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;
 gap:1px;background:var(--z-line);border:1px solid var(--z-line)}
@@ -723,13 +732,8 @@ def render_index(corpora, g7, graded, impact, prov):
 <div class="herorow">
 <div class="heromain">
 <h1 class="hero">REFERENCE MEMORY HUB<br><span class="accent">for AI agents</span></h1>
-<p class="lead">Resident memory for an AI agent: pull one domain&rsquo;s pinned, licence-checked
-corpus and search it locally &mdash; instead of guessing from training.</p>
-<ol class="flow">
-<li><span class="n">1</span><b>Pick a domain</b><span>One of {len(CATS)} &mdash; security, databases, crypto, law, and more.</span></li>
-<li><span class="n">2</span><b>Pull its corpus</b><span>A pinned slice downloaded per task. No retrain wait, no rate limits.</span></li>
-<li><span class="n">3</span><b>Search it locally</b><span>Answers in seconds, every hit citing its exact source.</span></li>
-</ol>
+<p class="lead">Resident memory for AI agents: the hub serves a pinned corpus, the XERJ engine
+indexes it locally, and the agent queries it in seconds &mdash; instead of guessing from training.</p>
 </div>
 <div class="heroside">
 <div class="statgrid">
@@ -742,6 +746,15 @@ corpus and search it locally &mdash; instead of guessing from training.</p>
 <a class="cta" href="contribute.html">Add your corpus &rarr;</a>
 </div>
 </div>
+<section class="schema" aria-label="How a corpus becomes an agent's memory">
+<ol class="arch">
+<li class="node"><span class="nlabel">Agent</span><span class="nsub">your coding agent, mid-task</span></li>
+<li class="node"><span class="nlabel">Hub</span><span class="nsub">hub.xerj.org serves one pinned, licence-checked corpus</span></li>
+<li class="node"><span class="nlabel">XERJ engine</span><span class="nsub">indexes that corpus locally, on your machine, in seconds</span></li>
+<li class="node on"><span class="nlabel">Resident memory</span><span class="nsub">the agent searches it &mdash; every hit cites its source</span></li>
+</ol>
+<div class="queries"><span class="qlab">example queries the agent runs against it</span><code>constant-time compare in a Rust crypto crate</code><code>ES mapping for a nested keyword field</code><code>Sigma rule for Log4Shell</code></div>
+</section>
 <section id="domains">
 <div class="toolbar">
 <div class="row"><input id="q" type="search" placeholder="filter by name, topic, use-case, licence"><span id="count" class="count"></span></div>
