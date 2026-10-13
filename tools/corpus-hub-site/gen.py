@@ -359,12 +359,19 @@ letter-spacing:.24em;color:var(--z-ink);text-decoration:none}
 .nav a{color:var(--z-mute);text-decoration:none}
 .nav a:hover{color:var(--z-ink)}
 .nav .spacer{flex:1}
-.nav a.navcta{color:var(--z-accent);border:1px solid var(--z-accent);padding:.3em .7em;margin-right:var(--sp-4)}
-.nav a.navcta:hover{background:var(--z-accent);color:var(--z-bg)}
+/* contribute CTA: animated purple gradient so it pops against the amber palette */
+.nav a.navcta{color:#fff;border:0;padding:.42em .95em;
+background:linear-gradient(100deg,#6d28d9,#9333ea,#7c3aed,#6d28d9);background-size:280% 100%;animation:ctaflow 5s ease infinite}
+.nav a.navcta:hover{filter:brightness(1.12)}
 .cta{display:inline-block;margin-top:var(--sp-5);font-family:var(--font-data);font-size:var(--fs-13);
-font-weight:600;text-transform:uppercase;letter-spacing:var(--track-ui);text-decoration:none;
-color:var(--z-bg);background:var(--z-accent);padding:.65em 1.1em;border:1px solid var(--z-accent)}
-.cta:hover{background:transparent;color:var(--z-accent)}
+font-weight:600;text-transform:uppercase;letter-spacing:var(--track-ui);text-decoration:none;color:#fff;
+background:linear-gradient(100deg,#6d28d9,#9333ea,#7c3aed,#6d28d9);background-size:280% 100%;animation:ctaflow 5s ease infinite;padding:.72em 1.25em;border:0}
+.cta:hover{filter:brightness(1.12)}
+@keyframes ctaflow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.promptbox{border:1px solid var(--z-line);background:#fff;margin:var(--sp-4) 0}
+.pbh{display:flex;justify-content:flex-end;padding:var(--sp-3) var(--sp-3) 0}
+.prompt{font-family:var(--font-mono);font-size:var(--fs-13);line-height:1.65;color:var(--z-ink);
+white-space:pre-wrap;word-break:break-word;padding:var(--sp-4) var(--sp-5) var(--sp-5);margin:0}
 main{max-width:var(--max-w);margin:0 auto;padding:var(--sp-8) var(--page-x) var(--sp-16)}
 /* type */
 .kicker{font-family:var(--font-data);font-size:var(--fs-11);font-weight:500;
@@ -520,7 +527,7 @@ PAGE = """<!doctype html><html lang="en"><head><meta charset="utf-8">
 <a href="{rel}index.html">CORPORA</a><a href="{rel}index.html#domains">DOMAINS</a>
 <a href="{rel}about.html">ABOUT</a>
 <a href="https://github.com/xerj-org/xerj/tree/corpus-hub/tools/xerj-code/hub">REGISTRY (GIT)</a>
-<span class="spacer"></span><a href="{rel}contribute.html" class="navcta">SHARE YOUR KNOWLEDGE</a><a href="https://xerj.org">XERJ.ORG</a></nav>
+<span class="spacer"></span><a href="https://xerj.org">XERJ.ORG</a><a href="{rel}contribute.html" class="navcta">ADD YOUR CORPUS</a></nav>
 {body}
 <footer><span>XERJ · CORPUS HUB · {stamp}</span>
 <span>PINNED SOURCES · VERIFIED LICENCES · MEASURED RETRIEVAL</span>
@@ -706,7 +713,7 @@ Each corpus here is a pinned, licence-checked slice of one domain that the agent
 downloads per task and searches in seconds. No waiting for the next model
 retrain. No fighting website blocks and rate limits. Every corpus names its
 sources, its pins, its licence verdict, and what the retrieval tests scored.</p>
-<a class="cta" href="contribute.html">Share your knowledge &rarr;</a>
+<a class="cta" href="contribute.html">Add your corpus &rarr;</a>
 </div>
 <div class="statgrid">
 <div class="stat"><b>{len(live)}</b><span>live corpora</span></div>
@@ -876,31 +883,20 @@ def contribute_prompt():
 
 
 def contribute_body():
+    prompt = esc(contribute_prompt())
     return f'''<main>
-<div class="kicker"><span class="accent">CONTRIBUTE</span><span class="dash">&middot;</span><span>SHARE YOUR KNOWLEDGE</span></div>
-<h1 class="hero" style="font-size:clamp(44px,6vw,var(--fs-96))">SHARE YOUR<br><span class="accent">KNOWLEDGE</span></h1>
-<p class="lead">A corpus is just a folder of documents &mdash; your own docs, a public dataset,
-a reference repo &mdash; pinned and licence-checked so agents search it instead of guessing.
-If the hub is missing a domain you know, index it and open a pull request. Every corpus here
-arrived the same way.</p>
-<div class="kbox"><b>Contribute a corpus</b> <button class="copy" data-copy="{esc(contribute_prompt())}" title="Copy a prompt that installs XERJ, indexes your corpus, and opens the PR">COPY PROMPT</button><br>
-Paste the prompt into your coding agent: it installs XERJ, builds the corpus from a folder
-(<code>xerj autoindex &lt;folder&gt;</code>) or from repos (<code>xerj corpus add &lt;name&gt; &lt;git-url&gt;</code>),
-and opens the pull request.</div>
-<section class="detail"><h2>Or by hand, in four steps</h2>
-<table>
-<tr><th>step</th><th>what to do</th></tr>
-<tr><td>1 &middot; install</td><td><code>curl -fsSL https://xerj.org/get | sh</code></td></tr>
-<tr><td>2 &middot; build</td><td><code>xerj autoindex &lt;folder&gt;</code> for your own documents, or <code>xerj corpus add &lt;name&gt; &lt;git-url&gt; ...</code> for public repos. XERJ pins the sources and writes a manifest.</td></tr>
-<tr><td>3 &middot; licence</td><td>Open each source's licence yourself and record a <code>review</code> block. The hub is Apache-2.0 and takes only openly-licensed, source-attributed corpora.</td></tr>
-<tr><td>4 &middot; open PR</td><td>Fork the repo, copy the manifest to <code>tools/xerj-code/hub/&lt;name&gt;.json</code>, add a backlog row, and open a PR to the <b>corpus-hub</b> branch. Say what the corpus is <em>for</em>.</td></tr>
-</table></section>
-<section class="detail"><h2>The registry you are adding to</h2>
-<p>Every corpus lives as one pinned manifest on the
-<a href="https://github.com/xerj-org/xerj/tree/corpus-hub/tools/xerj-code/hub">corpus-hub branch</a>
-&mdash; that list of corpus repos is what your PR extends. Full guide, templates and the
-review checklist:
-<a href="https://github.com/xerj-org/xerj/blob/corpus-hub/tools/xerj-code/hub/CONTRIBUTING.md">CONTRIBUTING.md</a>.</p></section>
+<div class="kicker"><span class="accent">CONTRIBUTE</span><span class="dash">&middot;</span><span>ADD YOUR CORPUS</span></div>
+<h1 class="hero" style="font-size:clamp(44px,6vw,var(--fs-96))">ADD YOUR<br><span class="accent">CORPUS</span></h1>
+<p class="lead">Sharing data is like sharing code: it compounds. A corpus you contribute becomes
+reference memory that any agent can search, so your domain knowledge makes everyone's agents
+better, not just yours.</p>
+<section class="detail"><h2>Contribute a corpus</h2>
+<p class="note" style="margin-bottom:var(--sp-4)">Paste this into your coding agent. It explains itself.</p>
+<div class="promptbox"><div class="pbh"><button class="copy" data-copy="{prompt}" title="Copy this prompt">COPY PROMPT</button></div>
+<pre class="prompt">{prompt}</pre></div>
+<p class="note">Full guide, templates and the review checklist:
+<a href="https://github.com/xerj-org/xerj/blob/corpus-hub/tools/xerj-code/hub/CONTRIBUTING.md">CONTRIBUTING.md</a>.</p>
+</section>
 {COPY_JS}
 </main>'''
 
