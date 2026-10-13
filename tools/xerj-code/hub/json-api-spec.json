@@ -1,0 +1,21 @@
+{
+ "corpus": "json-api-spec",
+ "cloned_at": "2026-10-13T03:27:04Z",
+ "repos": [
+  {
+   "repo": "json-api",
+   "url": "https://github.com/json-api/json-api.git",
+   "licence": "CC0-1.0",
+   "sha": "bde79ceb9e27cce77a5b2b3716b851f623bb7b62",
+   "files": 597,
+   "bytes": 2058855,
+   "review": {
+    "spdx": "CC0-1.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "LICENSE read via GitHub API \u2014 CC0 1.0 Universal text confirmed (GitHub detects CC0-1.0); public-domain dedication, no attribution legally required (courtesy credit advised). Default branch gh-pages; ls-remote HEAD OK."
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "asyncapi-spec",
+ "cloned_at": "2026-10-13T03:27:01Z",
+ "repos": [
+  {
+   "repo": "spec",
+   "url": "https://github.com/asyncapi/spec.git",
+   "licence": "Apache-2.0",
+   "sha": "1dd65fd2c1ed13f06365c1e870c61cdc82d8a981",
+   "files": 103,
+   "bytes": 1774405,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "LICENSE read via GitHub API \u2014 full Apache License 2.0 text confirmed (GitHub licensee also detects Apache-2.0); repo public, not archived, git ls-remote HEAD OK. Cite file:line when adapting."
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "smallstep-certificates",
+ "cloned_at": "2026-10-13T03:26:52Z",
+ "repos": [
+  {
+   "repo": "certificates",
+   "url": "https://github.com/smallstep/certificates.git",
+   "licence": "Apache-2.0",
+   "sha": "69d3c36fa1e1fccbac5138a45fa3367122b89a11",
+   "files": 550,
+   "bytes": 4885801,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Read LICENSE: full Apache-2.0 text; GitHub detects Apache-2.0. Permissive."
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "pagerduty-incident-response",
+ "cloned_at": "2026-10-13T03:27:12Z",
+ "repos": [
+  {
+   "repo": "incident-response-docs",
+   "url": "https://github.com/PagerDuty/incident-response-docs.git",
+   "licence": "Apache-2.0",
+   "sha": "464fc9d3e47e19e9d8da17cec1a41dc09624e95a",
+   "files": 216,
+   "bytes": 178696729,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Read LICENSE via authenticated GitHub API: 'Copyright 2016 PagerDuty, Inc.' + standard Apache-2.0 text, SPDX Apache-2.0; repo live. Keep LICENSE/NOTICE; ~165MB repo includes site assets/translations, filter to docs/ markdown."
+   }
+  }
+ ]
+}

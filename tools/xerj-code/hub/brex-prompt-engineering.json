@@ -1,0 +1,21 @@
+{
+ "corpus": "brex-prompt-engineering",
+ "cloned_at": "2026-10-13T03:26:53Z",
+ "repos": [
+  {
+   "repo": "prompt-engineering",
+   "url": "https://github.com/brexhq/prompt-engineering.git",
+   "licence": "MIT",
+   "sha": "50871be17eb86d70ce066462f4328a6f62a7208e",
+   "files": 5,
+   "bytes": 73479,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Read LICENSE via authenticated GitHub API: MIT, Copyright (c) 2023 Brex; single root licence file, no secondary/EE carve-out; repo live, not archived. Prose last touched 2023 but clean MIT."
+   }
+  }
+ ]
+}

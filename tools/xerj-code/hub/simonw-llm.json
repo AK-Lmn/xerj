@@ -1,0 +1,21 @@
+{
+ "corpus": "simonw-llm",
+ "cloned_at": "2026-10-13T03:26:54Z",
+ "repos": [
+  {
+   "repo": "llm",
+   "url": "https://github.com/simonw/llm.git",
+   "licence": "Apache-2.0",
+   "sha": "05d7ae7dedc524b024ab463b063854e7c43fee01",
+   "files": 118,
+   "bytes": 1965544,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Read LICENSE: full Apache-2.0 text confirmed; single licence file, no secondary carve-out; repo active (pushed 2026-10). Clean."
+   }
+  }
+ ]
+}

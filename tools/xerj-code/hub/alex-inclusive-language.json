@@ -1,0 +1,21 @@
+{
+ "corpus": "alex-inclusive-language",
+ "cloned_at": "2026-10-13T03:27:18Z",
+ "repos": [
+  {
+   "repo": "alex",
+   "url": "https://github.com/get-alex/alex.git",
+   "licence": "MIT",
+   "sha": "9a57595d1050d8fff99dc073670ee2bb41c925f6",
+   "files": 40,
+   "bytes": 490660,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE via GitHub API: verbatim MIT text ('The MIT License', Titus Wormer 2015). Matches claim; permissive, copy with attribution. Active, non-fork repo."
+   }
+  }
+ ]
+}

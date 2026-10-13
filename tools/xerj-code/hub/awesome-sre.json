@@ -1,0 +1,21 @@
+{
+ "corpus": "awesome-sre",
+ "cloned_at": "2026-10-13T03:27:13Z",
+ "repos": [
+  {
+   "repo": "awesome-sre",
+   "url": "https://github.com/dastergon/awesome-sre.git",
+   "licence": "CC0-1.0",
+   "sha": "e91ef69aa52129662164e54cc22272bc90e9b636",
+   "files": 5,
+   "bytes": 93809,
+   "review": {
+    "spdx": "CC0-1.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Read LICENSE via authenticated GitHub API: CC0-1.0 ('CC0 1.0 Universal') public-domain dedication, attribution NOT legally required; repo live. Caveat: curated LINK LIST - CC0 covers the list/blurbs only; linked targets are NOT in the clone and carry their own licences; thin original prose."
+   }
+  }
+ ]
+}

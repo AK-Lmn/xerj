@@ -1,0 +1,21 @@
+{
+ "corpus": "libsodium",
+ "cloned_at": "2026-10-13T03:26:43Z",
+ "repos": [
+  {
+   "repo": "libsodium",
+   "url": "https://github.com/jedisct1/libsodium.git",
+   "licence": "ISC",
+   "sha": "614789718b7af7777f97c56e04bab2968e4c5e8b",
+   "files": 741,
+   "bytes": 7298807,
+   "review": {
+    "spdx": "ISC",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Read LICENSE via GitHub API: ISC text ((c) Frank Denis), C-comment-wrapped; GitHub NOASSERTION is only the wrapper. Permissive."
+   }
+  }
+ ]
+}

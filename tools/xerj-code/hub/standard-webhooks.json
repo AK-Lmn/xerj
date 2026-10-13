@@ -1,0 +1,21 @@
+{
+ "corpus": "standard-webhooks",
+ "cloned_at": "2026-10-13T03:27:03Z",
+ "repos": [
+  {
+   "repo": "standard-webhooks",
+   "url": "https://github.com/standard-webhooks/standard-webhooks.git",
+   "licence": "Apache-2.0",
+   "sha": "7537d2a2d3d52d8f2e0ecd12527af4a9307fd81b",
+   "files": 125,
+   "bytes": 371911,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "LICENSE read via GitHub API \u2014 Apache License 2.0 text confirmed (GitHub detects Apache-2.0); refutes the occasional MIT mis-citation. Active repo, ls-remote HEAD OK."
+   }
+  }
+ ]
+}

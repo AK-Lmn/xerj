@@ -1,0 +1,21 @@
+{
+ "corpus": "how-they-sre",
+ "cloned_at": "2026-10-13T03:27:13Z",
+ "repos": [
+  {
+   "repo": "howtheysre",
+   "url": "https://github.com/upgundecha/howtheysre.git",
+   "licence": "CC0-1.0",
+   "sha": "284703b172d8318642cb9062633e56046b4af819",
+   "files": 16,
+   "bytes": 312863,
+   "review": {
+    "spdx": "CC0-1.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Read LICENSE via authenticated GitHub API: CC0-1.0 ('Creative Commons Legal Code / CC0 1.0 Universal'), no attribution required; repo live. Caveat: curated summaries + external links, not long-form original text; tiny repo; linked targets not in clone."
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "curve25519-dalek",
+ "cloned_at": "2026-10-13T03:26:46Z",
+ "repos": [
+  {
+   "repo": "curve25519-dalek",
+   "url": "https://github.com/dalek-cryptography/curve25519-dalek.git",
+   "licence": "BSD-3-Clause",
+   "sha": "97a020d185970839ed1d3f3a5c22aca816631786",
+   "files": 138,
+   "bytes": 2691238,
+   "review": {
+    "spdx": "BSD-3-Clause",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Root /license 404 (workspace); read curve25519-dalek/LICENSE = 3-clause BSD (lovecruft/de Valence), ed25519-dalek also carries LICENSE; one clone yields ed25519/x25519-dalek too. Permissive."
+   }
+  }
+ ]
+}

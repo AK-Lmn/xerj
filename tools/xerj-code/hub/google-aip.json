@@ -1,0 +1,21 @@
+{
+ "corpus": "google-aip",
+ "cloned_at": "2026-10-13T03:27:03Z",
+ "repos": [
+  {
+   "repo": "google.aip.dev",
+   "url": "https://github.com/aip-dev/google.aip.dev.git",
+   "licence": "CC-BY-4.0",
+   "sha": "615875bffc45584cd9d22cd2799fd4b7d377c85a",
+   "files": 162,
+   "bytes": 825728,
+   "review": {
+    "spdx": "CC-BY-4.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "LICENSE.md read directly (GitHub reports NOASSERTION) \u2014 dual-licence: repository content CC-BY-4.0, code samples Apache-2.0, both allow-listed. Indexable value is the CC-BY-4.0 prose; attribute Google. ls-remote HEAD OK."
+   }
+  }
+ ]
+}

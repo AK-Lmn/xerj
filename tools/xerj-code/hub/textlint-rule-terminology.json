@@ -1,0 +1,21 @@
+{
+ "corpus": "textlint-rule-terminology",
+ "cloned_at": "2026-10-13T03:27:19Z",
+ "repos": [
+  {
+   "repo": "textlint-rule-terminology",
+   "url": "https://github.com/sapegin/textlint-rule-terminology.git",
+   "licence": "MIT",
+   "sha": "b866c04bb0cf4477486309c62aacec6929de78f9",
+   "files": 21,
+   "bytes": 231359,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded License.md: '# The MIT License', Artem Sapegin 2019. Matches claim; permissive. Active repo."
+   }
+  }
+ ]
+}

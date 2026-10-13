@@ -1,0 +1,21 @@
+{
+ "corpus": "dspy",
+ "cloned_at": "2026-10-13T03:26:57Z",
+ "repos": [
+  {
+   "repo": "dspy",
+   "url": "https://github.com/stanfordnlp/dspy.git",
+   "licence": "MIT",
+   "sha": "099982b3c3eec9fc4ec4796d49915af42367a253",
+   "files": 735,
+   "bytes": 26300782,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Read LICENSE: MIT, Copyright (c) 2023 Stanford Future Data Systems; single licence file, no secondary carve-out; active repo. Clean (~184MB full clone)."
+   }
+  }
+ ]
+}

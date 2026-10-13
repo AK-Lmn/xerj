@@ -1,0 +1,21 @@
+{
+ "corpus": "plain-language-guidelines",
+ "cloned_at": "2026-10-13T03:27:17Z",
+ "repos": [
+  {
+   "repo": "plainlanguage.gov",
+   "url": "https://github.com/GSA/plainlanguage.gov.git",
+   "licence": "CC0-1.0",
+   "sha": "fd7694740f19c0ed20ed71c2dd1dc92699e920fa",
+   "files": 368,
+   "bytes": 67943039,
+   "review": {
+    "spdx": "CC0-1.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE.md directly (GitHub API returns NOASSERTION only because the licence is Markdown with YAML front-matter): it is a US-Government public-domain work PLUS an explicit CC0 1.0 Universal worldwide dedication - genuinely CC0-1.0, copy/modify allowed even commercially. Repo is ARCHIVED/read-only but fully present and cloneable (~79.8MB git size); corpus value is the guidelines markdown, not the Jekyll assets. CC0 waives attribution, so credit is provenance/courtesy only."
+   }
+  }
+ ]
+}

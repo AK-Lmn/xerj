@@ -1,0 +1,21 @@
+{
+ "corpus": "cloudevents-spec",
+ "cloned_at": "2026-10-13T03:27:02Z",
+ "repos": [
+  {
+   "repo": "spec",
+   "url": "https://github.com/cloudevents/spec.git",
+   "licence": "Apache-2.0",
+   "sha": "2ed3806b4ad8fda35813263cfefb2d73098b7655",
+   "files": 136,
+   "bytes": 34303539,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "LICENSE read via GitHub API \u2014 Apache License 2.0 text confirmed (GitHub detects Apache-2.0); active repo, ls-remote HEAD OK."
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "age",
+ "cloned_at": "2026-10-13T03:26:43Z",
+ "repos": [
+  {
+   "repo": "age",
+   "url": "https://github.com/FiloSottile/age.git",
+   "licence": "BSD-3-Clause",
+   "sha": "b74dce4cdbe35b5e5f66c06d9612b72f89028758",
+   "files": 97,
+   "bytes": 700645,
+   "review": {
+    "spdx": "BSD-3-Clause",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Read LICENSE: standard 3-clause BSD (age Authors/Google/Valsorda); GitHub detects BSD-3-Clause. Permissive."
+   }
+  }
+ ]
+}

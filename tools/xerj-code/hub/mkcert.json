@@ -1,0 +1,21 @@
+{
+ "corpus": "mkcert",
+ "cloned_at": "2026-10-13T03:26:53Z",
+ "repos": [
+  {
+   "repo": "mkcert",
+   "url": "https://github.com/FiloSottile/mkcert.git",
+   "licence": "BSD-3-Clause",
+   "sha": "1c1dc4ed27ed5936046b6398d39cab4d657a2d8e",
+   "files": 16,
+   "bytes": 55771,
+   "review": {
+    "spdx": "BSD-3-Clause",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Read LICENSE: 3-clause BSD (mkcert Authors); GitHub detects BSD-3-Clause. Permissive."
+   }
+  }
+ ]
+}

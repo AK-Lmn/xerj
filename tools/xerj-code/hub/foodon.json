@@ -1,0 +1,21 @@
+{
+ "corpus": "foodon",
+ "cloned_at": "2026-10-13T03:26:20Z",
+ "repos": [
+  {
+   "repo": "foodon",
+   "url": "https://github.com/FoodOntology/foodon.git",
+   "licence": "CC-BY-4.0",
+   "sha": "cd73540243a84bcd511a500d9a497d12d7dc02f6",
+   "files": 205,
+   "bytes": 259762758,
+   "review": {
+    "spdx": "CC-BY-4.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE.txt via authenticated GitHub API = CC BY 4.0 (SPDX CC-BY-4.0); repo live, not archived (~365MB). Attribution required. Fetch foodon.owl (~39MB) or --depth 1."
+   }
+  }
+ ]
+}

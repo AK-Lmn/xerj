@@ -1,0 +1,21 @@
+{
+ "corpus": "mdn-browser-compat-data",
+ "cloned_at": "2026-10-13T03:26:41Z",
+ "repos": [
+  {
+   "repo": "browser-compat-data",
+   "url": "https://github.com/mdn/browser-compat-data.git",
+   "licence": "CC0-1.0",
+   "sha": "85c50b0bb92d9c4098a51f126033cdae7c7d7a36",
+   "files": 3293,
+   "bytes": 29747003,
+   "review": {
+    "spdx": "CC0-1.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE: 'CC0 1.0 Universal' public-domain dedication; GitHub detector concurs (cc0-1.0). This is the DATA repo, NOT MDN's CC-BY-SA article prose. Live. No attribution legally required; credit MDN courteously. Shallow ~39MB."
+   }
+  }
+ ]
+}

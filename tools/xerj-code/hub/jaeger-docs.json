@@ -1,0 +1,21 @@
+{
+ "corpus": "jaeger-docs",
+ "cloned_at": "2026-10-13T03:27:15Z",
+ "repos": [
+  {
+   "repo": "documentation",
+   "url": "https://github.com/jaegertracing/documentation.git",
+   "licence": "Apache-2.0",
+   "sha": "231b67c02d3303b8286748a2be7cb924ac73a5af",
+   "files": 3951,
+   "bytes": 34432834,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Read LICENSE via authenticated GitHub API: standard Apache-2.0 text, SPDX Apache-2.0; repo live. CNCF project prose docs, distinct from any protobuf-schema entry."
+   }
+  }
+ ]
+}
