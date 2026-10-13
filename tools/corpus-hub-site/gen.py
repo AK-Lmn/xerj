@@ -399,9 +399,11 @@ align-items:flex-start;justify-content:space-between;margin-bottom:var(--sp-6)}
 .arch .node{position:relative;flex:1 1 0;min-width:0;border:1px solid var(--z-line);
 background:var(--z-bg);padding:var(--sp-4) var(--sp-5);display:flex;flex-direction:column;gap:6px}
 .arch .node.on{border-color:var(--z-accent);box-shadow:inset 0 0 0 1px var(--z-accent)}
-.arch .node:not(:last-child)::after{content:"\\2192";position:absolute;right:calc(var(--sp-6) / -2 - 5px);
+.arch .node:not(:last-child)::after{position:absolute;right:calc(var(--sp-6) / -2 - 5px);
 top:50%;transform:translateY(-50%);font-family:var(--font-display);font-weight:900;
 color:var(--z-accent);font-size:var(--fs-20);line-height:1}
+.arch .node:nth-child(1)::after{content:"\\2192"}
+.arch .node:nth-child(2)::after{content:"\\2190"}
 .arch .nlabel{font-family:var(--font-display);font-weight:800;font-size:var(--fs-20);
 color:var(--z-ink);line-height:1}
 .arch .nsub{font-family:var(--font-prose);color:var(--z-mute);font-size:var(--fs-13);line-height:1.4}
@@ -411,8 +413,10 @@ text-transform:uppercase;letter-spacing:var(--track-ui);color:var(--z-mute)}
 .queries code{font-family:var(--font-mono);font-size:var(--fs-13);color:var(--z-ink);
 background:#fff;border:1px solid var(--z-line);padding:3px 8px}
 @media(max-width:720px){.arch{flex-direction:column;gap:var(--sp-6)}
-.arch .node:not(:last-child)::after{content:"\\2193";right:auto;left:50%;top:auto;
-bottom:calc(var(--sp-6) / -2 - 5px);transform:translateX(-50%)}}
+.arch .node:not(:last-child)::after{right:auto;left:50%;top:auto;
+bottom:calc(var(--sp-6) / -2 - 5px);transform:translateX(-50%)}
+.arch .node:nth-child(1)::after{content:"\\2193"}
+.arch .node:nth-child(2)::after{content:"\\2191"}}
 .heroside{flex:0 1 360px;display:flex;flex-direction:column;gap:var(--sp-4);margin-top:var(--sp-2)}
 .statgrid{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;
 gap:1px;background:var(--z-line);border:1px solid var(--z-line)}
@@ -732,8 +736,9 @@ def render_index(corpora, g7, graded, impact, prov):
 <div class="herorow">
 <div class="heromain">
 <h1 class="hero">REFERENCE MEMORY HUB<br><span class="accent">for AI agents</span></h1>
-<p class="lead">Resident memory for AI agents: the hub serves a pinned corpus, the XERJ engine
-indexes it locally, and the agent queries it in seconds &mdash; instead of guessing from training.</p>
+<p class="lead">Knowledge becomes memory. The hub pins a field&rsquo;s open knowledge into a memory
+corpus an agent can search in seconds &mdash; so instead of guessing from training, any AI agent
+that loads one works like a domain expert.</p>
 </div>
 <div class="heroside">
 <div class="statgrid">
@@ -741,19 +746,16 @@ indexes it locally, and the agent queries it in seconds &mdash; instead of guess
 <div class="stat"><b>{len(CATS)}</b><span>domains</span></div>
 <div class="stat"><b>{len(corpora)}</b><span>registry rows</span></div>
 <div class="stat"><b>{human_bytes(total_bytes)}</b><span>pinned text</span></div>
-<div class="stat wide"><b>{n_imp}</b><span>with agent A/B results</span></div>
 </div>
 <a class="cta" href="contribute.html">Add your corpus &rarr;</a>
 </div>
 </div>
-<section class="schema" aria-label="How a corpus becomes an agent's memory">
+<section class="schema" aria-label="How domain knowledge becomes agent memory">
 <ol class="arch">
-<li class="node"><span class="nlabel">Agent</span><span class="nsub">your coding agent, mid-task</span></li>
-<li class="node"><span class="nlabel">Hub</span><span class="nsub">hub.xerj.org serves one pinned, licence-checked corpus</span></li>
-<li class="node"><span class="nlabel">XERJ engine</span><span class="nsub">indexes that corpus locally, on your machine, in seconds</span></li>
-<li class="node on"><span class="nlabel">Resident memory</span><span class="nsub">the agent searches it &mdash; every hit cites its source</span></li>
+<li class="node"><span class="nlabel">Domain knowledge</span><span class="nsub">everything a field has written down &mdash; docs, code, rules, research</span></li>
+<li class="node on"><span class="nlabel">Memory corpus</span><span class="nsub">pinned and searchable, right here on the hub</span></li>
+<li class="node"><span class="nlabel">AI agents</span><span class="nsub">now domain experts</span></li>
 </ol>
-<div class="queries"><span class="qlab">example queries the agent runs against it</span><code>constant-time compare in a Rust crypto crate</code><code>ES mapping for a nested keyword field</code><code>Sigma rule for Log4Shell</code></div>
 </section>
 <section id="domains">
 <div class="toolbar">
