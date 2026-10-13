@@ -1,0 +1,21 @@
+{
+ "corpus": "mts-dialog-clinical-notes",
+ "cloned_at": "2026-10-13T03:55:37Z",
+ "repos": [
+  {
+   "repo": "MTS-Dialog",
+   "url": "https://github.com/abachaa/MTS-Dialog.git",
+   "licence": "CC-BY-4.0",
+   "sha": "3ff0801933608d6f570468c13125125fb5cabdea",
+   "files": 11,
+   "bytes": 8269589,
+   "review": {
+    "spdx": "CC-BY-4.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded /license is byte-identical to MedQuAD's: 'Attribution 4.0 International', 0 NonCommercial/ShareAlike = plain CC-BY-4.0; API label NOASSERTION (trap). Repo live HTTP 200, 1.2MB; Main-Dataset/ + Augmented-Data/ present. Synthetic/augmented dialogues, no PHI."
+   }
+  }
+ ]
+}

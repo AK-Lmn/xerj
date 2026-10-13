@@ -1,0 +1,21 @@
+{
+ "corpus": "medical-abbreviations",
+ "cloned_at": "2026-10-13T03:55:37Z",
+ "repos": [
+  {
+   "repo": "medical_abbreviations",
+   "url": "https://github.com/imantsm/medical_abbreviations.git",
+   "licence": "MIT",
+   "sha": "3970d38b7ac0b9018f14da62abdb002b0a0354e9",
+   "files": 23,
+   "bytes": 179812,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded /license = MIT (Copyright 2020 imantsm). Repo live HTTP 200, 0.65MB; CSVs/ holds alphabetised abbreviation tables (#-A, B, C, ... .csv). Permissive reference lists, not prose."
+   }
+  }
+ ]
+}

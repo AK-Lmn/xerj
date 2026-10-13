@@ -1,0 +1,21 @@
+{
+ "corpus": "datafusion",
+ "cloned_at": "2026-10-13T03:56:26Z",
+ "repos": [
+  {
+   "repo": "datafusion",
+   "url": "https://github.com/apache/datafusion.git",
+   "licence": "Apache-2.0",
+   "sha": "45de64cfc199345c8f218acd6d18634105403776",
+   "files": 4143,
+   "bytes": 61106045,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE.txt = Apache-2.0 verified; worktree 58MB/4143 blobs. Distinct repo from the excluded arrow-rs. Rust SQL/Arrow query engine. Permissive; cite file:line."
+   }
+  }
+ ]
+}

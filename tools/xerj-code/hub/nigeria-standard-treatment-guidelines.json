@@ -1,0 +1,21 @@
+{
+ "corpus": "nigeria-standard-treatment-guidelines",
+ "cloned_at": "2026-10-13T03:55:36Z",
+ "repos": [
+  {
+   "repo": "nigeria-clinical-guidelines-dataset",
+   "url": "https://github.com/Aybee5/nigeria-clinical-guidelines-dataset.git",
+   "licence": "MIT",
+   "sha": "d2be90e9462ce20cc37fe39a07b36a2e454d9c98",
+   "files": 543,
+   "bytes": 1769641,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded /license = MIT (Copyright 2026 Chisom Rutherford, matching the stated chisomrutherford mirror). Repo live HTTP 200, 0.8MB; processed_json/ holds per-condition files (ABORTION.json, ACUTE CORONARY SYNDROME.json, ...). Clean permissive."
+   }
+  }
+ ]
+}

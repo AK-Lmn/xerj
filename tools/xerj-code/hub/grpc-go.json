@@ -1,0 +1,21 @@
+{
+ "corpus": "grpc-go",
+ "cloned_at": "2026-10-13T03:56:14Z",
+ "repos": [
+  {
+   "repo": "grpc-go",
+   "url": "https://github.com/grpc/grpc-go.git",
+   "licence": "Apache-2.0",
+   "sha": "de20bed5c0557256824b14b7ef9ac860c81a0863",
+   "files": 1393,
+   "bytes": 14789352,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE via license API = full Apache-2.0 text, spdx_id Apache-2.0, active, 45MB pure-Go (clone-friendly vs the ~612MB C-core grpc/grpc)."
+   }
+  }
+ ]
+}

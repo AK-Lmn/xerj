@@ -1,0 +1,21 @@
+{
+ "corpus": "avro",
+ "cloned_at": "2026-10-13T03:56:10Z",
+ "repos": [
+  {
+   "repo": "avro",
+   "url": "https://github.com/apache/avro.git",
+   "licence": "Apache-2.0",
+   "sha": "28cb08c15543c8c2dd8d186db2029bfe760940a5",
+   "files": 2232,
+   "bytes": 17890272,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE.txt via GitHub license API = full Apache-2.0 text (spdx_id Apache-2.0); repo 200/active, 76MB. Appended third-party notices are front-end JS (jQuery/tipsy/protovis) dual MIT-or-GPL i.e. usable under MIT, not the serialization/RPC code; own code is Apache-2.0."
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "nuclei-templates",
+ "cloned_at": "2026-10-13T03:55:57Z",
+ "repos": [
+  {
+   "repo": "nuclei-templates",
+   "url": "https://github.com/projectdiscovery/nuclei-templates.git",
+   "licence": "MIT",
+   "sha": "24a43e144dfa293c478b1f75f9c3af517b1f1051",
+   "files": 14433,
+   "bytes": 46039980,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE.md = MIT (confirmed grant text). Full repo 770MB is high-churn git history; working tree ~44MB pure YAML \u2014 clone --depth 1."
+   }
+  }
+ ]
+}

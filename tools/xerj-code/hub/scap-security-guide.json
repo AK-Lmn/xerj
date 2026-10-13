@@ -1,0 +1,21 @@
+{
+ "corpus": "scap-security-guide",
+ "cloned_at": "2026-10-13T03:55:59Z",
+ "repos": [
+  {
+   "repo": "content",
+   "url": "https://github.com/ComplianceAsCode/content.git",
+   "licence": "BSD-3-Clause",
+   "sha": "f0f3396f70661dc35ad96b38a2dd480ee8b94a11",
+   "files": 13746,
+   "bytes": 68332377,
+   "review": {
+    "spdx": "BSD-3-Clause",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE: opens 'SPDX license identifier: BSD-3-Clause' followed by the full standard BSD-3-Clause text (Red Hat, Inc.). GitHub's NOASSERTION was only the non-standard SPDX-prefix line, not a missing licence. Bundles US-gov public-domain DISA STIG XCCDF."
+   }
+  }
+ ]
+}

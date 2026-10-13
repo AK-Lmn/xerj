@@ -1,0 +1,21 @@
+{
+ "corpus": "hivemq-mqtt-client",
+ "cloned_at": "2026-10-13T03:56:18Z",
+ "repos": [
+  {
+   "repo": "hivemq-mqtt-client",
+   "url": "https://github.com/hivemq/hivemq-mqtt-client.git",
+   "licence": "Apache-2.0",
+   "sha": "99ab201365456ed9b3a92ba099a90ab84bfe6ab6",
+   "files": 757,
+   "bytes": 3543119,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE via license API = full Apache-2.0 text, spdx_id Apache-2.0, active, 8.5MB. Permissive MQTT 3.1.1/5.0 client; pairs with mosquitto (approach-only) for broker semantics."
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "weaviate",
+ "cloned_at": "2026-10-13T03:56:35Z",
+ "repos": [
+  {
+   "repo": "weaviate",
+   "url": "https://github.com/weaviate/weaviate.git",
+   "licence": "BSD-3-Clause AND LicenseRef-Weaviate-Enterprise",
+   "sha": "a920eab8522d314098f649b4fc23d302936fff88",
+   "files": 5870,
+   "bytes": 56819086,
+   "review": {
+    "spdx": "BSD-3-Clause AND LicenseRef-Weaviate-Enterprise",
+    "use": "mixed",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "LICENSE confirms BSD-3-Clause everywhere EXCEPT the wl/ directory (Copyright Weaviate BV, all-rights-reserved, license-key gated). Exclude wl/ when cloning/adapting; BSD parts fine with attribution. Worktree 54MB (1.17GB history, shallow-clone)."
+   }
+  }
+ ]
+}

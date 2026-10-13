@@ -1,0 +1,21 @@
+{
+ "corpus": "icd9-icd10-hierarchy",
+ "cloned_at": "2026-10-13T03:55:41Z",
+ "repos": [
+  {
+   "repo": "icd_hierarchical_structure",
+   "url": "https://github.com/LuChang-CS/icd_hierarchical_structure.git",
+   "licence": "MIT",
+   "sha": "1b03a8c0f947f1bba2b263ce79c7a56943deeb4b",
+   "files": 8,
+   "bytes": 199241324,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE: MIT 'Copyright (c) 2023 Chang Lu' - matches. Repo HTTP 200; API size 3.4MB. JSON parent/child hierarchy for ICD-9-CM + ICD-10-CM (US-gov PD source codes) -> adapt-with-attribution; adds ICD-9 coverage the other entries lack."
+   }
+  }
+ ]
+}

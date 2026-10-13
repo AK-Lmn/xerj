@@ -1,0 +1,21 @@
+{
+ "corpus": "libcbor",
+ "cloned_at": "2026-10-13T03:56:13Z",
+ "repos": [
+  {
+   "repo": "libcbor",
+   "url": "https://github.com/PJK/libcbor.git",
+   "licence": "MIT",
+   "sha": "ab8c72b1b26c0c3a6a462a11055bf7000a9d2ef5",
+   "files": 204,
+   "bytes": 1181827,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE.md via license API = verbatim MIT (Pavel Kalvoda 2014-2017), spdx_id MIT, active, 2.5MB."
+   }
+  }
+ ]
+}

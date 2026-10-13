@@ -1,0 +1,21 @@
+{
+ "corpus": "splunk-security-content",
+ "cloned_at": "2026-10-13T03:56:02Z",
+ "repos": [
+  {
+   "repo": "security_content",
+   "url": "https://github.com/splunk/security_content.git",
+   "licence": "Apache-2.0",
+   "sha": "c653da7c11fc74a5410646c96cb05b8998fd6d44",
+   "files": 4282,
+   "bytes": 40209225,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE = canonical Apache-2.0 (11357B, byte-identical to the reference text). Default branch is 'develop'; 313MB history \u2014 clone --depth 1."
+   }
+  }
+ ]
+}

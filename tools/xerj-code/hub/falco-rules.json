@@ -1,0 +1,21 @@
+{
+ "corpus": "falco-rules",
+ "cloned_at": "2026-10-13T03:56:05Z",
+ "repos": [
+  {
+   "repo": "rules",
+   "url": "https://github.com/falcosecurity/rules.git",
+   "licence": "Apache-2.0",
+   "sha": "21ef6d5f5fdd8996b8e5015357e34f53cee2ac9f",
+   "files": 104,
+   "bytes": 747769,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE = canonical Apache-2.0. ~7MB nearly all YAML; official CNCF Falco runtime/syscall ruleset."
+   }
+  }
+ ]
+}

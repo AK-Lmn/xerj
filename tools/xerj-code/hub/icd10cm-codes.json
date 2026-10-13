@@ -1,0 +1,21 @@
+{
+ "corpus": "icd10cm-codes",
+ "cloned_at": "2026-10-13T03:55:39Z",
+ "repos": [
+  {
+   "repo": "icd10-cm",
+   "url": "https://github.com/bryand1/icd10-cm.git",
+   "licence": "MIT",
+   "sha": "98ad49ef300b1f02daa5149aa766dc11822ad9c6",
+   "files": 10,
+   "bytes": 749399,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE and read full text: standard MIT grant + AS-IS disclaimer, 'Copyright 2019 Bryan Andrade' (the 'MIT License' title line is omitted but the body is unambiguously MIT). Repo HTTP 200; API size 3.4MB. ICD-10-CM codes are US NCHS/CMS public domain, wrapper MIT -> adapt-with-attribution (cite Andrade + CMS)."
+   }
+  }
+ ]
+}

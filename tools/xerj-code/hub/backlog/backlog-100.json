@@ -4995,6 +4995,981 @@
      "editorial"
     ]
    }
+  },
+  {
+   "cat": "HEALTH",
+   "domain": "health",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "medquad",
+   "sources": [
+    {
+     "licence_hint": "CC-BY-4.0",
+     "url": "https://github.com/abachaa/MedQuAD"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "consumer-health",
+     "question-answering",
+     "nih",
+     "patient-education"
+    ]
+   }
+  },
+  {
+   "cat": "HEALTH",
+   "domain": "health",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "nigeria-standard-treatment-guidelines",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/Aybee5/nigeria-clinical-guidelines-dataset"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "clinical-guidelines",
+     "standard-treatment",
+     "primary-care",
+     "nigeria"
+    ]
+   }
+  },
+  {
+   "cat": "HEALTH",
+   "domain": "health",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "medical-abbreviations",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/imantsm/medical_abbreviations"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "medical-abbreviations",
+     "terminology",
+     "reference"
+    ]
+   }
+  },
+  {
+   "cat": "HEALTH",
+   "domain": "health",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "mts-dialog-clinical-notes",
+   "sources": [
+    {
+     "licence_hint": "CC-BY-4.0",
+     "url": "https://github.com/abachaa/MTS-Dialog"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "clinical-notes",
+     "doctor-patient-dialogue",
+     "summarization"
+    ]
+   }
+  },
+  {
+   "cat": "HEALTH",
+   "domain": "health",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "edliz-zimbabwe-treatment-guidelines",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/michaeldera/edliz"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "essential-medicines",
+     "standard-treatment-guidelines",
+     "zimbabwe"
+    ]
+   }
+  },
+  {
+   "cat": "HEALTH",
+   "domain": "health",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "icd10cm-codes",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/bryand1/icd10-cm"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "icd-10-cm",
+     "diagnosis-codes",
+     "medical-coding",
+     "us-cms-public-domain"
+    ]
+   }
+  },
+  {
+   "cat": "HEALTH",
+   "domain": "health",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "icd10-who",
+   "sources": [
+    {
+     "licence_hint": "CC0-1.0",
+     "url": "https://github.com/StefanoTrv/simple_icd_10"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "icd-10",
+     "who",
+     "code-description-pairs",
+     "international"
+    ]
+   }
+  },
+  {
+   "cat": "HEALTH",
+   "domain": "health",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "icd9-icd10-hierarchy",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/LuChang-CS/icd_hierarchical_structure"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "icd-9-cm",
+     "icd-10-cm",
+     "hierarchy",
+     "json"
+    ]
+   }
+  },
+  {
+   "cat": "HEALTH",
+   "domain": "health",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "caliber-ehr-phenotypes",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/spiros/chronological-map-phenotypes"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "phenotypes",
+     "ehr",
+     "clinical-codelists",
+     "caliber",
+     "read-codes"
+    ]
+   }
+  },
+  {
+   "cat": "LAW",
+   "domain": "law",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "oss-license-texts",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/github/choosealicense.com"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "licenses",
+     "legal",
+     "open-source",
+     "license-texts"
+    ]
+   }
+  },
+  {
+   "cat": "LAW",
+   "domain": "law",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "cicero-contract-templates",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/accordproject/cicero-template-library"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "contracts",
+     "legal-tech",
+     "templates",
+     "clauses"
+    ]
+   }
+  },
+  {
+   "cat": "LAW",
+   "domain": "law",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "commonaccord-legal-docs",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/CommonAccord/Cmacc-Org"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "contracts",
+     "clauses",
+     "document-assembly",
+     "legal"
+    ]
+   }
+  },
+  {
+   "cat": "LAW",
+   "domain": "law",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "commonpaper-contracts",
+   "sources": [
+    {
+     "licence_hint": "CC-BY-4.0",
+     "url": "https://github.com/CommonPaper/CSA"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "contracts",
+     "saas",
+     "standard-agreements"
+    ]
+   }
+  },
+  {
+   "cat": "LAW",
+   "domain": "law",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "gdpr-commonaccord",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/CommonAccord/GDPR"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "gdpr",
+     "eu-law",
+     "privacy",
+     "data-protection"
+    ]
+   }
+  },
+  {
+   "cat": "LAW",
+   "domain": "law",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "uslm-us-legislation",
+   "sources": [
+    {
+     "licence_hint": "CC0-1.0",
+     "url": "https://github.com/usgpo/uslm"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "legislation",
+     "us-code",
+     "uslm",
+     "xml",
+     "public-domain"
+    ]
+   }
+  },
+  {
+   "cat": "LAW",
+   "domain": "law",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "accord-legal-models",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/accordproject/models"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "ontology",
+     "contracts",
+     "data-models",
+     "legal"
+    ]
+   }
+  },
+  {
+   "cat": "SEC",
+   "domain": "security",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "payloadsallthethings",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/swisskyrepo/PayloadsAllTheThings"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "offensive",
+     "payloads",
+     "web-exploitation",
+     "pentest"
+    ]
+   }
+  },
+  {
+   "cat": "SEC",
+   "domain": "security",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "nuclei-templates",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/projectdiscovery/nuclei-templates"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "vulnerability-detection",
+     "yaml-templates",
+     "scanning",
+     "web"
+    ]
+   }
+  },
+  {
+   "cat": "SEC",
+   "domain": "security",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "scap-security-guide",
+   "sources": [
+    {
+     "licence_hint": "BSD-3-Clause",
+     "url": "https://github.com/ComplianceAsCode/content"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "hardening",
+     "cis-benchmarks",
+     "stig",
+     "compliance",
+     "scap"
+    ]
+   }
+  },
+  {
+   "cat": "SEC",
+   "domain": "security",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "splunk-security-content",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/splunk/security_content"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "detection-rules",
+     "siem",
+     "analytic-stories",
+     "mitre-attack"
+    ]
+   }
+  },
+  {
+   "cat": "SEC",
+   "domain": "security",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "misp-galaxy",
+   "sources": [
+    {
+     "licence_hint": "CC0-1.0 OR BSD-2-Clause",
+     "url": "https://github.com/MISP/misp-galaxy"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "threat-intel",
+     "threat-actors",
+     "clusters",
+     "iocs"
+    ]
+   }
+  },
+  {
+   "cat": "SEC",
+   "domain": "security",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "falco-rules",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/falcosecurity/rules"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "runtime-security",
+     "detection-rules",
+     "syscalls",
+     "cloud-native"
+    ]
+   }
+  },
+  {
+   "cat": "SEC",
+   "domain": "security",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "kube-bench",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/aquasecurity/kube-bench"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "kubernetes",
+     "cis-benchmark",
+     "hardening"
+    ]
+   }
+  },
+  {
+   "cat": "SEC",
+   "domain": "security",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "trivy-checks",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/aquasecurity/trivy-checks"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "iac-security",
+     "misconfiguration",
+     "rego",
+     "policy-as-code"
+    ]
+   }
+  },
+  {
+   "cat": "SEC",
+   "domain": "security",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "stratus-red-team",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/DataDog/stratus-red-team"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "cloud-security",
+     "adversary-emulation",
+     "aws",
+     "detection"
+    ]
+   }
+  },
+  {
+   "cat": "SEC",
+   "domain": "security",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "attack-flow",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/center-for-threat-informed-defense/attack-flow"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "threat-intel",
+     "mitre-attack",
+     "attack-modeling"
+    ]
+   }
+  },
+  {
+   "cat": "NET",
+   "domain": "NET",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "avro",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/apache/avro"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "serialization",
+     "avro",
+     "rpc",
+     "bigdata",
+     "schema"
+    ]
+   }
+  },
+  {
+   "cat": "NET",
+   "domain": "NET",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "thrift",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/apache/thrift"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "serialization",
+     "rpc",
+     "thrift",
+     "cross-language",
+     "network-server"
+    ]
+   }
+  },
+  {
+   "cat": "NET",
+   "domain": "NET",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "libcbor",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/PJK/libcbor"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "cbor",
+     "serialization",
+     "c",
+     "rfc8949"
+    ]
+   }
+  },
+  {
+   "cat": "NET",
+   "domain": "NET",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "grpc-go",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/grpc/grpc-go"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "grpc",
+     "rpc",
+     "http2",
+     "protobuf",
+     "go"
+    ]
+   }
+  },
+  {
+   "cat": "NET",
+   "domain": "NET",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "miekg-dns",
+   "sources": [
+    {
+     "licence_hint": "BSD-3-Clause",
+     "url": "https://github.com/miekg/dns"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "dns",
+     "dns-library",
+     "dnssec",
+     "go"
+    ]
+   }
+  },
+  {
+   "cat": "NET",
+   "domain": "NET",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "c-ares",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/c-ares/c-ares"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "dns",
+     "resolver",
+     "async",
+     "c",
+     "library"
+    ]
+   }
+  },
+  {
+   "cat": "NET",
+   "domain": "NET",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "llhttp",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/nodejs/llhttp"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "http",
+     "http-parser",
+     "parser",
+     "llparse"
+    ]
+   }
+  },
+  {
+   "cat": "NET",
+   "domain": "NET",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "quiche",
+   "sources": [
+    {
+     "licence_hint": "BSD-2-Clause",
+     "url": "https://github.com/cloudflare/quiche"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "quic",
+     "http3",
+     "protocol",
+     "rust",
+     "tls"
+    ]
+   }
+  },
+  {
+   "cat": "NET",
+   "domain": "NET",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "hivemq-mqtt-client",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/hivemq/hivemq-mqtt-client"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "mqtt",
+     "mqtt5",
+     "mqtt-client",
+     "iot",
+     "reactive"
+    ]
+   }
+  },
+  {
+   "cat": "NET",
+   "domain": "NET",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "xz",
+   "sources": [
+    {
+     "licence_hint": "0BSD",
+     "url": "https://github.com/tukaani-project/xz"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "compression",
+     "lzma",
+     "xz",
+     "c"
+    ]
+   }
+  },
+  {
+   "cat": "DB",
+   "domain": "DB",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "polars",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/pola-rs/polars"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "rust",
+     "dataframe",
+     "query-engine",
+     "columnar",
+     "arrow"
+    ]
+   }
+  },
+  {
+   "cat": "DB",
+   "domain": "DB",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "tikv",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/tikv/tikv"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "rust",
+     "distributed",
+     "transactions",
+     "raft",
+     "mvcc",
+     "key-value"
+    ]
+   }
+  },
+  {
+   "cat": "DB",
+   "domain": "DB",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "datafusion",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/apache/datafusion"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "rust",
+     "sql",
+     "query-engine",
+     "arrow",
+     "olap"
+    ]
+   }
+  },
+  {
+   "cat": "DB",
+   "domain": "DB",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "chroma",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/chroma-core/chroma"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "rust",
+     "python",
+     "vector-database",
+     "ai-search"
+    ]
+   }
+  },
+  {
+   "cat": "DB",
+   "domain": "DB",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "milvus",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/milvus-io/milvus"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "go",
+     "cpp",
+     "vector-database",
+     "hnsw",
+     "diskann",
+     "ivf"
+    ]
+   }
+  },
+  {
+   "cat": "DB",
+   "domain": "DB",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "weaviate",
+   "sources": [
+    {
+     "licence_hint": "BSD-3-Clause AND LicenseRef-Weaviate-Enterprise",
+     "url": "https://github.com/weaviate/weaviate"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "go",
+     "vector-database",
+     "hnsw",
+     "hybrid-search"
+    ]
+   }
   }
  ],
  "lanes": [

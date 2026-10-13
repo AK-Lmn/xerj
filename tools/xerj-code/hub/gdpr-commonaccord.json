@@ -1,0 +1,21 @@
+{
+ "corpus": "gdpr-commonaccord",
+ "cloned_at": "2026-10-13T03:55:49Z",
+ "repos": [
+  {
+   "repo": "GDPR",
+   "url": "https://github.com/CommonAccord/GDPR.git",
+   "licence": "MIT",
+   "sha": "cd623e0da14f62d85a728d510619b7a607cc44ce",
+   "files": 801,
+   "bytes": 929329,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "license API decoded = verbatim MIT (c) 2015 CommonAccord.org, covering the markup/prose-object structure; the underlying GDPR text is (c) European Union, reusable under EU Commission Decision 2011/833/EU with attribution. Both layers are attribution-permissive. 0.7MB, branch master (pushed 2016; GDPR text is stable). Confirmed adapt-with-attribution (dual-layer: MIT markup + EU-attribution text)."
+   }
+  }
+ ]
+}
