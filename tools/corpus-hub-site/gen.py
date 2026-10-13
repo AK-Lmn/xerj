@@ -276,9 +276,12 @@ SETUP_STEPS = (
     "   If it is missing: curl -fsSL https://xerj.org/get | sh\n"
     '   then: export PATH="$HOME/.local/bin:$PATH"\n'
     "2. Check for a local node: curl -s localhost:9200/_cluster/health\n"
-    "   If nothing answers, start one and leave it running:\n"
-    "   xerj --insecure --data-dir ~/xerj-data &\n"
+    "   If one answers, use it as it is - do not restart or stop it.\n"
+    "   If nothing answers, start one, keep its PID, and leave it running:\n"
+    "   nohup xerj --insecure --data-dir ~/xerj-data > ~/xerj-node.log 2>&1 & echo $! > ~/xerj-node.pid\n"
     '   Success: the health call returns JSON containing "status":"green".\n'
+    "   To stop a node you started: kill $(cat ~/xerj-node.pid). Never pkill or killall xerj -\n"
+    "   other XERJ nodes may be running on this machine.\n"
 )
 
 
@@ -887,9 +890,9 @@ def detail_body(c, g7, graded, impact, prov):
                  f'<code>xerj corpus add --from ./{s}.json</code><br>'
                  f'<code>xerj corpus index {s}</code> then '
                  f'<code>xerj code {s} "your question"</code>'
-                 f'<p class="note">Needs the <code>xerj</code> CLI and a local node running '
-                 f'(<code>xerj --insecure --data-dir ~/xerj-data &amp;</code>); the copy prompt '
-                 f'covers both and checks each step. No shell: the MCP tool '
+                 f'<p class="note">Needs the <code>xerj</code> CLI and a local node running; the '
+                 f'copy prompt covers both, checks each step, and shows how to stop only the node '
+                 f'you started. No shell: the MCP tool '
                  f'<code>xerj_code_search</code> with <code>corpus: "{s}"</code>, once the corpus '
                  f'is indexed on the node.</p></div>')
     return f'''<main>
@@ -1056,12 +1059,15 @@ def main():
         "       curl -fsSL https://xerj.org/get | sh",
         '       export PATH="$HOME/.local/bin:$PATH"',
         "",
-        "2. Start a local node, if `curl -s localhost:9200/_cluster/health` does not answer.",
-        "   Leave it running:",
+        "2. Check for a local node: `curl -s localhost:9200/_cluster/health`. If one answers,",
+        "   use it as it is. If nothing answers, start one, keep its PID, and leave it running:",
         "",
-        "       xerj --insecure --data-dir ~/xerj-data &",
+        "       nohup xerj --insecure --data-dir ~/xerj-data > ~/xerj-node.log 2>&1 &",
+        "       echo $! > ~/xerj-node.pid",
         "",
         '   Success: the health call returns JSON containing "status":"green".',
+        "   To stop a node you started: `kill $(cat ~/xerj-node.pid)`. Never `pkill xerj` or",
+        "   `killall xerj`: other XERJ nodes may be running on the machine and you would stop them too.",
         "",
         "3. Download the pinned manifest and add the corpus. `--from` takes a local file:",
         "",
