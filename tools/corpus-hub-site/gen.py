@@ -352,7 +352,8 @@ code{font-family:var(--font-mono);font-size:.92em;background:var(--z-faint);padd
 /* nav: main-site pattern, 1px bottom line */
 .nav{display:flex;align-items:baseline;gap:var(--sp-5);padding:var(--sp-4) var(--page-x);
 border-bottom:1px solid var(--z-line);font-family:var(--font-data);font-size:var(--fs-11);
-font-weight:600;text-transform:uppercase;letter-spacing:var(--track-ui);flex-wrap:wrap}
+font-weight:600;text-transform:uppercase;letter-spacing:var(--track-ui);flex-wrap:wrap;
+position:sticky;top:0;z-index:50;background:var(--z-bg)}
 .nav .brand{font-family:var(--font-display);font-weight:900;font-size:var(--fs-16);
 letter-spacing:.24em;color:var(--z-ink);text-decoration:none}
 .nav .brand b{color:var(--z-accent)}
@@ -362,10 +363,14 @@ letter-spacing:.24em;color:var(--z-ink);text-decoration:none}
 .nav a.navicon{display:inline-flex;align-items:center;color:var(--z-mute)}
 .nav a.navicon svg{width:15px;height:15px;fill:currentColor;display:block}
 .nav a.navicon:hover{color:var(--z-ink)}
-/* contribute CTA: animated purple gradient so it pops against the amber palette */
-.nav a.navcta{color:#fff;border:0;padding:.42em .95em;
+/* contribute CTA: subtle 1px frame while the hero CTA is on screen; turns into the
+   animated purple gradient (.on, set by JS) once the hero CTA scrolls up under the nav */
+.nav a.navcta{color:var(--z-mute);border:1px solid var(--z-line);padding:.42em .95em;
+background:none;transition:color .2s,border-color .2s}
+.nav a.navcta:hover{color:var(--z-ink);border-color:var(--z-mute)}
+.nav a.navcta.on{color:#fff;border:0;
 background:linear-gradient(100deg,#6d28d9,#9333ea,#7c3aed,#6d28d9);background-size:280% 100%;animation:ctaflow 5s ease infinite}
-.nav a.navcta:hover{filter:brightness(1.12)}
+.nav a.navcta.on:hover{color:#fff;filter:brightness(1.12)}
 .cta{display:inline-block;margin-top:var(--sp-5);font-family:var(--font-data);font-size:var(--fs-13);
 font-weight:600;text-transform:uppercase;letter-spacing:var(--track-ui);text-decoration:none;color:#fff;
 background:linear-gradient(100deg,#6d28d9,#9333ea,#7c3aed,#6d28d9);background-size:280% 100%;animation:ctaflow 5s ease infinite;padding:.72em 1.25em;border:0}
@@ -561,7 +566,23 @@ PAGE = """<!doctype html><html lang="en"><head><meta charset="utf-8">
 <span>PINNED SOURCES · VERIFIED LICENCES · MEASURED RETRIEVAL</span>
 <span><a href="{rel}index.html">CORPORA</a> · <a href="{rel}about.html">ABOUT</a> ·
 <a href="{rel}llms.txt">LLMS.TXT</a></span></footer>
+{navjs}
 </body></html>"""
+
+
+# Keeps a single prominent CTA: the nav "ADD YOUR CORPUS" stays a subtle 1px frame
+# while the hero CTA is on screen, and turns purple (.on) once the hero CTA scrolls
+# under the sticky nav. On pages with no hero CTA it is prominent from the start.
+NAVCTA_JS = """<script>
+(function(){
+  var nav=document.querySelector('.nav a.navcta'); if(!nav) return;
+  var hero=document.querySelector('.heroside .cta');
+  if(!hero){ nav.classList.add('on'); return; }
+  var io=new IntersectionObserver(function(e){ nav.classList.toggle('on', !e[0].isIntersecting); },
+    {rootMargin:'-64px 0px 0px 0px', threshold:0});
+  io.observe(hero);
+})();
+</script>"""
 
 
 # Content hash of the stylesheet: appended as ?v= on every page's CSS link so a
@@ -571,7 +592,7 @@ STYLE_VER = hashlib.sha1(STYLE.encode("utf-8")).hexdigest()[:8]
 
 def page(title, desc, body, rel=""):
     return PAGE.format(title=esc(title), desc=esc(desc), body=body, rel=rel,
-                       fonts=FONTS, stamp=STAMP, ver=STYLE_VER)
+                       fonts=FONTS, stamp=STAMP, ver=STYLE_VER, navjs=NAVCTA_JS)
 
 
 FILTER_JS = """<script>
