@@ -362,12 +362,13 @@ line-height:1.5;max-width:56ch}
 align-items:flex-start;justify-content:space-between;margin-bottom:var(--sp-6)}
 .heromain{flex:1 1 440px;min-width:0}
 .heromain .hero,.heromain .lead{margin-bottom:0}
-.statgrid{flex:0 1 360px;display:grid;grid-template-columns:1fr 1fr;gap:1px;
-background:var(--z-line);border:1px solid var(--z-line);margin-top:var(--sp-2)}
-.stat{background:var(--z-bg);padding:var(--sp-4) var(--sp-5)}
+.statgrid{flex:0 1 360px;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;
+gap:1px;background:var(--z-line);border:1px solid var(--z-line);margin-top:var(--sp-2)}
+.stat{background:var(--z-bg);padding:var(--sp-4) var(--sp-5);min-height:88px;
+display:flex;flex-direction:column;justify-content:center;gap:4px}
 .stat.wide{grid-column:1 / -1}
-.stat b{display:block;font-family:var(--font-display);font-weight:800;
-font-size:var(--fs-56);line-height:1;color:var(--z-ink)}
+.stat b{font-family:var(--font-display);font-weight:800;white-space:nowrap;
+font-size:var(--fs-32);line-height:1;color:var(--z-ink)}
 .stat span{font-family:var(--font-data);font-size:var(--fs-11);font-weight:500;
 text-transform:uppercase;letter-spacing:var(--track-ui);color:var(--z-mute)}
 .count{font-family:var(--font-data);font-size:var(--fs-11);font-weight:500;
@@ -645,21 +646,23 @@ def render_index(corpora, g7, graded, impact, prov):
               for k in CATS}
     dmax = max(dstats.values(), default=0) or 1
     for k, (title, _what) in sorted(CATS.items(), key=lambda kv: -dstats[kv[0]]):
-        cs = [c for c in corpora if c["cat"] == k]
-        if not cs:
+        # Only LIVE corpora go in the treemap: it sizes cells by bytes, and a
+        # candidate/deferred/withdrawn entry has none (0 bytes) so it would be a
+        # meaningless empty cell. Those still appear on the domain/category pages;
+        # the registry-rows stat carries the full count.
+        live_cs = sorted((c for c in corpora if c["cat"] == k and c["status"] == "live"),
+                         key=lambda c: (-corpus_stats(c)[1], c["slug"]))
+        if not live_cs:
             continue
-        cs.sort(key=lambda c: (c["status"] != "live", -corpus_stats(c)[1], c["slug"]))
-        live_cs = [c for c in cs if c["status"] == "live"]
         n_live = len(live_cs)
         cat_bytes = dstats[k]
-        # Height gives every cell room to be readable: grows with the corpus
-        # count (crowded domains are taller) with a byte nudge so the biggest
-        # domain still leads. Clamped 240..540px.
-        band_h = max(240, min(540, round(120 + 12 * len(cs) + 110 * (cat_bytes / dmax) ** 0.5)))
+        # Height gives every cell room to be readable: grows with the live
+        # corpus count (crowded domains are taller) with a byte nudge so the
+        # biggest domain still leads. Clamped 240..540px.
+        band_h = max(240, min(540, round(120 + 13 * n_live + 110 * (cat_bytes / dmax) ** 0.5)))
         copy = (f'<button class="copy" data-copy="{esc(category_prompt(k, title, [c["slug"] for c in live_cs]))}" '
-                f'title="Copy a prompt that installs XERJ and sets up the whole {esc(k)} domain">COPY PROMPT</button>'
-                if n_live else "")
-        tiles = "".join(tile(c) for c in cs)
+                f'title="Copy a prompt that installs XERJ and sets up the whole {esc(k)} domain">COPY PROMPT</button>')
+        tiles = "".join(tile(c) for c in live_cs)
         groups.append(f'''<div class="tgroup">
 <div class="thead"><a class="thword" href="category/{k}.html">{esc(k)}</a>
 <div class="tgright">{copy}<span class="tgmeta"><b>{n_live}</b> live · {esc(title)} · {human_bytes(cat_bytes)}</span></div></div>
