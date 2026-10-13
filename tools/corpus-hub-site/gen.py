@@ -393,9 +393,21 @@ line-height:1.5;max-width:56ch}
 .herorow{display:flex;flex-wrap:wrap;gap:var(--sp-6) var(--sp-8);
 align-items:flex-start;justify-content:space-between;margin-bottom:var(--sp-6)}
 .heromain{flex:1 1 440px;min-width:0}
-.heromain .hero,.heromain .lead{margin-bottom:0}
-.statgrid{flex:0 1 360px;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;
-gap:1px;background:var(--z-line);border:1px solid var(--z-line);margin-top:var(--sp-2)}
+.heromain .lead{margin-bottom:0;max-width:52ch}
+.flow{list-style:none;margin:var(--sp-5) 0 0;padding:0;display:flex;flex-direction:column;gap:1px;
+border:1px solid var(--z-line);background:var(--z-line);max-width:52ch}
+.flow li{background:var(--z-bg);display:grid;grid-template-columns:auto 1fr;
+column-gap:var(--sp-4);row-gap:2px;padding:var(--sp-3) var(--sp-4)}
+.flow .n{grid-column:1;grid-row:1 / span 2;align-self:center;font-family:var(--font-display);
+font-weight:900;font-size:var(--fs-32);line-height:1;color:var(--z-accent)}
+.flow b{grid-column:2;grid-row:1;font-family:var(--font-data);font-weight:700;
+text-transform:uppercase;letter-spacing:var(--track-ui);font-size:var(--fs-13);color:var(--z-ink)}
+.flow span{grid-column:2;grid-row:2;font-family:var(--font-prose);color:var(--z-mute);
+font-size:var(--fs-16);line-height:1.45}
+.heroside{flex:0 1 360px;display:flex;flex-direction:column;gap:var(--sp-4);margin-top:var(--sp-2)}
+.statgrid{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;
+gap:1px;background:var(--z-line);border:1px solid var(--z-line)}
+.heroside .cta{margin-top:0;text-align:center}
 .stat{background:var(--z-bg);padding:var(--sp-4) var(--sp-5);min-height:88px;
 display:flex;flex-direction:column;justify-content:center;gap:4px}
 .stat.wide{grid-column:1 / -1}
@@ -711,19 +723,23 @@ def render_index(corpora, g7, graded, impact, prov):
 <div class="herorow">
 <div class="heromain">
 <h1 class="hero">REFERENCE MEMORY HUB<br><span class="accent">for AI agents</span></h1>
-<p class="lead">An agent with the right text at hand beats an agent guessing from memory.
-Each corpus here is a pinned, licence-checked slice of one domain that the agent
-downloads per task and searches in seconds. No waiting for the next model
-retrain. No fighting website blocks and rate limits. Every corpus names its
-sources, its pins, its licence verdict, and what the retrieval tests scored.</p>
-<a class="cta" href="contribute.html">Add your corpus &rarr;</a>
+<p class="lead">Resident memory for an AI agent: pull one domain&rsquo;s pinned, licence-checked
+corpus and search it locally &mdash; instead of guessing from training.</p>
+<ol class="flow">
+<li><span class="n">1</span><b>Pick a domain</b><span>One of {len(CATS)} &mdash; security, databases, crypto, law, and more.</span></li>
+<li><span class="n">2</span><b>Pull its corpus</b><span>A pinned slice downloaded per task. No retrain wait, no rate limits.</span></li>
+<li><span class="n">3</span><b>Search it locally</b><span>Answers in seconds, every hit citing its exact source.</span></li>
+</ol>
 </div>
+<div class="heroside">
 <div class="statgrid">
 <div class="stat"><b>{len(live)}</b><span>live corpora</span></div>
 <div class="stat"><b>{len(CATS)}</b><span>domains</span></div>
 <div class="stat"><b>{len(corpora)}</b><span>registry rows</span></div>
 <div class="stat"><b>{human_bytes(total_bytes)}</b><span>pinned text</span></div>
 <div class="stat wide"><b>{n_imp}</b><span>with agent A/B results</span></div>
+</div>
+<a class="cta" href="contribute.html">Add your corpus &rarr;</a>
 </div>
 </div>
 <section id="domains">
