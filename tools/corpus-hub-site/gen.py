@@ -181,7 +181,17 @@ def load_registry():
                 "added": "", "kind": "backlog row", "consumed": row.get("sources", [{}])[0].get("url", ""),
                 "tags": row.get("tags", {}), "merged_into": row.get("merged_into", ""),
             })
-    return sorted(corpora, key=lambda c: c["slug"])
+    # A slug can appear as both a lane-A manifest and a lane-B recipe (same
+    # corpus offered two ways); keep ONE entry so it is never listed twice.
+    # Richer wins: most pinned bytes, then most repos, then lane A.
+    def rank(c):
+        return (sum(r.get("bytes") or 0 for r in c["repos"]), len(c["repos"]),
+                1 if c["lane"] == "A" else 0)
+    best = {}
+    for c in corpora:
+        if c["slug"] not in best or rank(c) > rank(best[c["slug"]]):
+            best[c["slug"]] = c
+    return sorted(best.values(), key=lambda c: c["slug"])
 
 
 def corpus_stats(c):
@@ -297,8 +307,10 @@ def tile(c):
     resize and on filter, so the layout is fully scalable."""
     files, nbytes, _ = corpus_stats(c)
     st, stcls = STATUSES.get(c["status"], (c["status"], "mute"))
-    meta = (f"{human_bytes(nbytes)} · {human_files(files)}" if c["status"] == "live"
-            else st)
+    if c["status"] == "live":
+        meta = f"{human_bytes(nbytes)} · {human_files(files)}" if nbytes else "curated pack"
+    else:
+        meta = st
     ttl = f'{c["slug"]} — {meta}'
     return (f'<div class="tile" data-cat="{esc(c["cat"])}" '
             f'data-region="{esc(region(c))}" data-name="{esc(c["slug"])}" '
@@ -646,10 +658,11 @@ def render_index(corpora, g7, graded, impact, prov):
               for k in CATS}
     dmax = max(dstats.values(), default=0) or 1
     for k, (title, _what) in sorted(CATS.items(), key=lambda kv: -dstats[kv[0]]):
-        # Only LIVE corpora go in the treemap: it sizes cells by bytes, and a
-        # candidate/deferred/withdrawn entry has none (0 bytes) so it would be a
-        # meaningless empty cell. Those still appear on the domain/category pages;
-        # the registry-rows stat carries the full count.
+        # All LIVE corpora go in the treemap, sized by bytes. A lane-B curated
+        # pack has no PINNED bytes (its recipe fetches at use time), so it shows
+        # as a small, clearly-labelled "curated pack" cell (not "0 B"), kept
+        # readable by the squarify floor. Candidates/deferred are not live and
+        # never appear here.
         live_cs = sorted((c for c in corpora if c["cat"] == k and c["status"] == "live"),
                          key=lambda c: (-corpus_stats(c)[1], c["slug"]))
         if not live_cs:
@@ -660,7 +673,10 @@ def render_index(corpora, g7, graded, impact, prov):
         # corpus count (crowded domains are taller) with a byte nudge so the
         # biggest domain still leads. Clamped 240..540px.
         band_h = max(240, min(540, round(120 + 13 * n_live + 110 * (cat_bytes / dmax) ** 0.5)))
-        copy = (f'<button class="copy" data-copy="{esc(category_prompt(k, title, [c["slug"] for c in live_cs]))}" '
+        # The copy-prompt installs the pinned (lane-A) corpora; a lane-B curated
+        # pack has no manifest to `add --from`, so it is left out of the prompt.
+        installable = [c["slug"] for c in live_cs if corpus_stats(c)[1] > 0]
+        copy = (f'<button class="copy" data-copy="{esc(category_prompt(k, title, installable))}" '
                 f'title="Copy a prompt that installs XERJ and sets up the whole {esc(k)} domain">COPY PROMPT</button>')
         tiles = "".join(tile(c) for c in live_cs)
         groups.append(f'''<div class="tgroup">
