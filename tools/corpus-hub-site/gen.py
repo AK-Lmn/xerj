@@ -30,13 +30,17 @@ PACKS = ROOT / "tools" / "packs"
 OUT = pathlib.Path(__file__).resolve().parent / "out"
 
 CATS = {
-    "SEC": ("Security advisories and identifiers", "Is this CVE exploited in the wild; does this pattern have KEV or GHSA precedent"),
-    "STD": ("Standards, specs and regulations", "What RFC 9105 / SP 800-88 / 29 CFR 1910.28 actually says"),
-    "OPS": ("Production and incident knowledge", "How real teams handled this; what caused outages like this one"),
-    "GOOD": ("Design guidance and exemplars", "What a reviewed, idiomatic implementation looks like"),
-    "BAD": ("Failure precedent", "Real vulnerable functions and the fix that closed them"),
-    "DATA": ("Data engines, reference source", "How duckdb, rocksdb, sqlite actually do planner, LSM, B+-tree"),
-    "NET": ("Net, crypto, serialisation source", "How quinn, rustls, zstd actually do handshake, compression, framing"),
+    "SEC": ("Security and vulnerabilities", "Is this CVE exploited; does this pattern have KEV/GHSA precedent; how was it fixed"),
+    "DB": ("Databases and storage engines", "How duckdb, rocksdb, sqlite, kafka, faiss actually do planner, LSM, B-tree, log, ANN"),
+    "NET": ("Networking, protocols and serialisation", "How curl, nginx, envoy, protobuf, zstd do HTTP, proxying, framing, compression"),
+    "CRYPTO": ("Cryptography, TLS and secrets", "How openssl, rustls, s2n-tls, wireguard, vault do handshakes, ciphers, key handling"),
+    "WEB": ("Web and frontend platform", "What CSS, the DOM, ECMAScript, a design system or CLDR actually specify"),
+    "API": ("API design and specification", "What a reviewed REST/GraphQL/OpenAPI surface looks like, and the rule behind it"),
+    "OPS": ("Operations and SRE", "How real teams run, observe and recover systems; what the runbook says"),
+    "LAW": ("Law and regulation", "What the statute, CFR title, EU regulation or building/traffic code actually says"),
+    "HEALTH": ("Health and clinical reference", "What the clinical code, drug label or food-safety rule actually requires"),
+    "AI": ("AI, prompts and agents", "A tested prompt, a prompt-engineering pattern, or an agent design to build on"),
+    "WRITE": ("Writing and copy", "A proven content-style rule, copy pattern or editorial standard to write to"),
 }
 
 STATUSES = {"live": ("live", "ok"), "candidate": ("candidate", "warn"), "planned": ("planned", "mute"),
@@ -355,6 +359,12 @@ letter-spacing:.24em;color:var(--z-ink);text-decoration:none}
 .nav a{color:var(--z-mute);text-decoration:none}
 .nav a:hover{color:var(--z-ink)}
 .nav .spacer{flex:1}
+.nav a.navcta{color:var(--z-accent);border:1px solid var(--z-accent);padding:.3em .7em;margin-right:var(--sp-4)}
+.nav a.navcta:hover{background:var(--z-accent);color:var(--z-bg)}
+.cta{display:inline-block;margin-top:var(--sp-5);font-family:var(--font-data);font-size:var(--fs-13);
+font-weight:600;text-transform:uppercase;letter-spacing:var(--track-ui);text-decoration:none;
+color:var(--z-bg);background:var(--z-accent);padding:.65em 1.1em;border:1px solid var(--z-accent)}
+.cta:hover{background:transparent;color:var(--z-accent)}
 main{max-width:var(--max-w);margin:0 auto;padding:var(--sp-8) var(--page-x) var(--sp-16)}
 /* type */
 .kicker{font-family:var(--font-data);font-size:var(--fs-11);font-weight:500;
@@ -510,7 +520,7 @@ PAGE = """<!doctype html><html lang="en"><head><meta charset="utf-8">
 <a href="{rel}index.html">CORPORA</a><a href="{rel}index.html#domains">DOMAINS</a>
 <a href="{rel}about.html">ABOUT</a>
 <a href="https://github.com/xerj-org/xerj/tree/corpus-hub/tools/xerj-code/hub">REGISTRY (GIT)</a>
-<span class="spacer"></span><a href="https://xerj.org">XERJ.ORG</a></nav>
+<span class="spacer"></span><a href="{rel}contribute.html" class="navcta">SHARE YOUR KNOWLEDGE</a><a href="https://xerj.org">XERJ.ORG</a></nav>
 {body}
 <footer><span>XERJ · CORPUS HUB · {stamp}</span>
 <span>PINNED SOURCES · VERIFIED LICENCES · MEASURED RETRIEVAL</span>
@@ -696,6 +706,7 @@ Each corpus here is a pinned, licence-checked slice of one domain that the agent
 downloads per task and searches in seconds. No waiting for the next model
 retrain. No fighting website blocks and rate limits. Every corpus names its
 sources, its pins, its licence verdict, and what the retrieval tests scored.</p>
+<a class="cta" href="contribute.html">Share your knowledge &rarr;</a>
 </div>
 <div class="statgrid">
 <div class="stat"><b>{len(live)}</b><span>live corpora</span></div>
@@ -846,6 +857,54 @@ and the program doc (PROGRAM-100.md). This site is generated from the registry b
 </main>'''
 
 
+def contribute_prompt():
+    """Paste-ready agent prompt: install XERJ, build a corpus from a folder or
+    public repos, and open a PR to the corpus-hub registry."""
+    return (
+        "Help me contribute a corpus to the XERJ Corpus Hub (hub.xerj.org).\n"
+        "1. If the xerj CLI is not installed, install it: curl -fsSL https://xerj.org/get | sh\n"
+        "2. Build a corpus from a folder of documents I point you to: xerj autoindex <folder>\n"
+        "   (or from public repos: xerj corpus add <name> <git-url> ...). This pins the sources\n"
+        "   (commit SHA, files, bytes) and writes a manifest.\n"
+        "3. Confirm the content is openly licensed and attributable. The hub is Apache-2.0 and\n"
+        "   accepts only openly-licensed, source-cited corpora; record a review block per source\n"
+        "   rather than trusting the licence detector.\n"
+        "4. Fork github.com/xerj-org/xerj, copy the manifest to tools/xerj-code/hub/<name>.json,\n"
+        "   add a one-line row to tools/xerj-code/hub/backlog/backlog-100.json, and open a pull\n"
+        '   request targeting the corpus-hub branch. In the PR, say what the corpus is FOR.'
+    )
+
+
+def contribute_body():
+    return f'''<main>
+<div class="kicker"><span class="accent">CONTRIBUTE</span><span class="dash">&middot;</span><span>SHARE YOUR KNOWLEDGE</span></div>
+<h1 class="hero" style="font-size:clamp(44px,6vw,var(--fs-96))">SHARE YOUR<br><span class="accent">KNOWLEDGE</span></h1>
+<p class="lead">A corpus is just a folder of documents &mdash; your own docs, a public dataset,
+a reference repo &mdash; pinned and licence-checked so agents search it instead of guessing.
+If the hub is missing a domain you know, index it and open a pull request. Every corpus here
+arrived the same way.</p>
+<div class="kbox"><b>Contribute a corpus</b> <button class="copy" data-copy="{esc(contribute_prompt())}" title="Copy a prompt that installs XERJ, indexes your corpus, and opens the PR">COPY PROMPT</button><br>
+Paste the prompt into your coding agent: it installs XERJ, builds the corpus from a folder
+(<code>xerj autoindex &lt;folder&gt;</code>) or from repos (<code>xerj corpus add &lt;name&gt; &lt;git-url&gt;</code>),
+and opens the pull request.</div>
+<section class="detail"><h2>Or by hand, in four steps</h2>
+<table>
+<tr><th>step</th><th>what to do</th></tr>
+<tr><td>1 &middot; install</td><td><code>curl -fsSL https://xerj.org/get | sh</code></td></tr>
+<tr><td>2 &middot; build</td><td><code>xerj autoindex &lt;folder&gt;</code> for your own documents, or <code>xerj corpus add &lt;name&gt; &lt;git-url&gt; ...</code> for public repos. XERJ pins the sources and writes a manifest.</td></tr>
+<tr><td>3 &middot; licence</td><td>Open each source's licence yourself and record a <code>review</code> block. The hub is Apache-2.0 and takes only openly-licensed, source-attributed corpora.</td></tr>
+<tr><td>4 &middot; open PR</td><td>Fork the repo, copy the manifest to <code>tools/xerj-code/hub/&lt;name&gt;.json</code>, add a backlog row, and open a PR to the <b>corpus-hub</b> branch. Say what the corpus is <em>for</em>.</td></tr>
+</table></section>
+<section class="detail"><h2>The registry you are adding to</h2>
+<p>Every corpus lives as one pinned manifest on the
+<a href="https://github.com/xerj-org/xerj/tree/corpus-hub/tools/xerj-code/hub">corpus-hub branch</a>
+&mdash; that list of corpus repos is what your PR extends. Full guide, templates and the
+review checklist:
+<a href="https://github.com/xerj-org/xerj/blob/corpus-hub/tools/xerj-code/hub/CONTRIBUTING.md">CONTRIBUTING.md</a>.</p></section>
+{COPY_JS}
+</main>'''
+
+
 def main():
     OUT.mkdir(exist_ok=True)
     (OUT / "assets").mkdir(exist_ok=True)
@@ -865,6 +924,7 @@ def main():
         (OUT / "category" / f"{k}.html").write_text(
             page(f"{k}: {title} domain", what, category_body(k, cs, g7, graded, impact), rel="../"))
     (OUT / "about.html").write_text(page("About: XERJ Corpus Hub", "How corpora are gated, scored, tagged, and licenced", ABOUT, rel=""))
+    (OUT / "contribute.html").write_text(page("Contribute: XERJ Corpus Hub", "Share your knowledge: index a corpus and open a pull request", contribute_body(), rel=""))
     # llms.txt - agent-facing index of the registry, generated like everything
     # else. Short first screen (study rule 7), no obligation language, every
     # step verifiable; one line per live corpus.
