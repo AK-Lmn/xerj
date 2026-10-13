@@ -1,16 +1,20 @@
 {
  "cats": [
   "SEC",
-  "STD",
+  "DB",
+  "NET",
+  "CRYPTO",
+  "WEB",
+  "API",
   "OPS",
-  "GOOD",
-  "BAD",
-  "DATA",
-  "NET"
+  "LAW",
+  "HEALTH",
+  "AI",
+  "WRITE"
  ],
  "corpora": [
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent working on full-text search internals queries this for how lucene/tantivy/quickwit/meilisearch/sonic/elasticsearch do BM25, merge policy and the ES wire",
    "lane": "A",
    "refresh": "pinned",
@@ -31,7 +35,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent working on storage engines queries this for how sled/fjall/redb do WAL, crash recovery and compaction",
    "lane": "A",
    "refresh": "pinned",
@@ -52,7 +56,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent working on columnar layouts queries this for how clickhouse does codecs, layout and vectorised scans",
    "lane": "A",
    "refresh": "pinned",
@@ -73,7 +77,7 @@
    }
   },
   {
-   "cat": "NET",
+   "cat": "DB",
    "domain": "an agent working on vector search queries this for how qdrant/usearch/instant-distance/hnswlib do HNSW construction, quantisation and filtered kNN",
    "lane": "A",
    "refresh": "pinned",
@@ -94,7 +98,7 @@
    }
   },
   {
-   "cat": "BAD",
+   "cat": "SEC",
    "domain": "an agent reviewing Rust code queries this for vulnerability precedent \u2014 identity-resolved RUSTSEC/GHSA/CVE advisories with affected functions and fixed versions",
    "lane": "B",
    "refresh": "daily",
@@ -156,6 +160,8 @@
     "verdict": "PASS"
    },
    "lane": "A",
+   "merged_into": "cisa",
+   "note": "Withdrawn 2026-10-06: merged into the cisa corpus at the same pins.",
    "refresh": "daily",
    "slug": "cisa-kev",
    "sources": [
@@ -167,17 +173,15 @@
    "status": "withdrawn",
    "tags": {
     "region": "US",
+    "subtopics": [
+     "kev"
+    ],
     "topics": [
      "advisories",
      "vulnerabilities",
      "security"
-    ],
-    "subtopics": [
-     "kev"
     ]
-   },
-   "merged_into": "cisa",
-   "note": "Withdrawn 2026-10-06: merged into the cisa corpus at the same pins."
+   }
   },
   {
    "cat": "SEC",
@@ -302,12 +306,12 @@
    "status": "live",
    "tags": {
     "region": "GLOBAL",
+    "subtopics": [
+     "classification"
+    ],
     "topics": [
      "weaknesses",
      "security"
-    ],
-    "subtopics": [
-     "classification"
     ]
    }
   },
@@ -335,12 +339,12 @@
    "status": "live",
    "tags": {
     "region": "GLOBAL",
+    "subtopics": [
+     "ttp"
+    ],
     "topics": [
      "attack-techniques",
      "security"
-    ],
-    "subtopics": [
-     "ttp"
     ]
    }
   },
@@ -359,12 +363,12 @@
    "status": "live",
    "tags": {
     "region": "GLOBAL",
+    "subtopics": [
+     "classification"
+    ],
     "topics": [
      "attack-patterns",
      "security"
-    ],
-    "subtopics": [
-     "classification"
     ]
    }
   },
@@ -525,6 +529,8 @@
     "verdict": "PASS"
    },
    "lane": "A",
+   "merged_into": "cisa",
+   "note": "Withdrawn 2026-10-06: merged into the cisa corpus at the same pins.",
    "refresh": "weekly",
    "slug": "cisa-alerts",
    "sources": [
@@ -536,17 +542,15 @@
    "status": "withdrawn",
    "tags": {
     "region": "US",
+    "subtopics": [
+     "advisories"
+    ],
     "topics": [
      "advisories",
      "vulnerabilities",
      "security"
-    ],
-    "subtopics": [
-     "advisories"
     ]
-   },
-   "merged_into": "cisa",
-   "note": "Withdrawn 2026-10-06: merged into the cisa corpus at the same pins."
+   }
   },
   {
    "cat": "SEC",
@@ -571,7 +575,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "LAW",
    "domain": "an agent answering US individual-tax questions queries IRS publications for the exact rule (Pub 523 home-sale exclusion, 502 medical mileage, 970 education credits)",
    "g7": {
     "evidence": "hub/g7-irs-2026-10.json (suite); graded 2026-10-03 from the session driver, FAIL 2/5, never flipped",
@@ -601,7 +605,7 @@
    }
   },
   {
-   "cat": "STD",
+   "cat": "NET",
    "domain": "an agent implementing or debugging a protocol queries this for what the RFC actually says at clause level (TLP permits unmodified redistribution)",
    "g7": {
     "fix_pre_registered": "round-2: per-RFC abstract record layer (see graded evidence diagnosis); unscheduled",
@@ -630,7 +634,7 @@
    }
   },
   {
-   "cat": "STD",
+   "cat": "NET",
    "domain": "an agent implementing or debugging a protocol queries this for what the RFC actually says at clause level (TLP permits unmodified redistribution)",
    "fix_pre_registered": "per-RFC abstract layer committed 91c9d201c before round-2 retrieval",
    "g7": {
@@ -659,7 +663,7 @@
    }
   },
   {
-   "cat": "STD",
+   "cat": "WEB",
    "domain": "an agent building browser-adjacent tooling queries this for the living standard's exact normative statements (html/url/fetch/dom)",
    "g7": {
     "engine": "fix/xccode-g7-retrieval-1 (PR #1140, 0ae1439bb+35903648c)",
@@ -686,7 +690,7 @@
    }
   },
   {
-   "cat": "STD",
+   "cat": "WEB",
    "domain": "an agent working on layout/selector internals queries this for the csswg draft's algorithm text (the resolution and cascade algorithms are unmemorisable prose)",
    "lane": "A",
    "refresh": "pinned",
@@ -707,7 +711,7 @@
    }
   },
   {
-   "cat": "STD",
+   "cat": "WEB",
    "domain": "an agent building a JS-adjacent tool queries this for the spec's abstract operations and completion-record semantics",
    "g7": {
     "engine": "fix/xccode-g7-retrieval-1 (PR #1140, 0ae1439bb+35903648c)",
@@ -734,7 +738,7 @@
    }
   },
   {
-   "cat": "STD",
+   "cat": "WEB",
    "domain": "an agent formatting dates/numbers/names queries this for locale-specific CLDR rules and plural/data tables no model recalls",
    "g7": {
     "engine": "fix/xccode-g7-retrieval-1 (PR #1140, 0ae1439bb+35903648c)",
@@ -761,7 +765,7 @@
    }
   },
   {
-   "cat": "STD",
+   "cat": "API",
    "domain": "an agent generating or validating an API description queries this for the OpenAPI schema's exact keywords and resolution rules",
    "lane": "A",
    "refresh": "pinned",
@@ -782,7 +786,7 @@
    }
   },
   {
-   "cat": "STD",
+   "cat": "API",
    "domain": "an agent writing validators queries this for the dialect's exact keyword semantics (2019-09 vs 2020-12 differences bite)",
    "lane": "A",
    "refresh": "pinned",
@@ -803,7 +807,7 @@
    }
   },
   {
-   "cat": "STD",
+   "cat": "API",
    "domain": "an agent building a GraphQL server queries this for execution, defer/stream and introspection semantics",
    "lane": "A",
    "refresh": "pinned",
@@ -824,7 +828,7 @@
    }
   },
   {
-   "cat": "STD",
+   "cat": "DB",
    "domain": "an agent implementing a NATS client queries this for the wire protocol, verbs and semantics text",
    "lane": "A",
    "refresh": "pinned",
@@ -845,7 +849,7 @@
    }
   },
   {
-   "cat": "STD",
+   "cat": "DB",
    "domain": "an agent implementing a Kafka client queries this for the protocol guide's exact request/response schemas and error codes",
    "g7": {
     "engine": "fix/xccode-g7-retrieval-1 (PR #1140, 0ae1439bb+35903648c)",
@@ -872,7 +876,7 @@
    }
   },
   {
-   "cat": "STD",
+   "cat": "DB",
    "domain": "an agent building against RESP queries this for command semantics, ranges and error cases (the open post-relicence fork of the Redis docs)",
    "lane": "A",
    "refresh": "pinned",
@@ -893,7 +897,7 @@
    }
   },
   {
-   "cat": "STD",
+   "cat": "DB",
    "domain": "an agent writing SQL against Postgres queries this for exact function semantics, GUC defaults and MVCC behaviour by version",
    "lane": "A",
    "refresh": "pinned",
@@ -914,7 +918,7 @@
    }
   },
   {
-   "cat": "STD",
+   "cat": "DB",
    "domain": "an agent depending on SQLite's exact behaviour queries this for datatype, locking and pragma semantics",
    "lane": "A",
    "refresh": "pinned",
@@ -935,7 +939,7 @@
    }
   },
   {
-   "cat": "STD",
+   "cat": "DB",
    "domain": "an agent implementing an MQTT client/broker queries this for packet formats, QoS state machines and keepalive semantics",
    "lane": "A",
    "refresh": "pinned",
@@ -1167,7 +1171,7 @@
    }
   },
   {
-   "cat": "GOOD",
+   "cat": "API",
    "domain": "an agent designing a Rust library API queries this for the naming/convertibility/error conventions with their reasoning",
    "lane": "A",
    "refresh": "pinned",
@@ -1187,7 +1191,7 @@
    }
   },
   {
-   "cat": "GOOD",
+   "cat": "API",
    "domain": "an agent reviewing code queries this for the review standard's concrete what-to-look-for and clangers",
    "lane": "A",
    "refresh": "pinned",
@@ -1207,7 +1211,7 @@
    }
   },
   {
-   "cat": "GOOD",
+   "cat": "API",
    "domain": "an agent designing a REST surface queries this for the naming/paging/versioning/error rules with examples",
    "lane": "A",
    "refresh": "pinned",
@@ -1227,7 +1231,7 @@
    }
   },
   {
-   "cat": "GOOD",
+   "cat": "API",
    "domain": "an agent reviewing an API design queries this for the rule, its intent and propulated exceptions from a fleet of thousands",
    "g7": {
     "engine": "fix/xccode-g7-retrieval-1 (PR #1140, 0ae1439bb+35903648c)",
@@ -1253,7 +1257,7 @@
    }
   },
   {
-   "cat": "GOOD",
+   "cat": "API",
    "domain": "an agent building a GitHub integration queries this for the machine-readable schema of a huge production REST API (the exemplar OpenGraph/OpenAPI corpus)",
    "lane": "A",
    "refresh": "weekly",
@@ -1273,7 +1277,7 @@
    }
   },
   {
-   "cat": "GOOD",
+   "cat": "CRYPTO",
    "domain": "an agent configuring TLS termination queries this for the recommended cipher/protocol sets per server and their security/cost tradeoffs",
    "lane": "A",
    "refresh": "pinned",
@@ -1294,7 +1298,7 @@
    }
   },
   {
-   "cat": "GOOD",
+   "cat": "SEC",
    "domain": "an agent writing host detections queries this for battle-tested osquery SQL by objective (suid diffs, persistence paths, launch items)",
    "lane": "A",
    "refresh": "pinned",
@@ -1314,7 +1318,7 @@
    }
   },
   {
-   "cat": "GOOD",
+   "cat": "WEB",
    "domain": "an agent building accessible UI queries this for the component's exact accessibility criteria and edge cases",
    "g7": {
     "engine": "v1.0.0-rc.81 @9cefd8070 (PR #1144)",
@@ -1343,7 +1347,7 @@
    }
   },
   {
-   "cat": "GOOD",
+   "cat": "OPS",
    "domain": "an agent containerising or configuring an app queries this for the factor's exact statement and rationale (G3 borderline: well-known prose \u2014 keep only if G7 shows retrieval value)",
    "lane": "A",
    "refresh": "pinned",
@@ -1363,7 +1367,7 @@
    }
   },
   {
-   "cat": "BAD",
+   "cat": "SEC",
    "domain": "an agent reviewing C code queries this for version-pinned vulnerable functions and their fix diffs, permissively-licensed projects only",
    "lane": "B",
    "refresh": "weekly",
@@ -1383,7 +1387,7 @@
    }
   },
   {
-   "cat": "BAD",
+   "cat": "SEC",
    "domain": "an agent reviewing Go code queries this for vulnerable symbols with fix diffs (extends go-vulndb's symbols into code records)",
    "lane": "B",
    "refresh": "weekly",
@@ -1403,7 +1407,7 @@
    }
   },
   {
-   "cat": "BAD",
+   "cat": "SEC",
    "domain": "an agent reviewing Python code queries this for vulnerable functions with fix diffs, PYSEC-linked",
    "lane": "B",
    "refresh": "weekly",
@@ -1423,7 +1427,7 @@
    }
   },
   {
-   "cat": "BAD",
+   "cat": "SEC",
    "domain": "an agent vetting regex handling queries this for real ReDoS advisories with the pathological pattern and the bounded rewrite that fixed it",
    "g7": {
     "verdict": "PASS"
@@ -1447,7 +1451,7 @@
    }
   },
   {
-   "cat": "BAD",
+   "cat": "SEC",
    "domain": "an agent reviewing crypto call sites queries this for real CWE-327/328/347-class advisories showing the misuse and the corrected construction",
    "g7": {
     "verdict": "PASS"
@@ -1471,7 +1475,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent working on query execution queries this for how a real embeddable OLAP engine does join ordering, expression rewrites and memory-aware operators",
    "lane": "A",
    "refresh": "pinned",
@@ -1492,7 +1496,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent working on LSM stores queries this for compaction, WAL and recovery internals at production scale",
    "lane": "A",
    "refresh": "pinned",
@@ -1513,7 +1517,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent learning LSM internals queries this for the original clean implementation (memtable/sstable/manifest split)",
    "lane": "A",
    "refresh": "pinned",
@@ -1534,7 +1538,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent working on LSM stores queries this for a modern Go LSM with delete/RangeLock semantics",
    "g7": {
     "evidence": "backlog/g7-night2-2026-10-04-graded.json",
@@ -1565,7 +1569,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent working on pure-Go KV stores queries this for its LSM-with-value-log design and transaction implementation",
    "lane": "A",
    "refresh": "pinned",
@@ -1586,7 +1590,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent working on memory-mapped B+trees queries this for LMDB's page/cursor/COW mechanics",
    "lane": "A",
    "refresh": "pinned",
@@ -1607,7 +1611,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent working on ANN queries this for index construction, IVF/HNSW composition and GPU paths in the reference implementation",
    "lane": "A",
    "refresh": "pinned",
@@ -1628,7 +1632,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent working on read-mostly ANN queries this for the forest-of-trees build and on-disk format",
    "lane": "A",
    "refresh": "pinned",
@@ -1649,7 +1653,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent working on embedded DB internals queries this for the btree module, pager and the famously commented test harness",
    "lane": "A",
    "refresh": "pinned",
@@ -1670,7 +1674,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent working on planners queries this for the real cost model, join ordering and executor nodes",
    "lane": "A",
    "refresh": "pinned",
@@ -1691,7 +1695,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent reading/writing parquet queries this for encodings, logical types and the thrift metadata spec",
    "lane": "A",
    "refresh": "pinned",
@@ -1712,7 +1716,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent working on columnar memory queries this for the Rust arrow arrays, kernels and IPC paths",
    "lane": "A",
    "refresh": "pinned",
@@ -1733,7 +1737,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent building lakehouse tables queries this for spec semantics and the reference metadata/manifest handling",
    "lane": "A",
    "refresh": "pinned",
@@ -1754,7 +1758,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent working on log systems queries this for the log-cleaner, controller and replication protocol internals",
    "lane": "A",
    "refresh": "pinned",
@@ -1775,7 +1779,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent working on message brokers queries this for queue/exchange routing and mirrored-queue semantics",
    "lane": "A",
    "refresh": "pinned",
@@ -1796,7 +1800,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent working on pub/sub queries this for subject-tree routing, jetstream and clustering internals in readable Go",
    "lane": "A",
    "refresh": "pinned",
@@ -1817,7 +1821,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent working on coordination stores queries this for raft integration, watch semantics and backend compaction",
    "lane": "A",
    "refresh": "pinned",
@@ -1838,7 +1842,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent implementing raft queries this for the log/ready/progress state machine the tikv fleet runs on",
    "lane": "A",
    "refresh": "pinned",
@@ -1859,7 +1863,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent implementing multi-raft queries this for the sharded log and snapshot plumbing",
    "lane": "A",
    "refresh": "pinned",
@@ -1880,7 +1884,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent working on time series queries this for TSM/flux paths and downsampling semantics",
    "lane": "A",
    "refresh": "pinned",
@@ -1901,7 +1905,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent working on TSDB queries this for the head-block/WAL/head-compaction paths and PromQL evaluation",
    "lane": "A",
    "refresh": "pinned",
@@ -1922,7 +1926,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent working on in-memory KV queries this for the event-loop, object encoding and replication paths of the open fork",
    "lane": "A",
    "refresh": "pinned",
@@ -1943,7 +1947,7 @@
    }
   },
   {
-   "cat": "NET",
+   "cat": "CRYPTO",
    "domain": "an agent implementing TLS in Rust queries this for the state machine, cipher dispatch and certificate verification",
    "lane": "A",
    "refresh": "pinned",
@@ -1964,7 +1968,7 @@
    }
   },
   {
-   "cat": "NET",
+   "cat": "CRYPTO",
    "domain": "an agent debugging TLS/ASN.1 queries this for the reference provider's handshake, BIO and provider internals",
    "lane": "A",
    "refresh": "pinned",
@@ -1985,7 +1989,7 @@
    }
   },
   {
-   "cat": "NET",
+   "cat": "CRYPTO",
    "domain": "an agent hardening TLS queries this for the defensively-structured C state machine and its testing approach",
    "lane": "A",
    "refresh": "pinned",
@@ -2006,7 +2010,7 @@
    }
   },
   {
-   "cat": "NET",
+   "cat": "CRYPTO",
    "domain": "an agent implementing a VPN data plane queries this for the wireguard protocol implementation and its async runtime use",
    "lane": "A",
    "refresh": "pinned",
@@ -2299,7 +2303,7 @@
    }
   },
   {
-   "cat": "NET",
+   "cat": "CRYPTO",
    "domain": "an agent working on secret stores queries this for the barrier, seal and lease internals of the open vault fork",
    "lane": "A",
    "refresh": "pinned",
@@ -2383,7 +2387,7 @@
    }
   },
   {
-   "cat": "STD",
+   "cat": "LAW",
    "domain": "an agent answering workplace/employment questions queries this for what 29 CFR actually says \u2014 OSHA guardrail height, FMLA 12-month/1250-hour eligibility, FLSA overtime, youth-employment hours (demand: employment-HR Ask-HN volume 57)",
    "lane": "A",
    "refresh": "pinned",
@@ -2397,19 +2401,19 @@
    "status": "live",
    "tags": {
     "region": "US",
+    "subtopics": [
+     "osha",
+     "labor"
+    ],
     "topics": [
      "labor",
      "law",
      "standards"
-    ],
-    "subtopics": [
-     "osha",
-     "labor"
     ]
    }
   },
   {
-   "cat": "STD",
+   "cat": "LAW",
    "domain": "an agent answering federal tax questions queries this for what the Treasury regulations actually say \u2014 de minimis safe harbor, estimated-tax safe harbor, home-office exclusive use (demand: tax Ask-HN volume 40)",
    "g7": {
     "note": "insurance card \u2014 mirror public, suite blind-authored and registered; indexed when a round-2 slot fails",
@@ -2430,19 +2434,19 @@
    "status": "live",
    "tags": {
     "region": "US",
+    "subtopics": [
+     "irs",
+     "internal-revenue"
+    ],
     "topics": [
      "tax",
      "law",
      "standards"
-    ],
-    "subtopics": [
-     "irs",
-     "internal-revenue"
     ]
    }
   },
   {
-   "cat": "STD",
+   "cat": "LAW",
    "domain": "an agent answering consumer-credit or mortgage questions queries this for what Regulation Z / TILA actually says \u2014 higher-priced APR triggers, ability-to-repay/QM, rescission windows, card late-fee safe harbors (demand: consumer-finance Ask-HN volume 71)",
    "lane": "A",
    "refresh": "pinned",
@@ -2456,19 +2460,19 @@
    "status": "live",
    "tags": {
     "region": "US",
+    "subtopics": [
+     "banks",
+     "credit"
+    ],
     "topics": [
      "banking",
      "law",
      "standards"
-    ],
-    "subtopics": [
-     "banks",
-     "credit"
     ]
    }
   },
   {
-   "cat": "STD",
+   "cat": "LAW",
    "domain": "an agent answering UK-law questions queries this for what the current statute actually says \u2014 Consumer Rights Act remedies, GDPR-adjacent DPA 2018 duties, Building Safety Act duties (demand: legal-courts Ask-HN volume 46; source chosen for best-in-class versioned OGL XML)",
    "lane": "A",
    "refresh": "pinned",
@@ -2489,7 +2493,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "HEALTH",
    "domain": "an agent answering medication questions queries this for what the FDA-approved label actually says \u2014 indications, do-not-crush/dose-form rules, epidural-timing windows before/after anticoagulants, nitrate co-administration intervals, intraoperative floppy iris warnings (demand: patient-safety medication questions; 28k records over the current SPL set)",
    "g7": {
     "engine": "PR #1140 (0ae1439bb+35903648c)",
@@ -2516,7 +2520,7 @@
    }
   },
   {
-   "cat": "STD",
+   "cat": "LAW",
    "domain": "a pilot or mechanic queries this for the current FAR text \u2014 visibility minimums, transponder airspace, inspection intervals, right-of-way",
    "g7": {
     "engine": "v1.0.0-rc.81 @9cefd8070 (PR #1144)",
@@ -2538,19 +2542,19 @@
    "status": "live",
    "tags": {
     "region": "US",
+    "subtopics": [
+     "faa",
+     "airworthiness"
+    ],
     "topics": [
      "aviation",
      "law",
      "standards"
-    ],
-    "subtopics": [
-     "faa",
-     "airworthiness"
     ]
    }
   },
   {
-   "cat": "DATA",
+   "cat": "HEALTH",
    "domain": "a clinician or medical writer queries this for the current CDC-recommended STI regimen and dose, and measles clinical signs",
    "g7": {
     "engine": "v1.0.0-rc.81 @9cefd8070 (PR #1144)",
@@ -2579,7 +2583,7 @@
    }
   },
   {
-   "cat": "STD",
+   "cat": "LAW",
    "domain": "a mariner, boater, or agent writing navigation software queries this for the actual text of Rule 7 risk of collision, Rule 9 narrow channels, lights, sound signals",
    "g7": {
     "engine": "v1.0.0-rc.81 @9cefd8070 (PR #1144)",
@@ -2608,7 +2612,7 @@
    }
   },
   {
-   "cat": "STD",
+   "cat": "LAW",
    "domain": "current UK Building Regulations 2010 text: what work must comply with, materials, loading, exemptions, notices",
    "g7": {
     "engine": "v1.0.0-rc.81 @9cefd8070 (PR #1144)",
@@ -2638,7 +2642,7 @@
    }
   },
   {
-   "cat": "STD",
+   "cat": "LAW",
    "domain": "GDPR / AI Act / DSA / DMA / NIS2 article and recital text",
    "g7": {
     "engine": "v1.0.0-rc.81 @9cefd8070 (PR #1144)",
@@ -2668,7 +2672,7 @@
    }
   },
   {
-   "cat": "STD",
+   "cat": "LAW",
    "domain": "ADA 2010 Standards for Accessible Design: exact dimensional and technical requirements",
    "g7": {
     "engine": "v1.0.0-rc.81 @9cefd8070 (PR #1144)",
@@ -2698,7 +2702,7 @@
    }
   },
   {
-   "cat": "OPS",
+   "cat": "LAW",
    "domain": "the current MUTCD: sign and signal warrants, markings, work-zone typical applications",
    "g7": {
     "evidence": "backlog/g7-night2-2026-10-04-graded.json",
@@ -2729,7 +2733,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "HEALTH",
    "domain": "FDA Food Code 2022 provisions: cooking/holding temperatures, sanitizer tables, reporting rules",
    "g7": {
     "evidence": "backlog/g7-night2-2026-10-04-graded.json",
@@ -2760,7 +2764,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "LAW",
    "domain": "SSA program rules: disability waiting periods, SSI resource limits, payment mechanics",
    "g7": {
     "evidence": "backlog/g7-night2-2026-10-04-graded.json",
@@ -2790,7 +2794,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "LAW",
    "domain": "US Supreme Court slip opinions 2019-2025 terms (449 cases, 1,158 files): holdings and separate opinions verbatim",
    "g7": {
     "evidence": "backlog/g7-night2-2026-10-04-graded.json",
@@ -2820,7 +2824,7 @@
    }
   },
   {
-   "cat": "DATA",
+   "cat": "LAW",
    "domain": "German federal statutes per norm: GG, BGB, StGB, StVO, VwGO (3,546 norm files)",
    "g7": {
     "evidence": "backlog/g7-night2-2026-10-04-graded.json",
@@ -2851,7 +2855,7 @@
    }
   },
   {
-   "cat": "GOOD",
+   "cat": "AI",
    "domain": "an agent working on AI agents, LLM tooling, MCP servers and inference: real implementations agents can retrieve when building the same thing",
    "lane": "A",
    "note": "contributor-permission corpus opened 2026-10-05: every source author agreed by email to inclusion; manifest staged at candidates/agent-engineering.json",
@@ -3009,7 +3013,7 @@
    }
   },
   {
-   "cat": "GOOD",
+   "cat": "API",
    "domain": "an agent working on substantial recent solutions across other domains, contributed with the authors' permission",
    "lane": "A",
    "note": "contributor-permission corpus opened 2026-10-05: every source author agreed by email to inclusion; manifest staged at candidates/community-solutions.json",
@@ -3059,7 +3063,7 @@
    }
   },
   {
-   "cat": "GOOD",
+   "cat": "SEC",
    "domain": "an agent working on security engineering: identity, authentication, sandboxing and hardening code",
    "lane": "A",
    "note": "contributor-permission corpus opened 2026-10-05: every source author agreed by email to inclusion; manifest staged at candidates/security-practice.json",
@@ -3101,7 +3105,7 @@
    }
   },
   {
-   "cat": "GOOD",
+   "cat": "OPS",
    "domain": "an agent working on compilers, runtimes, emulators, game engines, OS and low-level systems code",
    "lane": "A",
    "note": "contributor-permission corpus opened 2026-10-05: every source author agreed by email to inclusion; manifest staged at candidates/systems-internals.json",
@@ -3175,7 +3179,7 @@
    }
   },
   {
-   "cat": "GOOD",
+   "cat": "WEB",
    "domain": "an agent working on web apps, APIs, frontends and design systems: production patterns from active projects",
    "lane": "A",
    "note": "contributor-permission corpus opened 2026-10-05: every source author agreed by email to inclusion; manifest staged at candidates/web-app-patterns.json",
@@ -3241,12 +3245,13 @@
    }
   },
   {
-   "slug": "cisa",
    "cat": "SEC",
-   "lane": "A",
-   "refresh": "weekly",
-   "status": "live",
    "domain": "One CISA corpus: advisories and the Known Exploited Vulnerabilities catalog together. An agent answering 'is this CVE exploited in the wild, and what do the mitigations say' queries one index.",
+   "g7": "backlog/g7-cisa-2026-10-graded.json",
+   "lane": "A",
+   "note": "Merged 2026-10-06 from cisa-kev + cisa-alerts at their existing pins (user directive: fewer larger corpora).",
+   "refresh": "weekly",
+   "slug": "cisa",
    "sources": [
     {
      "url": "https://github.com/xerj-org/corpus-cisa-kev"
@@ -3255,33 +3260,32 @@
      "url": "https://github.com/xerj-org/corpus-cisa-alerts"
     }
    ],
+   "status": "live",
    "tags": {
     "region": "US",
+    "subtopics": [
+     "kev",
+     "advisories"
+    ],
     "topics": [
      "advisories",
      "vulnerabilities",
      "security"
-    ],
-    "subtopics": [
-     "kev",
-     "advisories"
     ]
-   },
-   "g7": "backlog/g7-cisa-2026-10-graded.json",
-   "note": "Merged 2026-10-06 from cisa-kev + cisa-alerts at their existing pins (user directive: fewer larger corpora)."
+   }
   },
   {
-   "slug": "federal-register",
-   "cat": "STD",
+   "cat": "LAW",
+   "domain": "an agent answering 'what did the government change today' queries this for Federal Register final rules, proposed rules and notices at the day granularity",
    "lane": "A",
    "refresh": "daily",
-   "status": "candidate",
-   "domain": "an agent answering 'what did the government change today' queries this for Federal Register final rules, proposed rules and notices at the day granularity",
+   "slug": "federal-register",
    "sources": [
     {
      "url": "https://www.govinfo.gov/bulkdata/FR"
     }
    ],
+   "status": "candidate",
    "tags": {
     "region": "US",
     "topics": [
@@ -3292,17 +3296,17 @@
    }
   },
   {
-   "slug": "faa-aim",
-   "cat": "STD",
+   "cat": "LAW",
+   "domain": "a pilot, dispatcher, or drone operator queries this for the current Aeronautical Information Manual and ATC procedure (JO 7110.65) text: airspace classes, VFR minimums, radio failure protocols",
    "lane": "A",
    "refresh": "pinned",
-   "status": "candidate",
-   "domain": "a pilot, dispatcher, or drone operator queries this for the current Aeronautical Information Manual and ATC procedure (JO 7110.65) text: airspace classes, VFR minimums, radio failure protocols",
+   "slug": "faa-aim",
    "sources": [
     {
      "url": "https://www.faa.gov/air_traffic/publications"
     }
    ],
+   "status": "candidate",
    "tags": {
     "region": "US",
     "topics": [
@@ -3313,12 +3317,11 @@
    }
   },
   {
-   "slug": "hazmat-erg",
-   "cat": "STD",
+   "cat": "LAW",
+   "domain": "an agent answering a hazardous-materials incident question queries this for the DOT Emergency Response Guidebook and NIOSH pocket guide: isolation distances, protective actions, chemical exposure limits",
    "lane": "A",
    "refresh": "pinned",
-   "status": "candidate",
-   "domain": "an agent answering a hazardous-materials incident question queries this for the DOT Emergency Response Guidebook and NIOSH pocket guide: isolation distances, protective actions, chemical exposure limits",
+   "slug": "hazmat-erg",
    "sources": [
     {
      "url": "https://www.phmsa.dot.gov/hazmat/erg/emergency-response-guidebook"
@@ -3327,6 +3330,7 @@
      "url": "https://www.cdc.gov/niosh/npg/"
     }
    ],
+   "status": "candidate",
    "tags": {
     "region": "US",
     "topics": [
@@ -3337,17 +3341,17 @@
    }
   },
   {
-   "slug": "icd-10-cm",
-   "cat": "DATA",
+   "cat": "HEALTH",
+   "domain": "an agent coding clinical notes or checking a diagnosis label queries this for the ICD-10-CM code hierarchy and inclusion terms at the code level",
    "lane": "A",
    "refresh": "weekly",
-   "status": "candidate",
-   "domain": "an agent coding clinical notes or checking a diagnosis label queries this for the ICD-10-CM code hierarchy and inclusion terms at the code level",
+   "slug": "icd-10-cm",
    "sources": [
     {
      "url": "https://www.cms.gov/medicare/coding-billing/icd-10-codes"
     }
    ],
+   "status": "candidate",
    "tags": {
     "region": "US",
     "topics": [
@@ -3358,17 +3362,17 @@
    }
   },
   {
-   "slug": "geonames",
-   "cat": "DATA",
+   "cat": "DB",
+   "domain": "an agent resolving place names, admin divisions, or coordinates queries this for the GeoNames gazetteer records (CC-BY 4.0, attribution required)",
    "lane": "A",
    "refresh": "weekly",
-   "status": "candidate",
-   "domain": "an agent resolving place names, admin divisions, or coordinates queries this for the GeoNames gazetteer records (CC-BY 4.0, attribution required)",
+   "slug": "geonames",
    "sources": [
     {
      "url": "https://www.geonames.org/export/"
     }
    ],
+   "status": "candidate",
    "tags": {
     "region": "GLOBAL",
     "topics": [
@@ -3378,17 +3382,17 @@
    }
   },
   {
-   "slug": "tzdata-iana",
-   "cat": "DATA",
+   "cat": "WEB",
+   "domain": "an agent scheduling across timezones or debugging a DST transition queries this for the IANA time zone database rules and zone history",
    "lane": "A",
    "refresh": "weekly",
-   "status": "candidate",
-   "domain": "an agent scheduling across timezones or debugging a DST transition queries this for the IANA time zone database rules and zone history",
+   "slug": "tzdata-iana",
    "sources": [
     {
      "url": "https://www.iana.org/time-zones"
     }
    ],
+   "status": "candidate",
    "tags": {
     "region": "GLOBAL",
     "topics": [
@@ -3399,232 +3403,232 @@
    }
   },
   {
-   "slug": "exploit-pocs-2026",
    "cat": "SEC",
-   "lane": "A",
-   "refresh": "weekly",
-   "status": "live",
    "domain": "an agent triaging a fresh CVE queries this for runnable 2026 PoC repositories: exploit source, affected product, and the fix commit together",
+   "g7": "pending (graded suite owed after the reconcile re-run; tail coverage has a disk-flood caveat)",
+   "lane": "A",
+   "note": "LIVE 2026-10-06: 1,093,749 records from 4,614 pinned PoC repositories. Tail coverage caveat from the 2026-10-06 disk flood-stage (autoindex exit 1); reconcile re-run queued.",
+   "refresh": "weekly",
+   "slug": "exploit-pocs-2026",
    "sources": [
     {
-     "url": "https://github.com/nomi-sec/PoC-in-GitHub",
-     "licence_hint": "mixed per pinned repo (many NONE-FOUND); blanket approach-only, per-repo pins in hub/exploit-pocs-2026.json"
+     "licence_hint": "mixed per pinned repo (many NONE-FOUND); blanket approach-only, per-repo pins in hub/exploit-pocs-2026.json",
+     "url": "https://github.com/nomi-sec/PoC-in-GitHub"
     }
    ],
+   "status": "live",
    "tags": {
     "region": "GLOBAL",
+    "subtopics": [
+     "poc",
+     "source"
+    ],
     "topics": [
      "exploits",
      "vulnerabilities",
      "security"
-    ],
-    "subtopics": [
-     "poc",
-     "source"
     ]
-   },
-   "g7": "pending (graded suite owed after the reconcile re-run; tail coverage has a disk-flood caveat)",
-   "note": "LIVE 2026-10-06: 1,093,749 records from 4,614 pinned PoC repositories. Tail coverage caveat from the 2026-10-06 disk flood-stage (autoindex exit 1); reconcile re-run queued."
-  },
-  {
-   "slug": "cve-records",
-   "cat": "SEC",
-   "lane": "A",
-   "refresh": "daily",
-   "status": "candidate",
-   "domain": "an agent assessing a CVE queries this for the authoritative record: CVSS, affected versions, CPE, references and ADP history in full",
-   "sources": [
-    {
-     "url": "https://github.com/CVEProject/cvelistV5",
-     "licence_hint": "NONE-FOUND at pin (no LICENSE, README silent); US CVE-program published data"
-    }
-   ],
-   "tags": {
-    "region": "GLOBAL",
-    "topics": [
-     "vulnerabilities",
-     "security"
-    ],
-    "subtopics": [
-     "cve",
-     "records"
-    ]
-   },
-   "note": "Cloned+reviewed 2026-10-07 (402,744 records, 3.4GB). Built 2026-10-08 on the isolated :19285 node with the #1228 pipeline fix: 402,695 files in 6h31m (17.1 files/s end-to-end vs the 1.18 items/s pre-fix apply ceiling, issue #1224 closed), 213,851 records searchable, autoindex exit 1 salvaged (state records it honestly). G7 graded 2026-10-08: FAIL 0/7, one mechanism (#1244), retrieval-side, not a data problem; the needle record is rank-1 on a direct descriptions-field match.",
-   "g7": {
-    "evidence": "backlog/g7-cve-records-2026-10-08-graded.json",
-    "suite": "backlog/g7-cve-records-2026-10-08.json",
-    "graded": "2026-10-08",
-    "verdict": "FAIL",
-    "pass": 0,
-    "relevant": 7,
-    "note": "pre-registered before retrieval; 0/7 with a single diagnosed cause (#1244: the retrieval never queries the corpus's text-typed prose fields); stays candidate until the fix lands and the suite re-runs"
    }
   },
   {
-   "slug": "exploitdb-src",
    "cat": "SEC",
+   "domain": "an agent assessing a CVE queries this for the authoritative record: CVSS, affected versions, CPE, references and ADP history in full",
+   "g7": {
+    "evidence": "backlog/g7-cve-records-2026-10-08-graded.json",
+    "graded": "2026-10-08",
+    "note": "pre-registered before retrieval; 0/7 with a single diagnosed cause (#1244: the retrieval never queries the corpus's text-typed prose fields); stays candidate until the fix lands and the suite re-runs",
+    "pass": 0,
+    "relevant": 7,
+    "suite": "backlog/g7-cve-records-2026-10-08.json",
+    "verdict": "FAIL"
+   },
    "lane": "A",
-   "refresh": "weekly",
-   "status": "live",
-   "domain": "an agent matching an exploit to its target queries this for the full Exploit-DB record and exploit source",
+   "note": "Cloned+reviewed 2026-10-07 (402,744 records, 3.4GB). Built 2026-10-08 on the isolated :19285 node with the #1228 pipeline fix: 402,695 files in 6h31m (17.1 files/s end-to-end vs the 1.18 items/s pre-fix apply ceiling, issue #1224 closed), 213,851 records searchable, autoindex exit 1 salvaged (state records it honestly). G7 graded 2026-10-08: FAIL 0/7, one mechanism (#1244), retrieval-side, not a data problem; the needle record is rank-1 on a direct descriptions-field match.",
+   "refresh": "daily",
+   "slug": "cve-records",
    "sources": [
     {
-     "url": "https://gitlab.com/exploit-database/exploitdb",
-     "licence_hint": "GPL-2.0 (approach-only)"
+     "licence_hint": "NONE-FOUND at pin (no LICENSE, README silent); US CVE-program published data",
+     "url": "https://github.com/CVEProject/cvelistV5"
     }
    ],
+   "status": "candidate",
    "tags": {
     "region": "GLOBAL",
-    "topics": [
-     "exploits",
-     "security"
+    "subtopics": [
+     "cve",
+     "records"
     ],
+    "topics": [
+     "vulnerabilities",
+     "security"
+    ]
+   }
+  },
+  {
+   "cat": "SEC",
+   "domain": "an agent matching an exploit to its target queries this for the full Exploit-DB record and exploit source",
+   "g7": "pending (graded suite owed)",
+   "lane": "A",
+   "note": "LIVE 2026-10-07: 218,329 records from the full Exploit-DB tree (47,771 files, 174 MB) at pin 12879ca. GPL-2.0 approach-only: retrieval of indexed content for reference, never copied into XERJ. Read-back verified (Struts 2 content-type OGNL RCE retrieval, score 39.3). G7 graded suite owed.",
+   "refresh": "weekly",
+   "slug": "exploitdb-src",
+   "sources": [
+    {
+     "licence_hint": "GPL-2.0 (approach-only)",
+     "url": "https://gitlab.com/exploit-database/exploitdb"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
     "subtopics": [
      "exploitdb"
+    ],
+    "topics": [
+     "exploits",
+     "security"
     ]
-   },
-   "note": "LIVE 2026-10-07: 218,329 records from the full Exploit-DB tree (47,771 files, 174 MB) at pin 12879ca. GPL-2.0 approach-only: retrieval of indexed content for reference, never copied into XERJ. Read-back verified (Struts 2 content-type OGNL RCE retrieval, score 39.3). G7 graded suite owed.",
-   "g7": "pending (graded suite owed)"
+   }
   },
   {
-   "slug": "exploit-poc-index",
    "cat": "SEC",
-   "lane": "A",
-   "refresh": "daily",
-   "status": "candidate",
    "domain": "an agent mapping a CVE to public PoCs queries this for the cross-reference: PoC repo URLs per CVE id plus the trickest/wordlist metadata",
+   "lane": "A",
+   "note": "Cloned+reviewed 2026-10-07. First build interrupted by the 2026-10-06 disk flood-stage; rebuild queued behind the running cyber builds.",
+   "refresh": "daily",
+   "slug": "exploit-poc-index",
    "sources": [
     {
-     "url": "https://github.com/nomi-sec/PoC-in-GitHub",
-     "licence_hint": "CC0-1.0"
+     "licence_hint": "CC0-1.0",
+     "url": "https://github.com/nomi-sec/PoC-in-GitHub"
     },
     {
-     "url": "https://github.com/trickest/cve",
-     "licence_hint": "MIT"
+     "licence_hint": "MIT",
+     "url": "https://github.com/trickest/cve"
     }
    ],
+   "status": "candidate",
    "tags": {
     "region": "GLOBAL",
-    "topics": [
-     "exploits",
-     "vulnerabilities",
-     "security"
-    ],
     "subtopics": [
      "index"
+    ],
+    "topics": [
+     "exploits",
+     "vulnerabilities",
+     "security"
     ]
-   },
-   "note": "Cloned+reviewed 2026-10-07. First build interrupted by the 2026-10-06 disk flood-stage; rebuild queued behind the running cyber builds."
+   }
   },
   {
-   "slug": "exploit-pocs-2023",
    "cat": "SEC",
-   "lane": "A",
-   "refresh": "pinned",
-   "status": "live",
    "domain": "year backfill slice of the exploit-PoC set: 2023 PoC repositories at pinned shas",
+   "lane": "A",
+   "note": "Cloned at row time (2,451 repos, 4.75GB); build queued.",
+   "refresh": "pinned",
+   "slug": "exploit-pocs-2023",
    "sources": [
     {
-     "url": "https://github.com/nomi-sec/PoC-in-GitHub",
-     "licence_hint": "mixed per pinned repo; blanket approach-only"
+     "licence_hint": "mixed per pinned repo; blanket approach-only",
+     "url": "https://github.com/nomi-sec/PoC-in-GitHub"
     }
    ],
+   "status": "live",
    "tags": {
     "region": "GLOBAL",
+    "subtopics": [
+     "poc",
+     "source"
+    ],
     "topics": [
      "exploits",
      "vulnerabilities",
      "security"
-    ],
-    "subtopics": [
-     "poc",
-     "source"
     ]
-   },
-   "note": "Cloned at row time (2,451 repos, 4.75GB); build queued."
+   }
   },
   {
-   "slug": "exploit-pocs-2024",
    "cat": "SEC",
-   "lane": "A",
-   "refresh": "pinned",
-   "status": "live",
    "domain": "year backfill slice of the exploit-PoC set: 2024 PoC repositories at pinned shas",
-   "sources": [
-    {
-     "url": "https://github.com/nomi-sec/PoC-in-GitHub",
-     "licence_hint": "mixed per pinned repo; blanket approach-only"
-    }
-   ],
-   "tags": {
-    "region": "GLOBAL",
-    "topics": [
-     "exploits",
-     "vulnerabilities",
-     "security"
-    ],
-    "subtopics": [
-     "poc",
-     "source"
-    ]
-   },
-   "note": "Cloned at row time (2,994 repos, 19.4GB raw - the deepest year slice); build queued."
-  },
-  {
-   "slug": "exploit-pocs-2025",
-   "cat": "SEC",
    "lane": "A",
+   "note": "Cloned at row time (2,994 repos, 19.4GB raw - the deepest year slice); build queued.",
    "refresh": "pinned",
-   "status": "live",
-   "domain": "year backfill slice of the exploit-PoC set: 2025 PoC repositories at pinned shas",
+   "slug": "exploit-pocs-2024",
    "sources": [
     {
-     "url": "https://github.com/nomi-sec/PoC-in-GitHub",
-     "licence_hint": "mixed per pinned repo; blanket approach-only"
+     "licence_hint": "mixed per pinned repo; blanket approach-only",
+     "url": "https://github.com/nomi-sec/PoC-in-GitHub"
     }
    ],
+   "status": "live",
    "tags": {
     "region": "GLOBAL",
+    "subtopics": [
+     "poc",
+     "source"
+    ],
     "topics": [
      "exploits",
      "vulnerabilities",
      "security"
-    ],
+    ]
+   }
+  },
+  {
+   "cat": "SEC",
+   "domain": "year backfill slice of the exploit-PoC set: 2025 PoC repositories at pinned shas",
+   "lane": "A",
+   "note": "Cloned at row time (3,859 repos, 4.61GB); build queued.",
+   "refresh": "pinned",
+   "slug": "exploit-pocs-2025",
+   "sources": [
+    {
+     "licence_hint": "mixed per pinned repo; blanket approach-only",
+     "url": "https://github.com/nomi-sec/PoC-in-GitHub"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
     "subtopics": [
      "poc",
      "source"
-    ]
-   },
-   "note": "Cloned at row time (3,859 repos, 4.61GB); build queued."
-  },
-  {
-   "slug": "vuln-fix-commits",
-   "cat": "SEC",
-   "lane": "A",
-   "refresh": "weekly",
-   "status": "live",
-   "domain": "an agent confirming a vulnerability is actually fixed queries this for the fixing commit references (SAP project-kb cvefixcommit)",
-   "sources": [
-    {
-     "url": "https://github.com/SAP/project-kb",
-     "licence_hint": "Apache-2.0"
-    }
-   ],
-   "tags": {
-    "region": "GLOBAL",
+    ],
     "topics": [
+     "exploits",
      "vulnerabilities",
      "security"
-    ],
+    ]
+   }
+  },
+  {
+   "cat": "SEC",
+   "domain": "an agent confirming a vulnerability is actually fixed queries this for the fixing commit references (SAP project-kb cvefixcommit)",
+   "lane": "A",
+   "note": "Cloned+reviewed 2026-10-07 (Apache-2.0, adapt-with-attribution). Curated rebuild live 2026-10-08: 328,891 searchable records; harvesting-tool source/evaluation artifacts quarantined out of the indexed tree after the blind first G7 answered from them. Graded g7-vuln-fix-commits-2026-10-08: 4/5 needles in top-5 (three at rank 1) = pass at the >=4 bar; the miss is a 2020-era needle losing on generic buffer-overflow terms.",
+   "refresh": "weekly",
+   "slug": "vuln-fix-commits",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/SAP/project-kb"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
     "subtopics": [
      "fix-commits"
+    ],
+    "topics": [
+     "vulnerabilities",
+     "security"
     ]
-   },
-   "note": "Cloned+reviewed 2026-10-07 (Apache-2.0, adapt-with-attribution). Curated rebuild live 2026-10-08: 328,891 searchable records; harvesting-tool source/evaluation artifacts quarantined out of the indexed tree after the blind first G7 answered from them. Graded g7-vuln-fix-commits-2026-10-08: 4/5 needles in top-5 (three at rank 1) = pass at the >=4 bar; the miss is a 2020-era needle losing on generic buffer-overflow terms."
+   }
   },
   {
-   "cat": "DATA",
+   "cat": "DB",
    "domain": "an agent retrieving from its own or another agent's multi-session history: raw trajectories with timestamps, failure turns kept verbatim, so a hit that says you already tried this and it failed is reachable",
    "lane": "B",
    "note": "opened on demand from issue #1138 (Chunxiao Wang, Assay / nautilus-compass): they wanted a corpus of real multi-session agent trajectories with failure turns intact, and none existed. Donated as the first external-contributor record pack (PR #1255, CLA #1263): 70 sanitized trajectories, CC-BY-4.0, failure turns verbatim, evidence-hash fixes. Acceptance measured at merge: 70 envelopes -> 70 records from the committed recipe, README topic counts (46/13/6/5) exact against the source JSONL. Signed daily builds from pack-publish; the original demand discussion and eval scars live on the recipes answers page.",
@@ -3647,7 +3651,7 @@
    }
   },
   {
-   "cat": "GOOD",
+   "cat": "WRITE",
    "domain": "an agent writing a XERJ blog post or docs page queries this for the house voice: how past posts open (a number first), argue (every claim traced to a run), and close (losses kept in) - 7 posts as records with derived cve_ids/release_ids",
    "g7": {
     "verdict": "PASS"
