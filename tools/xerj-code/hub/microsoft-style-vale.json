@@ -1,0 +1,21 @@
+{
+ "corpus": "microsoft-style-vale",
+ "cloned_at": "2026-10-13T01:56:07Z",
+ "repos": [
+  {
+   "repo": "Microsoft",
+   "url": "https://github.com/vale-cli/Microsoft",
+   "licence": "MIT",
+   "sha": "ea5fa73c530a8413f39701b01856258c0223f101",
+   "files": 158,
+   "bytes": 115951,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "MIT (Vale rule package) verified. Encodes (does not reproduce) Microsoft's Writing Style Guide; not maintained or endorsed by Microsoft."
+   }
+  }
+ ]
+}

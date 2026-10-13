@@ -1,0 +1,21 @@
+{
+ "corpus": "12-factor-agents",
+ "cloned_at": "2026-10-13T01:56:01Z",
+ "repos": [
+  {
+   "repo": "12-factor-agents",
+   "url": "https://github.com/humanlayer/12-factor-agents",
+   "licence": "Apache-2.0",
+   "sha": "d20c728368bf9c189d6d7aab704744decb6ec0cc",
+   "files": 499,
+   "bytes": 47117328,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Apache-2.0 verified by reading the full LICENSE (GitHub auto-reports NOASSERTION; the text is verbatim Apache-2.0 with no added clauses)."
+   }
+  }
+ ]
+}

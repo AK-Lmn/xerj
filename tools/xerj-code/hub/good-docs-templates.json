@@ -1,0 +1,21 @@
+{
+ "corpus": "good-docs-templates",
+ "cloned_at": "2026-10-13T01:56:06Z",
+ "repos": [
+  {
+   "repo": "templates",
+   "url": "https://github.com/thegooddocsproject/templates",
+   "licence": "0BSD",
+   "sha": "de840b374c57502bf1e99c3ccfe05a858553f99f",
+   "files": 77,
+   "bytes": 23780585,
+   "review": {
+    "spdx": "0BSD",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "0BSD (Zero-Clause BSD, no attribution required) verified by reading LICENSE; detector reported UNKNOWN. Only the templates repo is 0BSD; the project's website prose is CC-BY-SA and is not included."
+   }
+  }
+ ]
+}

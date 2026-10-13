@@ -1,0 +1,21 @@
+{
+ "corpus": "llm-course",
+ "cloned_at": "2026-10-13T01:55:59Z",
+ "repos": [
+  {
+   "repo": "llm-course",
+   "url": "https://github.com/mlabonne/llm-course",
+   "licence": "Apache-2.0",
+   "sha": "7abd96e8284bfae232048fdb77b52397a2114847",
+   "files": 7,
+   "bytes": 867825,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Apache-2.0 verified (LICENSE)."
+   }
+  }
+ ]
+}

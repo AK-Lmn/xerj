@@ -1,0 +1,21 @@
+{
+ "corpus": "awesome-mcp-servers",
+ "cloned_at": "2026-10-13T01:57:54Z",
+ "repos": [
+  {
+   "repo": "awesome-mcp-servers",
+   "url": "https://github.com/punkpeye/awesome-mcp-servers",
+   "licence": "MIT",
+   "sha": "cc7f1f42c3fa8ced6fd5c0e02ea366ef7ed8cf1b",
+   "files": 12,
+   "bytes": 2391657,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "MIT verified (LICENSE). A curated directory (links and descriptions) of MCP servers."
+   }
+  }
+ ]
+}

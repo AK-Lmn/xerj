@@ -1,0 +1,21 @@
+{
+ "corpus": "prompt-engineering-guide",
+ "cloned_at": "2026-10-13T01:56:03Z",
+ "repos": [
+  {
+   "repo": "Prompt-Engineering-Guide",
+   "url": "https://github.com/dair-ai/Prompt-Engineering-Guide",
+   "licence": "MIT",
+   "sha": "57673726396dd94acb23bdb1e67f27c78ee85a8e",
+   "files": 1559,
+   "bytes": 79891088,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "MIT (DAIR.AI) verified by reading LICENSE.md."
+   }
+  }
+ ]
+}

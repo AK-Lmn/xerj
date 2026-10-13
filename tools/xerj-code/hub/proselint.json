@@ -1,0 +1,21 @@
+{
+ "corpus": "proselint",
+ "cloned_at": "2026-10-13T01:56:05Z",
+ "repos": [
+  {
+   "repo": "proselint",
+   "url": "https://github.com/amperser/proselint",
+   "licence": "BSD-3-Clause",
+   "sha": "dbed789caae662d06c7c8a5a13dd31f1acd36f5c",
+   "files": 527,
+   "bytes": 2870110,
+   "review": {
+    "spdx": "BSD-3-Clause",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "BSD-3-Clause verified (LICENSE)."
+   }
+  }
+ ]
+}
