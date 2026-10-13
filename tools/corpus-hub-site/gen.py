@@ -46,7 +46,7 @@ CATS = {
 STATUSES = {"live": ("live", "ok"), "candidate": ("candidate", "warn"), "planned": ("planned", "mute"),
             "deferred": ("deferred", "warn"), "killed": ("killed", "bad"), "withdrawn": ("withdrawn", "bad")}
 
-STAMP = "2026-10-06"
+STAMP = "2026-10-13"
 
 
 def plain(s):
@@ -259,47 +259,84 @@ def card(c, g7, graded, impact):
 </a>'''
 
 
-# Raw manifest base on the corpus-hub branch (what `xerj corpus add --from`
-# fetches). Lane-A manifests live directly here; lane-B packs do not, so a
-# copy-prompt is only offered for an installable (live, lane-A) corpus.
+# Raw manifest base on the corpus-hub branch. Lane-A manifests live directly
+# here; lane-B packs do not, so a copy-prompt is only offered for an
+# installable (live, lane-A) corpus.
+#
+# `xerj corpus add --from` reads a LOCAL file: releases up to v1.0.0-rc.95 do
+# not fetch a URL (measured 2026-10-13: "no such manifest: https://..."). Every
+# command printed on this site therefore downloads the manifest first. Do not
+# shorten it back to `--from <url>` until a release that fetches URLs is out.
 HUB_RAW = "https://raw.githubusercontent.com/xerj-org/xerj/corpus-hub/tools/xerj-code/hub"
+
+# The setup steps shared by every prompt. Each one names what success looks
+# like, so an agent can tell a working step from a silent failure.
+SETUP_STEPS = (
+    "1. Check the CLI: xerj --version\n"
+    "   If it is missing: curl -fsSL https://xerj.org/get | sh\n"
+    '   then: export PATH="$HOME/.local/bin:$PATH"\n'
+    "2. Check for a local node: curl -s localhost:9200/_cluster/health\n"
+    "   If nothing answers, start one and leave it running:\n"
+    "   xerj --insecure --data-dir ~/xerj-data &\n"
+    '   Success: the health call returns JSON containing "status":"green".\n'
+)
+
+
+def add_cmds(slug):
+    """The two commands that pull one pinned manifest and add its corpus."""
+    return (f"curl -fsSLO {HUB_RAW}/{slug}.json\n"
+            f"   xerj corpus add --from ./{slug}.json")
 
 
 def install_prompt(c):
-    """A paste-ready instruction an agent runs through its shell/MCP tools:
-    install XERJ if missing, add + index THIS corpus, then query it before it
-    writes code. Verbatim from landing/llms.txt (install one-liner, the
-    `corpus add/index/code` sequence, `xerj init` for MCP registration)."""
+    """A paste-ready prompt for ONE corpus: check/install the CLI, check/start
+    a node, add + index the corpus, query it. Every step is verifiable and the
+    commands are the ones that work on the released binary."""
     slug = c["slug"]
+    use = plain(c.get("usecase") or "")[:200]
     return (
-        "If the `xerj` CLI is not installed, install it: "
-        "curl -fsSL https://xerj.org/get | sh\n"
-        f"Add and index the {slug} reference corpus from the XERJ Corpus Hub, "
-        "then query it before writing code:\n"
-        f"xerj corpus add --from {HUB_RAW}/{slug}.json\n"
-        f"xerj corpus index {slug}\n"
-        f'xerj code {slug} "<your question>"\n'
-        "Retrieve the mechanism and cite file:line before you implement. "
-        "(To expose these as MCP tools in your agent, run: xerj init)"
+        f'Use the "{slug}" reference corpus from the XERJ Corpus Hub '
+        f"(https://hub.xerj.org/corpus/{slug}) for this task."
+        + (f" What it is for: {use}" if use else "") + "\n"
+        "Run these in a shell, in order, and check each result before the next:\n"
+        + SETUP_STEPS +
+        f"3. Add the corpus: {add_cmds(slug)}\n"
+        f"   Success: the last line is: next: xerj corpus index {slug}\n"
+        f"4. Index it: xerj corpus index {slug}\n"
+        f"   Success: corpus '{slug}' searchable: <N> records\n"
+        f'5. Ask it: xerj code {slug} "<your question>"\n'
+        "   Success: passages headed by a file path and line.\n"
+        "Answer from the retrieved passages and cite file:line. If a query finds no match, "
+        "say the corpus does not cover it rather than answering from memory.\n"
+        "No shell? Ask the person running the node to do steps 1-4 once, then call the MCP "
+        f'tool xerj_code_search with {{"corpus": "{slug}", "query": "<your question>"}}.'
     )
 
 
-def category_prompt(k, title, live_slugs):
-    """One paste-ready prompt PER DOMAIN: install XERJ if missing, then add +
-    index every live corpus in the domain and query them. Verbatim commands
-    from landing/llms.txt; `xerj init` for MCP registration."""
-    adds = "\n".join(
-        f"xerj corpus add --from {HUB_RAW}/{s}.json && xerj corpus index {s}"
-        for s in live_slugs
+def category_prompt(k, title, live):
+    """One paste-ready prompt PER DOMAIN. It lists the domain's corpora with
+    their sizes and tells the agent to add the ones the task needs. It does not
+    add the whole domain: that is tens of GB of clones and hundreds of indices,
+    which fills disks and trips the node's memory breaker."""
+    listing = "\n".join(
+        f"- {c['slug']} ({human_bytes(corpus_stats(c)[1])}): {plain(c.get('usecase') or '')[:110]}"
+        for c in live
     )
     return (
-        f"Set up the XERJ Corpus Hub {k} domain ({title}) for this agent. "
-        "If the `xerj` CLI is not installed, install it: "
-        "curl -fsSL https://xerj.org/get | sh\n"
-        "Add and index these reference corpora, then query them before you write code:\n"
-        f"{adds}\n"
-        'Query any of them with: xerj code <corpus> "<your question>" and cite file:line. '
-        "(Run `xerj init` to expose these as MCP tools.)"
+        f"The XERJ Corpus Hub {k} domain ({title}) has {len(live)} reference corpora. "
+        "Pick the ones this task needs - usually one to three - and use them; "
+        "do not add the whole domain.\n"
+        f"{listing}\n"
+        "For each corpus you pick, run these in a shell and check each result:\n"
+        + SETUP_STEPS +
+        f"3. Add it: {add_cmds('<slug>')}\n"
+        "   Success: the last line is: next: xerj corpus index <slug>\n"
+        "4. Index it: xerj corpus index <slug>\n"
+        "   Success: corpus '<slug>' searchable: <N> records\n"
+        '5. Ask it: xerj code <slug> "<your question>"\n'
+        "Answer from the retrieved passages and cite file:line. "
+        "No shell? Ask the person running the node to do steps 1-4, then call the MCP tool "
+        'xerj_code_search with {"corpus": "<slug>", "query": "<your question>"}.'
     )
 
 
@@ -739,11 +776,11 @@ def render_index(corpora, g7, graded, impact, prov):
         # corpus count (crowded domains are taller) with a byte nudge so the
         # biggest domain still leads. Clamped 240..540px.
         band_h = max(240, min(540, round(120 + 13 * n_live + 110 * (cat_bytes / dmax) ** 0.5)))
-        # The copy-prompt installs the pinned (lane-A) corpora; a lane-B curated
+        # The copy-prompt lists the pinned (lane-A) corpora; a lane-B curated
         # pack has no manifest to `add --from`, so it is left out of the prompt.
-        installable = [c["slug"] for c in live_cs if corpus_stats(c)[1] > 0]
+        installable = [c for c in live_cs if corpus_stats(c)[1] > 0]
         copy = (f'<button class="copy" data-copy="{esc(category_prompt(k, title, installable))}" '
-                f'title="Copy a prompt that installs XERJ and sets up the whole {esc(k)} domain">COPY PROMPT</button>')
+                f'title="Copy a prompt that lists the {esc(k)} corpora and how to add the ones a task needs">COPY PROMPT</button>')
         tiles = "".join(tile(c) for c in live_cs)
         groups.append(f'''<div class="tgroup">
 <div class="thead"><a class="thword" href="category/{k}.html">{esc(k)}</a>
@@ -844,10 +881,17 @@ def detail_body(c, g7, graded, impact, prov):
         copybtn = (f' <button class="copy" data-copy="{esc(install_prompt(c))}" '
                    f'title="Copy a prompt that installs XERJ and uses this corpus">COPY PROMPT</button>'
                    if (c["status"] == "live" and c["lane"] == "A") else "")
+        s = esc(c["slug"])
         useit = (f'<div class="kbox"><b>Use it</b>{copybtn}<br>'
-                 f'<code>xerj corpus add --from {HUB_RAW}/{esc(c["slug"])}.json</code><br>'
-                 f'<code>xerj corpus index {esc(c["slug"])}</code> then '
-                 f'<code>xerj code {esc(c["slug"])} "your question"</code></div>')
+                 f'<code>curl -fsSLO {HUB_RAW}/{s}.json</code><br>'
+                 f'<code>xerj corpus add --from ./{s}.json</code><br>'
+                 f'<code>xerj corpus index {s}</code> then '
+                 f'<code>xerj code {s} "your question"</code>'
+                 f'<p class="note">Needs the <code>xerj</code> CLI and a local node running '
+                 f'(<code>xerj --insecure --data-dir ~/xerj-data &amp;</code>); the copy prompt '
+                 f'covers both and checks each step. No shell: the MCP tool '
+                 f'<code>xerj_code_search</code> with <code>corpus: "{s}"</code>, once the corpus '
+                 f'is indexed on the node.</p></div>')
     return f'''<main>
 <p><a class="backlink" href="../index.html">&larr; all corpora</a></p>
 <h1 class="slug">{esc(c['slug'])} <span class="dot {stcls}"></span></h1>
@@ -984,22 +1028,82 @@ def main():
     lines = [
         "# XERJ Corpus Hub",
         "",
-        "> Reference memory for AI agents: pinned, licence-checked, measured",
-        f"> corpora an agent downloads per task and searches instead of guessing",
-        f"> from memory or fighting web blocks. {len(live)} live corpora.",
-        "> Registry of record (wins on any conflict with this generated file):",
+        f"> Reference memory for AI agents: {len(live)} pinned, licence-checked corpora.",
+        "> Pull the one your task needs and search it on your own machine, instead of",
+        "> guessing from training or fighting web blocks.",
+        "> This file is the agent index of https://hub.xerj.org, generated from the registry.",
+        "> Registry of record (wins on any conflict with this file):",
         "> https://github.com/xerj-org/xerj/tree/corpus-hub/tools/xerj-code/hub",
-        f"> Last updated: {STAMP}.",
+        f"> Engine and install docs: https://xerj.org/llms.txt - Last updated: {STAMP}.",
         "",
-        "Consume any corpus (no build step, the binary indexes from the manifest):",
+        "## Hub corpus or local corpus?",
         "",
-        "    xerj corpus add --from https://raw.githubusercontent.com/xerj-org/xerj/corpus-hub/tools/xerj-code/hub/<slug>.json",
-        "    xerj corpus index <slug>",
-        '    xerj code <slug> "your question"',
+        "- Hub corpus: the answer is in public material you cannot quote exactly from",
+        "  memory - a library's source at a pinned commit, a standard, a regulation, an",
+        '  advisory feed. Find its slug under "Live corpora" below.',
+        "- Local corpus: the answer is in files only this machine has - the project you",
+        "  are working in, private documents, exports. Index them with",
+        '  `xerj autoindex <folder>` and query with `xerj search "<words>"`. Nothing is uploaded.',
+        "- Both can live on the same local node. Use each for its own questions.",
+        "- Neither: a fact you can already state exactly. Retrieving memorised content only adds cost.",
         "",
-        "Retrieval is lexical-by-default. Scores are measured, never asserted:",
-        "G7 = 5 pre-registered queries graded on top-5; A/B = drift-anchored",
-        "agent benchmark (bare pass count -> with-corpus pass count).",
+        "## Use a hub corpus (shell)",
+        "",
+        "Run in order. Each step says what success looks like.",
+        "",
+        "1. Install, if `xerj --version` does not print a version:",
+        "",
+        "       curl -fsSL https://xerj.org/get | sh",
+        '       export PATH="$HOME/.local/bin:$PATH"',
+        "",
+        "2. Start a local node, if `curl -s localhost:9200/_cluster/health` does not answer.",
+        "   Leave it running:",
+        "",
+        "       xerj --insecure --data-dir ~/xerj-data &",
+        "",
+        '   Success: the health call returns JSON containing "status":"green".',
+        "",
+        "3. Download the pinned manifest and add the corpus. `--from` takes a local file:",
+        "",
+        f"       curl -fsSLO {HUB_RAW}/<slug>.json",
+        "       xerj corpus add --from ./<slug>.json",
+        "",
+        "   Success: the last line is `next: xerj corpus index <slug>`.",
+        "",
+        "4. Index it. A 138-file corpus (lz4) indexed in under 10 seconds in our test; time grows with size:",
+        "",
+        "       xerj corpus index <slug>",
+        "",
+        "   Success: `corpus '<slug>' searchable: <N> records`.",
+        "",
+        "5. Ask:",
+        "",
+        '       xerj code <slug> "your question"',
+        "",
+        "   Success: passages headed by a file path and line. Cite them. A no-match means",
+        "   this corpus does not hold the answer: say so instead of answering from memory.",
+        "",
+        "Search is lexical by default (word overlap and BM25, not a neural model): ask in the",
+        "words the source itself would use. If indexing sits at 0%, check free disk space -",
+        "a node on a disk that is 95% full refuses writes.",
+        "",
+        "## No shell",
+        "",
+        "- MCP: once someone has run steps 1-4 on the node, call the tool `xerj_code_search`",
+        '  with `{"corpus": "<slug>", "query": "your question"}`. `xerj init` in a project',
+        "  registers the MCP server for Claude Code and Cursor.",
+        "- HTTP only: `POST http://localhost:9200/xc-<slug>-*/_search` with the body",
+        '  `{"query":{"multi_match":{"query":"<words>","fields":["body","defs"]}}}`.',
+        "- Adding and indexing a corpus needs the CLI. Ask the person operating the node.",
+        "",
+        "## What to tell the person you work for",
+        "",
+        "Which corpus you added and its size, and the file:line of every passage you relied on.",
+        "",
+        "## Scores on each line",
+        "",
+        "G7 = 5 pre-registered queries, graded on the top 5 results. A/B = the same agent on",
+        "the same tasks without the corpus and with it (passes without -> passes with).",
         "",
         "## Live corpora",
         "",
