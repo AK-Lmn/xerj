@@ -497,6 +497,25 @@ td.mono{font-family:var(--font-mono);font-size:var(--fs-13)}
 .kbox{border:1px solid var(--z-line);padding:var(--sp-4) var(--sp-5);margin:var(--sp-4) 0}
 .g7q{margin:var(--sp-3) 0;padding:var(--sp-3) var(--sp-4);border-left:3px solid var(--z-line)}
 .g7q.pass{border-color:var(--ok)}.g7q.fail{border-color:var(--bad)}
+/* about: head-to-head benchmark lanes */
+.bench{margin:var(--sp-8) 0}
+.benchq{font-family:var(--font-prose);color:var(--z-ink);font-size:var(--fs-16);max-width:72ch;margin:0 0 var(--sp-5)}
+.lanes{display:flex;flex-direction:column;gap:1px;background:var(--z-line);border:1px solid var(--z-line);margin:var(--sp-5) 0}
+.lane{background:var(--z-bg);display:grid;grid-template-columns:132px 1fr auto;align-items:center;
+gap:var(--sp-4) var(--sp-5);padding:var(--sp-4) var(--sp-5)}
+.lane.on{box-shadow:inset 3px 0 0 var(--z-accent)}
+.lane-h{font-family:var(--font-data);font-weight:700;text-transform:uppercase;
+letter-spacing:var(--track-ui);font-size:var(--fs-13);color:var(--z-mute)}
+.lane.on .lane-h,.lane.on .lane-r{color:var(--z-accent)}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center}
+.steps li{font-family:var(--font-mono);font-size:var(--fs-13);color:var(--z-ink);
+background:var(--z-faint);border:1px solid var(--z-line);padding:3px 9px;position:relative}
+.steps li:not(:last-child)::after{content:"\\2192";position:absolute;right:-16px;top:50%;
+transform:translateY(-50%);color:var(--z-mute);font-family:var(--font-display);font-weight:900}
+.lane-r{font-family:var(--font-display);font-weight:800;font-size:var(--fs-20);
+color:var(--z-ink);white-space:nowrap}
+.benchtab td:first-child{color:var(--z-mute)}
+@media(max-width:720px){.lane{grid-template-columns:1fr;gap:var(--sp-2)}}
 .backlink{font-family:var(--font-mono);font-size:var(--fs-13);color:var(--z-mute);text-decoration:none}
 .backlink:hover{color:var(--z-ink)}
 h1.slug{font-family:var(--font-mono);font-size:var(--fs-32);font-weight:700;margin:var(--sp-4) 0 0}
@@ -879,43 +898,72 @@ def category_body(k, cs, g7, graded, impact):
 
 
 ABOUT = '''<main>
-<div class="kicker"><span class="accent">ABOUT</span><span class="dash">·</span><span>THE HUB IN ONE PAGE</span></div>
+<div class="kicker"><span class="accent">ABOUT</span><span class="dash">·</span><span>DOES THE HUB ACTUALLY HELP?</span></div>
 <h1 class="hero" style="font-size:clamp(48px,7vw,120px)">WHY A<br><span class="accent">CORPUS HUB</span></h1>
-<p class="lead">Agents answer from memory, and memory is stale, generic, or wrong on exactly
-the questions that matter: what the regulation says at this pin, whether this CVE is
-exploited, how this engine actually implements it. A corpus fixes that. The agent
-downloads the domain it needs, searches it, and cites what it found. This hub is the
-registry of those corpora: pinned, licence-checked, and measured.</p>
-<section class="detail"><h2>Every corpus passes seven gates</h2>
-<table>
-<tr><th>gate</th><th>what satisfies it</th></tr>
-<tr><td>G1 domain</td><td>the row finishes "an agent working on ___ would query this for ___" in one specific sentence</td></tr>
-<tr><td>G2 shape</td><td>the retrieval unit matches the question: clause-level sections for standards, function bodies for code, advisory records for precedent</td></tr>
-<tr><td>G3 un-memorisation</td><td>answer-bearing content is niche, internal, post-cutoff, or too detailed for recall. Famous-and-small is killed as retrieval theatre</td></tr>
-<tr><td>G4 licence</td><td>a human opened the licence at the pin and wrote the review block. Detector output is a hint, never the verdict</td></tr>
-<tr><td>G5 pin truth</td><td>manifest SHA equals the commit the build used. Rewrites are withdrawals, not re-pins</td></tr>
-<tr><td>G6 registry validation</td><td>validate_hub.py green in CI on the corpus-hub branch</td></tr>
-<tr><td>G7 retrieval spot-check</td><td>5 pre-registered domain queries, top-5 graded manually, median 3 or more relevant to pass</td></tr>
-</table></section>
-<section class="detail"><h2>Scores on the cards</h2>
-<p><b>G7</b> is the retrieval spot-check above. <b>A/B</b> is the drift-anchored agent
-benchmark: the same task run bare (offline, instructed to answer honestly rather than
-fabricate) and with the corpus. The badge shows pass counts, bare then corpus.
-A tie is a publishable outcome; the registry records it either way.</p></section>
-<section class="detail"><h2>Tags</h2>
-<p>Every corpus carries a region (US, UK, DE, EU, or GLOBAL) and topics. Filter the
-front page by domain and region; free-text search covers topics and subtopics.</p></section>
-<section class="detail"><h2>Rights policy</h2>
-<p>Per-source licence verdicts live in each manifest's review block. PD (US government
-works), OGL v3.0 (UK), and permissive licences ship as <code>adapt-with-attribution</code>.
-GPL, AGPL, SSPL, and other restrictive sources are <code>approach-only</code>: readable
-as design evidence, never copied. Closed families (ICC I-codes, Eurocodes, NEC, ASTM,
-ISO, DIN) are documented as closed and excluded.</p></section>
+<p class="lead">An agent answers from memory &mdash; and memory is stale, generic, or just wrong on the
+specifics that matter. A corpus is the fix: the real documents, already indexed, searched in seconds.
+Here is that difference measured head-to-head &mdash; one task, given to two Claude agents, one with
+the hub and one without.</p>
+
+<section class="bench">
+<p class="benchq">The task, identical for both: &ldquo;Using the <code>nuclei-templates</code> project
+(14,000+ vulnerability-detection templates), list every template that detects a <b>GeoServer</b>
+vulnerability, with each CVE ID and the request path it sends.&rdquo; Answer key: <b>11 CVE
+templates</b>, spanning 2021&ndash;2026 (one is a 2026 CVE; two hide under bundled-component names).</p>
+
+<div class="lanes">
+  <div class="lane">
+    <span class="lane-h">Without the hub</span>
+    <ol class="steps"><li>Claude agent</li><li>web search</li><li>git clone: 97 MB, 14,471 files</li><li>grep the repo</li></ol>
+    <span class="lane-r">11 / 11 &middot; 123 s</span>
+  </div>
+  <div class="lane on">
+    <span class="lane-h">With the hub</span>
+    <ol class="steps"><li>Claude agent</li><li>query the index</li><li>no download</li></ol>
+    <span class="lane-r">11 / 11 &middot; 15-line answer</span>
+  </div>
+</div>
+
+<table class="benchtab">
+<tr><th></th><th>Without the hub</th><th>With the hub</th></tr>
+<tr><td>GeoServer CVEs found</td><td>11 / 11</td><td>11 / 11</td></tr>
+<tr><td>Data pulled onto the machine</td><td>97 MB &middot; 14,471 files</td><td>none &mdash; queried an index</td></tr>
+<tr><td>Wall-clock</td><td>123 s</td><td>149 s</td></tr>
+<tr><td>Agent tokens</td><td>63k</td><td>159k *</td></tr>
+<tr><td>One query returns all 11</td><td>&mdash;</td><td>15 lines &middot; ~270 tokens</td></tr>
+</table>
+<p class="note">* Both agents were told to be exhaustive. The hub agent chose to run 12 queries and read
+full template bodies &mdash; that is where its tokens went, not the hub: a single compact query returns
+all 11 CVEs in 15 lines (~270 tokens). The bare agent's grep is cheap once the repo is local &mdash;
+but the whole 97 MB, 14,471-file repo had to come down first.</p>
+
+<p>Honest read: <b>same answer, both times.</b> The hub's index is as exhaustive as grepping the raw
+repo &mdash; both agents caught the 2026 CVE and the two filed under bundled components (GeoTools,
+jai-ext). On a one-off keyword lookup the wall-clock is close, and an agent that over-queries the hub
+can even spend more tokens than grep. The hub's real win is that <b>the download never happens</b> &mdash;
+decisive when the corpus is large, private, post-cutoff, behind rate limits or site blocks, or searched
+again and again. That is what &ldquo;resident memory&rdquo; buys you.</p>
+</section>
+
+<section class="detail"><h2>How every corpus is kept honest</h2>
+<p>Seven checks, each done by a human, before a corpus is listed:
+<b>domain</b> (one sentence &mdash; an agent working on ___ queries this for ___) &middot;
+<b>shape</b> (the retrieval unit fits the question) &middot;
+<b>un-memorisation</b> (niche, internal, or post-cutoff &mdash; famous-and-small is rejected) &middot;
+<b>licence</b> (a human read it at the pin; the detector is only a hint) &middot;
+<b>pin</b> (the manifest SHA equals the indexed commit) &middot;
+<b>registry</b> (CI-validated on the <code>corpus-hub</code> branch) &middot;
+<b>retrieval</b> (a graded spot-check). A tie against bare recall &mdash; like the one above &mdash; is a
+publishable outcome; the registry records it either way.</p></section>
+
+<section class="detail"><h2>Rights</h2>
+<p>Per-source licence verdicts live in each manifest. Public-domain, OGL, and permissive licences ship as
+<code>adapt-with-attribution</code>; GPL, AGPL, SSPL and other restrictive sources are
+<code>approach-only</code> (readable as design evidence, never copied); closed standards are excluded.</p></section>
+
 <section class="detail"><h2>Contribute</h2>
-<p>The registry is a git branch: <a href="https://github.com/xerj-org/xerj/tree/corpus-hub">corpus-hub</a>.
-Read <a href="https://github.com/xerj-org/xerj/blob/corpus-hub/tools/xerj-code/hub/CONTRIBUTING.md">CONTRIBUTING.md</a>
-and the program doc (PROGRAM-100.md). This site is generated from the registry by
-<code>tools/corpus-hub-site/gen.py</code>. No hand-written corpus pages, ever.</p></section>
+<p>The registry is a git branch &mdash; <a href="https://github.com/xerj-org/xerj/tree/corpus-hub">corpus-hub</a>.
+This site is generated from it by <code>tools/corpus-hub-site/gen.py</code>; no corpus page is hand-written.</p></section>
 </main>'''
 
 
