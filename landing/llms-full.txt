@@ -1611,8 +1611,15 @@ WHICH ONE
 - NEITHER: a fact you can already state exactly. Retrieving memorised content only
   adds cost (measured in the reference-coding study, section 9).
 
-USE A HUB CORPUS (shell). A node must be running (section 1). Each step names what
-success looks like; all of it was run on v1.0.0-rc.95 from a clean install.
+USE A HUB CORPUS (shell). A node must be running (section 1). If
+`curl -s localhost:9200/_cluster/health` already answers, use that node as it is.
+If you start one, keep its PID so you can stop exactly that one later:
+     nohup xerj --insecure --data-dir ~/xerj-data > ~/xerj-node.log 2>&1 &
+     echo $! > ~/xerj-node.pid
+     kill $(cat ~/xerj-node.pid)      # when you are done
+Never `pkill xerj` or `killall xerj`: other XERJ nodes may be running on the machine
+and you would stop them too. Each step below names what success looks like; all of
+it was run on v1.0.0-rc.95 from a clean install.
 
   1. curl -fsSLO https://raw.githubusercontent.com/xerj-org/xerj/corpus-hub/tools/xerj-code/hub/<slug>.json
      xerj corpus add --from ./<slug>.json

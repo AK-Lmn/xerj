@@ -45,7 +45,11 @@ Then, from an unknown folder to an answered question: `xerj autoindex <folder>` 
 - **Local corpus** — files only this machine has: the project you are working in, private documents, exports. `xerj autoindex <folder>`, then `xerj search "<words>"`. Nothing is uploaded.
 - Both live on the same local node; use each for its own questions. Skip retrieval for a fact you can already state exactly — on memorised content it only adds cost.
 
-Use a hub corpus, with a node running (First run, step 1). Each step says what success looks like:
+Use a hub corpus through a local node. If `curl -s localhost:9200/_cluster/health` already answers, use that node as it is. If you start one, keep its PID: `nohup xerj --insecure --data-dir ~/xerj-data > ~/xerj-node.log 2>&1 & echo $! > ~/xerj-node.pid`.
+
+Stop only a node you started, with `kill $(cat ~/xerj-node.pid)`. Never `pkill xerj` or `killall xerj`: other XERJ nodes may be running on the machine and you would stop them too.
+
+Each step says what success looks like:
 
 1. `curl -fsSLO https://raw.githubusercontent.com/xerj-org/xerj/corpus-hub/tools/xerj-code/hub/<slug>.json`, then `xerj corpus add --from ./<slug>.json` — success: the last line is `next: xerj corpus index <slug>`.
 2. `xerj corpus index <slug>` — success: `corpus '<slug>' searchable: <N> records`.

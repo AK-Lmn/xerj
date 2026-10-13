@@ -238,9 +238,11 @@
 
   <h2 id="consume">Consuming a corpus</h2>
   <p>A corpus is used through a local node, so start one first if none is running
-  (<code class="inline">xerj --insecure --data-dir ~/xerj-data &amp;</code>; the health check
-  <code class="inline">curl -s localhost:9200/_cluster/health</code> answers
-  <code class="inline">"status":"green"</code>). Then download the pinned manifest, add it, index it, ask:</p>
+  and keep its PID so you can later stop exactly that one
+  (<code class="inline">nohup xerj --insecure --data-dir ~/xerj-data &gt; ~/xerj-node.log 2&gt;&amp;1 &amp; echo $! &gt; ~/xerj-node.pid</code>;
+  stop it with <code class="inline">kill $(cat ~/xerj-node.pid)</code>, never <code class="inline">pkill xerj</code>).
+  The health check <code class="inline">curl -s localhost:9200/_cluster/health</code> answers
+  <code class="inline">"status":"green"</code>. Then download the pinned manifest, add it, index it, ask:</p>
 <pre class="code">$ curl -fsSLO https://raw.githubusercontent.com/xerj-org/xerj/corpus-hub/tools/xerj-code/hub/lz4.json
 $ xerj corpus add --from ./lz4.json     # last line: next: xerj corpus index lz4
 $ xerj corpus index lz4                 # last lines: corpus 'lz4' searchable: 1980 records
