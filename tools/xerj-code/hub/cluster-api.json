@@ -1,0 +1,21 @@
+{
+ "corpus": "cluster-api",
+ "cloned_at": "2026-10-13T06:34:30Z",
+ "repos": [
+  {
+   "repo": "cluster-api",
+   "url": "https://github.com/kubernetes-sigs/cluster-api.git",
+   "licence": "Apache-2.0",
+   "sha": "557ad73ab94835e85b9828ee8153ac2216b8b488",
+   "files": 2379,
+   "bytes": 35882100,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

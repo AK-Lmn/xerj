@@ -1,0 +1,21 @@
+{
+ "corpus": "knox",
+ "cloned_at": "2026-10-13T06:33:46Z",
+ "repos": [
+  {
+   "repo": "knox",
+   "url": "https://github.com/pinterest/knox.git",
+   "licence": "Apache-2.0",
+   "sha": "61dd58235016fe07c1a63aa8afda1be3e00fbea9",
+   "files": 60,
+   "bytes": 464535,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

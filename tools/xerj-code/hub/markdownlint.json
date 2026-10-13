@@ -1,0 +1,21 @@
+{
+ "corpus": "markdownlint",
+ "cloned_at": "2026-10-13T06:36:19Z",
+ "repos": [
+  {
+   "repo": "markdownlint",
+   "url": "https://github.com/DavidAnson/markdownlint.git",
+   "licence": "MIT",
+   "sha": "3f1f479322e863a53e56c94b01266b9785cd3bfd",
+   "files": 715,
+   "bytes": 3901072,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

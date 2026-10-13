@@ -1,0 +1,21 @@
+{
+ "corpus": "chamber",
+ "cloned_at": "2026-10-13T06:33:43Z",
+ "repos": [
+  {
+   "repo": "chamber",
+   "url": "https://github.com/segmentio/chamber.git",
+   "licence": "MIT",
+   "sha": "5f93f5f357740686db56a037935b4dfd9805ca57",
+   "files": 62,
+   "bytes": 282098,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

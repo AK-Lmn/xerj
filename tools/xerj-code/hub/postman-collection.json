@@ -1,0 +1,21 @@
+{
+ "corpus": "postman-collection",
+ "cloned_at": "2026-10-13T06:33:36Z",
+ "repos": [
+  {
+   "repo": "postman-collection",
+   "url": "https://github.com/postmanlabs/postman-collection.git",
+   "licence": "Apache-2.0",
+   "sha": "8801e7f4989e90128cd235ea37e238663a479804",
+   "files": 126,
+   "bytes": 1654897,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

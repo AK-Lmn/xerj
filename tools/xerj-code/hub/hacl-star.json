@@ -1,0 +1,21 @@
+{
+ "corpus": "hacl-star",
+ "cloned_at": "2026-10-13T06:33:48Z",
+ "repos": [
+  {
+   "repo": "hacl-star",
+   "url": "https://github.com/hacl-star/hacl-star.git",
+   "licence": "Apache-2.0",
+   "sha": "504c2987452f87fe44bce9b9f12e19d6e051761f",
+   "files": 3637,
+   "bytes": 95365751,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

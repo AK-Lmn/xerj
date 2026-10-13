@@ -1,0 +1,21 @@
+{
+ "corpus": "grpc-gateway",
+ "cloned_at": "2026-10-13T06:33:35Z",
+ "repos": [
+  {
+   "repo": "grpc-gateway",
+   "url": "https://github.com/grpc-ecosystem/grpc-gateway.git",
+   "licence": "BSD-3-Clause",
+   "sha": "14c1da7cb18e12b7302c53064e4cd6ae817b3479",
+   "files": 719,
+   "bytes": 9837735,
+   "review": {
+    "spdx": "BSD-3-Clause",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): BSD-3-Clause"
+   }
+  }
+ ]
+}

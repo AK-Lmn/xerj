@@ -1,0 +1,21 @@
+{
+ "corpus": "buf",
+ "cloned_at": "2026-10-13T06:33:34Z",
+ "repos": [
+  {
+   "repo": "buf",
+   "url": "https://github.com/bufbuild/buf.git",
+   "licence": "Apache-2.0",
+   "sha": "91f127d31d2d2fe771912e8f160b134375862b25",
+   "files": 3150,
+   "bytes": 13658702,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

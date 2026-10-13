@@ -1,0 +1,21 @@
+{
+ "corpus": "aioquic",
+ "cloned_at": "2026-10-13T06:34:18Z",
+ "repos": [
+  {
+   "repo": "aioquic",
+   "url": "https://github.com/aiortc/aioquic.git",
+   "licence": "BSD-3-Clause",
+   "sha": "974e93493367cecde155396cbc157f3711237008",
+   "files": 110,
+   "bytes": 1203032,
+   "review": {
+    "spdx": "BSD-3-Clause",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): BSD-3-Clause"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "adyen-openapi",
+ "cloned_at": "2026-10-13T06:33:33Z",
+ "repos": [
+  {
+   "repo": "adyen-openapi",
+   "url": "https://github.com/Adyen/adyen-openapi.git",
+   "licence": "MIT",
+   "sha": "45520ee6246d7e3d8074c3c5c5e991e65c2c02d6",
+   "files": 263,
+   "bytes": 56616338,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

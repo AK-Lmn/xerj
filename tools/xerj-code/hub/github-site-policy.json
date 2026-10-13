@@ -1,0 +1,21 @@
+{
+ "corpus": "github-site-policy",
+ "cloned_at": "2026-10-13T06:34:12Z",
+ "repos": [
+  {
+   "repo": "site-policy",
+   "url": "https://github.com/github/site-policy.git",
+   "licence": "CC0-1.0",
+   "sha": "b9578b546d2506febda1da2cd7431644d58e512c",
+   "files": 64,
+   "bytes": 665220,
+   "review": {
+    "spdx": "CC0-1.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): CC0-1.0"
+   }
+  }
+ ]
+}

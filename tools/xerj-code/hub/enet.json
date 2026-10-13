@@ -1,0 +1,21 @@
+{
+ "corpus": "enet",
+ "cloned_at": "2026-10-13T06:34:20Z",
+ "repos": [
+  {
+   "repo": "enet",
+   "url": "https://github.com/lsalzman/enet.git",
+   "licence": "MIT",
+   "sha": "5a9c537fd464b3c6d3c55e1d3bd47588faf71b42",
+   "files": 39,
+   "bytes": 378087,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

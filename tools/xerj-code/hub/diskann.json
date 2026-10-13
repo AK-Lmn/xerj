@@ -1,0 +1,21 @@
+{
+ "corpus": "diskann",
+ "cloned_at": "2026-10-13T06:33:55Z",
+ "repos": [
+  {
+   "repo": "DiskANN",
+   "url": "https://github.com/microsoft/DiskANN.git",
+   "licence": "MIT",
+   "sha": "177c03be279a9aa3d5c220be9c5dff5c29588f0e",
+   "files": 1413,
+   "bytes": 13033858,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

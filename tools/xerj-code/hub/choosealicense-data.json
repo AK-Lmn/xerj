@@ -1,0 +1,21 @@
+{
+ "corpus": "choosealicense-data",
+ "cloned_at": "2026-10-13T06:34:08Z",
+ "repos": [
+  {
+   "repo": "choosealicense.com",
+   "url": "https://github.com/github/choosealicense.com.git",
+   "licence": "MIT",
+   "sha": "f717b235f404c60b656bfbc1643f623d02ec10a7",
+   "files": 180,
+   "bytes": 1139695,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

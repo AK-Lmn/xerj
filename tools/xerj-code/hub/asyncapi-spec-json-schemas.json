@@ -1,0 +1,21 @@
+{
+ "corpus": "asyncapi-spec-json-schemas",
+ "cloned_at": "2026-10-13T06:33:33Z",
+ "repos": [
+  {
+   "repo": "spec-json-schemas",
+   "url": "https://github.com/asyncapi/spec-json-schemas.git",
+   "licence": "Apache-2.0",
+   "sha": "00af290521d7fb5738d8af739c1dca59a14a88e0",
+   "files": 971,
+   "bytes": 5010439,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

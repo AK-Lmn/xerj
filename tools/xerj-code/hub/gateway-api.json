@@ -1,0 +1,21 @@
+{
+ "corpus": "gateway-api",
+ "cloned_at": "2026-10-13T06:34:36Z",
+ "repos": [
+  {
+   "repo": "gateway-api",
+   "url": "https://github.com/kubernetes-sigs/gateway-api.git",
+   "licence": "Apache-2.0",
+   "sha": "0da5a10ebb0eb8382a70612ab7fc1e359787b188",
+   "files": 1891,
+   "bytes": 18671685,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

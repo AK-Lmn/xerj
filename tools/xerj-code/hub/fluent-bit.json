@@ -1,0 +1,21 @@
+{
+ "corpus": "fluent-bit",
+ "cloned_at": "2026-10-13T06:34:37Z",
+ "repos": [
+  {
+   "repo": "fluent-bit",
+   "url": "https://github.com/fluent/fluent-bit.git",
+   "licence": "Apache-2.0",
+   "sha": "3b6ce5cf331a1bec337f54e0c1df958e71829315",
+   "files": 12217,
+   "bytes": 173412750,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

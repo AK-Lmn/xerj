@@ -1,0 +1,21 @@
+{
+ "corpus": "cyclonedx-spec",
+ "cloned_at": "2026-10-13T06:34:56Z",
+ "repos": [
+  {
+   "repo": "specification",
+   "url": "https://github.com/CycloneDX/specification.git",
+   "licence": "Apache-2.0",
+   "sha": "ad83dae28b236b8760286399da4daba77592de86",
+   "files": 1080,
+   "bytes": 7836343,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

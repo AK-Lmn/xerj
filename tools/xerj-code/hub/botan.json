@@ -1,0 +1,21 @@
+{
+ "corpus": "botan",
+ "cloned_at": "2026-10-13T06:33:43Z",
+ "repos": [
+  {
+   "repo": "botan",
+   "url": "https://github.com/randombit/botan.git",
+   "licence": "BSD-2-Clause",
+   "sha": "9fc28d5b1103ba3e36101c8d25c321cf97f7b6be",
+   "files": 4220,
+   "bytes": 48049368,
+   "review": {
+    "spdx": "BSD-2-Clause",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): BSD-2-Clause"
+   }
+  }
+ ]
+}

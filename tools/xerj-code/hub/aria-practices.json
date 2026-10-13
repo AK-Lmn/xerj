@@ -1,0 +1,21 @@
+{
+ "corpus": "aria-practices",
+ "cloned_at": "2026-10-13T06:36:06Z",
+ "repos": [
+  {
+   "repo": "aria-practices",
+   "url": "https://github.com/w3c/aria-practices.git",
+   "licence": "W3C-20150513",
+   "sha": "0f765e4dc33e966026114ac12a8380db1de3b787",
+   "files": 521,
+   "bytes": 9131013,
+   "review": {
+    "spdx": "W3C-20150513",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-text): W3C-20150513"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "camel",
+ "cloned_at": "2026-10-13T06:33:23Z",
+ "repos": [
+  {
+   "repo": "camel",
+   "url": "https://github.com/camel-ai/camel.git",
+   "licence": "Apache-2.0",
+   "sha": "e5e55256e9446f744bf7309c478b084587dbf985",
+   "files": 2243,
+   "bytes": 151970336,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

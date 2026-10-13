@@ -1,0 +1,21 @@
+{
+ "corpus": "axolotl",
+ "cloned_at": "2026-10-13T06:33:17Z",
+ "repos": [
+  {
+   "repo": "axolotl",
+   "url": "https://github.com/axolotl-ai-cloud/axolotl.git",
+   "licence": "Apache-2.0",
+   "sha": "e767fe077c02a087bdf4c7da0cc2566800cddad3",
+   "files": 2019,
+   "bytes": 17216023,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

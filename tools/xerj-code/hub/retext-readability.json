@@ -1,0 +1,21 @@
+{
+ "corpus": "retext-readability",
+ "cloned_at": "2026-10-13T06:36:20Z",
+ "repos": [
+  {
+   "repo": "retext-readability",
+   "url": "https://github.com/retextjs/retext-readability.git",
+   "licence": "MIT",
+   "sha": "ece962416e72edeea12f670d3120da4f32e0d423",
+   "files": 13,
+   "bytes": 24808,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

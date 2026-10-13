@@ -1,0 +1,21 @@
+{
+ "corpus": "got",
+ "cloned_at": "2026-10-13T06:34:21Z",
+ "repos": [
+  {
+   "repo": "got",
+   "url": "https://github.com/sindresorhus/got.git",
+   "licence": "MIT",
+   "sha": "50c4ac614070d65b935f1533a6ca1d58e8328813",
+   "files": 137,
+   "bytes": 2581641,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

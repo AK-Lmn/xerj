@@ -1,0 +1,21 @@
+{
+ "corpus": "goss",
+ "cloned_at": "2026-10-13T06:34:37Z",
+ "repos": [
+  {
+   "repo": "goss",
+   "url": "https://github.com/goss-org/goss.git",
+   "licence": "Apache-2.0",
+   "sha": "f1a604363cf1b40a80e0b4d699b9c3b2cee73730",
+   "files": 321,
+   "bytes": 792724,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

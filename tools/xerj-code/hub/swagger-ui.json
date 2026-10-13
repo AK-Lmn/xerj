@@ -1,0 +1,21 @@
+{
+ "corpus": "swagger-ui",
+ "cloned_at": "2026-10-13T06:33:38Z",
+ "repos": [
+  {
+   "repo": "swagger-ui",
+   "url": "https://github.com/swagger-api/swagger-ui.git",
+   "licence": "Apache-2.0",
+   "sha": "e89a91f13cdee432d97ca9d3d1ac1969ff797036",
+   "files": 1007,
+   "bytes": 18175142,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

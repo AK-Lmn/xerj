@@ -1,0 +1,21 @@
+{
+ "corpus": "h2",
+ "cloned_at": "2026-10-13T06:34:21Z",
+ "repos": [
+  {
+   "repo": "h2",
+   "url": "https://github.com/hyperium/h2.git",
+   "licence": "MIT",
+   "sha": "e64c1662ebb14794fc19cbcbb5b5dd0f67925f27",
+   "files": 523,
+   "bytes": 61292220,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

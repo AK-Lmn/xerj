@@ -1,0 +1,21 @@
+{
+ "corpus": "cereal",
+ "cloned_at": "2026-10-13T06:34:19Z",
+ "repos": [
+  {
+   "repo": "cereal",
+   "url": "https://github.com/USCiLab/cereal.git",
+   "licence": "BSD-3-Clause",
+   "sha": "22a1b369f39be918ca79206a83c4facd759f9105",
+   "files": 210,
+   "bytes": 2233183,
+   "review": {
+    "spdx": "BSD-3-Clause",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): BSD-3-Clause"
+   }
+  }
+ ]
+}

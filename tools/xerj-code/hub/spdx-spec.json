@@ -1,0 +1,21 @@
+{
+ "corpus": "spdx-spec",
+ "cloned_at": "2026-10-13T06:34:18Z",
+ "repos": [
+  {
+   "repo": "spdx-spec",
+   "url": "https://github.com/spdx/spdx-spec.git",
+   "licence": "CC-BY-3.0",
+   "sha": "395d06e17168a3723472728ecd69fe7fb065d3e9",
+   "files": 94,
+   "bytes": 18499220,
+   "review": {
+    "spdx": "CC-BY-3.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-text): CC-BY-3.0"
+   }
+  }
+ ]
+}

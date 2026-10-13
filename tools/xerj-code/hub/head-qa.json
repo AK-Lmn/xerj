@@ -1,0 +1,21 @@
+{
+ "corpus": "head-qa",
+ "cloned_at": "2026-10-13T06:34:00Z",
+ "repos": [
+  {
+   "repo": "head-qa",
+   "url": "https://github.com/aghie/head-qa.git",
+   "licence": "MIT",
+   "sha": "da54ff230ed62664ca6eebd7ccfd2b7081f2c651",
+   "files": 17,
+   "bytes": 70697,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

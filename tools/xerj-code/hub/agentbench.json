@@ -1,0 +1,21 @@
+{
+ "corpus": "agentbench",
+ "cloned_at": "2026-10-13T06:33:14Z",
+ "repos": [
+  {
+   "repo": "AgentBench",
+   "url": "https://github.com/THUDM/AgentBench.git",
+   "licence": "Apache-2.0",
+   "sha": "d1e4a10db08c87075c78972e48ecc182be03e2d5",
+   "files": 240,
+   "bytes": 45144480,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

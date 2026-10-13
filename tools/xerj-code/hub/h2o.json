@@ -1,0 +1,21 @@
+{
+ "corpus": "h2o",
+ "cloned_at": "2026-10-13T06:34:23Z",
+ "repos": [
+  {
+   "repo": "h2o",
+   "url": "https://github.com/h2o/h2o.git",
+   "licence": "MIT",
+   "sha": "d21e7cb56258bc499e16349d398198222e77c9b1",
+   "files": 8573,
+   "bytes": 31680402,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "clipboard-apis",
+ "cloned_at": "2026-10-13T06:36:07Z",
+ "repos": [
+  {
+   "repo": "clipboard-apis",
+   "url": "https://github.com/w3c/clipboard-apis.git",
+   "licence": "W3C-20150513",
+   "sha": "6201fd15cf28cfefbcf3b920dd04edfc0fa61753",
+   "files": 16,
+   "bytes": 230328,
+   "review": {
+    "spdx": "W3C-20150513",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-text): W3C-20150513"
+   }
+  }
+ ]
+}

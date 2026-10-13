@@ -1,0 +1,21 @@
+{
+ "corpus": "protovalidate",
+ "cloned_at": "2026-10-13T06:33:37Z",
+ "repos": [
+  {
+   "repo": "protovalidate",
+   "url": "https://github.com/bufbuild/protovalidate.git",
+   "licence": "Apache-2.0",
+   "sha": "c550962b283761cd5e7d333c7fe32183e6d282eb",
+   "files": 332,
+   "bytes": 3777500,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

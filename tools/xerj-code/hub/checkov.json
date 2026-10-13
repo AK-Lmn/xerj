@@ -1,0 +1,21 @@
+{
+ "corpus": "checkov",
+ "cloned_at": "2026-10-13T06:34:57Z",
+ "repos": [
+  {
+   "repo": "checkov",
+   "url": "https://github.com/bridgecrewio/checkov.git",
+   "licence": "Apache-2.0",
+   "sha": "456c7e53a9610c3b7357b56d92286be2d96a5611",
+   "files": 9862,
+   "bytes": 69947334,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "counsel-chat",
+ "cloned_at": "2026-10-13T06:34:00Z",
+ "repos": [
+  {
+   "repo": "counsel-chat",
+   "url": "https://github.com/nbertagnolli/counsel-chat.git",
+   "licence": "MIT",
+   "sha": "e202e19c5002482f4f6631af754c276dd9adf7f2",
+   "files": 14,
+   "bytes": 11710592,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

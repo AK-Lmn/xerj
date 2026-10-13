@@ -1,0 +1,21 @@
+{
+ "corpus": "retext-passive",
+ "cloned_at": "2026-10-13T06:36:20Z",
+ "repos": [
+  {
+   "repo": "retext-passive",
+   "url": "https://github.com/retextjs/retext-passive.git",
+   "licence": "MIT",
+   "sha": "66ca2c564252bcfd395927a03b184f3dc19fc50a",
+   "files": 14,
+   "bytes": 16985,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

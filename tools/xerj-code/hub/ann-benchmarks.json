@@ -1,0 +1,21 @@
+{
+ "corpus": "ann-benchmarks",
+ "cloned_at": "2026-10-13T06:33:51Z",
+ "repos": [
+  {
+   "repo": "ann-benchmarks",
+   "url": "https://github.com/erikbern/ann-benchmarks.git",
+   "licence": "MIT",
+   "sha": "2e081ad32c1eccab72dcb739ad886c310b90f715",
+   "files": 208,
+   "bytes": 2722227,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

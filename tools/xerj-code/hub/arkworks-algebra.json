@@ -1,0 +1,21 @@
+{
+ "corpus": "arkworks-algebra",
+ "cloned_at": "2026-10-13T06:33:41Z",
+ "repos": [
+  {
+   "repo": "algebra",
+   "url": "https://github.com/arkworks-rs/algebra.git",
+   "licence": "Apache-2.0",
+   "sha": "4a19a1c50606ae4a0e96ccce107f6281aa0be38e",
+   "files": 755,
+   "bytes": 2675705,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

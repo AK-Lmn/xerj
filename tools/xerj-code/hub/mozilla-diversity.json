@@ -1,0 +1,21 @@
+{
+ "corpus": "mozilla-diversity",
+ "cloned_at": "2026-10-13T06:34:15Z",
+ "repos": [
+  {
+   "repo": "diversity",
+   "url": "https://github.com/mozilla/diversity.git",
+   "licence": "MPL-2.0",
+   "sha": "5e612f24d537b5e7b80ae0aa730c32e499b68db4",
+   "files": 72,
+   "bytes": 315900,
+   "review": {
+    "spdx": "MPL-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MPL-2.0"
+   }
+  }
+ ]
+}

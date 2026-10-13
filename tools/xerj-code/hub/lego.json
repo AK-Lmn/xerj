@@ -1,0 +1,21 @@
+{
+ "corpus": "lego",
+ "cloned_at": "2026-10-13T06:33:46Z",
+ "repos": [
+  {
+   "repo": "lego",
+   "url": "https://github.com/go-acme/lego.git",
+   "licence": "MIT",
+   "sha": "748e608a68442e91424a1f330a6dd16427c33d1e",
+   "files": 2701,
+   "bytes": 6688133,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

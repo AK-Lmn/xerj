@@ -1,0 +1,21 @@
+{
+ "corpus": "fortio",
+ "cloned_at": "2026-10-13T06:34:35Z",
+ "repos": [
+  {
+   "repo": "fortio",
+   "url": "https://github.com/fortio/fortio.git",
+   "licence": "Apache-2.0",
+   "sha": "67ce9fa2a3a62fdb2f7a0d2b50acda1f7002d32b",
+   "files": 109,
+   "bytes": 962094,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

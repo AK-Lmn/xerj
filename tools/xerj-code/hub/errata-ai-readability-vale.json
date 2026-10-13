@@ -1,0 +1,21 @@
+{
+ "corpus": "errata-ai-readability-vale",
+ "cloned_at": "2026-10-13T06:36:15Z",
+ "repos": [
+  {
+   "repo": "Readability",
+   "url": "https://github.com/errata-ai/Readability.git",
+   "licence": "MIT",
+   "sha": "20b367bc5febf7ec9b83e176b8e611d230855838",
+   "files": 19,
+   "bytes": 18942,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

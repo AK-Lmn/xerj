@@ -1,0 +1,21 @@
+{
+ "corpus": "jsdom",
+ "cloned_at": "2026-10-13T06:35:25Z",
+ "repos": [
+  {
+   "repo": "jsdom",
+   "url": "https://github.com/jsdom/jsdom.git",
+   "licence": "MIT",
+   "sha": "a78f9c22b94e91b39b9fffe36743df789da3a19a",
+   "files": 1205,
+   "bytes": 47111023,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

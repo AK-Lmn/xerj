@@ -1,0 +1,21 @@
+{
+ "corpus": "kics",
+ "cloned_at": "2026-10-13T06:35:09Z",
+ "repos": [
+  {
+   "repo": "kics",
+   "url": "https://github.com/Checkmarx/kics.git",
+   "licence": "Apache-2.0",
+   "sha": "bbb3c148d13528b49718c8e4999af99bd4a3c950",
+   "files": 17628,
+   "bytes": 128866467,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

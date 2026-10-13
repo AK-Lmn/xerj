@@ -1,0 +1,21 @@
+{
+ "corpus": "opensanctions",
+ "cloned_at": "2026-10-13T06:34:17Z",
+ "repos": [
+  {
+   "repo": "opensanctions",
+   "url": "https://github.com/opensanctions/opensanctions.git",
+   "licence": "MIT",
+   "sha": "d1619f4c4f92a8f3335bf50d9fd6b0f4e281a005",
+   "files": 2033,
+   "bytes": 30069799,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

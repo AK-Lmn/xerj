@@ -1,0 +1,21 @@
+{
+ "corpus": "bluge",
+ "cloned_at": "2026-10-13T06:33:52Z",
+ "repos": [
+  {
+   "repo": "bluge",
+   "url": "https://github.com/blugelabs/bluge.git",
+   "licence": "Apache-2.0",
+   "sha": "57414197005148539c5dc5db8ab581594969df79",
+   "files": 419,
+   "bytes": 1927410,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

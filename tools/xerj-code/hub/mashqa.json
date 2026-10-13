@@ -1,0 +1,21 @@
+{
+ "corpus": "mashqa",
+ "cloned_at": "2026-10-13T06:34:01Z",
+ "repos": [
+  {
+   "repo": "MASHQA",
+   "url": "https://github.com/mingzhu0527/MASHQA.git",
+   "licence": "Apache-2.0",
+   "sha": "86e0a7d7a1f3fc0906c74de534340f985f199b1f",
+   "files": 36,
+   "bytes": 680845,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

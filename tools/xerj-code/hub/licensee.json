@@ -1,0 +1,21 @@
+{
+ "corpus": "licensee",
+ "cloned_at": "2026-10-13T06:34:15Z",
+ "repos": [
+  {
+   "repo": "licensee",
+   "url": "https://github.com/licensee/licensee.git",
+   "licence": "MIT",
+   "sha": "9261af40f46d2039094e8219933914b6e11b3591",
+   "files": 324,
+   "bytes": 2343274,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "kube-hunter",
+ "cloned_at": "2026-10-13T06:35:03Z",
+ "repos": [
+  {
+   "repo": "kube-hunter",
+   "url": "https://github.com/aquasecurity/kube-hunter.git",
+   "licence": "Apache-2.0",
+   "sha": "bc47f08e88ea2a5fb059bf3b8a8edb1aefb4c6cc",
+   "files": 141,
+   "bytes": 747412,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

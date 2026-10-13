@@ -1,0 +1,21 @@
+{
+ "corpus": "jsonformer",
+ "cloned_at": "2026-10-13T06:33:28Z",
+ "repos": [
+  {
+   "repo": "jsonformer",
+   "url": "https://github.com/1rgs/jsonformer.git",
+   "licence": "MIT",
+   "sha": "bfad031876ace84ec0a7853718a1c0828ea1653a",
+   "files": 15,
+   "bytes": 307596,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

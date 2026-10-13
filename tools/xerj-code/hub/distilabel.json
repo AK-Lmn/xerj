@@ -1,0 +1,21 @@
+{
+ "corpus": "distilabel",
+ "cloned_at": "2026-10-13T06:33:25Z",
+ "repos": [
+  {
+   "repo": "distilabel",
+   "url": "https://github.com/argilla-io/distilabel.git",
+   "licence": "Apache-2.0",
+   "sha": "313fac85b1a2472dd88db1a31c2b754599f46476",
+   "files": 557,
+   "bytes": 10497801,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

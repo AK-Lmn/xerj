@@ -1,0 +1,21 @@
+{
+ "corpus": "spectral",
+ "cloned_at": "2026-10-13T06:33:38Z",
+ "repos": [
+  {
+   "repo": "spectral",
+   "url": "https://github.com/stoplightio/spectral.git",
+   "licence": "Apache-2.0",
+   "sha": "62527eec1143a7f7b013aa605b5cab4e1e466aee",
+   "files": 914,
+   "bytes": 7425059,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

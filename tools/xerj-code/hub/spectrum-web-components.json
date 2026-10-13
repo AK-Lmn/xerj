@@ -1,0 +1,21 @@
+{
+ "corpus": "spectrum-web-components",
+ "cloned_at": "2026-10-13T06:35:54Z",
+ "repos": [
+  {
+   "repo": "spectrum-web-components",
+   "url": "https://github.com/adobe/spectrum-web-components.git",
+   "licence": "Apache-2.0",
+   "sha": "be922808ae0dc5eb4cded7541c12265254a31b2d",
+   "files": 4307,
+   "bytes": 44437210,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

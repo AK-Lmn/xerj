@@ -1,0 +1,21 @@
+{
+ "corpus": "ctakes",
+ "cloned_at": "2026-10-13T06:34:01Z",
+ "repos": [
+  {
+   "repo": "ctakes",
+   "url": "https://github.com/apache/ctakes.git",
+   "licence": "Apache-2.0",
+   "sha": "80e0d8e951f895666b1a0132320fd0c4c9de75a2",
+   "files": 3217,
+   "bytes": 45253671,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

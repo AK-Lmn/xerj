@@ -1,0 +1,21 @@
+{
+ "corpus": "textlint-rule-preset-jtf-style",
+ "cloned_at": "2026-10-13T06:36:22Z",
+ "repos": [
+  {
+   "repo": "textlint-rule-preset-JTF-style",
+   "url": "https://github.com/textlint-ja/textlint-rule-preset-JTF-style.git",
+   "licence": "MIT",
+   "sha": "2186273a276e5c0acf60fa359f21c537d61730f1",
+   "files": 105,
+   "bytes": 1175798,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

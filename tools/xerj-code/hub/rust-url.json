@@ -1,0 +1,21 @@
+{
+ "corpus": "rust-url",
+ "cloned_at": "2026-10-13T06:35:49Z",
+ "repos": [
+  {
+   "repo": "rust-url",
+   "url": "https://github.com/servo/rust-url.git",
+   "licence": "Apache-2.0",
+   "sha": "00a6ce58d02f4e0d43c5ca0702c0bedb8b1ebf3a",
+   "files": 79,
+   "bytes": 2535716,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "fastrag",
+ "cloned_at": "2026-10-13T06:33:26Z",
+ "repos": [
+  {
+   "repo": "fastRAG",
+   "url": "https://github.com/IntelLabs/fastRAG.git",
+   "licence": "Apache-2.0",
+   "sha": "ab3d19d594616270c467948ffc6e15fde757ff23",
+   "files": 153,
+   "bytes": 28384011,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

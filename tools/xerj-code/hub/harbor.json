@@ -1,0 +1,21 @@
+{
+ "corpus": "harbor",
+ "cloned_at": "2026-10-13T06:34:38Z",
+ "repos": [
+  {
+   "repo": "harbor",
+   "url": "https://github.com/goharbor/harbor.git",
+   "licence": "Apache-2.0",
+   "sha": "23bfa9a110e0885a45b8a74557573dcaa5f2e54d",
+   "files": 3301,
+   "bytes": 19714840,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

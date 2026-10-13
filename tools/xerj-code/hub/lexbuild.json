@@ -1,0 +1,21 @@
+{
+ "corpus": "lexbuild",
+ "cloned_at": "2026-10-13T06:34:15Z",
+ "repos": [
+  {
+   "repo": "lexbuild",
+   "url": "https://github.com/chris-c-thomas/lexbuild.git",
+   "licence": "MIT",
+   "sha": "8cc0b93b7003b0867d4be6c574ba51121ca68fca",
+   "files": 564,
+   "bytes": 3570896,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

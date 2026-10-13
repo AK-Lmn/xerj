@@ -1,0 +1,21 @@
+{
+ "corpus": "ipsum-blocklist",
+ "cloned_at": "2026-10-13T06:35:00Z",
+ "repos": [
+  {
+   "repo": "ipsum",
+   "url": "https://github.com/stamparm/ipsum.git",
+   "licence": "Unlicense",
+   "sha": "444b48029c5f73a8d082d292bca1c5893638b08b",
+   "files": 11,
+   "bytes": 4752016,
+   "review": {
+    "spdx": "Unlicense",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Unlicense"
+   }
+  }
+ ]
+}

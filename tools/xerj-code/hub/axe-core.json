@@ -1,0 +1,21 @@
+{
+ "corpus": "axe-core",
+ "cloned_at": "2026-10-13T06:35:17Z",
+ "repos": [
+  {
+   "repo": "axe-core",
+   "url": "https://github.com/dequelabs/axe-core.git",
+   "licence": "MPL-2.0",
+   "sha": "7e287a6ab8ac547eb63c0b8ca513a223eca16772",
+   "files": 2069,
+   "bytes": 46383910,
+   "review": {
+    "spdx": "MPL-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MPL-2.0"
+   }
+  }
+ ]
+}

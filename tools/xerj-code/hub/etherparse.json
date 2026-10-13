@@ -1,0 +1,21 @@
+{
+ "corpus": "etherparse",
+ "cloned_at": "2026-10-13T06:34:21Z",
+ "repos": [
+  {
+   "repo": "etherparse",
+   "url": "https://github.com/JulianSchmid/etherparse.git",
+   "licence": "Apache-2.0",
+   "sha": "70f72bee542ae49efebb8d2106bde64f84f02a43",
+   "files": 356,
+   "bytes": 3482926,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

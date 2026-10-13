@@ -1,0 +1,21 @@
+{
+ "corpus": "covid-qa",
+ "cloned_at": "2026-10-13T06:34:00Z",
+ "repos": [
+  {
+   "repo": "COVID-QA",
+   "url": "https://github.com/deepset-ai/COVID-QA.git",
+   "licence": "Apache-2.0",
+   "sha": "fb2eb5e249618457e5359806601086c635c8eb8f",
+   "files": 205,
+   "bytes": 18418007,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

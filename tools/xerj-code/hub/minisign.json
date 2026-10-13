@@ -1,0 +1,21 @@
+{
+ "corpus": "minisign",
+ "cloned_at": "2026-10-13T06:33:46Z",
+ "repos": [
+  {
+   "repo": "minisign",
+   "url": "https://github.com/jedisct1/minisign.git",
+   "licence": "ISC",
+   "sha": "b6de4fe31b4c519887cef8b080eb1816b18795ae",
+   "files": 26,
+   "bytes": 92856,
+   "review": {
+    "spdx": "ISC",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): ISC"
+   }
+  }
+ ]
+}

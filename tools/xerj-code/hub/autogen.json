@@ -1,0 +1,21 @@
+{
+ "corpus": "autogen",
+ "cloned_at": "2026-10-13T06:33:16Z",
+ "repos": [
+  {
+   "repo": "autogen",
+   "url": "https://github.com/microsoft/autogen.git",
+   "licence": "CC-BY-4.0",
+   "sha": "027ecf0a379bcc1d09956d46d12d44a3ad9cee14",
+   "files": 1837,
+   "bytes": 48344797,
+   "review": {
+    "spdx": "CC-BY-4.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): CC-BY-4.0"
+   }
+  }
+ ]
+}

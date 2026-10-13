@@ -1,0 +1,21 @@
+{
+ "corpus": "chatdoctor",
+ "cloned_at": "2026-10-13T06:33:59Z",
+ "repos": [
+  {
+   "repo": "ChatDoctor",
+   "url": "https://github.com/Kent0n-Li/ChatDoctor.git",
+   "licence": "Apache-2.0",
+   "sha": "e77bd7ebafbffb6d82be3410cd0d4ebebe75a516",
+   "files": 29,
+   "bytes": 28077134,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "ibm-openapi-validator",
+ "cloned_at": "2026-10-13T06:33:35Z",
+ "repos": [
+  {
+   "repo": "openapi-validator",
+   "url": "https://github.com/IBM/openapi-validator.git",
+   "licence": "Apache-2.0",
+   "sha": "cf6ec4871468976f28ffe680d5d20daa2b4673e3",
+   "files": 561,
+   "bytes": 3015073,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

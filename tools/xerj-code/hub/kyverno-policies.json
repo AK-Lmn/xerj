@@ -1,0 +1,21 @@
+{
+ "corpus": "kyverno-policies",
+ "cloned_at": "2026-10-13T06:35:05Z",
+ "repos": [
+  {
+   "repo": "policies",
+   "url": "https://github.com/kyverno/policies.git",
+   "licence": "Apache-2.0",
+   "sha": "ec478cb5996376c0d2f09520675805a8e33297c9",
+   "files": 1910,
+   "bytes": 5493442,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

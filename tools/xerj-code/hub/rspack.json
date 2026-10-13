@@ -1,0 +1,21 @@
+{
+ "corpus": "rspack",
+ "cloned_at": "2026-10-13T06:35:51Z",
+ "repos": [
+  {
+   "repo": "rspack",
+   "url": "https://github.com/web-infra-dev/rspack.git",
+   "licence": "MIT",
+   "sha": "7d83e4690ee04ea0713f334d124d7bbd62bc486c",
+   "files": 24309,
+   "bytes": 69846159,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

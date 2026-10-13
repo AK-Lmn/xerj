@@ -1,0 +1,21 @@
+{
+ "corpus": "brpc",
+ "cloned_at": "2026-10-13T06:34:20Z",
+ "repos": [
+  {
+   "repo": "brpc",
+   "url": "https://github.com/apache/brpc.git",
+   "licence": "Apache-2.0",
+   "sha": "7a2c1d5e04b99dca884f87a534e32a86db491ed5",
+   "files": 1899,
+   "bytes": 41850018,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

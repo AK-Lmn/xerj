@@ -1,0 +1,21 @@
+{
+ "corpus": "style-dictionary",
+ "cloned_at": "2026-10-13T06:35:53Z",
+ "repos": [
+  {
+   "repo": "style-dictionary",
+   "url": "https://github.com/style-dictionary/style-dictionary.git",
+   "licence": "Apache-2.0",
+   "sha": "81ecc0525419911204c0c6c7c242fe6c721cb9e1",
+   "files": 935,
+   "bytes": 7536296,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

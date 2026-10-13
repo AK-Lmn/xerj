@@ -1,0 +1,21 @@
+{
+ "corpus": "bookkeeper",
+ "cloned_at": "2026-10-13T06:33:53Z",
+ "repos": [
+  {
+   "repo": "bookkeeper",
+   "url": "https://github.com/apache/bookkeeper.git",
+   "licence": "Apache-2.0",
+   "sha": "773a988ddf8b888a8869c6ae33f696935eba5cdc",
+   "files": 3322,
+   "bytes": 23721957,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "retext-indefinite-article",
+ "cloned_at": "2026-10-13T06:36:19Z",
+ "repos": [
+  {
+   "repo": "retext-indefinite-article",
+   "url": "https://github.com/retextjs/retext-indefinite-article.git",
+   "licence": "MIT",
+   "sha": "960875ee40ffd0806054d634f96052955fff8c18",
+   "files": 15,
+   "bytes": 22738,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

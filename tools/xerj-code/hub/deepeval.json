@@ -1,0 +1,21 @@
+{
+ "corpus": "deepeval",
+ "cloned_at": "2026-10-13T06:33:21Z",
+ "repos": [
+  {
+   "repo": "deepeval",
+   "url": "https://github.com/confident-ai/deepeval.git",
+   "licence": "Apache-2.0",
+   "sha": "016946f6d770f8bc4e2f63f665140aea527d6641",
+   "files": 3013,
+   "bytes": 44130880,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

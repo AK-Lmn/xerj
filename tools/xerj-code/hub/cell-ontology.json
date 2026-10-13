@@ -1,0 +1,21 @@
+{
+ "corpus": "cell-ontology",
+ "cloned_at": "2026-10-13T06:34:03Z",
+ "repos": [
+  {
+   "repo": "cell-ontology",
+   "url": "https://github.com/obophenotype/cell-ontology.git",
+   "licence": "CC-BY-4.0",
+   "sha": "b7cb31d4d3eae2790cb9631fd86f3ee70e1fe963",
+   "files": 332,
+   "bytes": 224927299,
+   "review": {
+    "spdx": "CC-BY-4.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): CC-BY-4.0"
+   }
+  }
+ ]
+}

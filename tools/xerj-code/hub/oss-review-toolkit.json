@@ -1,0 +1,21 @@
+{
+ "corpus": "oss-review-toolkit",
+ "cloned_at": "2026-10-13T06:34:18Z",
+ "repos": [
+  {
+   "repo": "ort",
+   "url": "https://github.com/oss-review-toolkit/ort.git",
+   "licence": "Apache-2.0",
+   "sha": "b0e622b00ea3603b221b8b0389e367e8dd8d521b",
+   "files": 3675,
+   "bytes": 82426568,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

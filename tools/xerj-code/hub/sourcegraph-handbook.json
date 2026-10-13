@@ -1,0 +1,21 @@
+{
+ "corpus": "sourcegraph-handbook",
+ "cloned_at": "2026-10-13T06:36:22Z",
+ "repos": [
+  {
+   "repo": "handbook",
+   "url": "https://github.com/sourcegraph/handbook.git",
+   "licence": "Apache-2.0",
+   "sha": "5752928b213a3ddbc7cee4459524f404a5b96fb4",
+   "files": 1090,
+   "bytes": 9562198,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

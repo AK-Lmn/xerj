@@ -1,0 +1,21 @@
+{
+ "corpus": "keywhiz",
+ "cloned_at": "2026-10-13T06:33:45Z",
+ "repos": [
+  {
+   "repo": "keywhiz",
+   "url": "https://github.com/square/keywhiz.git",
+   "licence": "Apache-2.0",
+   "sha": "52e77fd9f477637d5ed36ed6d1815b9c96c06166",
+   "files": 574,
+   "bytes": 2506095,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

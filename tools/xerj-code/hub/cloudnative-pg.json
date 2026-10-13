@@ -1,0 +1,21 @@
+{
+ "corpus": "cloudnative-pg",
+ "cloned_at": "2026-10-13T06:34:28Z",
+ "repos": [
+  {
+   "repo": "cloudnative-pg",
+   "url": "https://github.com/cloudnative-pg/cloudnative-pg.git",
+   "licence": "Apache-2.0",
+   "sha": "f2a7162e2f3b7607a738dd9b4d16e36f90c6d508",
+   "files": 1857,
+   "bytes": 61974006,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

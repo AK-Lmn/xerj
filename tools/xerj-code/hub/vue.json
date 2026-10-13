@@ -1,0 +1,21 @@
+{
+ "corpus": "vue",
+ "cloned_at": "2026-10-13T06:35:56Z",
+ "repos": [
+  {
+   "repo": "core",
+   "url": "https://github.com/vuejs/core.git",
+   "licence": "MIT",
+   "sha": "ff3501429d4970c37194708b055492a56d9e5be5",
+   "files": 703,
+   "bytes": 6489534,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

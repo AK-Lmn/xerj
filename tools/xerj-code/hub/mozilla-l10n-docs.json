@@ -1,0 +1,21 @@
+{
+ "corpus": "mozilla-l10n-docs",
+ "cloned_at": "2026-10-13T06:36:19Z",
+ "repos": [
+  {
+   "repo": "localizer-documentation",
+   "url": "https://github.com/mozilla-l10n/localizer-documentation.git",
+   "licence": "CC-BY-4.0",
+   "sha": "b190a6609fc94f5b9ca4e4ae8eec68984d427ace",
+   "files": 78,
+   "bytes": 1048022,
+   "review": {
+    "spdx": "CC-BY-4.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): CC-BY-4.0"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "agentscope",
+ "cloned_at": "2026-10-13T06:33:15Z",
+ "repos": [
+  {
+   "repo": "agentscope",
+   "url": "https://github.com/modelscope/agentscope.git",
+   "licence": "Apache-2.0",
+   "sha": "812eaecd7816223a7de176951eac9fc9e03555c7",
+   "files": 1187,
+   "bytes": 17063618,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

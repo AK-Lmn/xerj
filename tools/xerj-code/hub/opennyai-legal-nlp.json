@@ -1,0 +1,21 @@
+{
+ "corpus": "opennyai-legal-nlp",
+ "cloned_at": "2026-10-13T06:34:16Z",
+ "repos": [
+  {
+   "repo": "Opennyai",
+   "url": "https://github.com/OpenNyAI/Opennyai.git",
+   "licence": "MIT",
+   "sha": "2abee8fc7085270d7197dcb70d7b8c07d00364e3",
+   "files": 113,
+   "bytes": 3910172,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

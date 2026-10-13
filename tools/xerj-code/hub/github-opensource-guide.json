@@ -1,0 +1,21 @@
+{
+ "corpus": "github-opensource-guide",
+ "cloned_at": "2026-10-13T06:36:17Z",
+ "repos": [
+  {
+   "repo": "opensource.guide",
+   "url": "https://github.com/github/opensource.guide.git",
+   "licence": "CC-BY-4.0",
+   "sha": "e7ac98e94600c5eea834f9a026c000d26b28df24",
+   "files": 937,
+   "bytes": 14880887,
+   "review": {
+    "spdx": "CC-BY-4.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): CC-BY-4.0"
+   }
+  }
+ ]
+}

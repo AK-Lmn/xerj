@@ -1,0 +1,21 @@
+{
+ "corpus": "minify",
+ "cloned_at": "2026-10-13T06:35:35Z",
+ "repos": [
+  {
+   "repo": "minify",
+   "url": "https://github.com/tdewolff/minify.git",
+   "licence": "MIT",
+   "sha": "eb78925d85990bd6af9a4206adf55ed093480a12",
+   "files": 211,
+   "bytes": 39781699,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "candle",
+ "cloned_at": "2026-10-13T06:33:17Z",
+ "repos": [
+  {
+   "repo": "candle",
+   "url": "https://github.com/huggingface/candle.git",
+   "licence": "Apache-2.0",
+   "sha": "c68b24997319b8d76e5a4e775dab197c7f26322a",
+   "files": 1161,
+   "bytes": 15744329,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

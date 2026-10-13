@@ -1,0 +1,21 @@
+{
+ "corpus": "solid",
+ "cloned_at": "2026-10-13T06:35:51Z",
+ "repos": [
+  {
+   "repo": "solid",
+   "url": "https://github.com/solidjs/solid.git",
+   "licence": "MIT",
+   "sha": "25138e1c2a32712ddff683374e1a257b8bf8b5a8",
+   "files": 188,
+   "bytes": 1411741,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

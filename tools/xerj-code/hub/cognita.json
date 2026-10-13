@@ -1,0 +1,21 @@
+{
+ "corpus": "cognita",
+ "cloned_at": "2026-10-13T06:33:19Z",
+ "repos": [
+  {
+   "repo": "cognita",
+   "url": "https://github.com/truefoundry/cognita.git",
+   "licence": "Apache-2.0",
+   "sha": "8bcaae790af1effd398520338d6c623ff92b98fb",
+   "files": 261,
+   "bytes": 53310055,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

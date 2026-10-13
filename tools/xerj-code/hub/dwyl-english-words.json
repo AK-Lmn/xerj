@@ -1,0 +1,21 @@
+{
+ "corpus": "dwyl-english-words",
+ "cloned_at": "2026-10-13T06:36:16Z",
+ "repos": [
+  {
+   "repo": "english-words",
+   "url": "https://github.com/dwyl/english-words.git",
+   "licence": "Unlicense",
+   "sha": "20f5cc9b3f0ccc8ce45d814c532b7c2031bba31c",
+   "files": 16,
+   "bytes": 19356660,
+   "review": {
+    "spdx": "Unlicense",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Unlicense"
+   }
+  }
+ ]
+}

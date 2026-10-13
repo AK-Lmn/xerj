@@ -1,0 +1,21 @@
+{
+ "corpus": "fabric",
+ "cloned_at": "2026-10-13T06:33:23Z",
+ "repos": [
+  {
+   "repo": "fabric",
+   "url": "https://github.com/danielmiessler/fabric.git",
+   "licence": "MIT",
+   "sha": "177b3a9d284895c907d6eb3a64937d174add4cd5",
+   "files": 912,
+   "bytes": 28848908,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

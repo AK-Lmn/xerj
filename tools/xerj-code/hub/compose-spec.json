@@ -1,0 +1,21 @@
+{
+ "corpus": "compose-spec",
+ "cloned_at": "2026-10-13T06:34:27Z",
+ "repos": [
+  {
+   "repo": "compose-spec",
+   "url": "https://github.com/compose-spec/compose-spec.git",
+   "licence": "Apache-2.0",
+   "sha": "914ec15d1fa498969c0df5c1d672306db3256089",
+   "files": 52,
+   "bytes": 479830,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "esbuild",
+ "cloned_at": "2026-10-13T06:35:22Z",
+ "repos": [
+  {
+   "repo": "esbuild",
+   "url": "https://github.com/evanw/esbuild.git",
+   "licence": "MIT",
+   "sha": "f6058f8364fe7ab91ca57a83e02577ed74c9cae4",
+   "files": 350,
+   "bytes": 9460670,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "textlint-ja-technical-writing",
+ "cloned_at": "2026-10-13T06:36:22Z",
+ "repos": [
+  {
+   "repo": "textlint-rule-preset-ja-technical-writing",
+   "url": "https://github.com/textlint-ja/textlint-rule-preset-ja-technical-writing.git",
+   "licence": "MIT",
+   "sha": "5e73caaf8700db90408bb133b0d792aaea4337d6",
+   "files": 19,
+   "bytes": 546659,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}
