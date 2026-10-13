@@ -1,0 +1,21 @@
+{
+ "corpus": "google-devdocs-vale",
+ "cloned_at": "2026-10-13T01:56:06Z",
+ "repos": [
+  {
+   "repo": "Google",
+   "url": "https://github.com/vale-cli/Google",
+   "licence": "MIT",
+   "sha": "9e2483e2f09e7f623bacbbc154adb9627bed563b",
+   "files": 111,
+   "bytes": 55900,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "MIT (Vale rule package) verified. Encodes (does not reproduce) the Google Developer Documentation Style Guide, itself CC-BY-4.0; not endorsed by Google."
+   }
+  }
+ ]
+}

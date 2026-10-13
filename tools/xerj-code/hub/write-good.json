@@ -1,0 +1,21 @@
+{
+ "corpus": "write-good",
+ "cloned_at": "2026-10-13T01:55:23Z",
+ "repos": [
+  {
+   "repo": "write-good",
+   "url": "https://github.com/btford/write-good",
+   "licence": "MIT",
+   "sha": "6940b034c6f5a7e101c01a24d651a778fc3fe435",
+   "files": 24,
+   "bytes": 176237,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "MIT verified (LICENSE)."
+   }
+  }
+ ]
+}

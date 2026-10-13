@@ -1,0 +1,21 @@
+{
+ "corpus": "18f-content-guide",
+ "cloned_at": "2026-10-13T01:56:04Z",
+ "repos": [
+  {
+   "repo": "content-guide",
+   "url": "https://github.com/18F/content-guide",
+   "licence": "CC0-1.0",
+   "sha": "1b1723d3d5b8f91d92c16487c88b56265dc0ec3a",
+   "files": 90,
+   "bytes": 426858,
+   "review": {
+    "spdx": "CC0-1.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "US federal government work, public domain + CC0-1.0 worldwide waiver (LICENSE.md verified). Detector reported UNKNOWN. Repo archived (18F dissolved 2025); frozen public-domain guidance."
+   }
+  }
+ ]
+}

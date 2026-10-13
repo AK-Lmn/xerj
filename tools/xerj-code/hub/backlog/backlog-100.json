@@ -3676,6 +3676,253 @@
      "xerj"
     ]
    }
+  },
+  {
+   "cat": "AI",
+   "domain": "an agent designing a system prompt queries this for how frontier tools (ChatGPT, Claude, Cursor, v0) are actually system-prompted, with annotated patterns",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "awesome-ai-system-prompts",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/dontriskit/awesome-ai-system-prompts"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "prompts",
+     "system-prompts",
+     "agents"
+    ]
+   }
+  },
+  {
+   "cat": "AI",
+   "domain": "an agent applying a prompting technique queries this for CoT, ReAct, few-shot and RAG-prompting definitions and worked examples",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "prompt-engineering-guide",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/dair-ai/Prompt-Engineering-Guide"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "prompt-engineering",
+     "cot",
+     "react",
+     "rag"
+    ]
+   }
+  },
+  {
+   "cat": "AI",
+   "domain": "an agent builder queries this for the reliability and design principles of production LLM agents, the twelve factors",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "12-factor-agents",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/humanlayer/12-factor-agents"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "agents",
+     "design",
+     "reliability"
+    ]
+   }
+  },
+  {
+   "cat": "AI",
+   "domain": "an agent building with LLMs queries this for the fine-tune, quantize, RAG and deployment path and the concept behind each step",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "llm-course",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/mlabonne/llm-course"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "llm",
+     "fine-tuning",
+     "rag",
+     "roadmap"
+    ]
+   }
+  },
+  {
+   "cat": "AI",
+   "domain": "an agent wiring up MCP queries this for which server exists for a capability or integration and where to get it",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "awesome-mcp-servers",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/punkpeye/awesome-mcp-servers"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "mcp",
+     "agents",
+     "integrations",
+     "tools"
+    ]
+   }
+  },
+  {
+   "cat": "WRITE",
+   "domain": "an agent tightening prose queries this for the rule behind a flag: passive voice, weasel words, wordiness, cliches, with the explanation",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "write-good",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/btford/write-good"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "writing",
+     "prose",
+     "linter",
+     "editing"
+    ]
+   }
+  },
+  {
+   "cat": "WRITE",
+   "domain": "an agent writing plain-language content queries this for active-voice, concise-heading and inclusive-wording rules",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "18f-content-guide",
+   "sources": [
+    {
+     "licence_hint": "CC0-1.0",
+     "url": "https://github.com/18F/content-guide"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "US",
+    "topics": [
+     "writing",
+     "plain-language",
+     "content-style"
+    ]
+   }
+  },
+  {
+   "cat": "WRITE",
+   "domain": "an agent reviewing prose queries this for sourced style checks: redundancy, jargon, hedging, misused phrases, each with a citation",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "proselint",
+   "sources": [
+    {
+     "licence_hint": "BSD-3-Clause",
+     "url": "https://github.com/amperser/proselint"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "writing",
+     "prose",
+     "linter",
+     "style"
+    ]
+   }
+  },
+  {
+   "cat": "WRITE",
+   "domain": "an agent structuring a document queries this for how-to, tutorial, reference and explanation templates with embedded writing guidance",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "good-docs-templates",
+   "sources": [
+    {
+     "licence_hint": "0BSD",
+     "url": "https://github.com/thegooddocsproject/templates"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "writing",
+     "documentation",
+     "templates"
+    ]
+   }
+  },
+  {
+   "cat": "WRITE",
+   "domain": "an agent writing developer docs queries this for Google dev-doc style rules: voice, tense, second person, word choice",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "google-devdocs-vale",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/vale-cli/Google"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "writing",
+     "style-guide",
+     "docs"
+    ]
+   }
+  },
+  {
+   "cat": "WRITE",
+   "domain": "an agent writing UI or docs copy queries this for Microsoft Writing Style Guide rules: terminology, tone, inclusive language, capitalization",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "microsoft-style-vale",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/vale-cli/Microsoft"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "writing",
+     "style-guide",
+     "ui-copy"
+    ]
+   }
   }
  ],
  "lanes": [

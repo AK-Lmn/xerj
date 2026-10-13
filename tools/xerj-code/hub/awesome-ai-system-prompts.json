@@ -1,0 +1,21 @@
+{
+ "corpus": "awesome-ai-system-prompts",
+ "cloned_at": "2026-10-13T01:55:58Z",
+ "repos": [
+  {
+   "repo": "awesome-ai-system-prompts",
+   "url": "https://github.com/dontriskit/awesome-ai-system-prompts",
+   "licence": "MIT",
+   "sha": "74964625038011525ab44c3a673fc605b2c765b3",
+   "files": 89,
+   "bytes": 1236388,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "MIT wrapper verified (LICENSE). The collection quotes third-party vendor system prompts; treat quoted prompts as reference and cite their source."
+   }
+  }
+ ]
+}
