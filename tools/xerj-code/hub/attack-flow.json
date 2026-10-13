@@ -1,0 +1,21 @@
+{
+ "corpus": "attack-flow",
+ "cloned_at": "2026-10-13T03:56:09Z",
+ "repos": [
+  {
+   "repo": "attack-flow",
+   "url": "https://github.com/center-for-threat-informed-defense/attack-flow.git",
+   "licence": "Apache-2.0",
+   "sha": "8b6ca28bc13beb871f3a4c5fa029b96c6394f874",
+   "files": 1217,
+   "bytes": 38003374,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE = Apache-2.0 (MITRE Center for Threat-Informed Defense). ~36MB tree; index corpus/ (.afb attack-flow JSON) + docs/, exclude the bundled src/ TS 'builder' web app."
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "misp-galaxy",
+ "cloned_at": "2026-10-13T03:56:04Z",
+ "repos": [
+  {
+   "repo": "misp-galaxy",
+   "url": "https://github.com/MISP/misp-galaxy.git",
+   "licence": "CC0-1.0 OR BSD-2-Clause",
+   "sha": "b9675983c99a0d94b7b36036c0076f88b2ecf4fb",
+   "files": 479,
+   "bytes": 60429590,
+   "review": {
+    "spdx": "CC0-1.0 OR BSD-2-Clause",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE.md: JSON clusters dual-licensed 'CC0 1.0 Universal ... or [BSD-2-Clause text]' \u2014 both permissive/public-domain. GitHub NOASSERTION was the dual-licence wording. ~58MB pure JSON."
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "llhttp",
+ "cloned_at": "2026-10-13T03:56:16Z",
+ "repos": [
+  {
+   "repo": "llhttp",
+   "url": "https://github.com/nodejs/llhttp.git",
+   "licence": "MIT",
+   "sha": "69936dbc22922e596a05dfa912fc11d9a7af2136",
+   "files": 69,
+   "bytes": 8213354,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE via license API = verbatim MIT (Fedor Indutny 2018), spdx_id MIT, active, 7.7MB."
+   }
+  }
+ ]
+}

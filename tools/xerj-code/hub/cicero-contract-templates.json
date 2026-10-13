@@ -1,0 +1,21 @@
+{
+ "corpus": "cicero-contract-templates",
+ "cloned_at": "2026-10-13T03:55:45Z",
+ "repos": [
+  {
+   "repo": "cicero-template-library",
+   "url": "https://github.com/accordproject/cicero-template-library.git",
+   "licence": "Apache-2.0",
+   "sha": "89d82efc8768592ced768e9e22cd769c42233c81",
+   "files": 4278,
+   "bytes": 126939287,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "license API decoded = verbatim Apache-2.0 (Accord Project); permissive, same family as the hub. 33MB git, branch main, active (pushed 2026-10). Confirmed adapt-with-attribution."
+   }
+  }
+ ]
+}

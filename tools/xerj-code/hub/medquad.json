@@ -1,0 +1,21 @@
+{
+ "corpus": "medquad",
+ "cloned_at": "2026-10-13T03:55:35Z",
+ "repos": [
+  {
+   "repo": "MedQuAD",
+   "url": "https://github.com/abachaa/MedQuAD.git",
+   "licence": "CC-BY-4.0",
+   "sha": "577bd37b96c02d1833b2c9eed2de9f96964e96cb",
+   "files": 11277,
+   "bytes": 36735138,
+   "review": {
+    "spdx": "CC-BY-4.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded /license: LICENSE.txt first line 'Attribution 4.0 International' with 0 NonCommercial/ShareAlike/NoDerivatives hits = plain CC-BY-4.0; GitHub API label is NOASSERTION (label-vs-text trap, confirmed real). Repo live HTTP 200, 11MB; contents show all 12 NIH source dirs incl. the 3 answer-stripped MedlinePlus dirs (10/11/12)."
+   }
+  }
+ ]
+}

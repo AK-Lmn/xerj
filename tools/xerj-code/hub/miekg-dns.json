@@ -1,0 +1,21 @@
+{
+ "corpus": "miekg-dns",
+ "cloned_at": "2026-10-13T03:56:14Z",
+ "repos": [
+  {
+   "repo": "dns",
+   "url": "https://github.com/miekg/dns.git",
+   "licence": "BSD-3-Clause",
+   "sha": "2e4905fb030255032d4343cb83bc2f8c3cfcb82a",
+   "files": 104,
+   "bytes": 934241,
+   "review": {
+    "spdx": "BSD-3-Clause",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE via license API = BSD 3-Clause (Go Authors + Miek Gieben), spdx_id BSD-3-Clause, active, 16MB. Confirms it is BSD-3 (not MIT)."
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "edliz-zimbabwe-treatment-guidelines",
+ "cloned_at": "2026-10-13T03:55:38Z",
+ "repos": [
+  {
+   "repo": "edliz",
+   "url": "https://github.com/michaeldera/edliz.git",
+   "licence": "MIT",
+   "sha": "73b89bdc6ddb75550e23d4014d70508cc38c2eba",
+   "files": 288,
+   "bytes": 10183953,
+   "review": {
+    "spdx": "MIT",
+    "use": "mixed",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded /license = MIT (Copyright 2020 Michael Dera) covering the whole tree. Repo live HTTP 200, 22MB, default branch 'dev'. 'mixed' = content vs code: guideline text lives in Data/ + resources/ alongside a C#/.NET app (Controllers/, Pages/, EDLIZ.csproj/.sln) -- ingest content dirs only. Licence itself is clean."
+   }
+  }
+ ]
+}

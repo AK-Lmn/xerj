@@ -1,0 +1,21 @@
+{
+ "corpus": "commonaccord-legal-docs",
+ "cloned_at": "2026-10-13T03:55:47Z",
+ "repos": [
+  {
+   "repo": "Cmacc-Org",
+   "url": "https://github.com/CommonAccord/Cmacc-Org.git",
+   "licence": "MIT",
+   "sha": "c2e864fddab6afa29c43a7ffa67f513c3b785eef",
+   "files": 6829,
+   "bytes": 23721414,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "license API decoded = verbatim MIT (c) 2015 CommonAccord.org; permissive. 44MB git, branch master, active (pushed 2026-10). Confirmed adapt-with-attribution."
+   }
+  }
+ ]
+}

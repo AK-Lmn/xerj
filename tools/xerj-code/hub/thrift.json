@@ -1,0 +1,21 @@
+{
+ "corpus": "thrift",
+ "cloned_at": "2026-10-13T03:56:12Z",
+ "repos": [
+  {
+   "repo": "thrift",
+   "url": "https://github.com/apache/thrift.git",
+   "licence": "Apache-2.0",
+   "sha": "a81db74f84321bfec0a9bff2d91bb121a08863fa",
+   "files": 3051,
+   "bytes": 20698392,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE via license API = full Apache-2.0 text (spdx_id Apache-2.0), active, 40MB. Appended third-party all permissive (msinttypes BSD, Brad-Conte SHA-256 public-domain); no copyleft present."
+   }
+  }
+ ]
+}

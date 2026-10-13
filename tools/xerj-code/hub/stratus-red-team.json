@@ -1,0 +1,21 @@
+{
+ "corpus": "stratus-red-team",
+ "cloned_at": "2026-10-13T03:56:07Z",
+ "repos": [
+  {
+   "repo": "stratus-red-team",
+   "url": "https://github.com/DataDog/stratus-red-team.git",
+   "licence": "Apache-2.0",
+   "sha": "3ff51c44ba07587fff11a51165b13e5602dbcf36",
+   "files": 538,
+   "bytes": 4132322,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE = Apache-2.0. ~5MB; the queryable text is the per-technique Markdown (AWS/cloud TTPs + detection notes) alongside the Go source."
+   }
+  }
+ ]
+}

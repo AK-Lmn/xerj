@@ -1,0 +1,21 @@
+{
+ "corpus": "polars",
+ "cloned_at": "2026-10-13T03:56:21Z",
+ "repos": [
+  {
+   "repo": "polars",
+   "url": "https://github.com/pola-rs/polars.git",
+   "licence": "MIT",
+   "sha": "099c28632d62ce41e941f88c4210a300650f7188",
+   "files": 3494,
+   "bytes": 31420087,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Read full 20-line LICENSE: standard MIT grant; the NVIDIA 'All rights reserved' line is only a 2nd copyright notice (Ritchie Vink + NVIDIA for some portions) - preserve BOTH copyright lines when adapting. Worktree verified 29MB."
+   }
+  }
+ ]
+}

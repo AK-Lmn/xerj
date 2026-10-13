@@ -1,0 +1,21 @@
+{
+ "corpus": "kube-bench",
+ "cloned_at": "2026-10-13T03:56:05Z",
+ "repos": [
+  {
+   "repo": "kube-bench",
+   "url": "https://github.com/aquasecurity/kube-bench.git",
+   "licence": "Apache-2.0",
+   "sha": "e278a5915a982f2756026de6e2f9ca77077ef9f9",
+   "files": 393,
+   "bytes": 4871725,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE = Apache-2.0. ~10MB YAML CIS-Kubernetes checks (test text + remediation); the CIS benchmark PDFs (CC-BY-NC-SA) are correctly not vendored."
+   }
+  }
+ ]
+}

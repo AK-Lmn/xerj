@@ -1,0 +1,21 @@
+{
+ "corpus": "payloadsallthethings",
+ "cloned_at": "2026-10-13T03:55:53Z",
+ "repos": [
+  {
+   "repo": "PayloadsAllTheThings",
+   "url": "https://github.com/swisskyrepo/PayloadsAllTheThings.git",
+   "licence": "MIT",
+   "sha": "3ac27901c711bdf3f5b65a7b1d1820a1f65bd09a",
+   "files": 452,
+   "bytes": 12953747,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "GitHub /license API decoded: standard MIT grant ('Permission is hereby granted, free of charge' + 'THE SOFTWARE IS PROVIDED'). ~23MB, mostly Markdown; cite file:line for embedded third-party snippets that keep their own headers."
+   }
+  }
+ ]
+}

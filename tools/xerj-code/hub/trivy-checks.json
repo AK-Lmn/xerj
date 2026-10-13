@@ -1,0 +1,21 @@
+{
+ "corpus": "trivy-checks",
+ "cloned_at": "2026-10-13T03:56:06Z",
+ "repos": [
+  {
+   "repo": "trivy-checks",
+   "url": "https://github.com/aquasecurity/trivy-checks.git",
+   "licence": "MIT",
+   "sha": "ac85645895edcb66752315b3badbb9edb50f9f3b",
+   "files": 2663,
+   "bytes": 2778047,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE = MIT. ~5MB Rego misconfiguration policies + metadata; correct text pick over the generated trivy-db/grype-db binaries."
+   }
+  }
+ ]
+}

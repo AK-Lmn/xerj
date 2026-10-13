@@ -1,0 +1,21 @@
+{
+ "corpus": "quiche",
+ "cloned_at": "2026-10-13T03:56:17Z",
+ "repos": [
+  {
+   "repo": "quiche",
+   "url": "https://github.com/cloudflare/quiche.git",
+   "licence": "BSD-2-Clause",
+   "sha": "b60aff932a78c4bd9c219cc501f3966bff223448",
+   "files": 3994,
+   "bytes": 9975594,
+   "review": {
+    "spdx": "BSD-2-Clause",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded COPYING via license API = BSD 2-Clause (Cloudflare), spdx_id BSD-2-Clause, active, 26MB. Distinct project/slug from in-hub 'quinn' \u2014 no collision."
+   }
+  }
+ ]
+}

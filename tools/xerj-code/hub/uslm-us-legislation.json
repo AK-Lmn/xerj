@@ -1,0 +1,21 @@
+{
+ "corpus": "uslm-us-legislation",
+ "cloned_at": "2026-10-13T03:55:51Z",
+ "repos": [
+  {
+   "repo": "uslm",
+   "url": "https://github.com/usgpo/uslm.git",
+   "licence": "CC0-1.0",
+   "sha": "4ec9db2f4d5d8c18d54cbee5fd64cee9992e9311",
+   "files": 242,
+   "bytes": 174160011,
+   "review": {
+    "spdx": "CC0-1.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "LICENSE.md decoded is an EXPRESS public-domain grant: '...a work of the United States Government, this project is in the public domain... Additionally, we waive copyright and related rights... worldwide through the CC0 1.0 Universal public domain dedication' (US GPO). GitHub labels it NOASSERTION only because the file is a custom-format dedication, not because a grant is missing - the text explicitly invokes CC0 1.0 + 17 U.S.C. 105. Most permissive possible. 55MB, branch main; schema + sample US Code/bill XML (not the full US Code bulk data). Confirmed adapt-with-attribution (CC0)."
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "xz",
+ "cloned_at": "2026-10-13T03:56:19Z",
+ "repos": [
+  {
+   "repo": "xz",
+   "url": "https://github.com/tukaani-project/xz.git",
+   "licence": "0BSD",
+   "sha": "b355a311406e8889af00365e903243e96909c1ca",
+   "files": 530,
+   "bytes": 7012133,
+   "review": {
+    "spdx": "0BSD",
+    "use": "mixed",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded COPYING (NOASSERTION): liblzma + xz/xzdec/lzmadec/lzmainfo CLI = 0BSD (adapt w/ attribution), BUT xzgrep/xzdiff/xzless/xzmore = GPLv2+, getopt_long fallback = LGPLv2.1+, autotools = GPLv2+/GPLv3+ \u2014 do NOT copy those. SECURITY: this is xz-utils (CVE-2024-3094 backdoor); index source from a clean recent tag and EXCLUDE tests/files/*.xz binary blobs. 9.6MB."
+   }
+  }
+ ]
+}

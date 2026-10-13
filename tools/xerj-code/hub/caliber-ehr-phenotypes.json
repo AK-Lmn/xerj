@@ -1,0 +1,21 @@
+{
+ "corpus": "caliber-ehr-phenotypes",
+ "cloned_at": "2026-10-13T03:55:42Z",
+ "repos": [
+  {
+   "repo": "chronological-map-phenotypes",
+   "url": "https://github.com/spiros/chronological-map-phenotypes.git",
+   "licence": "MIT",
+   "sha": "f4f614fc88c66aa2f0c52802f62b3dfe12ebdec2",
+   "files": 615,
+   "bytes": 3895771,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE: MIT 'Copyright (c) 2019 Spiros Denaxas' - matches. Repo HTTP 200; API size 1.4MB. CALIBER machine-readable EHR phenotype code-lists (ICD-10/OPCS/CPRD Read) -> adapt-with-attribution (cite Denaxas/CALIBER)."
+   }
+  }
+ ]
+}

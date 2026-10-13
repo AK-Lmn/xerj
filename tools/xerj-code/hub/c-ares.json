@@ -1,0 +1,21 @@
+{
+ "corpus": "c-ares",
+ "cloned_at": "2026-10-13T03:56:15Z",
+ "repos": [
+  {
+   "repo": "c-ares",
+   "url": "https://github.com/c-ares/c-ares.git",
+   "licence": "MIT",
+   "sha": "f4156c12c8b36f5cb8f8a53658d44b24263c6ad1",
+   "files": 574,
+   "bytes": 3772615,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE.md via license API = MIT (MIT-1998 + Daniel Stenberg et al.), spdx_id MIT, active, 9.7MB."
+   }
+  }
+ ]
+}

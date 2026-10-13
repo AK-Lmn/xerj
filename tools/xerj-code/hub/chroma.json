@@ -1,0 +1,21 @@
+{
+ "corpus": "chroma",
+ "cloned_at": "2026-10-13T03:56:28Z",
+ "repos": [
+  {
+   "repo": "chroma",
+   "url": "https://github.com/chroma-core/chroma.git",
+   "licence": "Apache-2.0",
+   "sha": "5f30478c11ffdcf8cba1f872993c29d8f84ce0d9",
+   "files": 2197,
+   "bytes": 48024490,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE = Apache-2.0 verified; HEAD worktree only 45MB BUT full history 876MB - MUST clone --depth 1. Rust/Python vector DB. Permissive; cite file:line."
+   }
+  }
+ ]
+}

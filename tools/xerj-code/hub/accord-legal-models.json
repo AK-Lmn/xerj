@@ -1,0 +1,21 @@
+{
+ "corpus": "accord-legal-models",
+ "cloned_at": "2026-10-13T03:55:52Z",
+ "repos": [
+  {
+   "repo": "models",
+   "url": "https://github.com/accordproject/models.git",
+   "licence": "Apache-2.0",
+   "sha": "a23b30a15ed7fbf90e5dda78d684e28487c13a7d",
+   "files": 218,
+   "bytes": 6976637,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "license API decoded = verbatim Apache-2.0 (Accord Project); permissive, hub family. 3.1MB, branch main. Content is .cto Concerto ontology/schema files (legal vocabulary, lighter on free prose than a document corpus). Confirmed adapt-with-attribution."
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "commonpaper-contracts",
+ "cloned_at": "2026-10-13T03:55:48Z",
+ "repos": [
+  {
+   "repo": "CSA",
+   "url": "https://github.com/CommonPaper/CSA.git",
+   "licence": "CC-BY-4.0",
+   "sha": "3efceb01e3c8bfb7b302a5f34975aa2b084026a3",
+   "files": 5,
+   "bytes": 43944,
+   "review": {
+    "spdx": "CC-BY-4.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "NO LICENSE file (license API 404, repo license=None); grant verified by reading README verbatim under an explicit 'What license is this agreement released under?' heading from the rights holder: 'Common Paper agreements are free to use and modify under CC BY 4.0'. CC-BY-4.0 is permissive and one-way-compatible into Apache-2.0 with attribution. PROVENANCE CAVEAT: declared in README prose only, no LICENSE file - record this in hub metadata. 0.2MB, branch main. Confirmed adapt-with-attribution."
+   }
+  }
+ ]
+}
