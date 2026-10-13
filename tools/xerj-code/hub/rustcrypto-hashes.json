@@ -1,0 +1,21 @@
+{
+ "corpus": "rustcrypto-hashes",
+ "cloned_at": "2026-10-13T03:26:48Z",
+ "repos": [
+  {
+   "repo": "hashes",
+   "url": "https://github.com/RustCrypto/hashes.git",
+   "licence": "Apache-2.0 OR MIT",
+   "sha": "138dc5a05b93f8e49cda177fc6cfd7cc43673e5d",
+   "files": 455,
+   "bytes": 4096769,
+   "review": {
+    "spdx": "Apache-2.0 OR MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Root /license 404 (per-crate); read sha2/LICENSE-MIT (MIT text) and confirmed LICENSE-APACHE present -> dual Apache-2.0 OR MIT. Permissive."
+   }
+  }
+ ]
+}

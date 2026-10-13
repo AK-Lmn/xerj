@@ -1,0 +1,21 @@
+{
+ "corpus": "chaostoolkit-docs",
+ "cloned_at": "2026-10-13T03:27:14Z",
+ "repos": [
+  {
+   "repo": "chaostoolkit-documentation",
+   "url": "https://github.com/chaostoolkit/chaostoolkit-documentation.git",
+   "licence": "Apache-2.0",
+   "sha": "d113ae821fdeec47811f558f243cca4120201dad",
+   "files": 101,
+   "bytes": 1359145,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Read LICENSE via authenticated GitHub API: standard Apache-2.0 text, SPDX Apache-2.0; repo live. Dedicated docs repo (markdown/reST); low star count (22) but licence and cloneability are sound."
+   }
+  }
+ ]
+}

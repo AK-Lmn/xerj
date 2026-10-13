@@ -1,0 +1,21 @@
+{
+ "corpus": "whatwg-fetch",
+ "cloned_at": "2026-10-13T03:26:35Z",
+ "repos": [
+  {
+   "repo": "fetch",
+   "url": "https://github.com/whatwg/fetch.git",
+   "licence": "CC-BY-4.0",
+   "sha": "e9460d1b22ead1c6a72eeac37fb2ec0dc01aeb1d",
+   "files": 31,
+   "bytes": 6402614,
+   "review": {
+    "spdx": "CC-BY-4.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE byte-identical to whatwg-html (md5 7c81f45): CC-BY-4.0 prose + BSD-3-Clause code snippets. Live, not archived. Attribute WHATWG."
+   }
+  }
+ ]
+}

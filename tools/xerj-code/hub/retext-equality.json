@@ -1,0 +1,21 @@
+{
+ "corpus": "retext-equality",
+ "cloned_at": "2026-10-13T03:27:18Z",
+ "repos": [
+  {
+   "repo": "retext-equality",
+   "url": "https://github.com/retextjs/retext-equality.git",
+   "licence": "MIT",
+   "sha": "192deddf13bc2823540b0d9a0a6e17fb6d995bcd",
+   "files": 24,
+   "bytes": 176441,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE: verbatim MIT (Titus Wormer 2015), single licence covering the equality.yml rule data. Matches claim; permissive."
+   }
+  }
+ ]
+}

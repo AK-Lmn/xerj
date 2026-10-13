@@ -1,0 +1,21 @@
+{
+ "corpus": "libhydrogen",
+ "cloned_at": "2026-10-13T03:26:47Z",
+ "repos": [
+  {
+   "repo": "libhydrogen",
+   "url": "https://github.com/jedisct1/libhydrogen.git",
+   "licence": "ISC",
+   "sha": "264bf429021972c83b2a1a0cda13a765ddc3e11f",
+   "files": 66,
+   "bytes": 187799,
+   "review": {
+    "spdx": "ISC",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Read LICENSE: ISC text ((c) Frank Denis); GitHub NOASSERTION from the C-comment wrapper. Permissive."
+   }
+  }
+ ]
+}

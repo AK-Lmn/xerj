@@ -1,0 +1,21 @@
+{
+ "corpus": "grpc-proposals",
+ "cloned_at": "2026-10-13T03:27:05Z",
+ "repos": [
+  {
+   "repo": "proposal",
+   "url": "https://github.com/grpc/proposal.git",
+   "licence": "Apache-2.0",
+   "sha": "6342be729b96478a2897ceb208a8cddcd832a17b",
+   "files": 278,
+   "bytes": 10534670,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "LICENSE read via GitHub API \u2014 Apache License 2.0 text confirmed (GitHub detects Apache-2.0); active repo, ls-remote HEAD OK."
+   }
+  }
+ ]
+}

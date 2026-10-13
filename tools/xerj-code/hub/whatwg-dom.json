@@ -1,0 +1,21 @@
+{
+ "corpus": "whatwg-dom",
+ "cloned_at": "2026-10-13T03:26:34Z",
+ "repos": [
+  {
+   "repo": "dom",
+   "url": "https://github.com/whatwg/dom.git",
+   "licence": "CC-BY-4.0",
+   "sha": "3071e5f269448350fdea79bb284eedaf17bc431e",
+   "files": 31,
+   "bytes": 7680892,
+   "review": {
+    "spdx": "CC-BY-4.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE byte-identical to whatwg-html (md5 7c81f45): CC-BY-4.0 prose + BSD-3-Clause code snippets, both permissive. Live, not archived. Attribute WHATWG; shallow ~8MB."
+   }
+  }
+ ]
+}

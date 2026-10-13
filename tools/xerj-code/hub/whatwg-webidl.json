@@ -1,0 +1,21 @@
+{
+ "corpus": "whatwg-webidl",
+ "cloned_at": "2026-10-13T03:26:38Z",
+ "repos": [
+  {
+   "repo": "webidl",
+   "url": "https://github.com/whatwg/webidl.git",
+   "licence": "CC-BY-4.0",
+   "sha": "0620cf171d1b97138847088748e363cae4005156",
+   "files": 26,
+   "bytes": 7514369,
+   "review": {
+    "spdx": "CC-BY-4.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE byte-identical to whatwg-html (md5 7c81f45): CC-BY-4.0 prose + BSD-3-Clause code snippets. Live, not archived. Attribute WHATWG."
+   }
+  }
+ ]
+}

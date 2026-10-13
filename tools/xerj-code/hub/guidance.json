@@ -1,0 +1,21 @@
+{
+ "corpus": "guidance",
+ "cloned_at": "2026-10-13T03:26:58Z",
+ "repos": [
+  {
+   "repo": "guidance",
+   "url": "https://github.com/guidance-ai/guidance.git",
+   "licence": "MIT",
+   "sha": "21b1d90dfbebff4b141df70c714c8af15aa5f4af",
+   "files": 323,
+   "bytes": 38251066,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Read LICENSE.md: MIT (The Guidance Contributors); single licence file, no secondary carve-out; not archived. Clean."
+   }
+  }
+ ]
+}

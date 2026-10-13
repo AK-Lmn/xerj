@@ -1,0 +1,21 @@
+{
+ "corpus": "instructor",
+ "cloned_at": "2026-10-13T03:27:00Z",
+ "repos": [
+  {
+   "repo": "instructor",
+   "url": "https://github.com/567-labs/instructor.git",
+   "licence": "MIT",
+   "sha": "035c77b7b04dbbf70ae4457eb102038907b5a2a4",
+   "files": 1043,
+   "bytes": 77348902,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Read LICENSE: MIT, Copyright (c) 2023 Jason Liu; single licence file, no secondary carve-out; active repo. Clean."
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "openfda",
+ "cloned_at": "2026-10-13T03:26:13Z",
+ "repos": [
+  {
+   "repo": "openfda",
+   "url": "https://github.com/FDA/openfda.git",
+   "licence": "CC0-1.0",
+   "sha": "fdbe54327901a0c1e30130d1d6a2bbe67b79b77c",
+   "files": 306,
+   "bytes": 164290144,
+   "review": {
+    "spdx": "CC0-1.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded COPYING.txt via authenticated GitHub API = CC0 1.0 Universal legal code (SPDX CC0-1.0); US-gov public domain; repo live, not archived (~86MB ETL + data dictionaries + harmonization tables). Bulk JSON at download.open.fda.gov is also public domain, multi-GB."
+   }
+  }
+ ]
+}

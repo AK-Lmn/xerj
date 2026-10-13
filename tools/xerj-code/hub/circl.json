@@ -1,0 +1,21 @@
+{
+ "corpus": "circl",
+ "cloned_at": "2026-10-13T03:26:51Z",
+ "repos": [
+  {
+   "repo": "circl",
+   "url": "https://github.com/cloudflare/circl.git",
+   "licence": "BSD-3-Clause",
+   "sha": "91db3e785ba2635b4f24a023e1ad76d2780e2865",
+   "files": 769,
+   "bytes": 54388241,
+   "review": {
+    "spdx": "BSD-3-Clause",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Read LICENSE: 3-clause BSD with 'Neither the name of Cloudflare' clause ((c) 2019 Cloudflare); GitHub NOASSERTION false flag. Permissive."
+   }
+  }
+ ]
+}

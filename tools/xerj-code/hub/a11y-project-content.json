@@ -1,0 +1,21 @@
+{
+ "corpus": "a11y-project-content",
+ "cloned_at": "2026-10-13T03:27:20Z",
+ "repos": [
+  {
+   "repo": "a11yproject.com",
+   "url": "https://github.com/a11yproject/a11yproject.com.git",
+   "licence": "Apache-2.0",
+   "sha": "27de226845bb7729fd0c28a7652b3e47deae53b1",
+   "files": 575,
+   "bytes": 23430285,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded root LICENSE-APLv2 = Apache-2.0, AND verified src/contributing-guidelines.njk explicitly licenses CONTENT not just code under APLv2 ('By contributing your code and content, you agree to license your contribution under...APLv2') - resolves the content-vs-code risk for the 66 _posts articles + checklist. ~34.9MB full Jekyll repo; corpus value is the posts/checklist markdown."
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "mbedtls",
+ "cloned_at": "2026-10-13T03:26:44Z",
+ "repos": [
+  {
+   "repo": "mbedtls",
+   "url": "https://github.com/Mbed-TLS/mbedtls.git",
+   "licence": "Apache-2.0 OR GPL-2.0-or-later",
+   "sha": "de23569aa95ac518e1c794236219dcb04fca4ae5",
+   "files": 332,
+   "bytes": 8295117,
+   "review": {
+    "spdx": "Apache-2.0 OR GPL-2.0-or-later",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Read LICENSE: explicitly 'dual Apache-2.0 OR GPL-2.0-or-later, user chooses' -> use under Apache-2.0; GitHub NOASSERTION is a false flag. Permissive under Apache-2.0."
+   }
+  }
+ ]
+}

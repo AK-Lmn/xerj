@@ -1,0 +1,21 @@
+{
+ "corpus": "symptom-ontology",
+ "cloned_at": "2026-10-13T03:26:10Z",
+ "repos": [
+  {
+   "repo": "SymptomOntology",
+   "url": "https://github.com/DiseaseOntology/SymptomOntology.git",
+   "licence": "CC0-1.0",
+   "sha": "7a295d9856d8ce1af613e5b53b6af84940260605",
+   "files": 52,
+   "bytes": 3241159,
+   "review": {
+    "spdx": "CC0-1.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded License file via authenticated GitHub API = CC0 1.0 Universal legal code (SPDX CC0-1.0); repo live, not archived, tiny (~1.7MB, clones instantly). Public-domain, no attribution legally required."
+   }
+  }
+ ]
+}

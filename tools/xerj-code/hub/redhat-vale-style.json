@@ -1,0 +1,21 @@
+{
+ "corpus": "redhat-vale-style",
+ "cloned_at": "2026-10-13T03:27:21Z",
+ "repos": [
+  {
+   "repo": "vale-at-red-hat",
+   "url": "https://github.com/redhat-documentation/vale-at-red-hat.git",
+   "licence": "MIT",
+   "sha": "7cfb4abccd7893c96b8d9e14fe569b25d29ac78f",
+   "files": 457,
+   "bytes": 41641778,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE: 'MIT License', Rolfe Dlugy-Hegwer 2021 - cleanly MIT, NOT the CC-BY-SA that Red Hat prose docs usually carry; this is the Vale-tooling repo (styles/ rules + word-usage docs). Verified by reading the file, not trusting the usual Red Hat assumption. Matches claim."
+   }
+  }
+ ]
+}

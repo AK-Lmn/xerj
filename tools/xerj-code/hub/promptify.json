@@ -1,0 +1,21 @@
+{
+ "corpus": "promptify",
+ "cloned_at": "2026-10-13T03:26:55Z",
+ "repos": [
+  {
+   "repo": "Promptify",
+   "url": "https://github.com/promptslab/Promptify.git",
+   "licence": "Apache-2.0",
+   "sha": "bc5ed081a7a4d7be90e798dd48c324fd4c57bd2a",
+   "files": 101,
+   "bytes": 2236260,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Read LICENSE: full Apache-2.0 text confirmed; single licence file, no secondary carve-out; not archived. Clean."
+   }
+  }
+ ]
+}

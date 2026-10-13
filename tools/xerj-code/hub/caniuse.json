@@ -1,0 +1,21 @@
+{
+ "corpus": "caniuse",
+ "cloned_at": "2026-10-13T03:26:39Z",
+ "repos": [
+  {
+   "repo": "caniuse",
+   "url": "https://github.com/Fyrd/caniuse.git",
+   "licence": "CC-BY-4.0",
+   "sha": "e951c6cd80296dab56d08a932f5f879e786fa774",
+   "files": 827,
+   "bytes": 24339194,
+   "review": {
+    "spdx": "CC-BY-4.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "Decoded LICENSE: 'Attribution 4.0 International' (CC-BY-4.0), (C) Alexis Deveria; GitHub detector concurs (cc-by-4.0). Live, not archived. Attribute caniuse.com; shallow ~28MB vs 258MB."
+   }
+  }
+ ]
+}

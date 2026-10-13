@@ -1,0 +1,21 @@
+{
+ "corpus": "arazzo-spec",
+ "cloned_at": "2026-10-13T03:27:07Z",
+ "repos": [
+  {
+   "repo": "Arazzo-Specification",
+   "url": "https://github.com/OAI/Arazzo-Specification.git",
+   "licence": "Apache-2.0",
+   "sha": "79ddb24a832ea35d2d11e5674c40fd4f63ab906e",
+   "files": 59,
+   "bytes": 5492047,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "LICENSE read via GitHub API \u2014 Apache License 2.0 text confirmed (GitHub detects Apache-2.0); OpenAPI-Initiative-owned, active, ls-remote HEAD OK."
+   }
+  }
+ ]
+}

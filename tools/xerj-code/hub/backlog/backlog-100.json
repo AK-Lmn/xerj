@@ -3923,6 +3923,1078 @@
      "ui-copy"
     ]
    }
+  },
+  {
+   "cat": "HEALTH",
+   "domain": "An agent working on triaging or normalizing patient-reported complaints queries this for a controlled vocabulary of disease symptoms with definitions and synonyms.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "symptom-ontology",
+   "sources": [
+    {
+     "licence_hint": "CC0-1.0",
+     "url": "https://github.com/DiseaseOntology/SymptomOntology"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "symptoms",
+     "clinical",
+     "ontology",
+     "phenotype",
+     "triage"
+    ]
+   }
+  },
+  {
+   "cat": "HEALTH",
+   "domain": "An agent working on drug- and device-safety questions queries this for FDA adverse-event (FAERS), recall/enforcement, NDC, and device data field schemas and harmonization tables.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "openfda",
+   "sources": [
+    {
+     "licence_hint": "CC0-1.0",
+     "url": "https://github.com/FDA/openfda"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "US",
+    "topics": [
+     "drug-safety",
+     "adverse-events",
+     "recalls",
+     "ndc",
+     "medical-devices"
+    ]
+   }
+  },
+  {
+   "cat": "HEALTH",
+   "domain": "An agent working on normalizing food and ingredient names queries this for a controlled vocabulary of foods, food products, and source/processing relationships for diet and food-safety tasks.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "foodon",
+   "sources": [
+    {
+     "licence_hint": "CC-BY-4.0",
+     "url": "https://github.com/FoodOntology/foodon"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "food",
+     "nutrition",
+     "diet",
+     "food-safety",
+     "ontology"
+    ]
+   }
+  },
+  {
+   "cat": "WEB",
+   "domain": "an agent building or debugging web pages queries this for the HTML Living Standard's exact parsing algorithm, element semantics, and DOM-serialization rules.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "whatwg-html",
+   "sources": [
+    {
+     "licence_hint": "CC-BY-4.0",
+     "url": "https://github.com/whatwg/html"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "html",
+     "whatwg",
+     "web-platform",
+     "living-standard",
+     "spec"
+    ]
+   }
+  },
+  {
+   "cat": "WEB",
+   "domain": "an agent manipulating page structure queries this for the authoritative DOM tree, event, mutation, and node-interface semantics (including Shadow DOM / custom elements).",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "whatwg-dom",
+   "sources": [
+    {
+     "licence_hint": "CC-BY-4.0",
+     "url": "https://github.com/whatwg/dom"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "dom",
+     "whatwg",
+     "events",
+     "shadow-dom",
+     "spec"
+    ]
+   }
+  },
+  {
+   "cat": "WEB",
+   "domain": "an agent writing browser networking code queries this for the Fetch Standard's request/response model, CORS, redirect, and caching semantics.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "whatwg-fetch",
+   "sources": [
+    {
+     "licence_hint": "CC-BY-4.0",
+     "url": "https://github.com/whatwg/fetch"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "fetch",
+     "cors",
+     "http",
+     "whatwg",
+     "spec"
+    ]
+   }
+  },
+  {
+   "cat": "WEB",
+   "domain": "an agent parsing or validating URLs queries this for the WHATWG URL Standard's exact parsing state machine, origin rules, and the URLSearchParams API.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "whatwg-url",
+   "sources": [
+    {
+     "licence_hint": "CC-BY-4.0",
+     "url": "https://github.com/whatwg/url"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "url",
+     "parsing",
+     "origin",
+     "whatwg",
+     "spec"
+    ]
+   }
+  },
+  {
+   "cat": "WEB",
+   "domain": "an agent handling streaming I/O in the browser queries this for the Streams Standard's readable/writable/transform semantics and backpressure rules.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "whatwg-streams",
+   "sources": [
+    {
+     "licence_hint": "CC-BY-4.0",
+     "url": "https://github.com/whatwg/streams"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "streams",
+     "backpressure",
+     "whatwg",
+     "async",
+     "spec"
+    ]
+   }
+  },
+  {
+   "cat": "WEB",
+   "domain": "an agent implementing or calling web APIs queries this for Web IDL's type system and the binding rules every browser interface is defined with.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "whatwg-webidl",
+   "sources": [
+    {
+     "licence_hint": "CC-BY-4.0",
+     "url": "https://github.com/whatwg/webidl"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "webidl",
+     "interface-definition",
+     "bindings",
+     "whatwg",
+     "spec"
+    ]
+   }
+  },
+  {
+   "cat": "WEB",
+   "domain": "an agent targeting cross-browser features queries this for per-feature browser-version support data, notes, and known bugs.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "caniuse",
+   "sources": [
+    {
+     "licence_hint": "CC-BY-4.0",
+     "url": "https://github.com/Fyrd/caniuse"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "caniuse",
+     "browser-support",
+     "compatibility",
+     "data",
+     "frontend"
+    ]
+   }
+  },
+  {
+   "cat": "WEB",
+   "domain": "an agent checking API/CSS/HTML/JS availability queries this for machine-readable per-feature browser-version compatibility records.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "mdn-browser-compat-data",
+   "sources": [
+    {
+     "licence_hint": "CC0-1.0",
+     "url": "https://github.com/mdn/browser-compat-data"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "compat-data",
+     "browser-support",
+     "mdn",
+     "cc0",
+     "data"
+    ]
+   }
+  },
+  {
+   "cat": "CRYPTO",
+   "domain": "An agent working on a modern crypto library (AEAD, X25519, Ed25519, secretstream, password hashing) queries this for libsodium's battle-tested constant-time C implementations and misuse-resistant API.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "libsodium",
+   "sources": [
+    {
+     "licence_hint": "ISC",
+     "url": "https://github.com/jedisct1/libsodium"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "crypto-primitives",
+     "aead",
+     "x25519",
+     "ed25519",
+     "argon2",
+     "C"
+    ]
+   }
+  },
+  {
+   "cat": "CRYPTO",
+   "domain": "An agent working on a file-encryption tool or the age format queries this for the reference X25519 + ChaCha20-Poly1305 recipient/identity design and stanza format.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "age",
+   "sources": [
+    {
+     "licence_hint": "BSD-3-Clause",
+     "url": "https://github.com/FiloSottile/age"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "file-encryption",
+     "x25519",
+     "chacha20poly1305",
+     "format-spec",
+     "go"
+    ]
+   }
+  },
+  {
+   "cat": "CRYPTO",
+   "domain": "An agent working on embedding or implementing a TLS stack queries this for mbed-TLS's portable C TLS 1.2/1.3 handshake, X.509 and crypto modules.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "mbedtls",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0 OR GPL-2.0-or-later",
+     "url": "https://github.com/Mbed-TLS/mbedtls"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "tls",
+     "x509",
+     "handshake",
+     "embedded",
+     "C"
+    ]
+   }
+  },
+  {
+   "cat": "CRYPTO",
+   "domain": "An agent working on a tiny auditable crypto library queries this for Monocypher's single-file C implementations of X25519, EdDSA, ChaCha20, BLAKE2 and Argon2.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "monocypher",
+   "sources": [
+    {
+     "licence_hint": "BSD-2-Clause OR CC0-1.0",
+     "url": "https://github.com/LoupVaillant/Monocypher"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "crypto-primitives",
+     "chacha20",
+     "blake2",
+     "eddsa",
+     "single-file",
+     "C"
+    ]
+   }
+  },
+  {
+   "cat": "CRYPTO",
+   "domain": "An agent working on elliptic-curve or signature crypto in Rust queries this for the dalek curve25519/ed25519/x25519 field-arithmetic and group-operation code.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "curve25519-dalek",
+   "sources": [
+    {
+     "licence_hint": "BSD-3-Clause",
+     "url": "https://github.com/dalek-cryptography/curve25519-dalek"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "curve25519",
+     "ed25519",
+     "x25519",
+     "ristretto",
+     "rust"
+    ]
+   }
+  },
+  {
+   "cat": "CRYPTO",
+   "domain": "An agent working on crypto for constrained/embedded targets queries this for libhydrogen's small, hard-to-misuse C API covering hashing, AEAD, signatures and key exchange.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "libhydrogen",
+   "sources": [
+    {
+     "licence_hint": "ISC",
+     "url": "https://github.com/jedisct1/libhydrogen"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "embedded-crypto",
+     "aead",
+     "signatures",
+     "key-exchange",
+     "C"
+    ]
+   }
+  },
+  {
+   "cat": "CRYPTO",
+   "domain": "An agent working on hash-function implementations queries this for RustCrypto's pure-Rust SHA-2/SHA-3/BLAKE2/Keccak code and the shared digest-trait design.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "rustcrypto-hashes",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0 OR MIT",
+     "url": "https://github.com/RustCrypto/hashes"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "hashing",
+     "sha2",
+     "sha3",
+     "blake2",
+     "rust"
+    ]
+   }
+  },
+  {
+   "cat": "CRYPTO",
+   "domain": "An agent working on modern or post-quantum crypto queries this for Cloudflare CIRCL's Go implementations of X25519/X448, hash-to-curve, BLS, Kyber/Dilithium and HPKE.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "circl",
+   "sources": [
+    {
+     "licence_hint": "BSD-3-Clause",
+     "url": "https://github.com/cloudflare/circl"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "post-quantum",
+     "hpke",
+     "bls",
+     "hash-to-curve",
+     "go"
+    ]
+   }
+  },
+  {
+   "cat": "CRYPTO",
+   "domain": "An agent working on a private CA, ACME server or certificate-automation workflow queries this for step-ca's X.509/SSH issuance, provisioners and ACME implementation.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "smallstep-certificates",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/smallstep/certificates"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "certificate-authority",
+     "acme",
+     "x509",
+     "ssh-certs",
+     "pki"
+    ]
+   }
+  },
+  {
+   "cat": "CRYPTO",
+   "domain": "An agent working on locally-trusted development TLS certificates queries this for mkcert's local-CA creation and system/browser trust-store installation logic.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "mkcert",
+   "sources": [
+    {
+     "licence_hint": "BSD-3-Clause",
+     "url": "https://github.com/FiloSottile/mkcert"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "tls-certificates",
+     "local-ca",
+     "dev-tooling",
+     "trust-store",
+     "go"
+    ]
+   }
+  },
+  {
+   "cat": "AI",
+   "domain": "An agent writing or refining LLM prompts queries this for Brex's battle-tested prompt-engineering patterns, anti-patterns, and reasoning techniques in plain prose.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "brex-prompt-engineering",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/brexhq/prompt-engineering"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "prompt-engineering",
+     "llm",
+     "guide",
+     "text"
+    ]
+   }
+  },
+  {
+   "cat": "AI",
+   "domain": "An agent building an LLM CLI, logging model calls, or writing a model plugin queries this for the `llm` tool's architecture and its extensive, well-written docs.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "simonw-llm",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/simonw/llm"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "llm",
+     "cli",
+     "tooling",
+     "docs",
+     "plugins"
+    ]
+   }
+  },
+  {
+   "cat": "AI",
+   "domain": "An agent doing prompt-based NLP (NER, classification, QA) without fine-tuning queries this for Promptify's task-prompt templates and output parsers.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "promptify",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/promptslab/Promptify"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "prompt-engineering",
+     "nlp",
+     "llm",
+     "templates"
+    ]
+   }
+  },
+  {
+   "cat": "AI",
+   "domain": "An agent building a prompt-optimization or declarative LLM-program pipeline queries this for DSPy's signatures, modules, and optimizers (compile-prompts-from-metrics).",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "dspy",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/stanfordnlp/dspy"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "llm",
+     "prompt-optimization",
+     "dspy",
+     "framework"
+    ]
+   }
+  },
+  {
+   "cat": "AI",
+   "domain": "An agent constraining LLM output to a grammar, template, or control flow queries this for guidance's constrained-generation primitives and token-healing.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "guidance",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/guidance-ai/guidance"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "constrained-generation",
+     "llm",
+     "prompting",
+     "grammars"
+    ]
+   }
+  },
+  {
+   "cat": "AI",
+   "domain": "An agent extracting typed/structured data from LLM calls queries this for instructor's Pydantic response-model patterns, retries, and validation hooks.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "instructor",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/567-labs/instructor"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "structured-output",
+     "llm",
+     "pydantic",
+     "function-calling"
+    ]
+   }
+  },
+  {
+   "cat": "API",
+   "domain": "An agent working on event-driven or message-based API definitions queries this for the AsyncAPI specification's document structure, protocol bindings (Kafka/MQTT/AMQP/WebSocket), and message schema semantics.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "asyncapi-spec",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/asyncapi/spec"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "asyncapi",
+     "specification",
+     "kafka",
+     "mqtt",
+     "amqp",
+     "websockets",
+     "event-driven"
+    ]
+   }
+  },
+  {
+   "cat": "API",
+   "domain": "An agent working on event interchange between services queries this for the CloudEvents envelope format and its HTTP, Kafka, AMQP, and MQTT protocol bindings.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "cloudevents-spec",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/cloudevents/spec"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "cloudevents",
+     "specification",
+     "serverless",
+     "eventing"
+    ]
+   }
+  },
+  {
+   "cat": "API",
+   "domain": "An agent designing a resource-oriented REST or gRPC API queries this for Google's API Improvement Proposals on naming, pagination, field masks, errors, and long-running operations.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "google-aip",
+   "sources": [
+    {
+     "licence_hint": "CC-BY-4.0",
+     "url": "https://github.com/aip-dev/google.aip.dev"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "api-design",
+     "aip",
+     "rest",
+     "grpc",
+     "google"
+    ]
+   }
+  },
+  {
+   "cat": "API",
+   "domain": "An agent implementing or consuming webhooks queries this for the Standard Webhooks spec covering payload signing, signature verification, idempotency, and delivery semantics.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "standard-webhooks",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/standard-webhooks/standard-webhooks"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "webhooks",
+     "specification",
+     "http",
+     "openapi",
+     "asyncapi"
+    ]
+   }
+  },
+  {
+   "cat": "API",
+   "domain": "An agent building a JSON REST API queries this for the JSON:API specification's document structure, resource relationships, includes, and query-parameter conventions.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "json-api-spec",
+   "sources": [
+    {
+     "licence_hint": "CC0-1.0",
+     "url": "https://github.com/json-api/json-api"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "json-api",
+     "rest",
+     "specification",
+     "json"
+    ]
+   }
+  },
+  {
+   "cat": "API",
+   "domain": "An agent working on gRPC protocol or framework behaviour queries this for the gRFC design proposals that define wire format, naming, retries, and cross-language API semantics.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "grpc-proposals",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/grpc/proposal"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "grpc",
+     "design-proposals",
+     "rpc",
+     "specification"
+    ]
+   }
+  },
+  {
+   "cat": "API",
+   "domain": "An agent orchestrating multi-call API workflows queries this for the Arazzo Specification, which describes deterministic sequences and dependencies across OpenAPI operations.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "arazzo-spec",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/OAI/Arazzo-Specification"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "arazzo",
+     "openapi",
+     "api-workflows",
+     "specification"
+    ]
+   }
+  },
+  {
+   "cat": "OPS",
+   "domain": "An agent writing on-call runbooks or incident-response automation queries this for severity levels, responder roles, and postmortem process.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "pagerduty-incident-response",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/PagerDuty/incident-response-docs"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "incident-response",
+     "on-call",
+     "runbooks",
+     "sre",
+     "postmortem"
+    ]
+   }
+  },
+  {
+   "cat": "OPS",
+   "domain": "An agent researching reliability tooling and practice queries this curated index for pointers to SRE, observability, and production-engineering resources.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "awesome-sre",
+   "sources": [
+    {
+     "licence_hint": "CC0-1.0",
+     "url": "https://github.com/dastergon/awesome-sre"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "sre",
+     "reliability",
+     "awesome-list",
+     "resources",
+     "production-engineering"
+    ]
+   }
+  },
+  {
+   "cat": "OPS",
+   "domain": "An agent studying real-world SRE queries this for curated summaries of how many named organizations run reliability engineering.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "how-they-sre",
+   "sources": [
+    {
+     "licence_hint": "CC0-1.0",
+     "url": "https://github.com/upgundecha/howtheysre"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "sre",
+     "case-studies",
+     "reliability",
+     "practices"
+    ]
+   }
+  },
+  {
+   "cat": "OPS",
+   "domain": "An agent designing chaos-engineering experiments queries this for the experiment format, probe/action API, and reliability-testing workflow.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "chaostoolkit-docs",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/chaostoolkit/chaostoolkit-documentation"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "chaos-engineering",
+     "resilience",
+     "testing",
+     "reliability"
+    ]
+   }
+  },
+  {
+   "cat": "OPS",
+   "domain": "An agent instrumenting or operating distributed tracing queries this for Jaeger deployment, sampling configuration, and trace analysis.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "jaeger-docs",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/jaegertracing/documentation"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "tracing",
+     "observability",
+     "distributed-systems",
+     "jaeger"
+    ]
+   }
+  },
+  {
+   "cat": "WRITE",
+   "domain": "An agent rewriting bureaucratic or legalese text into plain language queries this for the U.S. Federal Plain Language Guidelines and their before/after examples.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "plain-language-guidelines",
+   "sources": [
+    {
+     "licence_hint": "CC0-1.0",
+     "url": "https://github.com/GSA/plainlanguage.gov"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "US",
+    "topics": [
+     "plain-language",
+     "government",
+     "guidelines",
+     "editorial",
+     "writing"
+    ]
+   }
+  },
+  {
+   "cat": "WRITE",
+   "domain": "An agent checking copy for insensitive or non-inclusive wording queries this for the terms to flag and their neutral replacements.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "alex-inclusive-language",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/get-alex/alex"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "inclusive-language",
+     "linter",
+     "bias",
+     "editorial",
+     "writing"
+    ]
+   }
+  },
+  {
+   "cat": "WRITE",
+   "domain": "An agent correcting gendered, ableist, or polarising language queries this for the exact term-to-suggestion rule data (equality.yml) that powers alex.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "retext-equality",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/retextjs/retext-equality"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "inclusive-language",
+     "equality",
+     "rules-data",
+     "retext",
+     "writing"
+    ]
+   }
+  },
+  {
+   "cat": "WRITE",
+   "domain": "An agent enforcing house terminology queries this for the canonical spelling and capitalisation of hundreds of tech and product terms (JavaScript, GitHub, npm...).",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "textlint-rule-terminology",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/sapegin/textlint-rule-terminology"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "terminology",
+     "style-guide",
+     "textlint",
+     "editorial",
+     "writing"
+    ]
+   }
+  },
+  {
+   "cat": "WRITE",
+   "domain": "An agent writing accessible UI copy and alt text queries this for The A11Y Project's accessibility checklist and plain-language accessibility articles.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "a11y-project-content",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/a11yproject/a11yproject.com"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "accessibility",
+     "a11y",
+     "content",
+     "alt-text",
+     "writing"
+    ]
+   }
+  },
+  {
+   "cat": "WRITE",
+   "domain": "An agent applying an enterprise technical-writing style queries this for Red Hat's supplementary Vale rules and word-usage guidance.",
+   "lane": "A",
+   "refresh": "pinned",
+   "slug": "redhat-vale-style",
+   "sources": [
+    {
+     "licence_hint": "MIT",
+     "url": "https://github.com/redhat-documentation/vale-at-red-hat"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "vale",
+     "style-guide",
+     "technical-writing",
+     "red-hat",
+     "editorial"
+    ]
+   }
   }
  ],
  "lanes": [
