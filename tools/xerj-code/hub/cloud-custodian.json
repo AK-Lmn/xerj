@@ -1,0 +1,21 @@
+{
+ "corpus": "cloud-custodian",
+ "cloned_at": "2026-10-13T06:34:58Z",
+ "repos": [
+  {
+   "repo": "cloud-custodian",
+   "url": "https://github.com/cloud-custodian/cloud-custodian.git",
+   "licence": "Apache-2.0",
+   "sha": "a75de191ac0601aabad825338b053ad6f9f8de58",
+   "files": 14640,
+   "bytes": 82738988,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

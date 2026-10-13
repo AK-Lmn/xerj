@@ -1,0 +1,21 @@
+{
+ "corpus": "lightningcss",
+ "cloned_at": "2026-10-13T06:35:26Z",
+ "repos": [
+  {
+   "repo": "lightningcss",
+   "url": "https://github.com/parcel-bundler/lightningcss.git",
+   "licence": "MPL-2.0",
+   "sha": "ab14f90df45b1a94c6c10a3d9ca16b39d09f67e0",
+   "files": 230,
+   "bytes": 11184979,
+   "review": {
+    "spdx": "MPL-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MPL-2.0"
+   }
+  }
+ ]
+}

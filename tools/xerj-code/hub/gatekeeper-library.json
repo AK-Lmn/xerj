@@ -1,0 +1,21 @@
+{
+ "corpus": "gatekeeper-library",
+ "cloned_at": "2026-10-13T06:34:58Z",
+ "repos": [
+  {
+   "repo": "gatekeeper-library",
+   "url": "https://github.com/open-policy-agent/gatekeeper-library.git",
+   "licence": "Apache-2.0",
+   "sha": "f8e3b4e9ab3b7d1a28092da75c2c5e71aedfd4b9",
+   "files": 2456,
+   "bytes": 3826011,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

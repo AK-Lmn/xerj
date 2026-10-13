@@ -1,0 +1,21 @@
+{
+ "corpus": "oxc",
+ "cloned_at": "2026-10-13T06:35:46Z",
+ "repos": [
+  {
+   "repo": "oxc",
+   "url": "https://github.com/oxc-project/oxc.git",
+   "licence": "MIT",
+   "sha": "da692b86af759631389c3e1eaf7ab752395534e1",
+   "files": 14929,
+   "bytes": 78753432,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

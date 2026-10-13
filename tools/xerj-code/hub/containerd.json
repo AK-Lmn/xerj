@@ -1,0 +1,21 @@
+{
+ "corpus": "containerd",
+ "cloned_at": "2026-10-13T06:34:30Z",
+ "repos": [
+  {
+   "repo": "containerd",
+   "url": "https://github.com/containerd/containerd.git",
+   "licence": "Apache-2.0",
+   "sha": "92f321c8da22925ed57649f391f78bfbf4724135",
+   "files": 6678,
+   "bytes": 57943423,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

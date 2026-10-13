@@ -1,0 +1,21 @@
+{
+ "corpus": "lit",
+ "cloned_at": "2026-10-13T06:35:27Z",
+ "repos": [
+  {
+   "repo": "lit",
+   "url": "https://github.com/lit/lit.git",
+   "licence": "BSD-3-Clause",
+   "sha": "01dbc6673cdc211543932afd0ca04e223e567366",
+   "files": 1929,
+   "bytes": 13417011,
+   "review": {
+    "spdx": "BSD-3-Clause",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): BSD-3-Clause"
+   }
+  }
+ ]
+}

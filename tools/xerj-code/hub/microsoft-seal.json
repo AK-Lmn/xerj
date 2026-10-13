@@ -1,0 +1,21 @@
+{
+ "corpus": "microsoft-seal",
+ "cloned_at": "2026-10-13T06:33:46Z",
+ "repos": [
+  {
+   "repo": "SEAL",
+   "url": "https://github.com/microsoft/SEAL.git",
+   "licence": "MIT",
+   "sha": "31fc3194bd1e843b5950e13d95ae5f5367729716",
+   "files": 382,
+   "bytes": 4656416,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

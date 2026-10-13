@@ -1,0 +1,21 @@
+{
+ "corpus": "gemini-cookbook",
+ "cloned_at": "2026-10-13T06:33:35Z",
+ "repos": [
+  {
+   "repo": "cookbook",
+   "url": "https://github.com/google-gemini/cookbook.git",
+   "licence": "Apache-2.0",
+   "sha": "dd5b15da88a49309f3e66d30d3ee8de70ab99f9d",
+   "files": 258,
+   "bytes": 149732754,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

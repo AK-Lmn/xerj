@@ -1,0 +1,21 @@
+{
+ "corpus": "autorag",
+ "cloned_at": "2026-10-13T06:33:17Z",
+ "repos": [
+  {
+   "repo": "AutoRAG",
+   "url": "https://github.com/Marker-Inc-Korea/AutoRAG.git",
+   "licence": "Apache-2.0",
+   "sha": "ccb70c129a323ad00054fdd24cd0ba43eac1cac0",
+   "files": 1425,
+   "bytes": 86390845,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

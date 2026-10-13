@@ -1,0 +1,21 @@
+{
+ "corpus": "siren-hypermedia",
+ "cloned_at": "2026-10-13T06:33:37Z",
+ "repos": [
+  {
+   "repo": "siren",
+   "url": "https://github.com/kevinswiber/siren.git",
+   "licence": "MIT",
+   "sha": "c29a87840407419d52c2acd742a1ad6a03ce80da",
+   "files": 4,
+   "bytes": 27307,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

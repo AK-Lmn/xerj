@@ -1,0 +1,21 @@
+{
+ "corpus": "bandit-plugins",
+ "cloned_at": "2026-10-13T06:34:45Z",
+ "repos": [
+  {
+   "repo": "bandit",
+   "url": "https://github.com/PyCQA/bandit.git",
+   "licence": "Apache-2.0",
+   "sha": "68ebe11ef79263be27ec223184b94a4fc394a622",
+   "files": 298,
+   "bytes": 5011677,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

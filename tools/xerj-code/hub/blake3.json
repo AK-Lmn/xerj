@@ -1,0 +1,21 @@
+{
+ "corpus": "blake3",
+ "cloned_at": "2026-10-13T06:33:41Z",
+ "repos": [
+  {
+   "repo": "BLAKE3",
+   "url": "https://github.com/BLAKE3-team/BLAKE3.git",
+   "licence": "Apache-2.0",
+   "sha": "f55849f89cd85083c1c9daa2c5de20766f309c00",
+   "files": 108,
+   "bytes": 1829877,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

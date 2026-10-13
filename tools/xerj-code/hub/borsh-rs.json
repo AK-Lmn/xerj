@@ -1,0 +1,21 @@
+{
+ "corpus": "borsh-rs",
+ "cloned_at": "2026-10-13T06:34:19Z",
+ "repos": [
+  {
+   "repo": "borsh-rs",
+   "url": "https://github.com/near/borsh-rs.git",
+   "licence": "Apache-2.0",
+   "sha": "c9a2ed48927612db0d1329d54a12ced2035b4f20",
+   "files": 457,
+   "bytes": 1018996,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

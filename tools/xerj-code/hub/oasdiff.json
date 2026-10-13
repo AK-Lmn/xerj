@@ -1,0 +1,21 @@
+{
+ "corpus": "oasdiff",
+ "cloned_at": "2026-10-13T06:33:36Z",
+ "repos": [
+  {
+   "repo": "oasdiff",
+   "url": "https://github.com/oasdiff/oasdiff.git",
+   "licence": "Apache-2.0",
+   "sha": "b687d634023a1b1068465f920539346bc81447fc",
+   "files": 1480,
+   "bytes": 6137203,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

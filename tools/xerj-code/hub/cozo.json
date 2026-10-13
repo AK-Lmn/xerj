@@ -1,0 +1,21 @@
+{
+ "corpus": "cozo",
+ "cloned_at": "2026-10-13T06:33:54Z",
+ "repos": [
+  {
+   "repo": "cozo",
+   "url": "https://github.com/cozodb/cozo.git",
+   "licence": "MPL-2.0",
+   "sha": "481af058abac9444ea8c9c52c78f096ed4b5bfc4",
+   "files": 229,
+   "bytes": 5809426,
+   "review": {
+    "spdx": "MPL-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MPL-2.0"
+   }
+  }
+ ]
+}

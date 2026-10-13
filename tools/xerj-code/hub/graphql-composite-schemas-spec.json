@@ -1,0 +1,21 @@
+{
+ "corpus": "graphql-composite-schemas-spec",
+ "cloned_at": "2026-10-13T06:33:35Z",
+ "repos": [
+  {
+   "repo": "composite-schemas-spec",
+   "url": "https://github.com/graphql/composite-schemas-spec.git",
+   "licence": "MIT",
+   "sha": "e5ce483569ec849a3fe000126e8b4260a5192420",
+   "files": 22,
+   "bytes": 389520,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

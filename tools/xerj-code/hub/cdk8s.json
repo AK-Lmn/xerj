@@ -1,0 +1,21 @@
+{
+ "corpus": "cdk8s",
+ "cloned_at": "2026-10-13T06:34:25Z",
+ "repos": [
+  {
+   "repo": "cdk8s",
+   "url": "https://github.com/cdk8s-team/cdk8s.git",
+   "licence": "Apache-2.0",
+   "sha": "ed80049b5c458c34d2d6f3af60182171de3ea66e",
+   "files": 245,
+   "bytes": 58083292,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

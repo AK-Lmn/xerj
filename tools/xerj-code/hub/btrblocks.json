@@ -1,0 +1,21 @@
+{
+ "corpus": "btrblocks",
+ "cloned_at": "2026-10-13T06:33:52Z",
+ "repos": [
+  {
+   "repo": "btrblocks",
+   "url": "https://github.com/maxi-k/btrblocks.git",
+   "licence": "MIT",
+   "sha": "c950c3c01c1fbf91007936b05781d431a29a60d3",
+   "files": 182,
+   "bytes": 1453968,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "csp",
+ "cloned_at": "2026-10-13T06:36:09Z",
+ "repos": [
+  {
+   "repo": "webappsec-csp",
+   "url": "https://github.com/w3c/webappsec-csp.git",
+   "licence": "W3C-20150513",
+   "sha": "b1bad631b091cdca904138d6947a16b89edfd2b4",
+   "files": 52,
+   "bytes": 4086722,
+   "review": {
+    "spdx": "W3C-20150513",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-text): W3C-20150513"
+   }
+  }
+ ]
+}

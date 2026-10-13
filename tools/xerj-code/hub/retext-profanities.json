@@ -1,0 +1,21 @@
+{
+ "corpus": "retext-profanities",
+ "cloned_at": "2026-10-13T06:36:20Z",
+ "repos": [
+  {
+   "repo": "retext-profanities",
+   "url": "https://github.com/retextjs/retext-profanities.git",
+   "licence": "MIT",
+   "sha": "2627fb0875b5d03609f383389f1c54657882705a",
+   "files": 19,
+   "bytes": 22836,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

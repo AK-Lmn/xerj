@@ -1,0 +1,21 @@
+{
+ "corpus": "gnark",
+ "cloned_at": "2026-10-13T06:33:45Z",
+ "repos": [
+  {
+   "repo": "gnark",
+   "url": "https://github.com/Consensys/gnark.git",
+   "licence": "Apache-2.0",
+   "sha": "3ac4de3e14374de08e9966c329251f9365506372",
+   "files": 1264,
+   "bytes": 18418178,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

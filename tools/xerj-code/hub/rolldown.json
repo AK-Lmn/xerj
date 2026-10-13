@@ -1,0 +1,21 @@
+{
+ "corpus": "rolldown",
+ "cloned_at": "2026-10-13T06:35:48Z",
+ "repos": [
+  {
+   "repo": "rolldown",
+   "url": "https://github.com/rolldown/rolldown.git",
+   "licence": "MIT",
+   "sha": "2d44fc3f5ae63b422e2f235215eafe499afefea0",
+   "files": 15191,
+   "bytes": 27318862,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

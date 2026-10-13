@@ -1,0 +1,21 @@
+{
+ "corpus": "capa-rules",
+ "cloned_at": "2026-10-13T06:34:49Z",
+ "repos": [
+  {
+   "repo": "capa-rules",
+   "url": "https://github.com/mandiant/capa-rules.git",
+   "licence": "Apache-2.0",
+   "sha": "805f9eaccfb6a4e1ddffc809d71d1e2b5ccc15e5",
+   "files": 1069,
+   "bytes": 925955,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

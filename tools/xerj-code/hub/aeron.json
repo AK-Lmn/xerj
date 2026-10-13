@@ -1,0 +1,21 @@
+{
+ "corpus": "aeron",
+ "cloned_at": "2026-10-13T06:34:18Z",
+ "repos": [
+  {
+   "repo": "aeron",
+   "url": "https://github.com/real-logic/aeron.git",
+   "licence": "Apache-2.0",
+   "sha": "d3499bb1365995d631a282fa2d107461d8e9861b",
+   "files": 1746,
+   "bytes": 21152487,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

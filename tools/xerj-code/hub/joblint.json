@@ -1,0 +1,21 @@
+{
+ "corpus": "joblint",
+ "cloned_at": "2026-10-13T06:36:18Z",
+ "repos": [
+  {
+   "repo": "joblint",
+   "url": "https://github.com/rowanmanning/joblint.git",
+   "licence": "MIT",
+   "sha": "3b3fbb4e4809831a3c6b507483ca9f52950c1175",
+   "files": 31,
+   "bytes": 414928,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

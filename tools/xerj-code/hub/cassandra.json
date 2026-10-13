@@ -1,0 +1,21 @@
+{
+ "corpus": "cassandra",
+ "cloned_at": "2026-10-13T06:33:57Z",
+ "repos": [
+  {
+   "repo": "cassandra",
+   "url": "https://github.com/apache/cassandra.git",
+   "licence": "Apache-2.0",
+   "sha": "ec2c276be145bb25085c5c35ac0da69113b676ff",
+   "files": 8780,
+   "bytes": 143573881,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

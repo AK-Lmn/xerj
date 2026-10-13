@@ -1,0 +1,21 @@
+{
+ "corpus": "anthropic-cookbook",
+ "cloned_at": "2026-10-13T06:33:21Z",
+ "repos": [
+  {
+   "repo": "anthropic-cookbook",
+   "url": "https://github.com/anthropics/anthropic-cookbook.git",
+   "licence": "MIT",
+   "sha": "9c1e493ddd2b82df399d2a61b9c806c539e18be6",
+   "files": 570,
+   "bytes": 217903519,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

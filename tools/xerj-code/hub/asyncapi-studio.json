@@ -1,0 +1,21 @@
+{
+ "corpus": "asyncapi-studio",
+ "cloned_at": "2026-10-13T06:33:34Z",
+ "repos": [
+  {
+   "repo": "studio",
+   "url": "https://github.com/asyncapi/studio.git",
+   "licence": "Apache-2.0",
+   "sha": "f3aa74ec51f486d5dfddf6fe7d963fca14724eb5",
+   "files": 366,
+   "bytes": 5804973,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

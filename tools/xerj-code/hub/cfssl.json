@@ -1,0 +1,21 @@
+{
+ "corpus": "cfssl",
+ "cloned_at": "2026-10-13T06:33:44Z",
+ "repos": [
+  {
+   "repo": "cfssl",
+   "url": "https://github.com/cloudflare/cfssl.git",
+   "licence": "BSD-2-Clause",
+   "sha": "ab47f0d984778865b3f5b5adf6ba336a15b96c31",
+   "files": 2254,
+   "bytes": 33283348,
+   "review": {
+    "spdx": "BSD-2-Clause",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): BSD-2-Clause"
+   }
+  }
+ ]
+}

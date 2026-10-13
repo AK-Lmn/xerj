@@ -1,0 +1,21 @@
+{
+ "corpus": "congress-legislators",
+ "cloned_at": "2026-10-13T06:34:09Z",
+ "repos": [
+  {
+   "repo": "congress-legislators",
+   "url": "https://github.com/unitedstates/congress-legislators.git",
+   "licence": "CC0-1.0",
+   "sha": "d5af3d2d2490f8c6532c9490b1f47a76cacca699",
+   "files": 71,
+   "bytes": 12949056,
+   "review": {
+    "spdx": "CC0-1.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): CC0-1.0"
+   }
+  }
+ ]
+}

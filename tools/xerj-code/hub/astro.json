@@ -1,0 +1,21 @@
+{
+ "corpus": "astro",
+ "cloned_at": "2026-10-13T06:36:09Z",
+ "repos": [
+  {
+   "repo": "astro",
+   "url": "https://github.com/withastro/astro.git",
+   "licence": "MIT",
+   "sha": "59b9cc00726495bb45f5c4b000dbbb7b5a19d662",
+   "files": 6977,
+   "bytes": 51567674,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-text): MIT"
+   }
+  }
+ ]
+}

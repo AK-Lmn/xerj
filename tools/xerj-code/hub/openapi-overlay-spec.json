@@ -1,0 +1,21 @@
+{
+ "corpus": "openapi-overlay-spec",
+ "cloned_at": "2026-10-13T06:33:36Z",
+ "repos": [
+  {
+   "repo": "Overlay-Specification",
+   "url": "https://github.com/OAI/Overlay-Specification.git",
+   "licence": "Apache-2.0",
+   "sha": "d4cc4c80c0002fea39f7f923b69abb99f5171e76",
+   "files": 192,
+   "bytes": 324049,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "inspect-ai",
+ "cloned_at": "2026-10-13T06:33:31Z",
+ "repos": [
+  {
+   "repo": "inspect_ai",
+   "url": "https://github.com/UKGovernmentBEIS/inspect_ai.git",
+   "licence": "MIT",
+   "sha": "81c1668d31030eebf7ff55e8376c2650b4f811ed",
+   "files": 2388,
+   "bytes": 53885547,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

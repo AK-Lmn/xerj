@@ -1,0 +1,21 @@
+{
+ "corpus": "asyncapi-bindings",
+ "cloned_at": "2026-10-13T06:33:33Z",
+ "repos": [
+  {
+   "repo": "bindings",
+   "url": "https://github.com/asyncapi/bindings.git",
+   "licence": "Apache-2.0",
+   "sha": "1f418fe7077096cc8f25d0c6518df617f7c303f3",
+   "files": 59,
+   "bytes": 588270,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

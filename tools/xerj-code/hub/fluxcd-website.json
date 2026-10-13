@@ -1,0 +1,21 @@
+{
+ "corpus": "fluxcd-website",
+ "cloned_at": "2026-10-13T06:34:40Z",
+ "repos": [
+  {
+   "repo": "website",
+   "url": "https://github.com/fluxcd/website.git",
+   "licence": "Apache-2.0",
+   "sha": "8aa27f0f26eeb6a235fa5023330373b9c00d31e0",
+   "files": 842,
+   "bytes": 116919565,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "go-tpm",
+ "cloned_at": "2026-10-13T06:33:44Z",
+ "repos": [
+  {
+   "repo": "go-tpm",
+   "url": "https://github.com/google/go-tpm.git",
+   "licence": "Apache-2.0",
+   "sha": "e05fb8b1ca4e1b91ddc1e5555ec0753237fe459e",
+   "files": 154,
+   "bytes": 1603858,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

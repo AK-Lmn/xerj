@@ -1,0 +1,21 @@
+{
+ "corpus": "caldera",
+ "cloned_at": "2026-10-13T06:34:48Z",
+ "repos": [
+  {
+   "repo": "caldera",
+   "url": "https://github.com/mitre/caldera.git",
+   "licence": "Apache-2.0",
+   "sha": "cb8d6a8160e0f4990af323a7c071d5e8482b42c7",
+   "files": 390,
+   "bytes": 7891207,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

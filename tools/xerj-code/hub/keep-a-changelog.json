@@ -1,0 +1,21 @@
+{
+ "corpus": "keep-a-changelog",
+ "cloned_at": "2026-10-13T06:36:18Z",
+ "repos": [
+  {
+   "repo": "keep-a-changelog",
+   "url": "https://github.com/olivierlacan/keep-a-changelog.git",
+   "licence": "MIT",
+   "sha": "08d0df5a7e93b71d902def8be0f0d40025b56289",
+   "files": 188,
+   "bytes": 5457587,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

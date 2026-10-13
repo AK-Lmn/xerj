@@ -1,0 +1,21 @@
+{
+ "corpus": "httparse",
+ "cloned_at": "2026-10-13T06:34:22Z",
+ "repos": [
+  {
+   "repo": "httparse",
+   "url": "https://github.com/seanmonstar/httparse.git",
+   "licence": "Apache-2.0",
+   "sha": "a0fa552e4e0fa9a5914a736ef3a556748fef709b",
+   "files": 28,
+   "bytes": 278994,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

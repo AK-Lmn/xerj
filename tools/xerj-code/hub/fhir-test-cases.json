@@ -1,0 +1,21 @@
+{
+ "corpus": "fhir-test-cases",
+ "cloned_at": "2026-10-13T06:34:05Z",
+ "repos": [
+  {
+   "repo": "fhir-test-cases",
+   "url": "https://github.com/FHIR/fhir-test-cases.git",
+   "licence": "Apache-2.0",
+   "sha": "4e3b24804e4ec1144f76386f04de7e3ff67a32c9",
+   "files": 7297,
+   "bytes": 201220344,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

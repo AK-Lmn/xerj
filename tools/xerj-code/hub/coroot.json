@@ -1,0 +1,21 @@
+{
+ "corpus": "coroot",
+ "cloned_at": "2026-10-13T06:34:33Z",
+ "repos": [
+  {
+   "repo": "coroot",
+   "url": "https://github.com/coroot/coroot.git",
+   "licence": "Apache-2.0",
+   "sha": "56d1b0bd4e7eac8b80406b338badbeb88c824af0",
+   "files": 984,
+   "bytes": 74748240,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

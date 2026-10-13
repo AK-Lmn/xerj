@@ -1,0 +1,21 @@
+{
+ "corpus": "textlint-rule-stop-words",
+ "cloned_at": "2026-10-13T06:36:23Z",
+ "repos": [
+  {
+   "repo": "textlint-rule-stop-words",
+   "url": "https://github.com/sapegin/textlint-rule-stop-words.git",
+   "licence": "MIT",
+   "sha": "674119e6a152b6df019859f89847b2c9b80d497d",
+   "files": 19,
+   "bytes": 477620,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

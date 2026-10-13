@@ -1,0 +1,21 @@
+{
+ "corpus": "anything-llm",
+ "cloned_at": "2026-10-13T06:33:17Z",
+ "repos": [
+  {
+   "repo": "anything-llm",
+   "url": "https://github.com/Mintplex-Labs/anything-llm.git",
+   "licence": "MIT",
+   "sha": "3e4f9411b67f2dd7fa9fc6f2b95dfacbda0633ba",
+   "files": 5716,
+   "bytes": 59386102,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

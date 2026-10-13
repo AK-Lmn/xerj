@@ -1,0 +1,21 @@
+{
+ "corpus": "act",
+ "cloned_at": "2026-10-13T06:34:25Z",
+ "repos": [
+  {
+   "repo": "act",
+   "url": "https://github.com/nektos/act.git",
+   "licence": "MIT",
+   "sha": "4f411281417e88660bea1c1a1749aa71ae0bd60f",
+   "files": 2466,
+   "bytes": 113883495,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

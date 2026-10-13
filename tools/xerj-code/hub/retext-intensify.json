@@ -1,0 +1,21 @@
+{
+ "corpus": "retext-intensify",
+ "cloned_at": "2026-10-13T06:36:20Z",
+ "repos": [
+  {
+   "repo": "retext-intensify",
+   "url": "https://github.com/retextjs/retext-intensify.git",
+   "licence": "MIT",
+   "sha": "9450bee5f02f49a748c27427f4fc39d8500a4c5c",
+   "files": 13,
+   "bytes": 16218,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

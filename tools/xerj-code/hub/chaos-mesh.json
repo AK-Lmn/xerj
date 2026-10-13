@@ -1,0 +1,21 @@
+{
+ "corpus": "chaos-mesh",
+ "cloned_at": "2026-10-13T06:34:27Z",
+ "repos": [
+  {
+   "repo": "chaos-mesh",
+   "url": "https://github.com/chaos-mesh/chaos-mesh.git",
+   "licence": "Apache-2.0",
+   "sha": "780cb80cc1325e756160db5ffaa92d8dacbd534a",
+   "files": 1170,
+   "bytes": 17009404,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

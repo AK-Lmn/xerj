@@ -1,0 +1,21 @@
+{
+ "corpus": "karpenter",
+ "cloned_at": "2026-10-13T06:34:40Z",
+ "repos": [
+  {
+   "repo": "karpenter",
+   "url": "https://github.com/kubernetes-sigs/karpenter.git",
+   "licence": "Apache-2.0",
+   "sha": "a44324855bbb85169380ed4c73fb0d61e319a0d3",
+   "files": 562,
+   "bytes": 18530077,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

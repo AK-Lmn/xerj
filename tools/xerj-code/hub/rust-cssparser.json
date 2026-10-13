@@ -1,0 +1,21 @@
+{
+ "corpus": "rust-cssparser",
+ "cloned_at": "2026-10-13T06:35:47Z",
+ "repos": [
+  {
+   "repo": "rust-cssparser",
+   "url": "https://github.com/servo/rust-cssparser.git",
+   "licence": "MPL-2.0",
+   "sha": "9f3ceddf398f5ce4ab76fdad1b42ccb6c578a926",
+   "files": 56,
+   "bytes": 1991283,
+   "review": {
+    "spdx": "MPL-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MPL-2.0"
+   }
+  }
+ ]
+}

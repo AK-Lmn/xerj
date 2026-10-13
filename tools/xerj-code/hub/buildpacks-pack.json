@@ -1,0 +1,21 @@
+{
+ "corpus": "buildpacks-pack",
+ "cloned_at": "2026-10-13T06:34:26Z",
+ "repos": [
+  {
+   "repo": "pack",
+   "url": "https://github.com/buildpacks/pack.git",
+   "licence": "Apache-2.0",
+   "sha": "99894bcb29c6d830bab8811fdf2d05f328f2b739",
+   "files": 903,
+   "bytes": 93424123,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

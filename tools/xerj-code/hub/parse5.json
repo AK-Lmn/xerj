@@ -1,0 +1,21 @@
+{
+ "corpus": "parse5",
+ "cloned_at": "2026-10-13T06:35:41Z",
+ "repos": [
+  {
+   "repo": "parse5",
+   "url": "https://github.com/inikulin/parse5.git",
+   "licence": "MIT",
+   "sha": "103d9aa6b50a903ba23134124337b2201b3822c2",
+   "files": 180,
+   "bytes": 3690470,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

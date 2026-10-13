@@ -1,0 +1,21 @@
+{
+ "corpus": "jose-js",
+ "cloned_at": "2026-10-13T06:33:45Z",
+ "repos": [
+  {
+   "repo": "jose",
+   "url": "https://github.com/panva/jose.git",
+   "licence": "MIT",
+   "sha": "2a3a5259683f21b8ae42181a33cdc812330104be",
+   "files": 348,
+   "bytes": 1660728,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "cel-spec",
+ "cloned_at": "2026-10-13T06:33:34Z",
+ "repos": [
+  {
+   "repo": "cel-spec",
+   "url": "https://github.com/google/cel-spec.git",
+   "licence": "Apache-2.0",
+   "sha": "40a3c9007a9305d1f2638d5f538a4e011732cace",
+   "files": 97,
+   "bytes": 1445500,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

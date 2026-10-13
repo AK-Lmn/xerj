@@ -1,0 +1,21 @@
+{
+ "corpus": "reporters-db",
+ "cloned_at": "2026-10-13T06:34:17Z",
+ "repos": [
+  {
+   "repo": "reporters-db",
+   "url": "https://github.com/freelawproject/reporters-db.git",
+   "licence": "BSD-2-Clause",
+   "sha": "7a5b9b06fcdc829546705fd874023990f493e751",
+   "files": 34,
+   "bytes": 1803914,
+   "review": {
+    "spdx": "BSD-2-Clause",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): BSD-2-Clause"
+   }
+  }
+ ]
+}

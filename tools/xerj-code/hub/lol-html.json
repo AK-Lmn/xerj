@@ -1,0 +1,21 @@
+{
+ "corpus": "lol-html",
+ "cloned_at": "2026-10-13T06:35:26Z",
+ "repos": [
+  {
+   "repo": "lol-html",
+   "url": "https://github.com/cloudflare/lol-html.git",
+   "licence": "BSD-3-Clause",
+   "sha": "608cc4a66b7ab4fcbe1bbdeb25df8f265572b11c",
+   "files": 3240,
+   "bytes": 5978870,
+   "review": {
+    "spdx": "BSD-3-Clause",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): BSD-3-Clause"
+   }
+  }
+ ]
+}

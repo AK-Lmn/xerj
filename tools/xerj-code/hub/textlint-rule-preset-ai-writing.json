@@ -1,0 +1,21 @@
+{
+ "corpus": "textlint-rule-preset-ai-writing",
+ "cloned_at": "2026-10-13T06:36:22Z",
+ "repos": [
+  {
+   "repo": "textlint-rule-preset-ai-writing",
+   "url": "https://github.com/textlint-ja/textlint-rule-preset-ai-writing.git",
+   "licence": "MIT",
+   "sha": "45bb6485062b96a8578c5fa6ae37a41de01d9b80",
+   "files": 36,
+   "bytes": 915910,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

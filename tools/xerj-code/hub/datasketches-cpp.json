@@ -1,0 +1,21 @@
+{
+ "corpus": "datasketches-cpp",
+ "cloned_at": "2026-10-13T06:33:54Z",
+ "repos": [
+  {
+   "repo": "datasketches-cpp",
+   "url": "https://github.com/apache/datasketches-cpp.git",
+   "licence": "Apache-2.0",
+   "sha": "9a7226e3494bc6c14d1ffed3ca5f4a453a1696c5",
+   "files": 306,
+   "bytes": 2822763,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

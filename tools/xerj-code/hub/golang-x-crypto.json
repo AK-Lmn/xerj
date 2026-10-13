@@ -1,0 +1,21 @@
+{
+ "corpus": "golang-x-crypto",
+ "cloned_at": "2026-10-13T06:33:45Z",
+ "repos": [
+  {
+   "repo": "crypto",
+   "url": "https://github.com/golang/crypto.git",
+   "licence": "BSD-3-Clause",
+   "sha": "3b414e3e8284a71c817c4d1009acdd5d3a464ff9",
+   "files": 368,
+   "bytes": 5443776,
+   "review": {
+    "spdx": "BSD-3-Clause",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): BSD-3-Clause"
+   }
+  }
+ ]
+}

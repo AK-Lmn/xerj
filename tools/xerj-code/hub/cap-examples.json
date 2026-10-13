@@ -1,0 +1,21 @@
+{
+ "corpus": "cap-examples",
+ "cloned_at": "2026-10-13T06:34:06Z",
+ "repos": [
+  {
+   "repo": "cap-examples",
+   "url": "https://github.com/harvard-lil/cap-examples.git",
+   "licence": "MIT",
+   "sha": "9ef3b4d050cc08dd285a84cba7ae5445a26ab64f",
+   "files": 34,
+   "bytes": 6305145,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "crossplane",
+ "cloned_at": "2026-10-13T06:34:32Z",
+ "repos": [
+  {
+   "repo": "crossplane",
+   "url": "https://github.com/crossplane/crossplane.git",
+   "licence": "Apache-2.0",
+   "sha": "b8d0c527923d8449f80de0b40133cf43614eae8d",
+   "files": 953,
+   "bytes": 22783760,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

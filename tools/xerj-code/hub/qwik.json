@@ -1,0 +1,21 @@
+{
+ "corpus": "qwik",
+ "cloned_at": "2026-10-13T06:35:46Z",
+ "repos": [
+  {
+   "repo": "qwik",
+   "url": "https://github.com/QwikDev/qwik.git",
+   "licence": "MIT",
+   "sha": "09c73b979624e40e590300e40088f7ad0b7626fa",
+   "files": 4801,
+   "bytes": 37949466,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

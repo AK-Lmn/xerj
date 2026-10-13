@@ -1,0 +1,21 @@
+{
+ "corpus": "season-of-docs",
+ "cloned_at": "2026-10-13T06:36:21Z",
+ "repos": [
+  {
+   "repo": "season-of-docs",
+   "url": "https://github.com/google/season-of-docs.git",
+   "licence": "CC-BY-4.0",
+   "sha": "ec6161e9bccdff2c4d28cf7e88ff22bd59c85ffb",
+   "files": 192,
+   "bytes": 841118,
+   "review": {
+    "spdx": "CC-BY-4.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): CC-BY-4.0"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "medqa-usmle",
+ "cloned_at": "2026-10-13T06:34:03Z",
+ "repos": [
+  {
+   "repo": "MedQA",
+   "url": "https://github.com/jind11/MedQA.git",
+   "licence": "MIT",
+   "sha": "27b02f66aac217933c9648a06f82e9f720377925",
+   "files": 34,
+   "bytes": 103153,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

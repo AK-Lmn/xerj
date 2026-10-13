@@ -1,0 +1,21 @@
+{
+ "corpus": "graphql-over-http",
+ "cloned_at": "2026-10-13T06:33:35Z",
+ "repos": [
+  {
+   "repo": "graphql-over-http",
+   "url": "https://github.com/graphql/graphql-over-http.git",
+   "licence": "MIT",
+   "sha": "d438b209d60fa3d34b0530b605e60d5640c7ef9b",
+   "files": 102,
+   "bytes": 616651,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

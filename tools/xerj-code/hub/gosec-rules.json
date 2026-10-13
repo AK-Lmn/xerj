@@ -1,0 +1,21 @@
+{
+ "corpus": "gosec-rules",
+ "cloned_at": "2026-10-13T06:35:00Z",
+ "repos": [
+  {
+   "repo": "gosec",
+   "url": "https://github.com/securego/gosec.git",
+   "licence": "Apache-2.0",
+   "sha": "71577268350e1e0f2f1491de1ef53f1227b43c1f",
+   "files": 300,
+   "bytes": 1935448,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

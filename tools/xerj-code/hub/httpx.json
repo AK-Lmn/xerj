@@ -1,0 +1,21 @@
+{
+ "corpus": "httpx",
+ "cloned_at": "2026-10-13T06:34:22Z",
+ "repos": [
+  {
+   "repo": "httpx",
+   "url": "https://github.com/encode/httpx.git",
+   "licence": "BSD-3-Clause",
+   "sha": "b5addb64f0161ff6bfe94c124ef76f6a1fba5254",
+   "files": 125,
+   "bytes": 3321071,
+   "review": {
+    "spdx": "BSD-3-Clause",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): BSD-3-Clause"
+   }
+  }
+ ]
+}

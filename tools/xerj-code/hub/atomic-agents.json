@@ -1,0 +1,21 @@
+{
+ "corpus": "atomic-agents",
+ "cloned_at": "2026-10-13T06:33:15Z",
+ "repos": [
+  {
+   "repo": "atomic-agents",
+   "url": "https://github.com/BrainBlend-AI/atomic-agents.git",
+   "licence": "MIT",
+   "sha": "4d4434745234b57dd3c2252d1a18726fbf1505db",
+   "files": 426,
+   "bytes": 11399877,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "medspacy",
+ "cloned_at": "2026-10-13T06:34:03Z",
+ "repos": [
+  {
+   "repo": "medspacy",
+   "url": "https://github.com/medspacy/medspacy.git",
+   "licence": "MIT",
+   "sha": "b7bb7d82f2e8fbadc9ab26d6b4c37578f8883c2c",
+   "files": 364,
+   "bytes": 5591790,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

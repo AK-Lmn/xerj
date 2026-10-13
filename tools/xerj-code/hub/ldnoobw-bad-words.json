@@ -1,0 +1,21 @@
+{
+ "corpus": "ldnoobw-bad-words",
+ "cloned_at": "2026-10-13T06:36:18Z",
+ "repos": [
+  {
+   "repo": "List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words",
+   "url": "https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words.git",
+   "licence": "CC-BY-4.0",
+   "sha": "5faf2ba42d7b1c0977169ec3611df25a3c08eb13",
+   "files": 31,
+   "bytes": 49121,
+   "review": {
+    "spdx": "CC-BY-4.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): CC-BY-4.0"
+   }
+  }
+ ]
+}

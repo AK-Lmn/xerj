@@ -1,0 +1,21 @@
+{
+ "corpus": "fastcrypto",
+ "cloned_at": "2026-10-13T06:33:44Z",
+ "repos": [
+  {
+   "repo": "fastcrypto",
+   "url": "https://github.com/MystenLabs/fastcrypto.git",
+   "licence": "Apache-2.0",
+   "sha": "f8b24b802a241106a79c987173ad21b83ede0e08",
+   "files": 246,
+   "bytes": 3635342,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

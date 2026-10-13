@@ -1,0 +1,21 @@
+{
+ "corpus": "helm",
+ "cloned_at": "2026-10-13T06:34:37Z",
+ "repos": [
+  {
+   "repo": "helm",
+   "url": "https://github.com/helm/helm.git",
+   "licence": "Apache-2.0",
+   "sha": "dc56a44fee5ac036807348bc48653bc93d714953",
+   "files": 2035,
+   "bytes": 4184513,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

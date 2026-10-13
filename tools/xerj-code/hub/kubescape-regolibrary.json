@@ -1,0 +1,21 @@
+{
+ "corpus": "kubescape-regolibrary",
+ "cloned_at": "2026-10-13T06:35:03Z",
+ "repos": [
+  {
+   "repo": "regolibrary",
+   "url": "https://github.com/kubescape/regolibrary.git",
+   "licence": "Apache-2.0",
+   "sha": "5d5fd8fcc130c34b78f477a4a496ffb8b791d9c2",
+   "files": 4246,
+   "bytes": 6550487,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

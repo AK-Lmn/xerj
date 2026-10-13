@@ -1,0 +1,21 @@
+{
+ "corpus": "huggingface-hub-docs",
+ "cloned_at": "2026-10-13T06:33:28Z",
+ "repos": [
+  {
+   "repo": "hub-docs",
+   "url": "https://github.com/huggingface/hub-docs.git",
+   "licence": "Apache-2.0",
+   "sha": "fa1174aee5a33e63da8511e92e03f94f5c3ad47c",
+   "files": 493,
+   "bytes": 21320174,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

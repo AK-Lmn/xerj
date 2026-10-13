@@ -1,0 +1,21 @@
+{
+ "corpus": "mozilla-l10n-styleguides",
+ "cloned_at": "2026-10-13T06:36:19Z",
+ "repos": [
+  {
+   "repo": "styleguides",
+   "url": "https://github.com/mozilla-l10n/styleguides.git",
+   "licence": "CC-BY-4.0",
+   "sha": "50ad513b1fe0c67d10cc9ade5a5ef8078153889b",
+   "files": 143,
+   "bytes": 2815595,
+   "review": {
+    "spdx": "CC-BY-4.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): CC-BY-4.0"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "eyecite",
+ "cloned_at": "2026-10-13T06:34:12Z",
+ "repos": [
+  {
+   "repo": "eyecite",
+   "url": "https://github.com/freelawproject/eyecite.git",
+   "licence": "BSD-2-Clause",
+   "sha": "b70a146d20f70b366baf150a1cc9e82229ef5a0d",
+   "files": 48,
+   "bytes": 695921,
+   "review": {
+    "spdx": "BSD-2-Clause",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): BSD-2-Clause"
+   }
+  }
+ ]
+}

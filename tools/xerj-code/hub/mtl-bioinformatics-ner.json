@@ -1,0 +1,21 @@
+{
+ "corpus": "mtl-bioinformatics-ner",
+ "cloned_at": "2026-10-13T06:34:11Z",
+ "repos": [
+  {
+   "repo": "MTL-Bioinformatics-2016",
+   "url": "https://github.com/cambridgeltl/MTL-Bioinformatics-2016.git",
+   "licence": "CC-BY-4.0",
+   "sha": "df0df02fae6dbb87d88ffcf323b9096528f06f84",
+   "files": 243,
+   "bytes": 222533030,
+   "review": {
+    "spdx": "CC-BY-4.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): CC-BY-4.0"
+   }
+  }
+ ]
+}

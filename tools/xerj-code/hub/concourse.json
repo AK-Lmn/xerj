@@ -1,0 +1,21 @@
+{
+ "corpus": "concourse",
+ "cloned_at": "2026-10-13T06:34:30Z",
+ "repos": [
+  {
+   "repo": "concourse",
+   "url": "https://github.com/concourse/concourse.git",
+   "licence": "Apache-2.0",
+   "sha": "6a706fb849774021de31fc10fe02506e3400879a",
+   "files": 2831,
+   "bytes": 38940940,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "lambdaworks",
+ "cloned_at": "2026-10-13T06:33:46Z",
+ "repos": [
+  {
+   "repo": "lambdaworks",
+   "url": "https://github.com/lambdaclass/lambdaworks.git",
+   "licence": "Apache-2.0",
+   "sha": "3a87850dc405e12ab6c4bbaeba68d52815ab1158",
+   "files": 784,
+   "bytes": 7064863,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

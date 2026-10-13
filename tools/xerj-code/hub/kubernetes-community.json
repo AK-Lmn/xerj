@@ -1,0 +1,21 @@
+{
+ "corpus": "kubernetes-community",
+ "cloned_at": "2026-10-13T06:33:36Z",
+ "repos": [
+  {
+   "repo": "community",
+   "url": "https://github.com/kubernetes/community.git",
+   "licence": "Apache-2.0",
+   "sha": "585a4ac6109d37525eb34f26fc0d32e175ffb5b1",
+   "files": 1609,
+   "bytes": 61637032,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

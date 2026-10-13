@@ -1,0 +1,21 @@
+{
+ "corpus": "openlegaldata-oldp",
+ "cloned_at": "2026-10-13T06:34:16Z",
+ "repos": [
+  {
+   "repo": "oldp",
+   "url": "https://github.com/openlegaldata/oldp.git",
+   "licence": "MIT",
+   "sha": "b1c2de5848985682ab54258fec9569c70bfeee96",
+   "files": 969,
+   "bytes": 29385082,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

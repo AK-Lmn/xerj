@@ -1,0 +1,21 @@
+{
+ "corpus": "golang-jwt",
+ "cloned_at": "2026-10-13T06:33:44Z",
+ "repos": [
+  {
+   "repo": "jwt",
+   "url": "https://github.com/golang-jwt/jwt.git",
+   "licence": "MIT",
+   "sha": "73c870b18e68b6e654b2b03f485aa3c9fab32cea",
+   "files": 77,
+   "bytes": 240905,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "bulletproofs",
+ "cloned_at": "2026-10-13T06:33:42Z",
+ "repos": [
+  {
+   "repo": "bulletproofs",
+   "url": "https://github.com/dalek-cryptography/bulletproofs.git",
+   "licence": "MIT",
+   "sha": "be67b6d5f5ad1c1f54d5511b52e6d645a1313d07",
+   "files": 45,
+   "bytes": 1579079,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

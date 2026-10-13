@@ -1,0 +1,21 @@
+{
+ "corpus": "kotaemon",
+ "cloned_at": "2026-10-13T06:33:29Z",
+ "repos": [
+  {
+   "repo": "kotaemon",
+   "url": "https://github.com/Cinnamon/kotaemon.git",
+   "licence": "Apache-2.0",
+   "sha": "9ad3e4e49aa35b8acddd235918a5d9753c1cfdf9",
+   "files": 414,
+   "bytes": 18805631,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

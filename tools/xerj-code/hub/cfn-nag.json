@@ -1,0 +1,21 @@
+{
+ "corpus": "cfn-nag",
+ "cloned_at": "2026-10-13T06:34:50Z",
+ "repos": [
+  {
+   "repo": "cfn_nag",
+   "url": "https://github.com/stelligent/cfn_nag.git",
+   "licence": "MIT",
+   "sha": "8b5f03da74202ba323a145e9d037ddce6cab9dec",
+   "files": 1192,
+   "bytes": 1409294,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "density",
+ "cloned_at": "2026-10-13T06:34:21Z",
+ "repos": [
+  {
+   "repo": "density",
+   "url": "https://github.com/g1mv/density.git",
+   "licence": "Apache-2.0",
+   "sha": "58938943bb0dfd85b186551a3d1d36cc286f9c1d",
+   "files": 34,
+   "bytes": 10269021,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

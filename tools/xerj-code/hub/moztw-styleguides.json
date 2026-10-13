@@ -1,0 +1,21 @@
+{
+ "corpus": "moztw-styleguides",
+ "cloned_at": "2026-10-13T06:36:20Z",
+ "repos": [
+  {
+   "repo": "styleguides",
+   "url": "https://github.com/moztw/styleguides.git",
+   "licence": "CC-BY-4.0",
+   "sha": "37d9832afd47eae0e55134bbdf721573c168ed89",
+   "files": 141,
+   "bytes": 2759161,
+   "review": {
+    "spdx": "CC-BY-4.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): CC-BY-4.0"
+   }
+  }
+ ]
+}

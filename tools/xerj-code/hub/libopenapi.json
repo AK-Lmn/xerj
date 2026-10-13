@@ -1,0 +1,21 @@
+{
+ "corpus": "libopenapi",
+ "cloned_at": "2026-10-13T06:33:36Z",
+ "repos": [
+  {
+   "repo": "libopenapi",
+   "url": "https://github.com/pb33f/libopenapi.git",
+   "licence": "MIT",
+   "sha": "c4c4be74abe32f0201f6f3086a951178975b00e3",
+   "files": 878,
+   "bytes": 27630934,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

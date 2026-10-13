@@ -1,0 +1,21 @@
+{
+ "corpus": "harper",
+ "cloned_at": "2026-10-13T06:36:18Z",
+ "repos": [
+  {
+   "repo": "harper",
+   "url": "https://github.com/Automattic/harper.git",
+   "licence": "Apache-2.0",
+   "sha": "6a0f42d1c17472b07a85be3e4a0e9913ec8a9303",
+   "files": 1855,
+   "bytes": 49762399,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "preact",
+ "cloned_at": "2026-10-13T06:35:45Z",
+ "repos": [
+  {
+   "repo": "preact",
+   "url": "https://github.com/preactjs/preact.git",
+   "licence": "MIT",
+   "sha": "8ff8785bac0749c8129f2a76920b3f10b9d6766f",
+   "files": 303,
+   "bytes": 1720594,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

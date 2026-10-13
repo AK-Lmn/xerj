@@ -1,0 +1,21 @@
+{
+ "corpus": "gatling",
+ "cloned_at": "2026-10-13T06:34:36Z",
+ "repos": [
+  {
+   "repo": "gatling",
+   "url": "https://github.com/gatling/gatling.git",
+   "licence": "Apache-2.0",
+   "sha": "d552826ba052f81f68d79a350b0330c697835f5c",
+   "files": 1134,
+   "bytes": 4600964,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

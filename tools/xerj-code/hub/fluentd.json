@@ -1,0 +1,21 @@
+{
+ "corpus": "fluentd",
+ "cloned_at": "2026-10-13T06:34:34Z",
+ "repos": [
+  {
+   "repo": "fluentd",
+   "url": "https://github.com/fluent/fluentd.git",
+   "licence": "Apache-2.0",
+   "sha": "358c92bbb327171ed71b2ed2360e71d535edbd31",
+   "files": 594,
+   "bytes": 4293826,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "boulder",
+ "cloned_at": "2026-10-13T06:33:43Z",
+ "repos": [
+  {
+   "repo": "boulder",
+   "url": "https://github.com/letsencrypt/boulder.git",
+   "licence": "MPL-2.0",
+   "sha": "f877538d2f0a3074030a78e6ba7a70ecfad82f7e",
+   "files": 4405,
+   "bytes": 40987629,
+   "review": {
+    "spdx": "MPL-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MPL-2.0"
+   }
+  }
+ ]
+}

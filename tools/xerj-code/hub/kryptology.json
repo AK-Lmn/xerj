@@ -1,0 +1,21 @@
+{
+ "corpus": "kryptology",
+ "cloned_at": "2026-10-13T06:33:46Z",
+ "repos": [
+  {
+   "repo": "kryptology",
+   "url": "https://github.com/coinbase/kryptology.git",
+   "licence": "Apache-2.0",
+   "sha": "eef703320df46f97e86ead4eff178b095181b0ec",
+   "files": 371,
+   "bytes": 7321625,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

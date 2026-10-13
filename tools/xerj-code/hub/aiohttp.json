@@ -1,0 +1,21 @@
+{
+ "corpus": "aiohttp",
+ "cloned_at": "2026-10-13T06:34:18Z",
+ "repos": [
+  {
+   "repo": "aiohttp",
+   "url": "https://github.com/aio-libs/aiohttp.git",
+   "licence": "Apache-2.0",
+   "sha": "708528592b1a8fdfc1cbe0d81fe4417693f0bb5d",
+   "files": 499,
+   "bytes": 5361472,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "fastchat",
+ "cloned_at": "2026-10-13T06:33:24Z",
+ "repos": [
+  {
+   "repo": "FastChat",
+   "url": "https://github.com/lm-sys/FastChat.git",
+   "licence": "Apache-2.0",
+   "sha": "587d5cfa1609a43d192cedb8441cac3c17db105d",
+   "files": 219,
+   "bytes": 15878636,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

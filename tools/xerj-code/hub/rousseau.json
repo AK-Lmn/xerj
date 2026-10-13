@@ -1,0 +1,21 @@
+{
+ "corpus": "rousseau",
+ "cloned_at": "2026-10-13T06:36:21Z",
+ "repos": [
+  {
+   "repo": "rousseau",
+   "url": "https://github.com/GitbookIO/rousseau.git",
+   "licence": "Apache-2.0",
+   "sha": "e7fb314d53074f65449d8e5c02a0dd7c932b83ae",
+   "files": 33,
+   "bytes": 155193,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

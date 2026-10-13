@@ -1,0 +1,21 @@
+{
+ "corpus": "kratix",
+ "cloned_at": "2026-10-13T06:34:41Z",
+ "repos": [
+  {
+   "repo": "kratix",
+   "url": "https://github.com/syntasso/kratix.git",
+   "licence": "Apache-2.0",
+   "sha": "2ed71d245b544af7963fd5bac3eef8c184910289",
+   "files": 620,
+   "bytes": 5457027,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "controlflow",
+ "cloned_at": "2026-10-13T06:33:19Z",
+ "repos": [
+  {
+   "repo": "ControlFlow",
+   "url": "https://github.com/PrefectHQ/ControlFlow.git",
+   "licence": "Apache-2.0",
+   "sha": "a7ffb12ff3d9a6fc9781b229b6f231328fc0c328",
+   "files": 248,
+   "bytes": 2767030,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

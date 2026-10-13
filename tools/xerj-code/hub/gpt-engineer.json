@@ -1,0 +1,21 @@
+{
+ "corpus": "gpt-engineer",
+ "cloned_at": "2026-10-13T06:33:27Z",
+ "repos": [
+  {
+   "repo": "gpt-engineer",
+   "url": "https://github.com/gpt-engineer-org/gpt-engineer.git",
+   "licence": "MIT",
+   "sha": "a90fcd543eedcc0ff2c34561bc0785d2ba83c47e",
+   "files": 182,
+   "bytes": 16764636,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

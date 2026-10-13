@@ -1,0 +1,21 @@
+{
+ "corpus": "courts-db",
+ "cloned_at": "2026-10-13T06:34:10Z",
+ "repos": [
+  {
+   "repo": "courts-db",
+   "url": "https://github.com/freelawproject/courts-db.git",
+   "licence": "BSD-2-Clause",
+   "sha": "c22604dff8b6819d022cc5ddfd6d9080101149e3",
+   "files": 58,
+   "bytes": 2061975,
+   "review": {
+    "spdx": "BSD-2-Clause",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): BSD-2-Clause"
+   }
+  }
+ ]
+}

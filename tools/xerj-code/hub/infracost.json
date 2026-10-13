@@ -1,0 +1,21 @@
+{
+ "corpus": "infracost",
+ "cloned_at": "2026-10-13T06:34:40Z",
+ "repos": [
+  {
+   "repo": "infracost",
+   "url": "https://github.com/infracost/infracost.git",
+   "licence": "Apache-2.0",
+   "sha": "ccc476fb861e251e4bad836ebb29b7ac947a3aad",
+   "files": 3312,
+   "bytes": 16445713,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

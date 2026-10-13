@@ -1,0 +1,21 @@
+{
+ "corpus": "docassemble",
+ "cloned_at": "2026-10-13T06:34:15Z",
+ "repos": [
+  {
+   "repo": "docassemble",
+   "url": "https://github.com/jhpyle/docassemble.git",
+   "licence": "MIT",
+   "sha": "fea293b778427b2996e1620006dec4983f650bd0",
+   "files": 2987,
+   "bytes": 76357856,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

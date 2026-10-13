@@ -1,0 +1,21 @@
+{
+ "corpus": "bebop",
+ "cloned_at": "2026-10-13T06:34:19Z",
+ "repos": [
+  {
+   "repo": "bebop",
+   "url": "https://github.com/betwixt-labs/bebop.git",
+   "licence": "Apache-2.0",
+   "sha": "03a2a761d7ea96afdb5bcd8885d0be15cc888e8a",
+   "files": 636,
+   "bytes": 8026479,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

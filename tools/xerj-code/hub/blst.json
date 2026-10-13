@@ -1,0 +1,21 @@
+{
+ "corpus": "blst",
+ "cloned_at": "2026-10-13T06:33:41Z",
+ "repos": [
+  {
+   "repo": "blst",
+   "url": "https://github.com/supranational/blst.git",
+   "licence": "Apache-2.0",
+   "sha": "19b285a417a686ea44211fec5e16ce67e9d3d016",
+   "files": 247,
+   "bytes": 3846955,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

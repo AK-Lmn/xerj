@@ -1,0 +1,21 @@
+{
+ "corpus": "flexrag",
+ "cloned_at": "2026-10-13T06:33:26Z",
+ "repos": [
+  {
+   "repo": "FlexRAG",
+   "url": "https://github.com/ictnlp/FlexRAG.git",
+   "licence": "MIT",
+   "sha": "2b6e32c301e20c3caef89cfab10ead068c4100eb",
+   "files": 204,
+   "bytes": 18600678,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

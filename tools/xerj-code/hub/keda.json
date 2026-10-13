@@ -1,0 +1,21 @@
+{
+ "corpus": "keda",
+ "cloned_at": "2026-10-13T06:34:40Z",
+ "repos": [
+  {
+   "repo": "keda",
+   "url": "https://github.com/kedacore/keda.git",
+   "licence": "Apache-2.0",
+   "sha": "59815e11667a0b8bb83453ab9ce5ebffcdf5b9da",
+   "files": 788,
+   "bytes": 9422082,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

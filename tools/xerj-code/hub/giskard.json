@@ -1,0 +1,21 @@
+{
+ "corpus": "giskard",
+ "cloned_at": "2026-10-13T06:33:27Z",
+ "repos": [
+  {
+   "repo": "giskard",
+   "url": "https://github.com/Giskard-AI/giskard.git",
+   "licence": "Apache-2.0",
+   "sha": "48814003452c07c19339278e77a13fa07956d1b7",
+   "files": 465,
+   "bytes": 10933636,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

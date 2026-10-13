@@ -1,0 +1,21 @@
+{
+ "corpus": "arroyo",
+ "cloned_at": "2026-10-13T06:33:51Z",
+ "repos": [
+  {
+   "repo": "arroyo",
+   "url": "https://github.com/ArroyoSystems/arroyo.git",
+   "licence": "Apache-2.0",
+   "sha": "18c203dcdd5515ab36237b2f02721570d6f20eef",
+   "files": 655,
+   "bytes": 21571542,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

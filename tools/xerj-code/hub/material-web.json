@@ -1,0 +1,21 @@
+{
+ "corpus": "material-web",
+ "cloned_at": "2026-10-13T06:35:34Z",
+ "repos": [
+  {
+   "repo": "material-web",
+   "url": "https://github.com/material-components/material-web.git",
+   "licence": "Apache-2.0",
+   "sha": "e3471c042a8decb822aba2e1af6134adb86e05dc",
+   "files": 1568,
+   "bytes": 18443974,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

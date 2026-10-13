@@ -1,0 +1,21 @@
+{
+ "corpus": "pubmedqa",
+ "cloned_at": "2026-10-13T06:34:05Z",
+ "repos": [
+  {
+   "repo": "pubmedqa",
+   "url": "https://github.com/pubmedqa/pubmedqa.git",
+   "licence": "MIT",
+   "sha": "1cbae8e92f72f20c8d3747cbb3bf5bc53554d997",
+   "files": 7,
+   "bytes": 2603745,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

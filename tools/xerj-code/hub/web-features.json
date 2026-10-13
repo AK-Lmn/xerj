@@ -1,0 +1,21 @@
+{
+ "corpus": "web-features",
+ "cloned_at": "2026-10-13T06:35:59Z",
+ "repos": [
+  {
+   "repo": "web-features",
+   "url": "https://github.com/web-platform-dx/web-features.git",
+   "licence": "Apache-2.0",
+   "sha": "de89ce660d926ba9ddc95f1d9f16705f0975dc2e",
+   "files": 3021,
+   "bytes": 4180316,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

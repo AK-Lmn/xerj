@@ -1,0 +1,21 @@
+{
+ "corpus": "awesome-llm-apps",
+ "cloned_at": "2026-10-13T06:33:22Z",
+ "repos": [
+  {
+   "repo": "awesome-llm-apps",
+   "url": "https://github.com/Shubhamsaboo/awesome-llm-apps.git",
+   "licence": "Apache-2.0",
+   "sha": "4bf51ab704fb2c5b3803cd5191b30d7dcdb51dc2",
+   "files": 1976,
+   "bytes": 90079829,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

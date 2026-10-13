@@ -1,0 +1,21 @@
+{
+ "corpus": "mdn-data",
+ "cloned_at": "2026-10-13T06:35:30Z",
+ "repos": [
+  {
+   "repo": "data",
+   "url": "https://github.com/mdn/data.git",
+   "licence": "CC0-1.0",
+   "sha": "2c16ea05c1f1596a7262851aeae1431790b52f1f",
+   "files": 61,
+   "bytes": 900444,
+   "review": {
+    "spdx": "CC0-1.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): CC0-1.0"
+   }
+  }
+ ]
+}

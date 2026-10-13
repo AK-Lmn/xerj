@@ -1,0 +1,21 @@
+{
+ "corpus": "argo-workflows",
+ "cloned_at": "2026-10-13T06:34:26Z",
+ "repos": [
+  {
+   "repo": "argo-workflows",
+   "url": "https://github.com/argoproj/argo-workflows.git",
+   "licence": "Apache-2.0",
+   "sha": "8f57ec7360d2f429c5e799c979d825909647eaeb",
+   "files": 3204,
+   "bytes": 83503446,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

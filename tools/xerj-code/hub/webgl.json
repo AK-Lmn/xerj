@@ -1,0 +1,21 @@
+{
+ "corpus": "webgl",
+ "cloned_at": "2026-10-13T06:36:05Z",
+ "repos": [
+  {
+   "repo": "WebGL",
+   "url": "https://github.com/KhronosGroup/WebGL.git",
+   "licence": "MIT",
+   "sha": "714857a28445e8f5d8d6ae1c78498578009534d8",
+   "files": 16008,
+   "bytes": 88588588,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): MIT"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "api-linter",
+ "cloned_at": "2026-10-13T06:33:32Z",
+ "repos": [
+  {
+   "repo": "api-linter",
+   "url": "https://github.com/googleapis/api-linter.git",
+   "licence": "Apache-2.0",
+   "sha": "836098d530b3e59a354de1e8fe52f651155a9e04",
+   "files": 1325,
+   "bytes": 2848753,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}

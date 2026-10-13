@@ -1,0 +1,21 @@
+{
+ "corpus": "openapi-moonwalk",
+ "cloned_at": "2026-10-13T06:33:36Z",
+ "repos": [
+  {
+   "repo": "sig-moonwalk",
+   "url": "https://github.com/OAI/sig-moonwalk.git",
+   "licence": "Apache-2.0",
+   "sha": "62520aa357f5579f9b592f418b004e435ecc9dde",
+   "files": 28,
+   "bytes": 182478,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-13",
+    "note": "licence host-verified (ok-spdx): Apache-2.0"
+   }
+  }
+ ]
+}
