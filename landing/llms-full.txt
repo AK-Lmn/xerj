@@ -1637,6 +1637,7 @@ binary; reinstall with the installer in section 1. Each step below names what
 success looks like.
 
   1. xerj "<your question>"            (the same command: xerj ask "<your question>")
+     The bare form needs a space in the question; for one word write xerj ask "<word>".
      XERJ picks the corpus: your project's dependency files first (Cargo.lock,
      package.json, go.mod, requirements.txt, pyproject.toml), then the catalogue.
      success: three lines, then any `warning:` lines.

@@ -49,11 +49,11 @@ What you probably assume: a hub corpus must be cloned and indexed before you can
 
 What is true: it is built, signed and indexed ahead of time, and XERJ fetches it the first time you ask. Retrieval is lexical, not semantic, so ask with the words and identifiers the source uses.
 
-Check your build first: `xerj ask --help` prints usage. Anything else means an older binary: reinstall with the line under **Start here**.
+Shell: check your build first. `xerj ask --help` prints usage; anything else means an older binary, so reinstall with the line under **Start here**.
 
 Ask a hub corpus in one line. No corpus name, no clone, no indexing. Each step says what success looks like:
 
-1. `xerj "<your question>"` — success: three lines, then any `warning:` lines. Cite the corpus, the pin date and the licence.
+1. `xerj "<your question>"` (a question of one word needs `xerj ask "<word>"`) — success: three lines, then any `warning:` lines. Cite the corpus, the pin date and the licence.
    - `<corpus>  pin <date> (<N> days old)  <licence>  <file>:<line>`
    - the passage itself
    - `answered from: local pack` (or `hosted hub`)
