@@ -122,6 +122,8 @@ class HubV2CopyTest(unittest.TestCase):
         p = gen.install_prompt(LANE_A)
         self.assertIn('xerj "<your question>" --corpus lz4', p)
         self.assertIn("xerj ask --def <SYMBOL> --corpus lz4", p)
+        # the bare form needs a space in the question; one word needs `ask`
+        self.assertIn('xerj ask "<word>" --corpus lz4', p)
         self.assertNoV1Flow(p, "the per-corpus copy prompt")
 
     def test_corpus_prompt_names_success_and_the_node_rule(self):
@@ -142,6 +144,7 @@ class HubV2CopyTest(unittest.TestCase):
         p = gen.category_prompt("NET", "Networking", [LANE_A])
         self.assertIn('2. Ask: xerj "<your question>"\n', p)
         self.assertIn("xerj ask --def <SYMBOL>\n", p)
+        self.assertIn('xerj ask "<word>"\n', p)
         self.assertIn("lz4 (", p)  # the domain's corpora are still listed for context
         self.assertIn("Exit 4", p)  # ambiguous: the candidates print, re-run with --corpus
         self.assertNoV1Flow(p, "the per-domain copy prompt")
@@ -223,7 +226,7 @@ class GeneratedSiteTest(unittest.TestCase):
 
     def test_hub_llms_txt_is_the_one_line_flow(self):
         text = (self.out / "llms.txt").read_text(encoding="utf-8")
-        for needed in ('xerj "your question"', "xerj ask --def <SYMBOL>",
+        for needed in ('xerj "your question"', 'xerj ask "word"', "xerj ask --def <SYMBOL>",
                        "xerj hub pull <slug>", "xerj hub stop", "xerj_hub_ask",
                        "pulled <slug> <pin8> <bytes> \u2192 <n> indices, <defs> definitions"):
             self.assertIn(needed, text)

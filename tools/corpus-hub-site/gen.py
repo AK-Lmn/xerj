@@ -318,6 +318,7 @@ def install_prompt(c):
         "Run these in a shell, in order, and check each result before the next:\n"
         + CLI_STEP +
         f'2. Ask: xerj "<your question>" --corpus {slug}\n'
+        f'   A question of one word needs ask: xerj ask "<word>" --corpus {slug}\n'
         + answer_lines(slug) +
         f"3. For an exact value, signature or default: xerj ask --def <SYMBOL> --corpus {slug}\n"
         "   Success: the declaration, then a value: line for a constant or macro. No passages.\n"
@@ -346,6 +347,7 @@ def category_prompt(k, title, live):
         "Run these in a shell, in order, and check each result before the next:\n"
         + CLI_STEP +
         '2. Ask: xerj "<your question>"\n'
+        '   A question of one word needs ask: xerj ask "<word>"\n'
         + answer_lines("<corpus>") +
         "   Exit 4 means more than one corpus fits: the candidates print, so run it again with --corpus <slug>.\n"
         "3. For an exact value, signature or default: xerj ask --def <SYMBOL>\n"
@@ -1088,6 +1090,7 @@ def main():
         "",
         '       xerj "your question"',
         "",
+        '   (A question of one word needs `ask`: `xerj ask "word"`.)',
         "   Success: three lines, then any `warning:` lines:",
         "",
         "       <corpus>  pin <date> (<N> days old)  <licence>  <file>:<line>",
