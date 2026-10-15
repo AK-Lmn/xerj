@@ -1661,7 +1661,9 @@ success looks like.
 EXIT CODES of `xerj ask`
   0 answered · 1 no match, or nothing to answer from · 2 usage error or unknown corpus ·
   3 a pack failed its checksum or signature check and was discarded · 4 more than one
-  corpus matches: the candidates print one per line, run again with `--corpus <slug>`.
+  corpus matches: the candidates print one per line, run again with `--corpus <slug>` ·
+  5 this build has no hub public key, so no pack can be verified and nothing was
+  downloaded (tell the user; a retry will not help).
   `no hub corpus matches` means the hub does not hold the answer. Say so; do not
   answer from memory.
 
@@ -1670,9 +1672,11 @@ licences · `--offline` cached catalogue and packs only · `--no-fetch` do not d
 a pack for next time · `--max-tokens N` · `--json` the answer as JSON · `--url <node>`.
 `xerj hub status` lists the cached packs, the node and the hosted setting.
 
-THE NODE. XERJ uses a node that answers on `localhost:9200`. If none does, it starts
-its own on a free port from 9300 and records the PID. Stop only a node you started:
-`xerj hub stop` stops XERJ's own; for a node you started by hand, save its PID
+THE NODE. XERJ uses the node at `--url`, `$XERJ_URL` or `localhost:9200` (the first
+one set) if it answers. If none does, it starts its own on a free loopback port from
+9300 and records the PID. Stop only a node you started: `xerj hub stop` stops XERJ's
+own (success: `stopped the hub node (pid <N>)`, or `no hub node was started by xerj;
+nothing to stop`); for a node you started by hand, save its PID
 (`echo $! > ~/xerj-node.pid`) and stop it with `kill $(cat ~/xerj-node.pid)`. Never
 `pkill xerj` or `killall xerj`: other XERJ nodes may be running on the machine and
 you would stop them too.
@@ -1691,17 +1695,30 @@ NO SHELL
   lines. Add "corpus": "<slug>" to name one, or "mode": "def" | "how" | "files".
   `xerj_hub_def` takes {"slug": "<slug>", "symbol": "<SYMBOL>"} (the --def form) and
   `xerj_hub_find` takes {"question": "<question>"} and names the corpora that match.
-  Register `xerj mcp` once, then restart the session:
+  Register `xerj mcp` once, with the absolute path to the binary (an editor started
+  from a desktop icon does not inherit the shell PATH), then restart the session:
     Claude Code: claude mcp add --scope user xerj -- "$(command -v xerj)" mcp
-    .mcp.json (written by `xerj init`), Cursor, Windsurf, Claude Desktop, Cline:
-      root key "mcpServers"
-    VS Code (.vscode/mcp.json): root key "servers"; an "mcpServers" block is ignored
+      (`xerj init` prints this line with the path filled in; in PowerShell put the
+      full path of xerj.exe in place of "$(command -v xerj)")
+    .mcp.json (Claude Code project scope, written by `xerj init`),
+    Cursor (~/.cursor/mcp.json or .cursor/mcp.json),
+    Windsurf (~/.codeium/windsurf/mcp_config.json),
+    Claude Desktop (claude_desktop_config.json), Cline: root key "mcpServers"
+      {"mcpServers": {"xerj": {"command": "/abs/path/to/xerj", "args": ["mcp"]}}}
+    VS Code (.vscode/mcp.json): root key "servers"; an "mcpServers" block is
+    silently ignored
+      {"servers": {"xerj": {"type": "stdio", "command": "/abs/path/to/xerj", "args": ["mcp"]}}}
   success: `xerj_hub_ask` is in the tool list.
-- HTTP: GET https://hub.xerj.org/api/v1/search?q=<words> names the corpus; GET
-  https://hub.xerj.org/api/v1/code/<slug>?q=<words> answers a question; GET
-  https://hub.xerj.org/api/v1/def/<slug>/<SYMBOL> answers an exact one. All are
-  read-only, the answer comes from the hosted hub, and the question is sent to
+- HTTP: read-only; the answer comes from the hosted hub, and the question is sent to
   hub.xerj.org.
+    GET https://hub.xerj.org/api/v1/search?q=<words>          names the corpus
+      success: {"corpora": [{"slug": ..., "best_score": ..., "best_hit": ...}]},
+      best first, at most 10
+    GET https://hub.xerj.org/api/v1/code/<slug>?q=<words>     answers a question
+      success: JSON with corpus, pin_date, licence_spdx, answered_from and a
+      non-empty hits list (file, line, text)
+    GET https://hub.xerj.org/api/v1/def/<slug>/<SYMBOL>       answers an exact one
+      success: the same JSON with mode "def" and, for a constant or macro, a value
 
 IF INDEXING A LOCAL CORPUS SITS AT 0%: check free disk space. A node whose disk is
 95% full blocks writes (`read_only_allow_delete`), and the indexer retries for ten

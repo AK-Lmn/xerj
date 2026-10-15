@@ -60,9 +60,13 @@ Ask a hub corpus in one line. No corpus name, no clone, no indexing. Each step s
 2. `xerj ask --def <SYMBOL>` — an exact question: a value, a signature, a default. Success: the declaration and, for a constant or macro, a `value: <literal>` line, with no passages.
 3. `xerj hub pull <slug>` — a large pack. The answer ends `run: xerj hub pull <slug> (<MB> MB)` when the pack is above the automatic download limit. Success: `pulled <slug> <pin8> <bytes> → <n> indices, <defs> definitions`. Then ask again.
 
-`no hub corpus matches` (exit 1) means the hub does not hold it: say so rather than answering from memory. Exit 4 means more than one corpus fits: run again with `--corpus <slug>`. Exit 3 means a pack failed its checksum or signature check and was discarded.
+`no hub corpus matches` (exit 1) means the hub does not hold it: say so rather than answering from memory. Exit 4 means more than one corpus fits: run again with `--corpus <slug>`.
 
-XERJ uses a node that answers on `localhost:9200`; if none does, it starts its own and records its PID. Stop only a node you started: `xerj hub stop` for XERJ's own, `kill $(cat ~/xerj-node.pid)` for one you saved the PID of.
+Exit 3 means a pack failed its checksum or signature check and was discarded. Exit 5 means this build has no hub public key, so nothing could be verified or downloaded; tell the user rather than retrying.
+
+XERJ uses the node at `--url`, `$XERJ_URL` or `localhost:9200` if it answers; if none does, it starts its own on a free loopback port and records its PID.
+
+Stop only a node you started: `xerj hub stop` for XERJ's own (success: `stopped the hub node (pid <N>)`, or `nothing to stop`); for one you started by hand, kill only the PID you recorded when you started it.
 
 Never `pkill xerj` or `killall xerj`: other XERJ nodes may be running on the machine and you would stop them too.
 
@@ -70,13 +74,17 @@ By default, inside a git repository the question is answered on this machine; ou
 
 No shell: the MCP tool `xerj_hub_ask` takes `{"question": "<your question>"}` and returns the same lines; `xerj_hub_def` takes `{"slug": "<slug>", "symbol": "<SYMBOL>"}`.
 
-Whoever has a shell registers `xerj mcp` once: `xerj init`, or `claude mcp add --scope user xerj -- "$(command -v xerj)" mcp`. Success: `xerj_hub_ask` is in the tool list after a restart.
+Whoever has a shell registers `xerj mcp` once, then restarts the session. Success: `xerj_hub_ask` is in the tool list. Use the absolute path to the binary: an editor started from a desktop icon does not inherit the shell PATH.
 
-Other clients: Cursor, Windsurf, Claude Desktop and Cline read the root key `mcpServers`; VS Code reads `servers` and silently ignores `mcpServers`.
+- Claude Code: `xerj init` (writes `.mcp.json` and prints the line below with the path filled in), or `claude mcp add --scope user xerj -- "$(command -v xerj)" mcp`. PowerShell: put the full path of `xerj.exe` in place of `"$(command -v xerj)"`.
+- Cursor (`~/.cursor/mcp.json` or `.cursor/mcp.json`), Windsurf (`~/.codeium/windsurf/mcp_config.json`), Claude Desktop (`claude_desktop_config.json`), Cline: root key `mcpServers` — `{"mcpServers": {"xerj": {"command": "/abs/path/to/xerj", "args": ["mcp"]}}}`
+- VS Code (`.vscode/mcp.json`): root key `servers`; a block under `mcpServers` is silently ignored — `{"servers": {"xerj": {"type": "stdio", "command": "/abs/path/to/xerj", "args": ["mcp"]}}}`
 
-No shell and no MCP: over plain HTTP, `GET https://hub.xerj.org/api/v1/search?q=<words>` names the corpus, then `GET https://hub.xerj.org/api/v1/code/<slug>?q=<words>` answers.
+No shell and no MCP: over plain HTTP, read-only, and the question goes to hub.xerj.org.
 
-For an exact question, `GET https://hub.xerj.org/api/v1/def/<slug>/<SYMBOL>`. The question goes to hub.xerj.org.
+- `GET https://hub.xerj.org/api/v1/search?q=<words>` names the corpus — success: JSON `{"corpora": [{"slug": …, "best_score": …, "best_hit": …}]}`, best first.
+- `GET https://hub.xerj.org/api/v1/code/<slug>?q=<words>` answers — success: JSON with `corpus`, `pin_date`, `licence_spdx`, `answered_from` and a non-empty `hits` list of `file`, `line`, `text`.
+- `GET https://hub.xerj.org/api/v1/def/<slug>/<SYMBOL>` answers an exact question — success: the same JSON with `mode` `def` and, for a constant or macro, a `value` in the hit.
 
 ## Caveats (read before you rely on a capability)
 
