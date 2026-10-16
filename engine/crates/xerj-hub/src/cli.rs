@@ -32,7 +32,7 @@ use serde_json::{json, Value};
 
 use xerj_common::hub::{
     render, Answer, CatalogueEntry, LicenceClass, PackIndex, PackManifest, PackSource,
-    AUTO_PULL_MAX_BYTES, DEFAULT_HUB_URL, DISK_BUDGET_BYTES, HUB_PUBKEY_HEX, PACK_FORMAT_VERSION,
+    AUTO_PULL_MAX_BYTES, DEFAULT_HUB_URL, DISK_BUDGET_BYTES, PACK_FORMAT_VERSION,
 };
 use xerj_common::xccode::manifest::read_hub_manifest;
 use xerj_common::xccode::state;
@@ -49,6 +49,8 @@ const HUB_USAGE: &str = "usage: xerj hub <command>
 
   build-pack <slug> --registry <dir> --out <dir> --url <node> --sign-key <seed-file>
         Build a signed, pre-indexed pack from a registry manifest (CI).
+  build-catalogue --registry <dir> --packs <dir> --out <file> --sign-key <seed-file>
+        Build and sign the catalogue from verified packs (CI; see -h).
   sync [--url <node>] | sync --install-timer
         Refresh the catalogue and bring every cached pack up to its pin;
         --install-timer schedules that every 6 hours (see `xerj hub sync -h`).
@@ -80,6 +82,7 @@ pub fn run_hub_cli(args: &[String]) -> i32 {
     let rest = &args[1..];
     match sub.as_str() {
         "build-pack" => run_build_pack(rest),
+        "build-catalogue" => crate::build_catalogue::run(rest),
         "sync" => crate::sync::run_sync(rest),
         "pull" => run_pull(rest),
         "status" => run_status(rest),
@@ -680,8 +683,16 @@ pub(crate) fn plan_pull(slug: &str) -> Result<PullPlan, PullError> {
         .unwrap_or_else(|| DEFAULT_HUB_URL.to_string());
 
     // 1. Catalogue → the entry for this slug.
-    let cat = load_catalogue(&hub_url, &hub_home, false)
-        .map_err(|e| PullError::new(E_INFRA, format!("cannot load catalogue: {e:#}")))?;
+    let cat = load_catalogue(&hub_url, &hub_home, false).map_err(|e| {
+        if xerj_common::hub::hub_key_configured() {
+            PullError::new(E_INFRA, format!("cannot load catalogue: {e:#}"))
+        } else {
+            // A build with no hub key could not verify the pack either; the
+            // catalogue error (often a parse error on whatever the hub URL
+            // serves) is not the useful answer.
+            PullError::new(E_NOKEY, xerj_common::hub::NO_HUB_KEY_MESSAGE)
+        }
+    })?;
     let entry = cat.corpora.iter().find(|c| c.slug == slug).ok_or_else(|| {
         PullError::new(
             E_SLUG,
@@ -1371,23 +1382,18 @@ pub(crate) fn hub_home() -> PathBuf {
     lockfile::default_hub_root()
 }
 
-/// The hub's ed25519 public key: `XERJ_HUB_PUBKEY` (tests) else the compiled-in
-/// [`HUB_PUBKEY_HEX`]. An empty key is a hard error — an unverifiable pack is
-/// never extracted.
+/// The hub's ed25519 public key ([`xerj_common::hub::hub_pubkey`]: a test
+/// `XERJ_HUB_PUBKEY` override, else the compiled-in
+/// [`xerj_common::hub::HUB_PUBKEY_HEX`]). No key
+/// is a hard error — an unverifiable pack is never extracted.
 fn hub_pubkey() -> Result<String> {
-    if let Ok(k) = std::env::var("XERJ_HUB_PUBKEY") {
-        if !k.is_empty() {
-            return Ok(k);
-        }
-    }
-    if !HUB_PUBKEY_HEX.is_empty() {
-        return Ok(HUB_PUBKEY_HEX.to_string());
-    }
-    bail!(
-        "no hub public key is configured in this build (HUB_PUBKEY_HEX is empty and \
-         XERJ_HUB_PUBKEY is unset), so a pack's signature cannot be verified; nothing was \
-         downloaded"
-    )
+    xerj_common::hub::hub_pubkey().ok_or_else(|| {
+        anyhow!(
+            "no hub public key is configured in this build (or XERJ_HUB_PUBKEY={}), so a \
+             pack's signature cannot be verified; nothing was downloaded",
+            xerj_common::hub::HUB_PUBKEY_NONE
+        )
+    })
 }
 
 /// First 8 hex chars of a 40-hex commit — the `pin8` in pack names.
@@ -1684,7 +1690,7 @@ mod tests {
     // `catalogue` test module already mutates under its own `ENV_LOCK`. A unit
     // test here that set/removed that var would race those tests (lib tests share
     // one process and run in parallel, and the lock is private to that module).
-    // The empty-key path — no key => its own exit code (5), with no `.tmp` leaked
+    // The no-key path (`XERJ_HUB_PUBKEY=none`) — its own exit code (5), no `.tmp` leaked
     // and no node started — is covered end to end by the `nokey` scenario in
     // `tests/pack_roundtrip.rs` instead. Everything below refuses BEFORE the key is
     // looked at, so it needs no environment.
