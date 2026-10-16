@@ -55,16 +55,20 @@ const GOVERNOR_THREAD_SPAWN_BACKOFF: std::time::Duration = std::time::Duration::
 /// spawn is retried with back-off through `xerj_common::thread_spawn` (which
 /// never panics), and a final failure is logged at ERROR naming the thread
 /// and what the node loses. Returns whether the thread is running.
+///
+/// These threads deliberately do NOT consult the governor's spawn gate
+/// (`thread_spawn_safe`). The gate is a soft RSS watermark, not an OS
+/// allocation failure, and these are the threads that sample RSS, engage the
+/// breaker and drain memory. A node that boots above its watermark (a large
+/// WAL replay under a low `XERJ_MAX_PROCESS_MEMORY_MB`) would otherwise have
+/// every attempt refused and run with no breaker for the life of the process,
+/// which is exactly when the breaker is needed. A real spawn failure still
+/// comes back as an `Err` and is logged, not aborted.
 fn spawn_governor_thread<F>(name: &str, f: F) -> bool
 where
     F: FnOnce() + Send + 'static,
 {
-    spawn_governor_thread_using(
-        &xerj_common::thread_spawn::StdSpawn,
-        xerj_common::thread_spawn::spawn_allowed,
-        name,
-        f,
-    )
+    spawn_governor_thread_using(&xerj_common::thread_spawn::StdSpawn, || true, name, f)
 }
 
 fn spawn_governor_thread_using<S, G, F>(spawner: &S, gate: G, name: &str, f: F) -> bool
@@ -5181,7 +5185,9 @@ mod governor_thread_spawn_tests {
 
     #[test]
     fn a_closed_spawn_gate_is_respected() {
-        // A working spawner, but the governor says memory is exhausted.
+        // A working spawner, but the gate is closed. Production passes an
+        // always-open gate for these threads (see `spawn_governor_thread`);
+        // this pins the plumbing for a caller that does gate.
         let started = spawn_governor_thread_using(
             &xerj_common::thread_spawn::StdSpawn,
             || false,
