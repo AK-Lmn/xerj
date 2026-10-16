@@ -355,6 +355,15 @@ mod tests {
     }
 
     #[test]
+    fn the_hub_key_stays_on_the_one_line_the_workflows_read() {
+        // hub-packs.yml and hub-pubkey.yml extract the key with a single-line
+        // sed over this file. If a reformat ever wrapped the declaration, they
+        // would read "" and go quietly dormant instead of publishing.
+        let line = format!("\npub const HUB_PUBKEY_HEX: &str = \"{HUB_PUBKEY_HEX}\";\n");
+        assert!(include_str!("hub.rs").contains(&line), "{line}");
+    }
+
+    #[test]
     fn licence_class_is_kebab_case() {
         assert_eq!(
             serde_json::to_value(LicenceClass::AdaptWithAttribution).unwrap(),
