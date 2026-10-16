@@ -651,6 +651,16 @@ the hub code switched off and says nothing about it.
 `HUB_SIGNING_SEED` secret, and the `hub key and secret in place?` job in
 `hub-packs.yml` passes. Without it nothing below can run.
 
+**Who routes a question to a corpus: the client.** `xerj_hub::router` runs inside the
+user's `xerj` binary. It routes from the project's lockfiles and from the per-corpus
+term sketches in the signed `catalogue.json`. That file is static, so hub.xerj.org can
+stay a static site, and routing works with no hub server. The hosted search and answer
+routes (step 6) need a live public node, which does not exist. For this release,
+hosted is OUT of scope: the client must work, and the gate is passed, with hosted
+unreachable. A static host answers unknown paths with the HTML home page and status
+200 (today `/api/v1/catalogue.json` and `/api/v1/search` both do), so the client must
+treat a non-JSON or unsigned response as "unavailable", never as data.
+
 **12.1 Backfill: every existing corpus becomes a pre-indexed pack.**
 - Run `hub-packs.yml` (`workflow_dispatch`, `corpora: all`) in capped batches until
   every live corpus in `backlog/backlog-100.json` has a release for its current pin.
@@ -701,8 +711,10 @@ production `hub.xerj.org`):
 - `xerj "<question>"` with no corpus named routes and answers for the lz4 benchmark
   questions (step 2's "done when") and for `curl https://hub.xerj.org/api/v1/def/lz4/LZ4_VERSION_RELEASE`
   (step 6's).
-- Hosted off, offline (`--offline`) and over-the-cap (`AUTO_PULL_MAX_BYTES`) paths each
-  give their documented message.
+- Hosted off, hosted unreachable (including an HTML 200 from the static site),
+  offline (`--offline`) and over-the-cap (`AUTO_PULL_MAX_BYTES`) paths each give
+  their documented message. The `curl …/api/v1/def/…` check above applies only once a
+  public node exists.
 - The shell-less persona of the first-time-agent harness answers through
   `xerj_hub_ask` in one call (step 9).
 - A tampered pack (one flipped byte) and a tampered catalogue are refused, with nothing
