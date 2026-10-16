@@ -101,6 +101,10 @@ on:
         description: "Let the catalogue delist corpora that are still live (after a failed pack build)"
         type: boolean
         default: false
+      first_catalogue:
+        description: "No signed catalogue is live yet: deploy without the delisting guard (the first deploy only)"
+        type: boolean
+        default: false
       repin:
         description: "Also run the re-pin job now"
         type: boolean
@@ -613,20 +617,54 @@ jobs:
         if: env.NO_PACKS != '1'
         env:
           ALLOW_DROPS: ${{ inputs.allow_drops }}
+          FIRST_CATALOGUE: ${{ inputs.first_catalogue }}
+          DEPLOYING: ${{ !inputs.dry_run && vars.HUB_CATALOGUE_DEPLOY == 'true' }}
         run: |
           set -euo pipefail
           bash tools/hub-packs/ed25519.sh verify "$HUB_PUBKEY_HEX" catalogue.json catalogue.json.sig
           args=(check-catalogue --registry "$REGISTRY" --backlog "$BACKLOG" --catalogue catalogue.json \
                 --repo "$GITHUB_REPOSITORY")
-          # Compare with the LIVE catalogue so a half-failed build cannot delist a corpus.
-          # Only a clean 404 means "first publish"; any other failure to read it must
-          # not quietly switch the guard off.
-          code=$(curl -sS --max-time 60 -o "$RUNNER_TEMP/live.json" -w '%{http_code}' \
+          # Compare with the LIVE catalogue so a half-failed build cannot delist a
+          # corpus. Only a clean 404 means "none yet". A 200 is a previous catalogue
+          # only if it is one: signed by the hub key, and JSON with a corpora list.
+          # (The site answers unknown paths with its HTML page and a 200; read as
+          # JSON-or-nothing, that switched this guard off without a word.) Anything
+          # else is UNKNOWN: fatal when this run deploys, unless the owner says this
+          # is the first catalogue (first_catalogue); a warning otherwise, since
+          # nothing is published.
+          LIVE="$RUNNER_TEMP/live.json"
+          code=$(curl -sS --max-time 60 -o "$LIVE" -w '%{http_code}' \
                    "$HUB_URL/api/v1/catalogue.json" || echo 000)
-          case "$code" in
-            200) args+=(--previous "$RUNNER_TEMP/live.json") ;;
-            404) echo "no live catalogue yet (first publish)" ;;
-            *) echo "::error::cannot read the live catalogue (HTTP $code); not publishing without the delisting guard"; exit 1 ;;
+          sig_code=$(curl -sS --max-time 60 -o "$LIVE.sig" -w '%{http_code}' \
+                   "$HUB_URL/api/v1/catalogue.json.sig" || echo 000)
+          state=unknown; why="HTTP $code"
+          if [ "$code" = 404 ]; then
+            state=none
+          elif [ "$code" = 200 ]; then
+            if [ "$sig_code" != 200 ]; then
+              why="200 but its .sig is HTTP $sig_code (unsigned)"
+            elif ! bash tools/hub-packs/ed25519.sh verify "$HUB_PUBKEY_HEX" "$LIVE" "$LIVE.sig" >/dev/null 2>&1; then
+              why="200 but it does not verify under the hub key ($(head -c 40 "$LIVE" | tr -c '[:print:]' ' '))"
+            elif ! jq -e '.corpora | type == "array"' "$LIVE" >/dev/null 2>&1; then
+              why="200, signed, but not a catalogue"
+            else
+              state=live
+            fi
+          fi
+          case "$state" in
+            live) args+=(--previous "$LIVE"); echo "guarding against the live catalogue ($(jq '.corpora | length' "$LIVE") corpora)" ;;
+            none) echo "no live catalogue yet (404): first publish" ;;
+            unknown)
+              msg="cannot read the live catalogue at $HUB_URL/api/v1/catalogue.json: $why"
+              if [ "$FIRST_CATALOGUE" = "true" ]; then
+                echo "::warning title=catalogue::$msg; first_catalogue is set, so publishing without the delisting guard"
+              elif [ "$DEPLOYING" = "true" ]; then
+                echo "::error title=catalogue::$msg; not deploying without the delisting guard. If no catalogue has ever been published, re-run with first_catalogue."
+                exit 1
+              else
+                echo "::warning title=catalogue::$msg; checked without the delisting guard (this run deploys nothing)"
+              fi
+              ;;
           esac
           [ "${ALLOW_DROPS:-}" = "true" ] && args+=(--allow-drops)
           python3 tools/hub-packs/hub_packs.py "${args[@]}"

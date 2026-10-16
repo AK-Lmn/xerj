@@ -481,23 +481,46 @@ fn fetch_and_store(hub_url: &str, cache_file: &Path, etag_file: &Path) -> Result
         .get(reqwest::header::ETAG)
         .and_then(|v| v.to_str().ok())
         .map(str::to_string);
+    let cat_type = content_type(&resp);
     let body = resp
         .bytes()
         .with_context(|| format!("read body of {cat_url}"))?
         .to_vec();
+    // A static host answers an unknown path with its HTML page and a 200, so a
+    // success status alone does not mean a catalogue is published. Say so plainly
+    // instead of failing later on a signature that is really an HTML page.
+    if !starts_like_json_object(&body) {
+        bail!(
+            "the hub catalogue is unavailable: {cat_url} returned {} ({cat_type}), not a signed \
+             catalogue; the hub has not published one at this address",
+            preview(&body)
+        );
+    }
 
     let sig_resp = client
         .get(&sig_url)
         .send()
         .with_context(|| format!("GET {sig_url}"))?;
     if !sig_resp.status().is_success() {
-        bail!("GET {sig_url} returned HTTP {}", sig_resp.status());
+        bail!(
+            "the hub catalogue is unavailable: it is not signed (GET {sig_url} returned HTTP {})",
+            sig_resp.status()
+        );
     }
+    let sig_type = content_type(&sig_resp);
     let sig_hex = sig_resp
         .text()
         .with_context(|| format!("read body of {sig_url}"))?
         .trim()
         .to_string();
+
+    if sig_hex.len() != 128 || !sig_hex.bytes().all(|b| b.is_ascii_hexdigit()) {
+        bail!(
+            "the hub catalogue is unavailable: it is not signed ({sig_url} returned {} \
+             ({sig_type}), not a detached signature)",
+            preview(sig_hex.as_bytes())
+        );
+    }
 
     // Verify BEFORE these bytes are allowed anywhere near the cache.
     verify_bytes(&body, &sig_hex, &pubkey)
@@ -522,6 +545,33 @@ fn fetch_and_store(hub_url: &str, cache_file: &Path, etag_file: &Path) -> Result
         }
     }
     Ok(cat)
+}
+
+/// The response's `Content-Type`, or `no content type`.
+fn content_type(resp: &reqwest::blocking::Response) -> String {
+    resp.headers()
+        .get(reqwest::header::CONTENT_TYPE)
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("no content type")
+        .to_string()
+}
+
+/// A catalogue is a JSON object: its first non-whitespace byte is `{`.
+fn starts_like_json_object(body: &[u8]) -> bool {
+    body.iter().find(|b| !b.is_ascii_whitespace()) == Some(&b'{')
+}
+
+/// A short, printable description of a body for an error message.
+fn preview(body: &[u8]) -> String {
+    if body.is_empty() {
+        return "an empty body".to_string();
+    }
+    let text = String::from_utf8_lossy(&body[..body.len().min(40)]);
+    let flat: String = text
+        .chars()
+        .map(|c| if c.is_control() { ' ' } else { c })
+        .collect();
+    format!("{} bytes starting {:?}", body.len(), flat.trim())
 }
 
 /// `<cache_file>.sig` (e.g. `catalogue.json.sig`).
@@ -959,6 +1009,72 @@ mod tests {
         );
         let on_disk = fs::read(cache.path().join(CACHE_FILE)).unwrap();
         assert_eq!(on_disk, good_bytes, "the cache is untouched");
+    }
+
+    /// A localhost "static site" that answers every GET with the same HTML page
+    /// and a 200, for `gets` requests.
+    fn spawn_html_site(gets: usize) -> (String, std::thread::JoinHandle<()>) {
+        let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+        let url = format!("http://{}", listener.local_addr().unwrap());
+        let handle = std::thread::spawn(move || {
+            for _ in 0..gets {
+                let Ok((mut stream, _)) = listener.accept() else {
+                    break;
+                };
+                let mut buf = [0u8; 2048];
+                let _ = stream.read(&mut buf);
+                let body = "<!doctype html><html><body>hub</body></html>";
+                let header = format!(
+                    "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\n\
+                     Content-Length: {}\r\nConnection: close\r\n\r\n",
+                    body.len()
+                );
+                let _ = stream.write_all(header.as_bytes());
+                let _ = stream.write_all(body.as_bytes());
+            }
+        });
+        (url, handle)
+    }
+
+    #[test]
+    fn an_html_page_served_as_the_catalogue_reads_as_unavailable() {
+        let _guard = ENV_LOCK.lock().unwrap();
+        let fx = tempfile::tempdir().unwrap();
+        let (_, _, public) = fixture_bytes(fx.path());
+        let cache = tempfile::tempdir().unwrap();
+        // One GET: the catalogue is refused before the signature is even asked for.
+        let (url, handle) = spawn_html_site(1);
+
+        std::env::set_var("XERJ_HUB_PUBKEY", &public);
+        let err = load_catalogue(&url, cache.path(), false).expect_err("HTML is not a catalogue");
+        std::env::remove_var("XERJ_HUB_PUBKEY");
+        handle.join().unwrap();
+
+        let msg = format!("{err:#}");
+        assert!(msg.contains("the hub catalogue is unavailable"), "{msg}");
+        assert!(
+            msg.contains("text/html"),
+            "the message names what came back: {msg}"
+        );
+        assert!(!cache.path().join(CACHE_FILE).exists(), "nothing is cached");
+    }
+
+    #[test]
+    fn a_catalogue_whose_signature_url_serves_html_reads_as_unsigned() {
+        let _guard = ENV_LOCK.lock().unwrap();
+        let fx = tempfile::tempdir().unwrap();
+        let (good_bytes, _, public) = fixture_bytes(fx.path());
+        let cache = tempfile::tempdir().unwrap();
+        let (url, handle) = spawn_hub(good_bytes, "<!doctype html><html></html>".to_string());
+
+        std::env::set_var("XERJ_HUB_PUBKEY", &public);
+        let err = load_catalogue(&url, cache.path(), false).expect_err("unsigned");
+        std::env::remove_var("XERJ_HUB_PUBKEY");
+        handle.join().unwrap();
+
+        let msg = format!("{err:#}");
+        assert!(msg.contains("it is not signed"), "{msg}");
+        assert!(!cache.path().join(CACHE_FILE).exists(), "nothing is cached");
     }
 
     #[test]
