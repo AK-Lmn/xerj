@@ -114,7 +114,7 @@ pub fn install<R: Send>(f: impl FnOnce() -> R + Send) -> R {
     install_in(scan_pool(), f)
 }
 
-fn install_in<R: Send>(pool: Option<&ThreadPool>, f: impl FnOnce() -> R + Send) -> R {
+pub(crate) fn install_in<R: Send>(pool: Option<&ThreadPool>, f: impl FnOnce() -> R + Send) -> R {
     match pool {
         Some(pool) => pool.install(f),
         None => sequential(f),

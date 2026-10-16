@@ -813,12 +813,13 @@ fn fetch_objects(
     if pending.is_empty() {
         return Ok(Vec::new());
     }
-    let pool = rayon::ThreadPoolBuilder::new()
-        .num_threads(concurrency)
-        .thread_name(|i| format!("xerj-fetch-{i}"))
-        .build()
-        .context("build the object-fetch pool")?;
-    let results: Vec<Result<FetchOutcome>> = pool.install(|| {
+    let build = || {
+        rayon::ThreadPoolBuilder::new()
+            .num_threads(concurrency)
+            .thread_name(|i| format!("xerj-fetch-{i}"))
+            .build()
+    };
+    let results: Vec<Result<FetchOutcome>> = install_in_fetch_pool(build, || {
         use rayon::prelude::*;
         pending
             .par_iter()
@@ -851,6 +852,32 @@ fn fetch_objects(
         Some(e) => Err(e),
         None => Ok(outcomes),
     }
+}
+
+/// Run `f` in a freshly built object-fetch pool, or on the calling thread when
+/// the pool cannot be started (#1122).
+///
+/// `build()` fails when `pthread_create` returns `EAGAIN` (thread or memory
+/// limit). That used to error the whole object run, after the listing had
+/// already been paid for, on exactly the machine that was short of threads.
+/// A sequential fetch is slower but downloads the same objects, so the run
+/// degrades instead of failing. Every download is still an independent
+/// `Result`, so the abort-on-real-failure rule above is unchanged.
+fn install_in_fetch_pool<R: Send>(
+    build: impl FnOnce() -> std::result::Result<rayon::ThreadPool, rayon::ThreadPoolBuildError>,
+    f: impl FnOnce() -> R + Send,
+) -> R {
+    let pool = match build() {
+        Ok(pool) => Some(pool),
+        Err(e) => {
+            eprintln!(
+                "autoindex: could not start the object-fetch pool ({e}); \
+                 fetching on the calling thread instead (#1122)"
+            );
+            None
+        }
+    };
+    crate::pool::install_in(pool.as_ref(), f)
 }
 
 fn fetch_one(run: &ObjectRun, source: &dyn DocSource, entry: &SourceEntry) -> Result<FetchOutcome> {
@@ -1625,6 +1652,44 @@ mod tests {
             "{:?}",
             lines
         );
+    }
+
+    /// #1122: a fetch pool whose every thread spawn fails (as `pthread_create`
+    /// does with `EAGAIN`) used to error the object run. The work now runs to
+    /// completion, in order, on the calling thread alone.
+    #[test]
+    fn a_fetch_pool_that_cannot_spawn_fetches_on_the_calling_thread() {
+        // A fresh thread: the fallback registers its caller as a rayon worker
+        // for the rest of that thread's life.
+        std::thread::spawn(|| {
+            let failing = || {
+                rayon::ThreadPoolBuilder::new()
+                    .num_threads(4)
+                    .spawn_handler(|_| {
+                        Err(std::io::Error::new(
+                            std::io::ErrorKind::WouldBlock,
+                            "injected EAGAIN",
+                        ))
+                    })
+                    .build()
+            };
+            let caller = std::thread::current().id();
+            let out: Vec<(u64, bool)> = install_in_fetch_pool(failing, || {
+                use rayon::prelude::*;
+                (0..200u64)
+                    .into_par_iter()
+                    .map(|i| (i * 3, std::thread::current().id() == caller))
+                    .collect()
+            });
+            assert_eq!(out.len(), 200);
+            assert!(out.iter().enumerate().all(|(i, &(v, _))| v == 3 * i as u64));
+            assert!(
+                out.iter().all(|&(_, here)| here),
+                "with no pool, every item runs on the calling thread"
+            );
+        })
+        .join()
+        .expect("fallback thread");
     }
 
     #[test]
