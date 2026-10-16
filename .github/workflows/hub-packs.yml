@@ -39,10 +39,13 @@
 #   verify; clients independently refuse any pack whose sha256 or signature fails
 #   (`xerj hub pull`), and extract nothing before both pass.
 #
-# DORMANT UNTIL THE KEY EXISTS
-#   HUB_PUBKEY_HEX is "" until the hub signing key is generated and committed.
-#   Until then the `preflight` job reports "dormant" and every publishing job is
-#   skipped; the re-pin job does not need the key and runs regardless.
+# DORMANT WITHOUT A KEY
+#   HUB_PUBKEY_HEX holds the public half of HUB_SIGNING_SEED (derived by
+#   hub-pubkey.yml, committed in #1505). On a branch where it is empty (one
+#   that predates that commit) the `preflight` job reports "dormant" and every
+#   publishing job is skipped; the re-pin job does not need the key and runs
+#   regardless. The key and the secret change only together; preflight fails
+#   if they disagree.
 #
 # DEPLOY (opt-in)
 #   The catalogue job always builds, checks and uploads the signed catalogue as an
@@ -149,7 +152,9 @@ jobs:
         run: python3 tools/hub-packs/test_hub_packs.py
 
       - name: Shell syntax
-        run: bash -n tools/hub-packs/ed25519.sh
+        run: |
+          bash -n tools/hub-packs/ed25519.sh
+          bash -n tools/hub-packs/consumer_e2e.sh
 
   # ── is there a key to sign with and verify against? ────────────────────────
   preflight:
@@ -288,8 +293,8 @@ jobs:
     if: needs.plan.result == 'success' && needs.plan.outputs.count != '0'
     runs-on: ubuntu-latest
     # The repo-wide ceiling (.github/scripts/workflow-timeout-guard.py, 1..90).
-    # This pipeline has not run for real yet (HUB_PUBKEY_HEX is unset), so there
-    # is no measured job time to justify more; if a real pack needs longer, that
+    # This pipeline had never run for real before HUB_PUBKEY_HEX was committed,
+    # so there is no measured job time to justify more; if a real pack needs longer, that
     # is a measured case for raising MAX_TIMEOUT there, not an exception here.
     timeout-minutes: 90
     permissions:
@@ -424,6 +429,39 @@ jobs:
             --draft --prerelease --latest=false --target "$GITHUB_SHA" \
             --title "hub pack: $SLUG @ $PIN8" --notes-file "$RUNNER_TEMP/notes.md"
 
+      # §12.3: the consumer path, with the real binary, BEFORE anything is
+      # published. A real run pulls the bytes back out of the DRAFT release (what a
+      # client will download, not the builder's local copy); a dry run uses the
+      # builder's output. A fresh node, an empty HOME, `hub pull` through a signed
+      # catalogue, then `--def` for a symbol from the pack's own defs.jsonl and one
+      # question. A failure fails the job and leaves the release a draft.
+      - name: Consumer end-to-end (pull, --def, one question)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HUB_SIGNING_SEED: ${{ secrets.HUB_SIGNING_SEED }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          FILE="$SLUG-$PIN8.hubpack.tar.zst"
+          SRC="$RUNNER_TEMP/e2e-src"; mkdir -p "$SRC"
+          if [ "$DRY_RUN" = "true" ]; then
+            TAG="pack-$SLUG-$PIN8"
+            cp "$PACK_OUT/$FILE" "$PACK_OUT/$FILE.sig" "$SRC/"
+          else
+            TAG="$PACK_TAG"
+            gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir "$SRC" \
+              --pattern "$FILE" --pattern "$FILE.sig"
+            cmp "$SRC/$FILE" "$PACK_OUT/$FILE"
+            cmp "$SRC/$FILE.sig" "$PACK_OUT/$FILE.sig"
+          fi
+          umask 077
+          printf '%s' "$HUB_SIGNING_SEED" > "$RUNNER_TEMP/e2e.key"
+          unset HUB_SIGNING_SEED
+          trap 'rm -f "$RUNNER_TEMP/e2e.key"' EXIT
+          bash tools/hub-packs/consumer_e2e.sh bin/xerj "$SLUG" "$PIN8" "$TAG" "$SRC" "$RUNNER_TEMP/e2e.key" \
+            | tee "$RUNNER_TEMP/e2e.txt"
+          { echo "### consumer e2e: $SLUG @ $PIN8"; echo; sed 's/^/    /' "$RUNNER_TEMP/e2e.txt"; } >> "$GITHUB_STEP_SUMMARY"
+
       # Draft first, publish last: the step GitHub's own error message prescribes
       # for immutable-release repositories. A tag whose release was DELETED is burned
       # with no queryable trace, so the picker cannot foresee the refusal: on
@@ -542,8 +580,17 @@ jobs:
             done
           done < "$RUNNER_TEMP/fetch.tsv"
           echo "$(wc -l < "$RUNNER_TEMP/fetch.tsv") packs, $(du -sh "$RUNNER_TEMP/packs" | cut -f1)"
+          # No live corpus has a PUBLISHED pack yet (a dry run before the first real
+          # publish): there is nothing to catalogue, and an empty catalogue is not
+          # fit to publish. Say so and skip the rest, rather than fail.
+          if [ ! -s "$RUNNER_TEMP/fetch.tsv" ]; then
+            echo "::notice title=catalogue::no live corpus has a published pack yet; nothing to catalogue"
+            { echo "### catalogue: skipped"; echo; echo "No live corpus has a published pack release yet."; } >> "$GITHUB_STEP_SUMMARY"
+            echo "NO_PACKS=1" >> "$GITHUB_ENV"
+          fi
 
       - name: Build and sign the catalogue
+        if: env.NO_PACKS != '1'
         env:
           HUB_SIGNING_SEED: ${{ secrets.HUB_SIGNING_SEED }}
         run: |
@@ -552,7 +599,9 @@ jobs:
           printf '%s' "$HUB_SIGNING_SEED" > "$RUNNER_TEMP/pack.key"
           unset HUB_SIGNING_SEED
           trap 'rm -f "$RUNNER_TEMP/pack.key"' EXIT
-          bin/xerj hub build-catalogue --registry "$REGISTRY" --packs "$RUNNER_TEMP/packs" \
+          # --tags: the release each pack came from, so a -rN retag gets its real URL.
+          bin/xerj hub build-catalogue --registry "$REGISTRY" --backlog "$BACKLOG" \
+            --packs "$RUNNER_TEMP/packs" --tags "$RUNNER_TEMP/fetch.tsv" \
             --out catalogue.json --sign-key "$RUNNER_TEMP/pack.key"
           test -s catalogue.json
           test -s catalogue.json.sig || { echo "::error::build-catalogue wrote no catalogue.json.sig"; exit 1; }
@@ -561,6 +610,7 @@ jobs:
       # publish: it verifies under the key clients embed, agrees with the registry
       # (pins, release URLs), is under 2 MB, and drops no live corpus.
       - name: Check the catalogue
+        if: env.NO_PACKS != '1'
         env:
           ALLOW_DROPS: ${{ inputs.allow_drops }}
         run: |
@@ -582,6 +632,7 @@ jobs:
           python3 tools/hub-packs/hub_packs.py "${args[@]}"
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: env.NO_PACKS != '1'
         with:
           name: catalogue
           path: |
@@ -592,7 +643,7 @@ jobs:
       # Same generator, validation and Pages project as deploy-hub-pages.yml, with the
       # catalogue added under api/v1/ (the path the client fetches).
       - name: Generate the hub site with the catalogue
-        if: ${{ !inputs.dry_run && vars.HUB_CATALOGUE_DEPLOY == 'true' }}
+        if: ${{ !inputs.dry_run && vars.HUB_CATALOGUE_DEPLOY == 'true' && env.NO_PACKS != '1' }}
         run: |
           set -euo pipefail
           python3 tools/corpus-hub-site/test_gen.py
@@ -602,14 +653,14 @@ jobs:
           cp catalogue.json catalogue.json.sig tools/corpus-hub-site/out/api/v1/
 
       - name: Deploy to Cloudflare Pages
-        if: ${{ !inputs.dry_run && vars.HUB_CATALOGUE_DEPLOY == 'true' }}
+        if: ${{ !inputs.dry_run && vars.HUB_CATALOGUE_DEPLOY == 'true' && env.NO_PACKS != '1' }}
         run: npx wrangler@3 pages deploy tools/corpus-hub-site/out --project-name=xerj-hub --branch=corpus-hub
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       - name: Deploy skipped
-        if: ${{ inputs.dry_run || vars.HUB_CATALOGUE_DEPLOY != 'true' }}
+        if: ${{ env.NO_PACKS != '1' && (inputs.dry_run || vars.HUB_CATALOGUE_DEPLOY != 'true') }}
         run: |
           {
             echo "### catalogue built and checked, NOT deployed"
