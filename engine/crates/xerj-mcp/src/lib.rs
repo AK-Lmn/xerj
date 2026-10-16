@@ -1399,16 +1399,17 @@ fn build_search(args: &Value) -> Result<BuiltRequest, String> {
         // untouched for structured queries.
         Some(Value::String(q)) if !q.trim().is_empty() => {
             plain_string = true;
+            let shaped = xerj_common::code_query::normalize_code_search_query(q);
             body.insert(
                 "query".into(),
                 json!({ "bool": { "should": [
                     { "multi_match": {
-                        "query": q,
-                        "fields": ["name^4", "defs^3", "code^2", "body", "title"],
+                        "query": shaped,
+                        "fields": ["name^4", "code^2", "body", "defs^3", "title"],
                         "type": "most_fields"
                     }},
-                    { "match_phrase": { "defs": { "query": q, "boost": 8 } } },
-                    { "term": { "name": { "value": q, "boost": 10 } } }
+                    { "match_phrase": { "defs": { "query": shaped, "boost": 8 } } },
+                    { "term": { "name": { "value": q.trim(), "boost": 10 } } }
                 ]}}),
             );
         }
@@ -1882,8 +1883,9 @@ fn code_root() -> std::path::PathBuf {
             return std::path::PathBuf::from(home);
         }
     }
-    let home = std::env::var("HOME").unwrap_or_else(|_| ".".to_string());
-    std::path::Path::new(&home).join(".xerj-code")
+    xerj_common::home::home_dir()
+        .unwrap_or_else(|| std::path::PathBuf::from("."))
+        .join(".xerj-code")
 }
 
 // ── Engine transport ─────────────────────────────────────────────────────────
@@ -1981,6 +1983,39 @@ mod tests {
         assert_eq!(path, "/ax-*/_search");
         let (_, path, _) = built(build_search(&json!({ "index": "docs" })));
         assert_eq!(path, "/docs/_search");
+    }
+
+    #[test]
+    fn search_plain_string_strips_multiword_glue_tokens_and_preserves_single_word() {
+        let (_, _, body) = built(build_search(&json!({
+            "query": "factor de calibracion de margen de seguridad"
+        })));
+        assert_eq!(
+            body["query"]["bool"]["should"][0]["multi_match"]["query"],
+            "factor calibracion margen seguridad"
+        );
+        assert_eq!(
+            body["query"]["bool"]["should"][0]["multi_match"]["fields"],
+            json!(["name^4", "code^2", "body", "defs^3", "title"])
+        );
+
+        let (_, _, single) = built(build_search(&json!({ "query": "de" })));
+        assert_eq!(
+            single["query"]["bool"]["should"][0]["multi_match"]["query"],
+            "de"
+        );
+
+        // A short identifier lookup keeps its punctuation, and the exact-name
+        // term clause always sees the caller's identifier, never a shaped one.
+        let (_, _, dotted) = built(build_search(&json!({ "query": ".mensaje_motor" })));
+        assert_eq!(
+            dotted["query"]["bool"]["should"][0]["multi_match"]["query"],
+            ".mensaje_motor"
+        );
+        assert_eq!(
+            dotted["query"]["bool"]["should"][2]["term"]["name"]["value"],
+            ".mensaje_motor"
+        );
     }
 
     #[test]

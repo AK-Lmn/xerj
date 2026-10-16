@@ -1,6 +1,6 @@
 //! xerj configuration system.
 //!
-//! Configuration is intentionally minimal: **132 settings** versus
+//! Configuration is intentionally minimal: **134 settings** versus
 //! Elasticsearch's 3000+. Every option is named, documented, and has a sensible
 //! production-ready default. The format is TOML, loaded from a single file.
 //!
@@ -99,7 +99,7 @@ pub struct Config {
     /// Second-stage reranking provider — 3 settings. Inert until a key is set.
     pub rerank: RerankProviderConfig,
     /// Typed decisions answered from a labelled-history index by
-    /// nearest-neighbour vote — 8 settings. Inert until `decisions.index`
+    /// nearest-neighbour vote — 9 settings. Inert until `decisions.index`
     /// names an index that exists.
     pub decisions: DecisionsConfig,
     /// Corpus Hub hosted read-only endpoints (`/_hub/v1/…`) — 2 settings.
@@ -108,7 +108,7 @@ pub struct Config {
     pub hub: HubConfig,
 }
 
-// 24 sub-configs, 132 leaf settings in total. Do not maintain that sum by hand
+// 24 sub-configs, 134 leaf settings in total. Do not maintain that sum by hand
 // — `journey_zero_config` in xerj-engine/tests/product_experience.rs counts a
 // serialised `Config::default()` and fails if this comment and the module
 // header stop matching. `Default` is derived: every field is a sub-config that
@@ -391,6 +391,19 @@ impl Config {
             )));
         }
 
+        // Decisions: escalate_below is a winning-vote-share floor in 0.0..=1.0
+        // (0.0 disables confidence escalation; #1094).
+        if !self.decisions.escalate_below.is_finite()
+            || !(0.0..=1.0).contains(&self.decisions.escalate_below)
+        {
+            return Err(XerjError::config(format!(
+                "decisions.escalate_below must be in 0.0..=1.0 (got {}); it is the winning \
+                 vote-share floor below which tier 1 escalates to the local decision tier, and \
+                 0.0 disables confidence escalation",
+                self.decisions.escalate_below
+            )));
+        }
+
         self.engine.validate()?;
 
         // Cluster: fail closed rather than expose an unauthenticated Raft
@@ -550,13 +563,13 @@ impl Config {
 }
 
 // ═════════════════════════════════════════════════════════════════════════════
-// Sub-configs  (132 user-facing settings total; counted by
+// Sub-configs  (134 user-facing settings total; counted by
 // `journey_zero_config`, not by hand)
 // ═════════════════════════════════════════════════════════════════════════════
 
 /// Network and data-directory settings.
 ///
-/// **7 settings.**
+/// **8 settings.**
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(default, deny_unknown_fields)]
 pub struct ServerConfig {
@@ -618,6 +631,12 @@ pub struct ServerConfig {
     /// right-most address that is *not* itself a listed proxy is used — the
     /// left end of the chain is written by the caller and cannot be trusted.
     pub trusted_proxies: Vec<String>,
+    /// Multi-instance opt-in (default `false`). When `true`, a listener port
+    /// that is already in use makes the node bind the next free one, and a
+    /// `data_dir` held by another live process makes it use `<data_dir>-N`.
+    /// Off by default so a taken port stays a fatal startup error (#465).
+    #[serde(default)]
+    pub auto_port: bool,
 }
 
 impl Default for ServerConfig {
@@ -633,6 +652,7 @@ impl Default for ServerConfig {
             bind_address: "127.0.0.1".into(),
             allow_insecure_network_bind: false,
             trusted_proxies: Vec::new(),
+            auto_port: false,
         }
     }
 }
@@ -2651,7 +2671,7 @@ impl RerankProviderConfig {
 /// weighted nearest-neighbour vote over a labelled-history index — the
 /// retrieval analogue of a judge model, with the evidence staying on the node.
 ///
-/// **8 settings.**
+/// **9 settings.**
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(default, deny_unknown_fields)]
 pub struct DecisionsConfig {
@@ -2672,6 +2692,13 @@ pub struct DecisionsConfig {
     /// `/_decide` abstains below this vote share (0 = never abstain; the
     /// `/v1/systemone` wire has no abstain field and errors instead).
     pub min_confidence: f64,
+    /// Winning vote-share floor in `0.0..=1.0` below which a tier-1 history
+    /// vote escalates to the tier-2 local decision head when armed
+    /// (`XERJ_DECIDE_MODE=local`, issue #1094). Default `0.8` matches the
+    /// flywheel gate's confidence bar so low-confidence history hits do not
+    /// freeze write-back; `0.0` disables confidence escalation. With no local
+    /// tier armed, a vote below this floor still answers from history.
+    pub escalate_below: f64,
     /// How much more a human correction weighs in the vote than a cached or
     /// seeded example, when the history document carries `human: true`
     /// (issue #1061). 2.0 — the issue's ≥ 2x floor for corrections — is the
@@ -2694,6 +2721,7 @@ impl Default for DecisionsConfig {
             text_field: "text".to_string(),
             positive_label: "true".to_string(),
             min_confidence: 0.0,
+            escalate_below: 0.8,
             human_weight: 2.0,
             calibration: CalibrationMethod::None,
         }
@@ -3652,7 +3680,7 @@ mod tests {
     /// module header, in `xerj-common/src/lib.rs`, in `engine/README.md` and in
     /// `xerj.default.toml`) — change the table and the prose together.
     const SETTINGS_BY_SECTION: &[(&str, usize)] = &[
-        ("server", 7),
+        ("server", 8),
         ("auth", 3),
         ("cors", 2),
         ("tls", 4),
@@ -3674,7 +3702,7 @@ mod tests {
         ("lifecycle", 1),
         ("wal_tap", 10),
         ("rerank", 3),
-        ("decisions", 8),
+        ("decisions", 9),
         ("hub", 2),
     ];
 
@@ -3718,7 +3746,7 @@ mod tests {
             "the section table must sum to the whole config"
         );
         assert_eq!(
-            total, 132,
+            total, 134,
             "the total settings count changed. It is quoted in this module's \
              header, in xerj-common/src/lib.rs, in engine/README.md, in \
              xerj.default.toml and in EXPECTED_SETTINGS in \
