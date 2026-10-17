@@ -229,6 +229,20 @@ pub fn read_hub_manifest(path: &Path) -> Result<HubManifest, String> {
         .map_err(|e| format!("no such manifest: {} ({e})", path.display()))?;
     let v: Value = serde_json::from_str(&raw)
         .map_err(|e| format!("{} is not valid JSON: {e}", path.display()))?;
+    // A withdrawn pin is refused before any url is read. The field is how a
+    // hub file says "do not clone this": the crypto-misuse source repository
+    // returns HTTP 404, and a missing `url` alone only produced "missing
+    // 'repo' or 'url'", which sent people looking for a typo.
+    if let Some(reason) = v.get("withdrawn").and_then(Value::as_str) {
+        let reason = reason.trim();
+        if reason.is_empty() {
+            return Err(format!("{}: 'withdrawn' is set but empty", path.display()));
+        }
+        return Err(format!(
+            "{}: withdrawn, not cloneable: {reason}",
+            path.display()
+        ));
+    }
     let repos = v
         .get("repos")
         .and_then(Value::as_array)
@@ -421,6 +435,54 @@ mod tests {
             .contains("no 'repos' array"));
     }
 
+    /// A hub pin whose source repository is gone must be refused before any
+    /// `url` is handed to git. The crypto-misuse pin used to clone
+    /// xerj-org/corpus-crypto-misuse-precedent, which returns HTTP 404.
+    #[test]
+    fn a_withdrawn_hub_manifest_is_refused_before_clone() {
+        let dir = tmp();
+        let bad = dir.join("crypto-misuse-precedent.json");
+        std::fs::write(
+            &bad,
+            r#"{"corpus":"crypto-misuse-precedent","withdrawn":"the source repository returns HTTP 404","repos":[{"repo":"corpus-crypto-misuse-precedent","url":"https://github.com/xerj-org/corpus-crypto-misuse-precedent","sha":"a5a10175dc074483205b9609b97385ff557a3b56"}]}"#,
+        )
+        .unwrap();
+        let err = read_hub_manifest(&bad).unwrap_err();
+        assert!(err.contains("withdrawn"), "{err}");
+        assert!(err.contains("404"), "{err}");
+    }
+
+    /// golang/vulndb rejects `6f4f07681f45fbbc11cf2f1543d4222b51e7808d`
+    /// (`gh api` HTTP 422, "No commit found for SHA"). The review note already
+    /// named `5cd8418c`, which GitHub serves as this full sha.
+    #[test]
+    fn go_vulndb_pin_is_the_commit_the_upstream_accepts() {
+        let p = find_repo_root().join("tools/xerj-code/hub/go-vulndb.json");
+        if !p.is_file() {
+            return;
+        }
+        let v: Value = serde_json::from_str(&std::fs::read_to_string(&p).unwrap()).unwrap();
+        let sha = v["repos"][0]["sha"].as_str().unwrap();
+        assert_eq!(sha, "5cd8418cf9c867d344fda07a73ea844b0f34bca2");
+    }
+
+    /// The published crypto-misuse pin must not be a clone recipe. The
+    /// repository returns HTTP 404; `corpus add --from` has to stop here.
+    #[test]
+    fn crypto_misuse_precedent_is_withdrawn_not_a_404_clone() {
+        let p = find_repo_root().join("tools/xerj-code/hub/crypto-misuse-precedent.json");
+        if !p.is_file() {
+            return;
+        }
+        let err = read_hub_manifest(&p).unwrap_err();
+        assert!(err.contains("404"), "{err}");
+        let text = std::fs::read_to_string(&p).unwrap();
+        assert!(
+            !text.contains("\"url\""),
+            "a withdrawn pin must not carry a clone url"
+        );
+    }
+
     /// The hub's own vetted manifests must stay valid under the SAME gate the
     /// `--from` path enforces — they are the reference for "rebuild a corpus
     /// someone else defined", so a hub file that the tool itself would reject
@@ -433,6 +495,13 @@ mod tests {
         for entry in std::fs::read_dir(&hub).expect("hub dir") {
             let p = entry.unwrap().path();
             if p.extension().and_then(|e| e.to_str()) != Some("json") {
+                continue;
+            }
+            let raw = std::fs::read_to_string(&p).unwrap_or_default();
+            if raw.contains("\"withdrawn\"") {
+                let err = read_hub_manifest(&p).expect_err("a withdrawn hub pin must be refused");
+                assert!(err.contains("withdrawn"), "{}: {err}", p.display());
+                checked += 1;
                 continue;
             }
             let hub = read_hub_manifest(&p)
