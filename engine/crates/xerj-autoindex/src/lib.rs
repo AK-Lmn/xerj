@@ -6035,39 +6035,48 @@ fn run_index_report_inner(
             .to_string_lossy()
             .to_string(),
     };
-    // Same --prefix on a different folder overwrites catalog ids
-    // `ds:{prefix}:{slug}` and writes into `{prefix}-*` at finalize. The
-    // journals do not share a state dir (the default key includes the root),
-    // so nothing local notices. Refuse before preflight creates state, and
-    // before --dry-run walks the tree. --replace-prefix is the explicit
-    // opt-in; it prints the same facts and continues.
-    let foreign_roots = catalog::foreign_prefix_roots(
-        &catalog_runs_for_prefix(&es, &cfg.prefix)?,
-        &cfg.prefix,
-        &root_str,
-    );
-    if !foreign_roots.is_empty() {
-        let message = catalog::prefix_reuse_message(
-            &cfg.prefix,
-            &root_str,
-            &foreign_roots,
-            cfg.replace_prefix,
-        );
-        if cfg.replace_prefix {
-            // `warn` replaces newlines (they are not a safe display char), so
-            // each sentence is its own line. The refusal below keeps the
-            // newlines: it is an error, not a progress record.
-            for line in message.lines() {
-                pr.warn(line);
-            }
-        } else {
-            anyhow::bail!("{message}");
-        }
-    }
     let state_dir = cfg
         .state_dir
         .clone()
         .unwrap_or_else(|| state::default_state_dir(&root_str, &cfg.url, &cfg.prefix));
+    // Same --prefix on a different folder overwrites catalog ids
+    // `ds:{prefix}:{slug}` and writes into `{prefix}-*` at finalize. The
+    // journals do not share a state dir (the default key includes the root),
+    // so nothing local notices a *new* folder. Refuse before preflight
+    // creates state, and before --dry-run walks the tree. --replace-prefix
+    // is the explicit opt-in; it prints the same facts and continues.
+    //
+    // A journal that already binds this state dir to this root, url, and
+    // prefix is a resume or an incremental re-run of the same folder,
+    // including one the local plan / `--fresh` gates are about to refuse.
+    // Those refusals promise the only remote call is the readiness GET, so
+    // this guard must not search the catalog on that path. A different
+    // folder has no such journal and still hits the check.
+    if !state::journal_continues_folder(&state_dir, &root_str, &cfg.url, &cfg.prefix) {
+        let foreign_roots = catalog::foreign_prefix_roots(
+            &catalog_runs_for_prefix(&es, &cfg.prefix)?,
+            &cfg.prefix,
+            &root_str,
+        );
+        if !foreign_roots.is_empty() {
+            let message = catalog::prefix_reuse_message(
+                &cfg.prefix,
+                &root_str,
+                &foreign_roots,
+                cfg.replace_prefix,
+            );
+            if cfg.replace_prefix {
+                // `warn` replaces newlines (they are not a safe display char), so
+                // each sentence is its own line. The refusal below keeps the
+                // newlines: it is an error, not a progress record.
+                for line in message.lines() {
+                    pr.warn(line);
+                }
+            } else {
+                anyhow::bail!("{message}");
+            }
+        }
+    }
     // Acquire state authority before discovery as well as hashing. A waiter
     // must never classify a path snapshot taken while another owner was
     // publishing or replacing the durable plan.
