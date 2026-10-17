@@ -2056,9 +2056,8 @@ async fn get_index_inner(
         };
 
         // Settings: replay what was written (normalized to strings), merged
-        // with engine defaults; `analysis` is the block in force (#1092).
-        // Creation timestamps are synthesized because we don't persist them
-        // yet (TODO).
+        // with engine defaults; `analysis` is the block in force (#1092) and
+        // `creation_date` is the persisted creation time (#1573).
         let settings_inner = index_settings_response(&state, name, idx.as_ref(), human).await;
 
         let mut index_obj = serde_json::Map::new();
@@ -2110,7 +2109,12 @@ async fn index_settings_response(
             stored = i.get_settings().await;
         }
     }
-    let mut settings = merge_settings_defaults(&stored, name, human);
+    // Creation timestamps: the real persisted value (#1573), not a fresh
+    // `Utc::now()` per request. `index_created_at` is recorded at create and
+    // loaded from `created_at.json` on boot; the fallback only covers an
+    // index that has no recorded time (e.g. a failed create).
+    let created_at_ms = state.engine.index_created_at.get(name).map(|v| *v);
+    let mut settings = merge_settings_defaults(&stored, name, human, created_at_ms);
     if let Some(i) = idx {
         let in_force = i.analysis_in_force().await;
         if let Some(inner) = settings.get_mut("index").and_then(Value::as_object_mut) {
@@ -2128,7 +2132,12 @@ async fn index_settings_response(
 /// ES always wraps user settings under `{ "index": { ... } }` and coerces
 /// all simple values to strings. Missing fields fall through to engine
 /// defaults (single shard, zero replicas).
-fn merge_settings_defaults(user_settings: &Value, provided_name: &str, human: bool) -> Value {
+fn merge_settings_defaults(
+    user_settings: &Value,
+    provided_name: &str,
+    human: bool,
+    created_at_ms: Option<i64>,
+) -> Value {
     // Pull the inner `index` block if the user used `{ "index": { ... } }`
     // syntax; otherwise treat the whole blob as the inner block.
     let raw_inner = user_settings
@@ -2161,11 +2170,14 @@ fn merge_settings_defaults(user_settings: &Value, provided_name: &str, human: bo
         }
     }
 
-    // Synthesize required fields if absent.
-    let now_ms = Utc::now().timestamp_millis();
+    // Synthesize required fields if absent. `creation_date` prefers the
+    // persisted creation time: a client comparing two `GET /{index}` calls
+    // must see one stable value (index age, ILM-style tooling). The `now`
+    // fallback is only for an index with no recorded time.
+    let created_ms = created_at_ms.unwrap_or_else(|| Utc::now().timestamp_millis());
     inner
         .entry("creation_date".to_string())
-        .or_insert_with(|| Value::String(now_ms.to_string()));
+        .or_insert_with(|| Value::String(created_ms.to_string()));
     // Emit the stable, deterministic index uuid — the SAME value
     // _cat/indices reports — rather than a fresh random one per request.
     inner.insert(
@@ -2683,10 +2695,39 @@ pub async fn get_settings_all(State(state): State<AppState>) -> impl IntoRespons
     get_settings(State(state), Path("_all".to_string())).await
 }
 
+/// ES `indices.get_mapping`: a concrete name that is not an index or an
+/// alias is `404 index_not_found_exception`. A wildcard (including one that
+/// matches nothing) is not this case — that stays the empty-target path,
+/// same split `_cat/indices` already documents.
+pub(crate) fn first_missing_concrete_name(
+    spec: &str,
+    known: impl Fn(&str) -> bool,
+) -> Option<&str> {
+    for part in spec.split(',').map(str::trim).filter(|s| !s.is_empty()) {
+        if part == "_all" || part == "*" || part.contains('*') {
+            continue;
+        }
+        if !known(part) {
+            return Some(part);
+        }
+    }
+    None
+}
+
 pub async fn get_mapping(
     State(state): State<AppState>,
     Path(index): Path<String>,
 ) -> impl IntoResponse {
+    let names = state.engine.index_name_list();
+    let failed = state.engine.list_failed_indices();
+    if let Some(missing) = first_missing_concrete_name(&index, |part| {
+        names.iter().any(|n| n == part)
+            || failed.iter().any(|f| f.name == part)
+            || state.engine.aliases.contains_key(part)
+    }) {
+        let e = xerj_common::XerjError::index_not_found(missing);
+        return ApiError::new(e).into_response();
+    }
     let targets = resolve_index_selector(&state, &index).await;
     if targets.is_empty() {
         let e = xerj_common::XerjError::index_not_found(&index);
@@ -2804,6 +2845,101 @@ fn inject_bbq_rescore_defaults(node: &mut Value) {
             }
         }
         _ => {}
+    }
+}
+
+#[cfg(test)]
+mod get_mapping_missing_index {
+    use super::*;
+    use axum::body::{to_bytes, Body};
+    use axum::http::Request;
+    use tower::ServiceExt;
+    use xerj_common::{
+        config::{Config, WalSync},
+        metrics::Metrics,
+    };
+    use xerj_engine::Engine;
+
+    fn test_state() -> AppState {
+        let dir = tempfile::tempdir().expect("tempdir").keep();
+        let mut config = Config::default();
+        config.server.data_dir = dir.to_string_lossy().into_owned();
+        config.storage.wal_sync = WalSync::Async;
+        let metrics = Metrics::new().expect("metrics");
+        let engine = Engine::new(config.clone()).expect("engine");
+        AppState::new(config, engine, metrics)
+    }
+
+    #[test]
+    fn a_concrete_missing_name_is_reported_and_a_wildcard_is_not() {
+        let known = |p: &str| p == "logs" || p == "metrics";
+        assert_eq!(first_missing_concrete_name("nope", known), Some("nope"));
+        assert_eq!(first_missing_concrete_name("logs", known), None);
+        assert_eq!(
+            first_missing_concrete_name("logs,nope", known),
+            Some("nope")
+        );
+        // A wildcard that matches nothing is not a concrete miss. The empty
+        // result stays on the existing path so the YAML suite's wildcard
+        // cases are unchanged.
+        assert_eq!(first_missing_concrete_name("nope*", known), None);
+        assert_eq!(first_missing_concrete_name("_all", known), None);
+        assert_eq!(first_missing_concrete_name("*", known), None);
+        assert_eq!(first_missing_concrete_name("logs*", known), None);
+    }
+
+    /// ES `indices.get_mapping`: `GET /nope/_mapping` is 404, not 200 `{}`.
+    /// A name that exists still returns its mapping. A wildcard is not this
+    /// check — `nope*` stays on the empty-target path.
+    #[tokio::test]
+    async fn get_mapping_404s_a_concrete_missing_name_and_returns_a_real_one() {
+        let state = test_state();
+        let mut schema = Schema::empty();
+        schema
+            .fields
+            .push(FieldConfig::new("body", FieldType::Text));
+        state.engine.create_index("logs", schema).unwrap();
+        let router = crate::router::build_es_compat_router(state);
+
+        let missing = router
+            .clone()
+            .oneshot(Request::get("/nope/_mapping").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        assert_eq!(missing.status(), StatusCode::NOT_FOUND);
+        let bytes = to_bytes(missing.into_body(), usize::MAX).await.unwrap();
+        let json: Value = serde_json::from_slice(&bytes).unwrap();
+        assert_eq!(json["error"]["type"], "index_not_found_exception");
+        assert_eq!(json["error"]["reason"], "no such index [nope]");
+
+        let mixed = router
+            .clone()
+            .oneshot(
+                Request::get("/logs,nope/_mapping")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+        assert_eq!(mixed.status(), StatusCode::NOT_FOUND);
+
+        let found = router
+            .clone()
+            .oneshot(Request::get("/logs/_mapping").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        assert_eq!(found.status(), StatusCode::OK);
+        let bytes = to_bytes(found.into_body(), usize::MAX).await.unwrap();
+        let json: Value = serde_json::from_slice(&bytes).unwrap();
+        assert!(json.get("logs").is_some(), "{json}");
+
+        // Wildcard miss is not rewritten by the concrete check. Empty targets
+        // already 404; this pins that the new branch did not turn it into 200.
+        let wild = router
+            .oneshot(Request::get("/nope*/_mapping").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        assert_eq!(wild.status(), StatusCode::NOT_FOUND);
     }
 }
 
@@ -13420,11 +13556,10 @@ async fn search_impl(
         started.elapsed(),
         merged_hits.len() as u64,
         if body.aggs.is_some() { "with-aggs" } else { "" },
-        &body
-            .query
-            .as_ref()
-            .map(|q| q.to_string())
-            .unwrap_or_default(),
+        // An omitted `query` (match_all) or a top-level `knn` with no query
+        // clause used to log `query=` empty. `logged_search_query` records
+        // the clause the engine actually ran.
+        &xerj_engine::slow_query::logged_search_query(body.query.as_ref(), body.knn.as_ref()),
     );
     // v0.9 9-P4: append to the audit log. The subject was the literal
     // "anonymous" until issue #329 — the API-key operations had been passing a
@@ -20597,6 +20732,32 @@ fn count_shard_failure(index: &str, rendered: &Value) -> Value {
     json!({ "shard": 0, "index": index, "reason": reason })
 }
 
+/// Locator of an autoindex file-card anchor. Must stay equal to
+/// `xerj_autoindex::detect::FILE_CARD_LOCATOR` (`"file"`). The card is a real
+/// document so graph edges can resolve it, and it is not a content record.
+const FILE_CARD_LOCATOR: &str = "file";
+
+/// `stats.doc_count` minus file-card anchors. A bare `_count` is what
+/// `xerj autoindex map` and agents read as the record count; one card per
+/// file was inflating it. An explicit query is left alone, so a caller who
+/// asks for `ax_locator: file` still gets those documents, and a term query
+/// that cannot run (the field is absent) leaves the stat count unchanged.
+async fn content_doc_count(idx: &xerj_engine::index::Index) -> u64 {
+    let total = idx.stats().await.doc_count;
+    let body = json!({
+        "query": {"term": {"ax_locator": FILE_CARD_LOCATOR}},
+        "size": 0,
+        "track_total_hits": true
+    });
+    let Ok(req) = xerj_query::parse_request(&body) else {
+        return total;
+    };
+    match idx.search(&req).await {
+        Ok(result) if result.script_failure.is_none() => total.saturating_sub(result.total.value),
+        _ => total,
+    }
+}
+
 pub async fn count_docs_global(
     State(state): State<AppState>,
     Query(params): Query<CountParams>,
@@ -20768,7 +20929,7 @@ pub async fn count_docs(
                     }
                 }
             } else {
-                total += idx.stats().await.doc_count;
+                total += content_doc_count(&idx).await;
                 successful += 1;
             }
         }
@@ -20844,7 +21005,7 @@ pub async fn count_docs(
             }
         }
     } else {
-        idx.stats().await.doc_count
+        content_doc_count(&idx).await
     };
 
     let mut body_out = json!({
@@ -33268,13 +33429,15 @@ pub async fn restore_snapshot(
 // GET  /_cluster/pending_tasks
 // ─────────────────────────────────────────────────────────────────────────────
 
-pub async fn get_cluster_settings(State(state): State<AppState>) -> impl IntoResponse {
+pub async fn get_cluster_settings(
+    State(state): State<AppState>,
+    axum::extract::Query(params): axum::extract::Query<std::collections::HashMap<String, String>>,
+) -> impl IntoResponse {
     let settings = state.engine.cluster_settings.read().await;
-    let persistent = settings.get("persistent").cloned().unwrap_or(json!({}));
-    let transient = settings.get("transient").cloned().unwrap_or(json!({}));
+    let flat = flat_settings_param(&params);
     Json(json!({
-        "persistent": persistent,
-        "transient": transient,
+        "persistent": render_settings(settings.get("persistent"), flat),
+        "transient": render_settings(settings.get("transient"), flat),
         "defaults": {},
     }))
     .into_response()
@@ -33282,23 +33445,79 @@ pub async fn get_cluster_settings(State(state): State<AppState>) -> impl IntoRes
 
 pub async fn put_cluster_settings(
     State(state): State<AppState>,
+    axum::extract::Query(params): axum::extract::Query<std::collections::HashMap<String, String>>,
     Json(body): Json<Value>,
 ) -> impl IntoResponse {
     let mut settings = state.engine.cluster_settings.write().await;
-    if let Some(persistent) = body.get("persistent") {
-        settings["persistent"] = persistent.clone();
+    // ES merges an update into the stored settings, keyed by the flat dotted
+    // name whichever form the request used, and `null` removes a setting.
+    // The response lists only the settings this request set.
+    let mut updated = json!({ "persistent": {}, "transient": {} });
+    for scope in ["persistent", "transient"] {
+        let Some(update) = body.get(scope) else {
+            continue;
+        };
+        let mut flat = serde_json::Map::new();
+        flatten_settings("", update, &mut flat);
+        if !settings[scope].is_object() {
+            settings[scope] = json!({});
+        }
+        if let Some(stored) = settings[scope].as_object_mut() {
+            for (key, value) in flat {
+                if value.is_null() {
+                    stored.remove(&key);
+                } else {
+                    updated[scope][key.as_str()] = value.clone();
+                    stored.insert(key, value);
+                }
+            }
+        }
     }
-    if let Some(transient) = body.get("transient") {
-        settings["transient"] = transient.clone();
-    }
-    let persistent = settings.get("persistent").cloned().unwrap_or(json!({}));
-    let transient = settings.get("transient").cloned().unwrap_or(json!({}));
+    let flat = flat_settings_param(&params);
     Json(json!({
         "acknowledged": true,
-        "persistent": persistent,
-        "transient": transient,
+        "persistent": render_settings(updated.get("persistent"), flat),
+        "transient": render_settings(updated.get("transient"), flat),
     }))
     .into_response()
+}
+
+/// `?flat_settings` / `?flat_settings=true`; ES defaults to the nested form.
+fn flat_settings_param(params: &std::collections::HashMap<String, String>) -> bool {
+    matches!(
+        params.get("flat_settings").map(String::as_str),
+        Some("" | "true")
+    )
+}
+
+/// Settings are stored under flat dotted keys; render them nested unless the
+/// caller asked for `flat_settings`.
+fn render_settings(stored: Option<&Value>, flat: bool) -> Value {
+    let stored = stored.cloned().unwrap_or(json!({}));
+    if flat {
+        stored
+    } else {
+        expand_dotted_keys(stored)
+    }
+}
+
+/// Flattens `{"a": {"b": 1}}` into `{"a.b": 1}`.
+fn flatten_settings(prefix: &str, value: &Value, out: &mut serde_json::Map<String, Value>) {
+    match value {
+        Value::Object(map) => {
+            for (key, child) in map {
+                let key = if prefix.is_empty() {
+                    key.clone()
+                } else {
+                    format!("{prefix}.{key}")
+                };
+                flatten_settings(&key, child, out);
+            }
+        }
+        _ => {
+            out.insert(prefix.to_string(), value.clone());
+        }
+    }
 }
 
 pub async fn cluster_reroute(

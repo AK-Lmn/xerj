@@ -53,7 +53,7 @@ HTTP wire payloads, single-node, tmpfs data dir, both freshly started
 | Per-batch (5K) bulk p99 | **34.8 ms** | 80.3 ms | ES 2.3× |
 | Data loss on restart | 0% | 0% | tied |
 | GC pauses | 20–40 ms (JVM) | **0** (no GC) | **xerj** |
-| Config surface | 3,000+ knobs | **115**, all optional | **xerj** |
+| Config surface | 3,000+ knobs | **134**, all optional | **xerj** |
 
 xerj wins on every operational and read-path metric. ES still wins
 bulk-ingest throughput on warm Lucene `IndexWriter` (perf-backlog item
@@ -86,7 +86,7 @@ The resulting binary is at `target/release/xerj`.
 ## Configuration
 
 See [`xerj.default.toml`](xerj.default.toml) for the commonly-tuned settings, and
-[`crates/xerj-common/src/config.rs`](crates/xerj-common/src/config.rs) for all 115
+[`crates/xerj-common/src/config.rs`](crates/xerj-common/src/config.rs) for all 134
 — every one of them optional.
 
 The minimal config to get started:
@@ -103,8 +103,9 @@ enabled = false   # NOT the default — the default is true
 `auth.enabled` defaults to **true**; `enabled = false` above is an explicit
 opt-out, appropriate only for a trusted private network or local development.
 Leave it out (or set it to `true`) and the server mints an admin key on first
-boot, prints it, and writes it to `<data_dir>/admin.key`. Every client then has
-to send it — including `xerj autoindex`, which never reads the key out of
+boot and writes it to `<data_dir>/admin.key` (mode 0600). The key is not
+printed: the first-run notice names that path. Every client then has to send
+it — including `xerj autoindex`, which never reads the key out of
 `xerj.toml`; give it `--api-key` or `XERJ_API_KEY`:
 
 ```bash

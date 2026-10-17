@@ -1649,12 +1649,16 @@ fn route_cli_error(error: &anyhow::Error, json_output: bool) -> CliErrorRoute {
 /// Entry point for the `xerj autoindex` subcommand (blocking; the server
 /// binary calls this via spawn_blocking). Returns the process exit code.
 pub fn run_cli() -> i32 {
-    let args: Vec<String> = std::env::args().skip(2).collect();
+    let args: Vec<String> = xerj_common::argv::args_after_subcommand();
     let cmd = match cli::parse(args) {
         Ok(c) => c,
         Err(e) => {
-            eprintln!("error: {e}\n");
-            cli::print_help();
+            // #1586: a usage error is the error plus one pointer line. The
+            // 390-line help page used to follow on stdout, which buried the
+            // error for anyone reading stdout or the tail of combined output —
+            // an agent saw help and concluded the run had done something.
+            eprintln!("error: {e}");
+            eprintln!("run `xerj autoindex --help` for usage.");
             return 2;
         }
     };
@@ -1681,6 +1685,64 @@ pub fn run_cli() -> i32 {
             }
             route.exit_code
         }
+    }
+}
+
+/// The hub manifest at the root of a corpus directory. Excluded only by
+/// [`run_with_options`]; a folder named the same way is still indexed.
+const CORPUS_MANIFEST_REL: &str = "corpus.json";
+
+/// Drop walk entries whose root-relative path is in `exclude`. An empty list
+/// returns the walk unchanged, so this is not a global skip of that filename.
+fn without_excluded_rels(
+    files: Vec<walk::FileEntry>,
+    exclude: &[String],
+) -> (Vec<walk::FileEntry>, usize) {
+    if exclude.is_empty() {
+        return (files, 0);
+    }
+    let before = files.len();
+    let kept: Vec<walk::FileEntry> = files
+        .into_iter()
+        .filter(|file| !exclude.contains(&file.rel))
+        .collect();
+    let dropped = before - kept.len();
+    (kept, dropped)
+}
+
+#[cfg(test)]
+mod exclude_rels_tests {
+    use super::*;
+
+    fn entry(rel: &str) -> walk::FileEntry {
+        walk::FileEntry {
+            path: std::path::PathBuf::from(rel),
+            rel: rel.to_string(),
+            rel_id: rel.to_string(),
+            is_symlink: false,
+            size: 1,
+        }
+    }
+
+    #[test]
+    fn the_corpus_manifest_is_dropped_and_a_nested_copy_is_kept() {
+        let files = vec![
+            entry("corpus.json"),
+            entry("src/lib.rs"),
+            entry("vendor/corpus.json"),
+        ];
+        let (kept, dropped) = without_excluded_rels(files, &[CORPUS_MANIFEST_REL.to_string()]);
+        assert_eq!(dropped, 1);
+        let rels: Vec<&str> = kept.iter().map(|file| file.rel.as_str()).collect();
+        assert_eq!(rels, ["src/lib.rs", "vendor/corpus.json"]);
+    }
+
+    #[test]
+    fn an_empty_exclusion_list_keeps_a_root_corpus_json() {
+        let files = vec![entry("corpus.json"), entry("README.md")];
+        let (kept, dropped) = without_excluded_rels(files, &[]);
+        assert_eq!(dropped, 0);
+        assert_eq!(kept.len(), 2);
     }
 }
 
@@ -1722,7 +1784,14 @@ pub fn run_with_options(
         }
     };
     let res = match cmd {
-        Cmd::Index(cfg) => run_index(*cfg),
+        Cmd::Index(cfg) => {
+            // The corpus directory's own manifest is bookkeeping, not a
+            // source file. A normal folder index leaves `exclude_rels` empty,
+            // so a project that happens to contain `corpus.json` still indexes it.
+            let mut cfg = *cfg;
+            cfg.exclude_rels = vec![CORPUS_MANIFEST_REL.to_string()];
+            run_index(cfg)
+        }
         _ => return 2,
     };
     match res {
@@ -3020,6 +3089,7 @@ mod phase_a_grouping_tests {
             watch: false,
             label: None,
             debounce: std::time::Duration::from_millis(0),
+            exclude_rels: Vec::new(),
         }
     }
 
@@ -4298,6 +4368,10 @@ pub struct ZeroLiveVerificationError {
     pub files_done_journaled: usize,
     /// Dataset indices that answered with zero live documents.
     pub dataset_indices: usize,
+    /// Directory the resume journal was read from. A new `--data-dir` does
+    /// not move this directory: the default is keyed by folder, URL, and
+    /// prefix, so a journal left by an earlier node is reused as-is.
+    pub state_dir: String,
 }
 
 impl std::fmt::Display for ZeroLiveVerificationError {
@@ -4306,12 +4380,14 @@ impl std::fmt::Display for ZeroLiveVerificationError {
             formatter,
             "autoindex verification failed: the resume journal records {} \
              record(s) from {} completed file(s), but 0 documents are \
-             live across the {} dataset index(es). The indices exist and look healthy but \
+             live across the {} dataset index(es). Journal state dir: {}. \
+             This journal may belong to another data dir (a new --data-dir \
+             reuses it). The indices exist and look healthy but \
              hold nothing — a server-side write rejection (e.g. a disk flood-stage or \
-             index write block), deleted indices, or an unreadable server can all cause \
+             index write block), deleted indices, or an unreadable server can also cause \
              this. Fix the server-side condition, then rerun with --fresh to re-index \
              from scratch",
-            self.journal_records, self.files_done_journaled, self.dataset_indices
+            self.journal_records, self.files_done_journaled, self.dataset_indices, self.state_dir
         )
     }
 }
@@ -5869,6 +5945,12 @@ fn run_index_report_inner(
     // gets the same recipe `xerj def` already prints: start one, or aim at
     // an existing node.
     if let Err(e) = es.ping() {
+        if esclient::Es::ping_failure_is_auth(&e) {
+            anyhow::bail!(
+                "the node at {url} answered, but authentication failed.\n{e:#}",
+                url = cfg.url
+            );
+        }
         anyhow::bail!(
             "no XERJ node reachable at {url} ({e:#})\n\n\
              Start one, then re-run this command:\n  \
@@ -6191,6 +6273,13 @@ fn run_index_report_inner(
         cfg.follow_symlinks_outside_root,
         cfg.ignore,
     )?;
+    let (discovered_files, excluded) = without_excluded_rels(discovered_files, &cfg.exclude_rels);
+    if excluded > 0 {
+        pr.note(&format!(
+            "autoindex: left out {excluded} path(s) ({}) — not part of this corpus index",
+            cfg.exclude_rels.join(", ")
+        ));
+    }
     let discovered_bytes: u64 = discovered_files.iter().map(|f| f.size).sum();
     pr.note(&format!(
         "autoindex: {} files ({} MB) under {}",
@@ -8518,10 +8607,22 @@ fn run_index_report_inner(
     pr.phase("finalize-count", plan.datasets.len() as u64, 0);
     let mut ds_counts: HashMap<String, u64> = HashMap::new();
     let mut ds_timerange: HashMap<String, (Option<String>, Option<String>)> = HashMap::new();
+    // A count that did not answer is not a zero. `unwrap_or(0)` used to
+    // turn a timeout, a 500, or a `timed_out` size:0 page into "0 live
+    // documents", and the gate below then aborted a run whose records
+    // were already journaled (#195's last resort, fired on the wrong
+    // input). Unknown counts skip the gate and are named in the summary.
+    let mut count_unknown: Vec<String> = Vec::new();
     for d in &plan.datasets {
         let _counted = pr.file(&d.index, 0);
-        let cnt = es.count(&d.index).unwrap_or(0);
-        ds_counts.insert(d.slug.clone(), cnt);
+        match es.count(&d.index) {
+            Ok(cnt) => {
+                ds_counts.insert(d.slug.clone(), cnt);
+            }
+            Err(error) => {
+                count_unknown.push(format!("{}: {error:#}", d.index));
+            }
+        }
         if let Some(t) = &d.time_field {
             let body = json!({"size":0,"aggs":{
                 "mn":{"min":{"field":t}},"mx":{"max":{"field":t}}}});
@@ -8561,7 +8662,15 @@ fn run_index_report_inner(
         )
     };
     let live_records: u64 = ds_counts.values().sum();
-    if journal_records > 0 && live_records == 0 {
+    if !count_unknown.is_empty() {
+        pr.warn(&format!(
+            "finalize-count: {} dataset index(es) did not answer a count, so the \
+             zero-live check was not applied. The journal records {journal_records} \
+             record(s). {}",
+            count_unknown.len(),
+            count_unknown.join(" | ")
+        ));
+    } else if journal_records > 0 && live_records == 0 {
         // Typed, not `bail!`: a caller that composes this pipeline can only
         // tell "the journal outlived its destination" from "the server
         // rejected our writes" if the condition carries a type. `xerj brain`
@@ -8575,6 +8684,7 @@ fn run_index_report_inner(
             journal_records,
             files_done_journaled,
             dataset_indices: plan.datasets.len(),
+            state_dir: state_dir.display().to_string(),
         }
         .into());
     }
@@ -8776,6 +8886,12 @@ fn run_index_report_inner(
         formats.sort();
         formats.dedup();
         let (tmin, tmax) = ds_timerange.get(&d.slug).cloned().unwrap_or((None, None));
+        if !ds_counts.contains_key(&d.slug) {
+            notes.push(
+                "record_count unavailable: the node did not answer a count, so 0 here is not a measurement"
+                    .to_string(),
+            );
+        }
         let (id, doc) = catalog::dataset_doc(&catalog::DatasetDocInput {
             prefix: &cfg.prefix,
             pd: d,
@@ -9538,27 +9654,56 @@ fn run_map(cfg: MapCfg) -> Result<i32> {
         duplicate_files.retain(|f| catalog::file_matches_prefix(f, prefix));
     }
     if cfg.json {
-        println!(
-            "{}",
-            serde_json::to_string_pretty(&json!({
+        let (start, end) =
+            catalog::detail_bounds(datasets.len(), cfg.detail_offset, cfg.detail_limit);
+        let truncated = start > 0 || end < datasets.len();
+        let body = if truncated {
+            let summary: Vec<Value> = datasets
+                .iter()
+                .map(|d| {
+                    json!({
+                        "index_name": d.get("index_name"),
+                        "slug": d.get("slug"),
+                        "record_count": d.get("record_count"),
+                        "file_count": d.get("file_count"),
+                    })
+                })
+                .collect();
+            json!({
+                "run": runs.first(),
+                "datasets_total": datasets.len(),
+                "detail_offset": start,
+                "datasets": &datasets[start..end],
+                "datasets_summary": summary,
+                "detail_note": "field detail is paged; `autoindex map --dataset <slug>` or `--offset`/`--limit`",
+                "correlations": correlations,
+                "junk_files": junk_files,
+                "duplicate_files": duplicate_files,
+                "gotchas": catalog::GOTCHAS,
+            })
+        } else {
+            json!({
                 "run": runs.first(),
                 "datasets": datasets,
                 "correlations": correlations,
                 "junk_files": junk_files,
                 "duplicate_files": duplicate_files,
                 "gotchas": catalog::GOTCHAS,
-            }))?
-        );
+            })
+        };
+        println!("{}", serde_json::to_string_pretty(&body)?);
     } else {
         print!(
             "{}",
-            catalog::render_map(
+            catalog::render_map_page(
                 runs.first(),
                 &datasets,
                 &correlations,
                 &junk_files,
                 &duplicate_files,
-                junk_files.len() as u64
+                junk_files.len() as u64,
+                cfg.detail_offset,
+                cfg.detail_limit,
             )
         );
         // Second-brain summary (§6.1): live edge count straight from the
@@ -9607,8 +9752,12 @@ fn run_map(cfg: MapCfg) -> Result<i32> {
 pub struct CatalogSummary {
     /// The most recent `doc_kind: run` document, if any run has been recorded.
     pub run: Option<Value>,
-    /// Every `doc_kind: dataset` document, most records first — the same order
-    /// `run_map` renders them in.
+    /// Dataset documents for the sentence in [`CatalogSummary::one_line`].
+    ///
+    /// When the latest run carries a `run_id` and the catalog has dataset docs
+    /// stamped with that id, this is only those docs (most records first). A
+    /// catalog that predates `run_id` on dataset docs keeps the unscoped list,
+    /// because those docs cannot be told apart from this run.
     pub datasets: Vec<Value>,
 }
 
@@ -9618,26 +9767,39 @@ impl CatalogSummary {
     /// rather than a sentence that says "0 records"). Never fabricates: every
     /// number here comes straight from the catalog the server wrote.
     pub fn one_line(&self) -> Option<String> {
-        if self.datasets.is_empty() {
+        // The record total and the dataset count have to describe the same
+        // run. Pairing `records_total` from the newest run document with
+        // `datasets.len()` counted every `doc_kind: dataset` doc on the shared
+        // catalog (other prefixes, older runs), so a field report said the
+        // last run's records were spread across the whole node.
+        let scoped = self.datasets_for_latest_run();
+        if scoped.is_empty() && self.datasets.is_empty() {
             return None;
         }
         let get = |v: &Value, k: &str| v.get(k).cloned().unwrap_or(Value::Null);
-        // Prefer the run document's own total; fall back to summing datasets so
-        // a node whose run doc predates that field still reports a real count.
-        let records = self
+        let records_from_run = self
             .run
             .as_ref()
-            .and_then(|r| get(r, "records_total").as_u64())
-            .unwrap_or_else(|| {
-                self.datasets
+            .and_then(|r| get(r, "records_total").as_u64());
+        let (records, dataset_count) = if scoped.is_empty() {
+            // Dataset docs are present, but none belong to this run. Report
+            // the run document's own total and omit the dataset count. With
+            // no total, say nothing rather than summing the other runs.
+            let records = records_from_run?;
+            (records, None)
+        } else {
+            let records = records_from_run.unwrap_or_else(|| {
+                scoped
                     .iter()
                     .filter_map(|d| d.get("record_count").and_then(Value::as_u64))
                     .sum()
             });
-        let mut sentence = format!(
-            "{records} records across {} dataset(s)",
-            self.datasets.len()
-        );
+            (records, Some(scoped.len()))
+        };
+        let mut sentence = match dataset_count {
+            Some(n) => format!("{records} records across {n} dataset(s)"),
+            None => format!("{records} records"),
+        };
         if let Some(root) = self
             .run
             .as_ref()
@@ -9657,6 +9819,42 @@ impl CatalogSummary {
             sentence.push_str(&format!(" (autoindex run {run_id})"));
         }
         Some(sentence)
+    }
+
+    /// Dataset docs that belong to the latest run.
+    ///
+    /// A matching `run_id` wins. When no dataset doc carries that id, untagged
+    /// docs (catalogs written before dataset docs stored `run_id`) are kept,
+    /// and docs tagged with a *different* run are dropped so they cannot inflate
+    /// the count.
+    fn datasets_for_latest_run(&self) -> Vec<&Value> {
+        let run_id = self
+            .run
+            .as_ref()
+            .and_then(|r| r.get("run_id"))
+            .and_then(Value::as_str)
+            .filter(|s| !s.is_empty());
+        let Some(run_id) = run_id else {
+            return self.datasets.iter().collect();
+        };
+        let matched: Vec<&Value> = self
+            .datasets
+            .iter()
+            .filter(|d| d.get("run_id").and_then(Value::as_str) == Some(run_id))
+            .collect();
+        if !matched.is_empty() {
+            return matched;
+        }
+        let any_other_run = self.datasets.iter().any(|d| {
+            d.get("run_id")
+                .and_then(Value::as_str)
+                .is_some_and(|s| !s.is_empty())
+        });
+        if any_other_run {
+            Vec::new()
+        } else {
+            self.datasets.iter().collect()
+        }
     }
 }
 
@@ -9685,11 +9883,6 @@ pub fn fetch_catalog_summary(url: &str, api_key: Option<String>) -> Result<Catal
             })
             .unwrap_or_default())
     };
-    let datasets = fetch(
-        json!({"term": {"doc_kind": "dataset"}}),
-        500,
-        Some(json!([{"record_count": "desc"}])),
-    )?;
     let mut runs = fetch(json!({"term": {"doc_kind": "run"}}), 50, None)?;
     runs.sort_by_key(|r| {
         std::cmp::Reverse(
@@ -9699,13 +9892,137 @@ pub fn fetch_catalog_summary(url: &str, api_key: Option<String>) -> Result<Catal
                 .to_string(),
         )
     });
-    Ok(CatalogSummary {
-        run: runs.into_iter().next(),
-        datasets,
-    })
+    let run = runs.into_iter().next();
+    let run_id = run
+        .as_ref()
+        .and_then(|r| r.get("run_id"))
+        .and_then(Value::as_str)
+        .filter(|s| !s.is_empty())
+        .map(str::to_string);
+    // Scope the dataset query to the latest run so a catalog with more than
+    // the fetch cap of older datasets cannot crowd this run's docs out of the
+    // page. An empty scoped page falls back to the unscoped list: catalogs
+    // written before dataset docs stored `run_id` have nothing to match, and
+    // [`CatalogSummary::one_line`] still refuses to count docs tagged with a
+    // different run.
+    let dataset_sort = Some(json!([{"record_count": "desc"}]));
+    let mut datasets = if let Some(id) = &run_id {
+        fetch(
+            json!({"bool": {"filter": [
+                {"term": {"doc_kind": "dataset"}},
+                {"term": {"run_id": id}},
+            ]}}),
+            500,
+            dataset_sort.clone(),
+        )?
+    } else {
+        Vec::new()
+    };
+    if datasets.is_empty() {
+        datasets = fetch(json!({"term": {"doc_kind": "dataset"}}), 500, dataset_sort)?;
+    }
+    Ok(CatalogSummary { run, datasets })
 }
 
 // ─── status subcommand ───────────────────────────────────────────────────
+
+struct JournalFacts {
+    root: String,
+    files_done: u64,
+    records: u64,
+    finished: bool,
+    generation: Option<u64>,
+    generation_files: Option<u64>,
+    generation_records: Option<u64>,
+    graph_line: Option<String>,
+    /// `url` from the `kind: run` record. Empty on a journal written before
+    /// that field existed.
+    url: String,
+}
+
+fn read_journal_facts(jp: &Path) -> JournalFacts {
+    let mut facts = JournalFacts {
+        root: String::new(),
+        files_done: 0,
+        records: 0,
+        finished: false,
+        generation: None,
+        generation_files: None,
+        generation_records: None,
+        graph_line: None,
+        url: String::new(),
+    };
+    let Ok(f) = std::fs::File::open(jp) else {
+        return facts;
+    };
+    for line in std::io::BufReader::new(f).lines().map_while(|l| l.ok()) {
+        let Ok(v) = serde_json::from_str::<Value>(&line) else {
+            continue;
+        };
+        match v.get("kind").and_then(|k| k.as_str()) {
+            Some("run") => {
+                facts.root = v.get("root").and_then(|r| r.as_str()).unwrap_or("").into();
+                if let Some(url) = v.get("url").and_then(|u| u.as_str()) {
+                    facts.url = url.to_string();
+                }
+            }
+            Some("file_done") => {
+                facts.files_done += 1;
+                facts.records += v.get("records").and_then(|r| r.as_u64()).unwrap_or(0);
+            }
+            Some("finish") => {
+                facts.finished = true;
+                facts.generation = v.pointer("/summary/generation").and_then(Value::as_u64);
+                facts.generation_files =
+                    v.pointer("/summary/files_indexed").and_then(Value::as_u64);
+                facts.generation_records =
+                    v.pointer("/summary/records_total").and_then(Value::as_u64);
+                // Latest finish wins — the summary embeds the run
+                // doc, whose `graph` block is the edge count of
+                // record for this journal.
+                if let Some(g) = v.pointer("/summary/graph").filter(|graph| !graph.is_null()) {
+                    facts.graph_line = Some(format!(
+                        "graph: {} edges written to {} (brain {})",
+                        g.get("edges_written").and_then(Value::as_u64).unwrap_or(0),
+                        g.get("edges_index").and_then(Value::as_str).unwrap_or("?"),
+                        g.get("brain").and_then(Value::as_str).unwrap_or("?"),
+                    ));
+                }
+            }
+            _ => {}
+        }
+    }
+    facts
+}
+
+/// Two endpoint strings name the same node when they match after trimming
+/// and stripping one trailing slash. `http://127.0.0.1:9200/` and
+/// `http://127.0.0.1:9200` are the same journal.
+fn urls_identify_same_endpoint(recorded: &str, current: &str) -> bool {
+    fn norm(s: &str) -> &str {
+        s.trim().trim_end_matches('/')
+    }
+    norm(recorded) == norm(current)
+}
+
+/// Status word for one journal line.
+///
+/// A journal whose `run` record names a different node is not this
+/// endpoint's run. Printing `in progress` or `FINISHED` there makes
+/// `autoindex status` look like another node's work is this node's.
+/// An empty recorded URL is a journal from before `url` was written;
+/// those keep the old words.
+fn journal_progress_label(finished: bool, journal_url: &str, current_url: &str) -> String {
+    let recorded = journal_url.trim().trim_end_matches('/');
+    if !recorded.is_empty() && !urls_identify_same_endpoint(recorded, current_url) {
+        return format!("other endpoint {recorded}");
+    }
+    if finished {
+        "FINISHED".to_string()
+    } else {
+        "in progress".to_string()
+    }
+}
 
 fn run_status(cfg: StatusCfg) -> Result<i32> {
     if let Some(note) = &cfg.xerj_url_note {
@@ -9729,64 +10046,21 @@ fn run_status(cfg: StatusCfg) -> Result<i32> {
         if !jp.exists() {
             continue;
         }
-        let mut root = String::new();
-        let mut done = 0u64;
-        let mut records = 0u64;
-        let mut finished = false;
-        let mut generation: Option<u64> = None;
-        let mut generation_files: Option<u64> = None;
-        let mut generation_records: Option<u64> = None;
-        let mut graph_line: Option<String> = None;
-        if let Ok(f) = std::fs::File::open(&jp) {
-            use std::io::BufRead;
-            for line in std::io::BufReader::new(f).lines().map_while(|l| l.ok()) {
-                if let Ok(v) = serde_json::from_str::<Value>(&line) {
-                    match v.get("kind").and_then(|k| k.as_str()) {
-                        Some("run") => {
-                            root = v.get("root").and_then(|r| r.as_str()).unwrap_or("").into()
-                        }
-                        Some("file_done") => {
-                            done += 1;
-                            records += v.get("records").and_then(|r| r.as_u64()).unwrap_or(0);
-                        }
-                        Some("finish") => {
-                            finished = true;
-                            generation = v.pointer("/summary/generation").and_then(Value::as_u64);
-                            generation_files =
-                                v.pointer("/summary/files_indexed").and_then(Value::as_u64);
-                            generation_records =
-                                v.pointer("/summary/records_total").and_then(Value::as_u64);
-                            // Latest finish wins — the summary embeds the run
-                            // doc, whose `graph` block is the edge count of
-                            // record for this journal.
-                            if let Some(g) =
-                                v.pointer("/summary/graph").filter(|graph| !graph.is_null())
-                            {
-                                graph_line = Some(format!(
-                                    "graph: {} edges written to {} (brain {})",
-                                    g.get("edges_written").and_then(Value::as_u64).unwrap_or(0),
-                                    g.get("edges_index").and_then(Value::as_str).unwrap_or("?"),
-                                    g.get("brain").and_then(Value::as_str).unwrap_or("?"),
-                                ));
-                            }
-                        }
-                        _ => {}
-                    }
-                }
-            }
-        }
+        let facts = read_journal_facts(&jp);
+        let label = journal_progress_label(facts.finished, &facts.url, &cfg.url);
         println!(
             "journal {} — root {} — {} files done, {} records, {}{}",
             jp.display(),
-            root,
-            generation_files.unwrap_or(done),
-            generation_records.unwrap_or(records),
-            if finished { "FINISHED" } else { "in progress" },
-            generation
+            facts.root,
+            facts.generation_files.unwrap_or(facts.files_done),
+            facts.generation_records.unwrap_or(facts.records),
+            label,
+            facts
+                .generation
                 .map(|generation| format!(" (generation {generation})"))
                 .unwrap_or_default()
         );
-        if let Some(line) = graph_line {
+        if let Some(line) = facts.graph_line {
             println!("  {line}");
         }
     }
@@ -9803,6 +10077,77 @@ fn run_status(cfg: StatusCfg) -> Result<i32> {
         }
     }
     Ok(0)
+}
+
+#[cfg(test)]
+mod journal_status_tests {
+    use super::{journal_progress_label, read_journal_facts};
+    use std::fs;
+
+    fn write_journal(name: &str, body: &str) -> std::path::PathBuf {
+        let dir = std::env::temp_dir().join(format!("xerj-status-{}-{name}", std::process::id()));
+        let _ = fs::remove_dir_all(&dir);
+        fs::create_dir_all(&dir).unwrap();
+        let path = dir.join("journal.ndjson");
+        fs::write(&path, body).unwrap();
+        path
+    }
+
+    #[test]
+    fn another_endpoints_journal_is_not_in_progress() {
+        let path = write_journal(
+            "other-open",
+            "{\"v\":1,\"kind\":\"run\",\"root\":\"/repo\",\"url\":\"http://127.0.0.1:9201\",\"prefix\":\"ax\"}\n\
+             {\"kind\":\"file_done\",\"records\":3}\n",
+        );
+        let facts = read_journal_facts(&path);
+        assert_eq!(facts.root, "/repo");
+        assert_eq!(facts.files_done, 1);
+        assert_eq!(facts.records, 3);
+        assert!(!facts.finished);
+        let label = journal_progress_label(facts.finished, &facts.url, "http://127.0.0.1:9200");
+        assert_eq!(label, "other endpoint http://127.0.0.1:9201");
+        assert!(!label.contains("in progress"));
+        assert!(!label.contains("FINISHED"));
+
+        let finished = write_journal(
+            "other-done",
+            "{\"kind\":\"run\",\"root\":\"/other\",\"url\":\"http://10.0.0.2:9200/\"}\n\
+             {\"kind\":\"finish\",\"summary\":{\"generation\":4,\"files_indexed\":2,\"records_total\":9}}\n",
+        );
+        let facts = read_journal_facts(&finished);
+        assert!(facts.finished);
+        assert_eq!(facts.generation, Some(4));
+        assert_eq!(facts.generation_files, Some(2));
+        assert_eq!(facts.generation_records, Some(9));
+        let label = journal_progress_label(facts.finished, &facts.url, "http://127.0.0.1:9200");
+        assert_eq!(label, "other endpoint http://10.0.0.2:9200");
+        assert!(!label.contains("in progress"));
+        assert!(!label.contains("FINISHED"));
+        let _ = fs::remove_dir_all(path.parent().unwrap());
+        let _ = fs::remove_dir_all(finished.parent().unwrap());
+    }
+
+    #[test]
+    fn this_endpoint_and_a_legacy_journal_keep_the_old_words() {
+        assert_eq!(
+            journal_progress_label(true, "http://127.0.0.1:9200/", "http://127.0.0.1:9200"),
+            "FINISHED"
+        );
+        assert_eq!(
+            journal_progress_label(false, "  http://127.0.0.1:9200  ", "http://127.0.0.1:9200/"),
+            "in progress"
+        );
+        // No `url` on the run record: a journal from before the field existed.
+        let path = write_journal("legacy", "{\"kind\":\"run\",\"root\":\"/old\"}\n");
+        let facts = read_journal_facts(&path);
+        assert!(facts.url.is_empty());
+        assert_eq!(
+            journal_progress_label(facts.finished, &facts.url, "http://127.0.0.1:9200"),
+            "in progress"
+        );
+        let _ = fs::remove_dir_all(path.parent().unwrap());
+    }
 }
 
 #[cfg(test)]
