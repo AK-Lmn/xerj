@@ -2056,9 +2056,8 @@ async fn get_index_inner(
         };
 
         // Settings: replay what was written (normalized to strings), merged
-        // with engine defaults; `analysis` is the block in force (#1092).
-        // Creation timestamps are synthesized because we don't persist them
-        // yet (TODO).
+        // with engine defaults; `analysis` is the block in force (#1092) and
+        // `creation_date` is the persisted creation time (#1573).
         let settings_inner = index_settings_response(&state, name, idx.as_ref(), human).await;
 
         let mut index_obj = serde_json::Map::new();
@@ -2110,7 +2109,12 @@ async fn index_settings_response(
             stored = i.get_settings().await;
         }
     }
-    let mut settings = merge_settings_defaults(&stored, name, human);
+    // Creation timestamps: the real persisted value (#1573), not a fresh
+    // `Utc::now()` per request. `index_created_at` is recorded at create and
+    // loaded from `created_at.json` on boot; the fallback only covers an
+    // index that has no recorded time (e.g. a failed create).
+    let created_at_ms = state.engine.index_created_at.get(name).map(|v| *v);
+    let mut settings = merge_settings_defaults(&stored, name, human, created_at_ms);
     if let Some(i) = idx {
         let in_force = i.analysis_in_force().await;
         if let Some(inner) = settings.get_mut("index").and_then(Value::as_object_mut) {
@@ -2128,7 +2132,12 @@ async fn index_settings_response(
 /// ES always wraps user settings under `{ "index": { ... } }` and coerces
 /// all simple values to strings. Missing fields fall through to engine
 /// defaults (single shard, zero replicas).
-fn merge_settings_defaults(user_settings: &Value, provided_name: &str, human: bool) -> Value {
+fn merge_settings_defaults(
+    user_settings: &Value,
+    provided_name: &str,
+    human: bool,
+    created_at_ms: Option<i64>,
+) -> Value {
     // Pull the inner `index` block if the user used `{ "index": { ... } }`
     // syntax; otherwise treat the whole blob as the inner block.
     let raw_inner = user_settings
@@ -2161,11 +2170,14 @@ fn merge_settings_defaults(user_settings: &Value, provided_name: &str, human: bo
         }
     }
 
-    // Synthesize required fields if absent.
-    let now_ms = Utc::now().timestamp_millis();
+    // Synthesize required fields if absent. `creation_date` prefers the
+    // persisted creation time: a client comparing two `GET /{index}` calls
+    // must see one stable value (index age, ILM-style tooling). The `now`
+    // fallback is only for an index with no recorded time.
+    let created_ms = created_at_ms.unwrap_or_else(|| Utc::now().timestamp_millis());
     inner
         .entry("creation_date".to_string())
-        .or_insert_with(|| Value::String(now_ms.to_string()));
+        .or_insert_with(|| Value::String(created_ms.to_string()));
     // Emit the stable, deterministic index uuid — the SAME value
     // _cat/indices reports — rather than a fresh random one per request.
     inner.insert(
@@ -33268,13 +33280,15 @@ pub async fn restore_snapshot(
 // GET  /_cluster/pending_tasks
 // ─────────────────────────────────────────────────────────────────────────────
 
-pub async fn get_cluster_settings(State(state): State<AppState>) -> impl IntoResponse {
+pub async fn get_cluster_settings(
+    State(state): State<AppState>,
+    axum::extract::Query(params): axum::extract::Query<std::collections::HashMap<String, String>>,
+) -> impl IntoResponse {
     let settings = state.engine.cluster_settings.read().await;
-    let persistent = settings.get("persistent").cloned().unwrap_or(json!({}));
-    let transient = settings.get("transient").cloned().unwrap_or(json!({}));
+    let flat = flat_settings_param(&params);
     Json(json!({
-        "persistent": persistent,
-        "transient": transient,
+        "persistent": render_settings(settings.get("persistent"), flat),
+        "transient": render_settings(settings.get("transient"), flat),
         "defaults": {},
     }))
     .into_response()
@@ -33282,23 +33296,79 @@ pub async fn get_cluster_settings(State(state): State<AppState>) -> impl IntoRes
 
 pub async fn put_cluster_settings(
     State(state): State<AppState>,
+    axum::extract::Query(params): axum::extract::Query<std::collections::HashMap<String, String>>,
     Json(body): Json<Value>,
 ) -> impl IntoResponse {
     let mut settings = state.engine.cluster_settings.write().await;
-    if let Some(persistent) = body.get("persistent") {
-        settings["persistent"] = persistent.clone();
+    // ES merges an update into the stored settings, keyed by the flat dotted
+    // name whichever form the request used, and `null` removes a setting.
+    // The response lists only the settings this request set.
+    let mut updated = json!({ "persistent": {}, "transient": {} });
+    for scope in ["persistent", "transient"] {
+        let Some(update) = body.get(scope) else {
+            continue;
+        };
+        let mut flat = serde_json::Map::new();
+        flatten_settings("", update, &mut flat);
+        if !settings[scope].is_object() {
+            settings[scope] = json!({});
+        }
+        if let Some(stored) = settings[scope].as_object_mut() {
+            for (key, value) in flat {
+                if value.is_null() {
+                    stored.remove(&key);
+                } else {
+                    updated[scope][key.as_str()] = value.clone();
+                    stored.insert(key, value);
+                }
+            }
+        }
     }
-    if let Some(transient) = body.get("transient") {
-        settings["transient"] = transient.clone();
-    }
-    let persistent = settings.get("persistent").cloned().unwrap_or(json!({}));
-    let transient = settings.get("transient").cloned().unwrap_or(json!({}));
+    let flat = flat_settings_param(&params);
     Json(json!({
         "acknowledged": true,
-        "persistent": persistent,
-        "transient": transient,
+        "persistent": render_settings(updated.get("persistent"), flat),
+        "transient": render_settings(updated.get("transient"), flat),
     }))
     .into_response()
+}
+
+/// `?flat_settings` / `?flat_settings=true`; ES defaults to the nested form.
+fn flat_settings_param(params: &std::collections::HashMap<String, String>) -> bool {
+    matches!(
+        params.get("flat_settings").map(String::as_str),
+        Some("" | "true")
+    )
+}
+
+/// Settings are stored under flat dotted keys; render them nested unless the
+/// caller asked for `flat_settings`.
+fn render_settings(stored: Option<&Value>, flat: bool) -> Value {
+    let stored = stored.cloned().unwrap_or(json!({}));
+    if flat {
+        stored
+    } else {
+        expand_dotted_keys(stored)
+    }
+}
+
+/// Flattens `{"a": {"b": 1}}` into `{"a.b": 1}`.
+fn flatten_settings(prefix: &str, value: &Value, out: &mut serde_json::Map<String, Value>) {
+    match value {
+        Value::Object(map) => {
+            for (key, child) in map {
+                let key = if prefix.is_empty() {
+                    key.clone()
+                } else {
+                    format!("{prefix}.{key}")
+                };
+                flatten_settings(&key, child, out);
+            }
+        }
+        _ => {
+            out.insert(prefix.to_string(), value.clone());
+        }
+    }
 }
 
 pub async fn cluster_reroute(
