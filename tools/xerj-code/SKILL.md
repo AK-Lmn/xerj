@@ -145,7 +145,7 @@ which. Pick by the project's domain, not by size:
 | cross-ecosystem dependency audit | `ghsa-db` | GitHub-reviewed advisories (36,263 text records): CVSS vectors, patched ranges, affected packages across npm/PyPI/Go/Rust/maven and the rest |
 | security review of Go modules | `go-vulndb` | Go-team-curated advisories (4,577): affected packages and symbols, fixed versions, GO ids with CVE aliases |
 | regex denial-of-service precedent | `redos-precedent` | 634 regex-specific ReDoS advisories (CWE-1337/185 class, not bare CWE-400): the pathological input, the affected function, the bounded rewrite |
-| crypto misuse precedent | `crypto-misuse-precedent` | 721 CWE-326/327/328/329/347-class advisories: weak ciphers, hardcoded keys, nonce reuse, signature-verification bypass, padding oracles, ECB |
+| crypto misuse precedent | withdrawn: do not `corpus add` `crypto-misuse-precedent` | the pin pointed at xerj-org/corpus-crypto-misuse-precedent, which returns HTTP 404. Those 721 records were a flatten of `ghsa-db`, osv, and `pysec`; use those |
 | vulnerability / weakness taxonomy | `mitre-cwe`, `mitre-capec` | CWE weakness definitions and CAPEC attack patterns, id-level |
 | adversary techniques / detection engineering | `mitre-attck` | ATT&CK v19.2 per-technique records: technique ids, tactics, detection data sources, procedure examples (enterprise/mobile/ics; software and group objects out of scope) |
 | patch-priority triage | `cisa-kev` | the Known Exploited Vulnerabilities catalogue, one record per CVE — exploitation status in the wild, binding remediation dates |
@@ -170,13 +170,12 @@ second.** Advisories about the same CVE exist in several databases; start
 with the corpus whose ecosystem matches the project (`rustsec-advisories`
 for Rust crates, `pysec` for PyPI, `go-vulndb` for Go modules,
 `ghsa-db` when the tree is mixed or the ecosystem is unclear — it is the
-superset, GitHub-reviewed). Then, when the review is about a *pattern you
-are looking at* rather than a package — a regex fed user input, a cipher
-or key-management call site — switch to the stratum corpus
-(`redos-precedent`, `crypto-misuse-precedent`): smaller, selected for
-exactly that defect class, so the mechanism (the pathological input, the
-weak primitive, the bounded rewrite that fixed it) ranks instead of
-thousands of generic advisories.
+superset, GitHub-reviewed). Then, when the review is about a regex fed user input rather than a
+package, switch to `redos-precedent`: smaller, selected for exactly that
+defect class, so the mechanism (the pathological input, the bounded
+rewrite that fixed it) ranks instead of thousands of generic advisories.
+`crypto-misuse-precedent` is withdrawn (its repository returns HTTP 404);
+a cipher or key-management question stays on `ghsa-db`.
 
 Three rules that keep the choice honest:
 
