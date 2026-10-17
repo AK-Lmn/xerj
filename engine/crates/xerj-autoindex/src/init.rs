@@ -15,7 +15,28 @@ use serde_json::{json, Value};
 use std::fs;
 use std::path::{Path, PathBuf};
 
-const USAGE: &str = "\
+/// `--help` for `xerj init`. `hub` is this build's [`xerj_common::hub::hub_key_configured`]:
+/// a build with no signing key does not write the hub teaching files and must
+/// not tell the reader that `xerj "<question>"` asks the hub (that command
+/// exits 5 there).
+fn usage(hub: bool) -> String {
+    let hub_skill = if hub {
+        "    .claude/skills/xerj-hub/SKILL.md\n                                 teach `xerj \"<question>\"`: when to ask the\n                                 hub, `--def`, the MCP registration per client\n"
+    } else {
+        ""
+    };
+    let hub_rule = if hub {
+        "    .cursor/rules/xerj-hub.mdc   the hub teaching file for Cursor (if .cursor/)\n"
+    } else {
+        ""
+    };
+    let hub_next = if hub {
+        "Public libraries,\nstandards and advisories need no indexing: `xerj \"<question>\"` asks the hub.\n"
+    } else {
+        "This build has no hub signing key, so `xerj \"<question>\"` is not available\n(it exits 5). For public libraries, use `xerj corpus` and `xerj code`.\n"
+    };
+    format!(
+        "\
 xerj init — wire XERJ into the coding agents installed in this project
 
 USAGE:
@@ -27,12 +48,8 @@ config for each — with a .bak backup for any file it edits:
     .mcp.json                    register the `xerj mcp` server (Claude Code
                                  project scope; merged, other servers kept)
     .claude/skills/xerj/SKILL.md teach `xerj search` / `xerj def` (10 lines)
-    .claude/skills/xerj-hub/SKILL.md
-                                 teach `xerj \"<question>\"`: when to ask the
-                                 hub, `--def`, the MCP registration per client
-    .cursor/rules/xerj.mdc       same teaching file for Cursor (if .cursor/)
-    .cursor/rules/xerj-hub.mdc   the hub teaching file for Cursor (if .cursor/)
-    AGENTS.md                    a short XERJ section (appended if the file
+{hub_skill}    .cursor/rules/xerj.mdc       same teaching file for Cursor (if .cursor/)
+{hub_rule}    AGENTS.md                    a short XERJ section (appended if the file
                                  exists, created otherwise)
 
 The teaching files carry an `xerj-init-version` marker. A re-run upgrades one
@@ -46,15 +63,17 @@ OPTIONS:
     -h, --help      this help
 
 After init: restart the agent session so it picks up the new tools, then
-`xerj autoindex <folder>` anything you want searchable. Public libraries,
-standards and advisories need no indexing: `xerj \"<question>\"` asks the hub.
-init also prints the MCP registration line for each client.
+`xerj autoindex <folder> --prefix <name>` anything you want searchable.
+Pass that same `--prefix <name>` to `xerj search` and `xerj def`; without it
+they search the default `ax` prefix. {hub_next}init also prints the MCP registration line for each client.
 
 Auth: nothing secret is written (`.mcp.json` is meant to be committed). For a
 loopback node the MCP server reads <data-dir>/admin.key by itself and says so
 on stderr; for any other node add \"XERJ_AUTH\": \"ApiKey <key>\" to the env
 block — init prints which case you are in.
-";
+"
+    )
+}
 
 /// The ten-line teaching file. One idea per line, no filler: what the tools
 /// are, when to reach for them, what comes back.
@@ -63,7 +82,8 @@ fn skill_md() -> String {
      Use XERJ instead of grep when you need code you cannot see in the open files:\n\n\
      - `xerj def \"<symbol>\"` — where is this defined? Returns file:line + signature in one call.\n\
      - `xerj search \"<plain words>\"` — ranked passages, definitions first; cite the printed file:line.\n\
-     - `xerj autoindex <folder>` — index a repo first (once; re-index is incremental).\n\
+     - `xerj autoindex <folder> --prefix <name>` — index a repo first (once; re-index is incremental).\n\
+     - Pass the same `--prefix <name>` to `xerj search` / `xerj def`; without it they search the default `ax` prefix.\n\
      - MCP: the `xerj_search` tool accepts a plain string query and returns the same passages.\n\n\
      Trust the passage over memory: it is the actual code at that path.\n"
         .to_string()
@@ -74,7 +94,9 @@ fn agents_md_section() -> String {
      This project uses XERJ for reference coding. Before writing code that touches\n\
      unfamiliar territory: `xerj def \"<symbol>\"` for go-to-definition, or\n\
      `xerj search \"<plain words>\"` for ranked, definition-first passages.\n\
-     Index a repo with `xerj autoindex <folder>`. Cite file:line for anything you rely on.\n"
+     Index each repo under its own prefix: `xerj autoindex <folder> --prefix <name>`, then\n\
+     pass the same `--prefix <name>` to `xerj search` and `xerj def` (without it they search\n\
+     the default `ax` prefix). Cite file:line for anything you rely on.\n"
         .to_string()
 }
 
@@ -102,7 +124,8 @@ Pick the source before you search:
 - **HUB**: public material you cannot quote exactly. A library's source at a pinned commit, a
   standard, a regulation, an advisory feed.
 - **LOCAL**: files only this machine has. This project, private documents, exports.
-  `xerj autoindex <folder>` once, then `xerj search "<words>"` or `xerj def "<symbol>"`.
+  `xerj autoindex <folder> --prefix <name>` once, then pass that `--prefix <name>` to
+  `xerj search` and `xerj def`. Without `--prefix` they search the default `ax` prefix.
 - **NEITHER**: a fact you can already state exactly. Retrieval on memorised content only adds cost.
 
 ## Ask the hub
@@ -240,7 +263,9 @@ fn closing_message(bin: &str, url: &str, hub: bool) -> String {
     };
     format!(
         "\ndone. Restart the agent session to pick up the tools, then\n\
-         `xerj autoindex <folder>` anything you want searchable.\n\n\
+         `xerj autoindex <folder> --prefix <name>` anything you want searchable.\n\
+         Pass that same `--prefix <name>` to `xerj search` and `xerj def`\n\
+         (without it they search the default `ax` prefix).\n\n\
          {hub_line}{}",
         mcp_registration(bin, url)
     )
@@ -258,7 +283,7 @@ fn self_bin() -> String {
 /// `skill_md()` or `HUB_SKILL_MD` changes, so a file an older init wrote (and
 /// the user never edited) is upgraded on the next run. A unit test pins the
 /// texts' hashes to this number, so a text change without a bump fails CI.
-const INIT_FILES_VERSION: u32 = 1;
+const INIT_FILES_VERSION: u32 = 3;
 
 /// The marker's prefix. The full line is
 /// `<!-- xerj-init-version: <N> sha256:<16 hex> -->`: the generation, and the
@@ -436,17 +461,20 @@ pub fn run_init_cli() -> i32 {
         .filter(|s| !s.is_empty())
         .unwrap_or_else(|| DEFAULT_URL.to_string());
     let mut dry = false;
-    let mut it = std::env::args().skip(2);
+    let mut it = xerj_common::argv::args_after_subcommand().into_iter();
     while let Some(a) = it.next() {
         match a.as_str() {
             "-h" | "--help" => {
-                print!("{USAGE}");
+                print!("{}", usage(xerj_common::hub::hub_key_configured()));
                 return 0;
             }
             "--url" => url = it.next().unwrap_or(url),
             "--dry-run" => dry = true,
             other => {
-                eprintln!("xerj init: unexpected argument '{other}'\n\n{USAGE}");
+                eprintln!(
+                    "xerj init: unexpected argument '{other}'\n\n{}",
+                    usage(xerj_common::hub::hub_key_configured())
+                );
                 return 2;
             }
         }
@@ -588,7 +616,7 @@ pub(crate) fn run_init_with(
     // we only tell the user which of the two worlds they are in — the key
     // itself is never printed or written.
     if xerj_common::localauth::url_is_loopback(url) {
-        match xerj_common::localauth::discover_local_admin_key() {
+        match xerj_common::localauth::discover_local_admin_key_for_url(url) {
             Some((_, path)) => out.push(format!(
                 "  auth     MCP authenticates with the admin key at {} (local node)",
                 path.display()
@@ -930,7 +958,8 @@ mod tests {
         let closing = closing_message("/usr/local/bin/xerj", DEFAULT_URL, true);
         assert!(closing.contains(&printed));
         assert!(closing.contains(r#"xerj "<question>""#));
-        assert!(closing.contains("xerj autoindex <folder>"));
+        assert!(closing.contains("xerj autoindex <folder> --prefix <name>"));
+        assert!(closing.contains("default `ax` prefix"));
     }
 
     /// The printed Claude Code line is pasteable in any shell: it carries the
@@ -1001,9 +1030,12 @@ mod tests {
         assert!(printed.contains("xerj_search"));
     }
 
-    /// `--help` lists every file init can write, the hub pair included.
+    /// `--help` lists every file init can write. The hub pair is listed only
+    /// when this build can verify hub packs; otherwise the help must not
+    /// teach `xerj "<question>"`, which exits 5.
     #[test]
     fn help_lists_every_file_init_writes() {
+        let with_hub = usage(true);
         for file in [
             ".mcp.json",
             ".claude/skills/xerj/SKILL.md",
@@ -1012,8 +1044,36 @@ mod tests {
             ".cursor/rules/xerj-hub.mdc",
             "AGENTS.md",
         ] {
-            assert!(USAGE.contains(file), "--help does not list {file}");
+            assert!(with_hub.contains(file), "--help does not list {file}");
         }
+        assert!(
+            with_hub.contains("xerj autoindex <folder> --prefix <name>"),
+            "{with_hub}"
+        );
+        assert!(with_hub.contains("default `ax` prefix"), "{with_hub}");
+        assert!(with_hub.contains("asks the hub"), "{with_hub}");
+
+        let no_hub = usage(false);
+        for file in [
+            ".mcp.json",
+            ".claude/skills/xerj/SKILL.md",
+            ".cursor/rules/xerj.mdc",
+            "AGENTS.md",
+        ] {
+            assert!(no_hub.contains(file), "--help does not list {file}");
+        }
+        assert!(
+            !no_hub.contains("xerj-hub"),
+            "a no-key build must not list hub teaching files it will not write:\n{no_hub}"
+        );
+        assert!(
+            !no_hub.contains(r#"asks the hub"#),
+            "a no-key build must not say the hub answers:\n{no_hub}"
+        );
+        assert!(
+            no_hub.contains("exits 5") && no_hub.contains("xerj code"),
+            "{no_hub}"
+        );
     }
 
     // ── the version marker: upgrade only what init wrote and nobody edited ──
@@ -1114,6 +1174,60 @@ mod tests {
         );
     }
 
+    /// The generated AGENTS.md section used to teach
+    /// `xerj search "<words>"` with no `--prefix`, so an agent on a node whose
+    /// repos were indexed under their own prefixes ran the bare command, hit
+    /// the default `ax-*` pattern, and found nothing (field report
+    /// 2026-10-15-reference-coding-installed-xerj-indexed-this-repo). The
+    /// section must show the flag on the index step AND on the query step.
+    #[test]
+    fn agents_md_section_shows_prefix_on_index_and_query() {
+        let text = agents_md_section();
+        assert!(
+            text.contains("xerj autoindex <folder> --prefix <name>"),
+            "AGENTS.md must show --prefix on the index step:\n{text}"
+        );
+        assert!(
+            text.contains("same `--prefix <name>`"),
+            "AGENTS.md must tell search/def to reuse the prefix:\n{text}"
+        );
+        assert!(
+            text.contains("default `ax` prefix"),
+            "AGENTS.md must name what a bare search reads:\n{text}"
+        );
+    }
+
+    /// The hub skill's LOCAL bullet used to teach a bare `xerj autoindex` and
+    /// a bare `xerj search` / `xerj def`, the same omission as the project
+    /// skill (#1580). An agent that followed it searched the default `ax`
+    /// prefix.
+    #[test]
+    fn hub_skill_shows_prefix_on_index_and_query() {
+        assert!(
+            HUB_SKILL_MD.contains("xerj autoindex <folder> --prefix <name>"),
+            "{HUB_SKILL_MD}"
+        );
+        assert!(HUB_SKILL_MD.contains("`--prefix <name>`"), "{HUB_SKILL_MD}");
+        assert!(
+            HUB_SKILL_MD.contains("default `ax` prefix"),
+            "{HUB_SKILL_MD}"
+        );
+    }
+
+    /// The skill used to teach `xerj search` / `xerj def` with no `--prefix`,
+    /// so an agent on a node whose repos sit under their own prefixes searched
+    /// the default `ax-*` and found nothing (#1580).
+    #[test]
+    fn skill_shows_prefix_on_index_and_query() {
+        let text = skill_md();
+        assert!(
+            text.contains("xerj autoindex <folder> --prefix <name>"),
+            "{text}"
+        );
+        assert!(text.contains("same `--prefix <name>`"), "{text}");
+        assert!(text.contains("default `ax` prefix"), "{text}");
+    }
+
     /// A text change without a version bump would leave every pristine older
     /// file un-upgraded. Changing either text fails here until
     /// `INIT_FILES_VERSION` is bumped and these hashes are re-pinned.
@@ -1125,7 +1239,7 @@ mod tests {
                 content_hash(&skill_md()).as_str(),
                 content_hash(HUB_SKILL_MD).as_str()
             ),
-            (1, "2431e2257fd251e5", "c2ee5047ba667c35"),
+            (3, "c59537bc1064a30f", "6040c97600edc004"),
             "a teaching text changed: bump INIT_FILES_VERSION and re-pin"
         );
     }
@@ -1240,7 +1354,11 @@ mod tests {
         );
         let closing = closing_message("/usr/local/bin/xerj", DEFAULT_URL, false);
         assert!(!closing.contains(r#"xerj "<question>""#), "{closing}");
-        assert!(closing.contains("xerj autoindex <folder>"), "{closing}");
+        assert!(
+            closing.contains("xerj autoindex <folder> --prefix <name>"),
+            "{closing}"
+        );
+        assert!(closing.contains("default `ax` prefix"), "{closing}");
     }
 
     /// A non-loopback URL never triggers discovery, even with a local key

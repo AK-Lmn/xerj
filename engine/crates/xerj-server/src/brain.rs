@@ -36,7 +36,7 @@ const BOOT_TIMEOUT: Duration = Duration::from_secs(120);
 const BOOT_POLL: Duration = Duration::from_millis(150);
 
 pub fn run_cli() -> i32 {
-    let args: Vec<String> = std::env::args().skip(2).collect();
+    let args: Vec<String> = xerj_common::argv::args_after_subcommand();
     let cfg = match parse(args) {
         Ok(Some(cfg)) => cfg,
         Ok(None) => {
@@ -649,6 +649,7 @@ fn index_cfg(cfg: &BrainCfg, brain: &str, api_key: Option<String>) -> IndexCfg {
         watch: false,
         label: None,
         debounce: std::time::Duration::from_millis(0),
+        exclude_rels: Vec::new(),
     }
 }
 
@@ -1003,6 +1004,7 @@ mod tests {
             journal_records: 42,
             files_done_journaled: 7,
             dataset_indices: 2,
+            state_dir: "/tmp/xerj-state".to_string(),
         }
         .into();
         assert!(zero_live_is_journal_server_disagreement(
@@ -1040,6 +1042,7 @@ mod tests {
             journal_records: 3,
             files_done_journaled: 1,
             dataset_indices: 1,
+            state_dir: "/tmp/xerj-state".to_string(),
         }
         .to_string();
         assert!(
