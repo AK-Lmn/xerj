@@ -355,6 +355,7 @@ impl Estimate {
         let coverage = (planned_bytes > 0).then(|| covered_bytes as f64 / planned_bytes as f64);
 
         if families.is_empty() {
+            let unmeasured_count = unmeasured_families.len();
             return Self {
                 kind: ESTIMATE_KIND,
                 low_seconds: None,
@@ -380,7 +381,7 @@ impl Estimate {
                 coverage,
                 families,
                 unmeasured_families,
-                excludes: EXCLUDES.to_vec(),
+                excludes: excludes_for(planned_files, unmeasured_count),
             };
         }
 
@@ -404,6 +405,7 @@ impl Estimate {
             }
         );
 
+        let unmeasured_count = unmeasured_families.len();
         Self {
             kind: ESTIMATE_KIND,
             low_seconds: Some(low),
@@ -416,7 +418,7 @@ impl Estimate {
             coverage,
             families,
             unmeasured_families,
-            excludes: EXCLUDES.to_vec(),
+            excludes: excludes_for(planned_files, unmeasured_count),
         }
     }
 
@@ -473,6 +475,23 @@ const EXCLUDES: &[&str] = &[
     "relationship detection and edge writes (--no-graph removes these)",
     "families with no end-to-end read in phase A, listed under unmeasured_families",
 ];
+
+/// Which exclusion lines to print.
+///
+/// The last line points at the `NOT priced` family list. A fully measured
+/// run and a resume with nothing pending both printed it, and neither list
+/// was there. A resume also has no estimate, so the other three lines (what
+/// a number would have left out) do not apply.
+fn excludes_for(planned_files: u64, unmeasured_families: usize) -> Vec<&'static str> {
+    if planned_files == 0 {
+        return Vec::new();
+    }
+    EXCLUDES
+        .iter()
+        .copied()
+        .filter(|line| unmeasured_families > 0 || !line.contains("unmeasured_families"))
+        .collect()
+}
 
 /// `1.4 GB`, `812.0 MB`, `4.0 KB`, `37 B`.
 pub fn human_bytes(bytes: u64) -> String {
@@ -585,6 +604,43 @@ mod tests {
         // The sqlite bytes contribute NO seconds — an estimate that quietly
         // priced them at the code rate would be a fabrication.
         assert!((estimate.low_seconds.unwrap() - 1.0).abs() < 1e-9);
+        assert!(
+            estimate
+                .excludes
+                .iter()
+                .any(|line| line.contains("unmeasured_families")),
+            "a family that was not timed must still be named in the excludes"
+        );
+    }
+
+    /// Tokio's fresh run measured every family and still printed
+    /// "listed under unmeasured_families". The resume printed that line,
+    /// plus the other excludes, under "nothing to index".
+    #[test]
+    fn excludes_match_the_estimate_that_was_actually_made() {
+        let rates = BTreeMap::from([rate("code", 1_000.0)]);
+        let measured = Estimate::compute(&planned("code", 1_000, 2), &rates, 4);
+        assert!(measured.unmeasured_families.is_empty());
+        assert!(measured
+            .excludes
+            .iter()
+            .any(|line| line.contains("server-side indexing")));
+        assert!(
+            !measured
+                .excludes
+                .iter()
+                .any(|line| line.contains("unmeasured_families")),
+            "{:?}",
+            measured.excludes
+        );
+
+        let nothing = Estimate::compute(&[], &rates, 4);
+        assert_eq!(nothing.basis, "nothing to index");
+        assert!(
+            nothing.excludes.is_empty(),
+            "a resume with nothing pending has no estimate to qualify: {:?}",
+            nothing.excludes
+        );
     }
 
     #[test]
