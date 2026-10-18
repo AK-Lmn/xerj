@@ -16,6 +16,7 @@ import io
 import json
 import os
 import pathlib
+import re
 import subprocess
 import sys
 import tempfile
@@ -898,6 +899,89 @@ class CommandLineTests(unittest.TestCase):
             self.assertEqual(rc, 0, err)
             self.assertIn(f"would open: hub: re-pin feed to {shas[1][:8]}", out)
             self.assertEqual((reg / "feed.json").read_text(), before, "dry run leaves the manifest alone")
+
+
+class ConsumerE2eDefsDetectionTests(unittest.TestCase):
+    """The per-pack consumer gate (tools/hub-packs/consumer_e2e.sh, §12.3) runs
+    its `--def` assertion only when the pack carries a usable code symbol. A
+    defs-0 pack (the awesome-* lists, docs-only, dataset and regulation corpora,
+    e.g. awesome-mcp-servers at bytes:2.8MB defs:0) has nothing to look up, so it
+    must fall back to the question check alone rather than failing outright — the
+    bug that stalled the §12.1 backfill at ~134/514, since ~380 corpora are
+    defs-0. These tests pin (a) that the script parses, (b) that the usable-symbol
+    detection is correct across every defs.jsonl shape the builder can write, and
+    (c) that the question-only fallback and its branches are wired, with no
+    `fail` the moment defs is empty."""
+
+    REPO_ROOT = pathlib.Path(__file__).resolve().parents[2]
+    SCRIPT = REPO_ROOT / "tools" / "hub-packs" / "consumer_e2e.sh"
+
+    @classmethod
+    def setUpClass(cls):
+        if not cls.SCRIPT.is_file():
+            raise unittest.SkipTest(f"{cls.SCRIPT} not found")
+        cls.text = cls.SCRIPT.read_text()
+
+    def test_the_script_parses(self):
+        out = subprocess.run(["bash", "-n", str(self.SCRIPT)], capture_output=True, text=True)
+        self.assertEqual(out.returncode, 0, f"consumer_e2e.sh does not parse:\n{out.stderr}")
+
+    def _def_program(self) -> str:
+        """The exact jq program the script uses to pick the first usable symbol."""
+        m = re.search(r"DEF=\$\(jq -cn '([^']*)'", self.text)
+        self.assertIsNotNone(m, "could not find the DEF=jq picker in consumer_e2e.sh")
+        return m.group(1)
+
+    def _pick(self, jsonl: str) -> str:
+        """Run the script's own DEF picker over a defs.jsonl body; '' means no usable symbol."""
+        with tempfile.NamedTemporaryFile("w", suffix=".jsonl", delete=False) as f:
+            f.write(jsonl)
+            path = f.name
+        try:
+            out = subprocess.run(["jq", "-cn", self._def_program(), path],
+                                 capture_output=True, text=True)
+            self.assertEqual(out.returncode, 0, out.stderr)
+            return out.stdout.strip()
+        finally:
+            os.unlink(path)
+
+    def test_an_empty_defs_jsonl_has_no_usable_symbol(self):
+        # The defs-0 shape the builder writes for a docs/list/dataset corpus.
+        self.assertEqual(self._pick(""), "")
+
+    def test_blank_lines_only_have_no_usable_symbol(self):
+        self.assertEqual(self._pick("\n   \n\n"), "")
+
+    def test_symbols_shorter_than_four_chars_are_not_usable(self):
+        # Records exist, but no `.symbol` is a 4+-char identifier -> question-only.
+        self.assertEqual(self._pick('{"symbol":"ab","file":"x","line":1}\n'
+                                    '{"symbol":"c","file":"y","line":2}\n'), "")
+
+    def test_the_first_four_char_identifier_is_picked(self):
+        got = self._pick('{"symbol":"ab","file":"a","line":1}\n'
+                         '{"symbol":"parse_block","file":"src/lz4.c","line":42}\n')
+        self.assertEqual(json.loads(got),
+                         {"symbol": "parse_block", "file": "src/lz4.c", "line": 42})
+
+    def test_non_identifier_symbols_are_skipped(self):
+        # A punctuation/operator symbol never matches; the next real identifier wins.
+        got = self._pick('{"symbol":"<=>","file":"a","line":1}\n'
+                         '{"symbol":"LZ4_decompress","file":"src/lz4.c","line":99}\n')
+        self.assertEqual(json.loads(got)["symbol"], "LZ4_decompress")
+
+    def test_the_defs_zero_fallback_is_wired_and_the_old_hard_fail_is_gone(self):
+        # The branch: usable symbol -> --def required; otherwise question-only.
+        self.assertIn('if [ -n "$DEF" ]; then', self.text)
+        self.assertIn("--def", self.text)
+        self.assertIn("question-only check", self.text)
+        # The pre-fix behaviour -- failing the whole pack the instant defs is
+        # empty -- must not come back.
+        self.assertNotIn("defs.jsonl has no identifier to look up", self.text,
+                         "the defs-0 hard fail is back; defs-0 packs would stall the backfill again")
+
+    def test_a_record_count_is_computed_for_logging(self):
+        # Robust defs count: non-blank lines of defs.jsonl, read as the builder wrote it.
+        self.assertRegex(self.text, r"DEFS_RECORDS=\$\(grep -c")
 
 
 if __name__ == "__main__":

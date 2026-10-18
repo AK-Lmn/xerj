@@ -93,21 +93,45 @@ done
 
 # 4. --def for a symbol from the pack's own defs.jsonl: the first identifier of
 #    four or more characters (a stable, deterministic choice).
+#
+#    Not every corpus HAS identifiers. The awesome-* lists, docs-only, dataset
+#    and regulation corpora are published with an EMPTY defs.jsonl (bytes:N
+#    defs:0) — valid packs that answer natural-language questions but declare no
+#    code symbols. For those the --def step has nothing to look up, so it is
+#    SKIPPED and the pack is gated on the question check (step 5) alone. A pack
+#    that DOES carry a usable symbol still MUST satisfy both --def and the
+#    question (the full §12.3 gate, with the #1735 fix); only a pack with no
+#    usable symbol falls back to question-only. A pack that answers nothing —
+#    no defs AND no question hit — still fails (in step 5).
 zstd -dc "$WORK/rel/$TAG/$FILE" | tar -xOf - defs.jsonl > "$WORK/defs.jsonl"
+# defs.jsonl is one JSON DefRecord per line, exactly as the builder wrote it
+# (xerj-hub::pack::to_jsonl, newline-terminated); an empty file is zero records.
+# Count the non-blank lines, then pick the first "usable" symbol: a `.symbol`
+# that is an identifier of four or more characters. "No usable symbol" covers
+# every defs-0 shape — a zero-byte file, blank lines, or records whose symbols
+# are all too short or not identifiers.
+DEFS_RECORDS=$(grep -c '[^[:space:]]' "$WORK/defs.jsonl" || true)
 DEF=$(jq -cn 'first(inputs | select(.symbol | test("^[A-Za-z_][A-Za-z0-9_]{3,}$"))) // empty' \
       "$WORK/defs.jsonl")
-[ -n "$DEF" ] || fail "defs.jsonl has no identifier to look up"
-SYM=$(jq -r .symbol <<<"$DEF")
-"$BIN" code "$SLUG" --def "$SYM" --json > "$WORK/def.json" \
-  || fail "xerj code $SLUG --def $SYM failed"
-# An answer's hits carry file and line, not the symbol: the definition the pack
-# recorded must be among them, answered from the local pack.
-jq -e --argjson d "$DEF" '
-  .answered_from == "local_pack"
-  and ([.hits[]? | select(.file == $d.file and .line == $d.line)] | length) > 0' \
-  "$WORK/def.json" >/dev/null \
-  || { cat "$WORK/def.json"; fail "--def $SYM did not return $(jq -r '"\(.file):\(.line)"' <<<"$DEF") from the local pack"; }
-echo "def ok: $SYM -> $(jq -r '"\(.file):\(.line)"' <<<"$DEF") (answered_from local_pack)"
+if [ -n "$DEF" ]; then
+  SYM=$(jq -r .symbol <<<"$DEF")
+  echo "defs present: $DEFS_RECORDS record(s); --def $SYM is required"
+  "$BIN" code "$SLUG" --def "$SYM" --json > "$WORK/def.json" \
+    || fail "xerj code $SLUG --def $SYM failed"
+  # An answer's hits carry file and line, not the symbol: the definition the pack
+  # recorded must be among them, answered from the local pack.
+  jq -e --argjson d "$DEF" '
+    .answered_from == "local_pack"
+    and ([.hits[]? | select(.file == $d.file and .line == $d.line)] | length) > 0' \
+    "$WORK/def.json" >/dev/null \
+    || { cat "$WORK/def.json"; fail "--def $SYM did not return $(jq -r '"\(.file):\(.line)"' <<<"$DEF") from the local pack"; }
+  echo "def ok: $SYM -> $(jq -r '"\(.file):\(.line)"' <<<"$DEF") (answered_from local_pack)"
+else
+  # defs:0 — a docs/list/dataset/regulation pack with no code symbols. The --def
+  # assertion has nothing to look up, so it is skipped; the question check below
+  # is the whole gate for this pack. (If it too finds nothing, step 5 fails.)
+  echo "no defs ($DEFS_RECORDS record(s), none a usable symbol); question-only check"
+fi
 
 # 5. One question: a word from the catalogue entry's ask_for. Words the template
 #    sentence ("an agent working on ... queries this for ...") always carries say
