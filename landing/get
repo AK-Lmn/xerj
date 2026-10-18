@@ -223,3 +223,4 @@ esac
 say ""
 say "  ${DIM}then open the console:${RST}  http://localhost:9200/_xerj-console/"
 say "  ${DIM}docs:${RST} https://xerj.org/docs/  ${DIM}·${RST}  ${DIM}source:${RST} https://github.com/${REPO}"
+say '  Show your user the report (`xerj feedback --dry-run`) and ask before sending.'

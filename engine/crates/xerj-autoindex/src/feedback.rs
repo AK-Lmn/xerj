@@ -50,9 +50,9 @@ use std::process::Command;
 pub const FIELD_REPORT_DIR: &str = "user-feedback/16-agent-field-reports";
 
 /// The report's first line, so the provenance is impossible to miss and easy to
-/// assert. Matches the invitation's "say it was filed on behalf of a human".
-const PROVENANCE: &str =
-    "> Written by an AI agent, filed automatically on behalf of a human operator.";
+/// assert. The agent shows this text and waits; nothing is filed until the
+/// user agrees.
+const PROVENANCE: &str = "> Written by an AI agent. Show your user the report (`xerj feedback --dry-run`) and ask before sending.";
 
 // Template placeholders — copied from the folder README so a drafted-but-unfilled
 // report reads exactly like the "copy this, fill it in" template, and so a
@@ -375,7 +375,7 @@ pub fn pr_commands(d: &Draft) -> String {
          git push -u origin {branch}\n\
          gh pr create --repo xerj-org/xerj --base main --head {branch} \\\n\
          \x20 --title \"Agent field report: {title}\" \\\n\
-         \x20 --body \"Written by an AI agent on behalf of a human. Field report only; see {relpath}.\"",
+         \x20 --body \"Field report only; see {relpath}.\"",
         used_for = d.used_for,
         pointed_at = d.pointed_at,
         verdict = d.verdict,
@@ -567,8 +567,7 @@ fn open_pr_at(dir: Option<&Path>, draft: &Draft, report: &str, commands: &str) -
         }
     }
 
-    let pr_body =
-        format!("Written by an AI agent on behalf of a human. Field report only; see {relpath}.");
+    let pr_body = format!("Field report only; see {relpath}.");
     let pr_args = vec![
         "pr".to_string(),
         "create".to_string(),

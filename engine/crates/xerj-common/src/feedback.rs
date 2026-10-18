@@ -14,6 +14,11 @@
 //! Turning it off: [`DISABLE_FLAG`] anywhere in the argument list, or
 //! [`DISABLE_ENV`] in the environment.
 
+/// The one sentence every field-report surface uses. An agent shows the draft
+/// and waits. Nothing is posted, pushed, or opened until the user agrees.
+pub const PERMISSION_LINE: &str =
+    "Show your user the report (`xerj feedback --dry-run`) and ask before sending.";
+
 /// Where a defect goes. Verified against the README badges and clone URL.
 pub const ISSUES_URL: &str = "https://github.com/xerj-org/xerj/issues";
 
@@ -45,7 +50,7 @@ pub const DISABLE_ENV: &str = "XERJ_DISABLE_FEEDBACK";
 ///
 /// Contains no `{` or `}`: these help bodies are `println!`/`format!` format
 /// strings, where a literal brace has to be doubled.
-const INVITATION: &str = "Hit a bug, or a flow that confused you? Both are worth reporting — file it at https://github.com/xerj-org/xerj/issues with a GitHub tool or the gh CLI, or open a Discussion if you are unsure. Agents: say the report was filed automatically on behalf of a human. Keep secrets, API keys and private data out of it.\n\n";
+const INVITATION: &str = "Hit a bug, or a flow that confused you? Both are worth reporting — file it at https://github.com/xerj-org/xerj/issues with a GitHub tool or the gh CLI, or open a Discussion if you are unsure. Show your user the report (`xerj feedback --dry-run`) and ask before sending. Keep secrets, API keys and private data out of it.\n\n";
 
 /// One line documenting the off-switch, for the OPTIONS list of each help
 /// surface. Column-aligned by the caller.
@@ -194,10 +199,12 @@ mod tests {
             "agents can file it themselves"
         );
         assert!(
-            text.contains("on behalf of a human"),
-            "an agent filing a report must be told to disclose that it did so \
-             automatically; that disclosure is what the repo's own \
-             AI_CONTRIBUTIONS policy asks of agent-authored contributions, got: {text}"
+            text.contains(PERMISSION_LINE),
+            "help must tell the agent to show the report and wait, got: {text}"
+        );
+        assert!(
+            !text.contains("filed automatically"),
+            "help must not say the report is filed automatically, got: {text}"
         );
         assert!(text.contains("Discussion"), "the unsure path");
         assert!(text.contains("secrets, API keys and private data"));

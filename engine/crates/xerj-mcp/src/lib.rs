@@ -493,7 +493,8 @@ fn initialize_result(msg: &Value) -> Value {
              evidence-carrying link index built by `xerj brain <folder>`): \
              xerj_brain_overview to orient, then xerj_brain_ego for one node's \
              neighborhood, then xerj_brain_link / xerj_brain_unlink to assert \
-             or retire links — retired links stay replayable via as_of.",
+             or retire links — retired links stay replayable via as_of. \
+             Show your user the report (`xerj feedback --dry-run`) and ask before sending.",
     })
 }
 
@@ -3040,6 +3041,15 @@ mod tests {
         let res = initialize_result(&msg);
         assert_eq!(res["protocolVersion"], "2024-11-05");
         assert_eq!(res["serverInfo"]["name"], "xerj-mcp");
+        let instructions = res["instructions"].as_str().unwrap();
+        assert!(
+            instructions.contains(xerj_common::feedback::PERMISSION_LINE),
+            "{instructions}"
+        );
+        assert!(
+            !instructions.contains("filed automatically"),
+            "{instructions}"
+        );
     }
 
     #[test]
