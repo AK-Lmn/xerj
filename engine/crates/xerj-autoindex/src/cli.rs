@@ -629,9 +629,7 @@ pub fn help_text_with(feedback: bool) -> String {
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20journal committed; only the catalog's duplicate-alias cleanup\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20could not run. Read `reason` on the xerj-done line to tell the\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20two apart, and rerun the same command once the reported server\n\
-         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20condition clears. ok=true with exit=3 is success: the next\n\
-         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20line is a xerj-note that says so (--progress json sets\n\
-         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20exit_meaning on the done object);\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20condition clears;\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x204 NEEDS A DECISION — the estimate exceeded --max-minutes, or a\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20--watch poll cost more than --max-monthly-ops; nothing was\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20indexed and a JSON decision request is on stdout;\n\
@@ -1668,7 +1666,15 @@ pub fn parse(args: Vec<String>) -> Result<Cmd, String> {
                 exclude_rels: Vec::new(),
             })))
         }
-        _ => Ok(Cmd::Help),
+        // No folder and no subcommand. This used to print the full help and
+        // exit 0, so a bare `xerj autoindex` looked like a successful run.
+        // `--help` / `-h` still return [`Cmd::Help`] above.
+        _ => Err(
+            "a folder is required (`xerj autoindex <folder>`), or use \
+             `xerj autoindex map` / `xerj autoindex status`. \
+             `xerj autoindex --help` prints the full usage"
+                .into(),
+        ),
     }
 }
 
@@ -1676,6 +1682,23 @@ pub fn parse(args: Vec<String>) -> Result<Cmd, String> {
 mod tests {
     use super::{parse, Approval, Cmd, Duration, ProgressMode, DEFAULT_MAX_MINUTES};
     use std::path::PathBuf;
+
+    #[test]
+    fn a_bare_autoindex_is_a_usage_error() {
+        let err = parse(Vec::new()).expect_err("bare autoindex must not succeed");
+        assert!(err.contains("a folder is required"), "{err}");
+        assert!(matches!(
+            parse(vec!["--help".into()]).expect("help still parses"),
+            Cmd::Help
+        ));
+        assert!(matches!(
+            parse(vec!["-h".into()]).expect("-h still parses"),
+            Cmd::Help
+        ));
+        let err = parse(vec!["--url".into(), "http://127.0.0.1:9200".into()])
+            .expect_err("flags without a folder are still usage");
+        assert!(err.contains("a folder is required"), "{err}");
+    }
 
     /// A flag that is accepted and silently does nothing is refused, because
     /// the operator who passed it believes the run did something it did not.
