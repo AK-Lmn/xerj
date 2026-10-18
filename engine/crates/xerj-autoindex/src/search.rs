@@ -12,6 +12,7 @@ use std::collections::BTreeSet;
 
 use crate::esclient::Es;
 use serde_json::{json, Value};
+use xerj_common::xccode::demote_catalog_noise;
 
 const USAGE: &str = "\
 xerj search — retrieve code from a running XERJ node (reference coding, no scripts)
@@ -23,7 +24,8 @@ OPTIONS:
     --url <U>       node endpoint (default $XERJ_URL or http://localhost:9200)
     --prefix <P>    index prefix to search (default \"ax\" — what `xerj autoindex` writes)
     --api-key <K>   Authorization (or $XERJ_API_KEY; --insecure nodes need none)
-    -k <N>          number of passages to return (default 5)
+    -k <N>          number of passages to return (default 5). A non-number is a
+                    usage error, not a silent default
     --full <CHARS>  max characters of each passage to print (default 600)
     --json          print the raw response instead of formatted passages
 
@@ -63,6 +65,29 @@ pub(crate) fn passage_text(hit: &Value) -> Option<String> {
         }
         _ => None,
     }
+}
+
+/// Text to print for one hit.
+///
+/// Passage first, then the symbol `code`. When the engine matched a document
+/// but selected no passage and there is no `code`, a section `heading` or
+/// document `title` is what the header would otherwise sit on top of — a
+/// blank block.
+pub(crate) fn hit_display_text(hit: &Value) -> Option<String> {
+    if let Some(text) = passage_text(hit) {
+        return Some(text);
+    }
+    let src = hit.get("_source")?;
+    for key in ["code", "heading", "title"] {
+        if let Some(text) = src
+            .get(key)
+            .and_then(Value::as_str)
+            .filter(|s| !s.is_empty())
+        {
+            return Some(text.to_string());
+        }
+    }
+    None
 }
 
 /// True when the query looks like a single code identifier (`IOSIntfLine`,
@@ -314,7 +339,7 @@ fn build_search_query(
         "query": { "bool": { "should": should }},
         // No `body` here: whole-file bodies are the token flood (measured ~9x
         // the size of the matching passage). `_passage` carries the snippet.
-        "_source": ["ax_path", "line", "start_line", "language", "kind", "code", "title"],
+        "_source": ["ax_path", "line", "start_line", "language", "kind", "code", "title", "heading"],
         "fields": ["_passage"]
     })
 }
@@ -354,6 +379,83 @@ pub(crate) fn hit_location(hit: &Value) -> String {
     match line {
         Some(n) => format!("{path}:{n}"),
         None => path.to_string(),
+    }
+}
+
+/// A line an agent can cite: `_source.line` / `start_line`, else a lexical
+/// passage ordinal. A `defs` / `title` / `name` passage has none.
+fn citable_line(hit: &Value) -> Option<u64> {
+    let src = hit.get("_source").unwrap_or(&Value::Null);
+    src.get("line")
+        .or_else(|| src.get("start_line"))
+        .and_then(Value::as_u64)
+        .or_else(|| passage_line(hit))
+}
+
+fn hit_path(hit: &Value) -> String {
+    hit.get("_source")
+        .and_then(|src| src.get("ax_path").or_else(|| src.get("path")))
+        .and_then(Value::as_str)
+        .unwrap_or("")
+        .to_string()
+}
+
+/// Move a no-line hit to just after the last lined hit on the same path.
+///
+/// A `defs` catalog for `src/lib.rs` can outscore `src/lib.rs:255` because the
+/// phrase boost is on the symbol list, not the declaration. An agent that
+/// cites the first header then cites a file with no line. Other paths keep
+/// their relative order, and a bare hit whose path has no lined sibling stays
+/// where the score put it. This does not demote `defs` hits as a class: that
+/// phrase clause is what ranks the defining file first.
+pub(crate) fn prefer_citable_line_on_the_same_path(hits: &mut [Value]) {
+    let mut last_lined: std::collections::HashMap<String, usize> = std::collections::HashMap::new();
+    for (i, hit) in hits.iter().enumerate() {
+        let path = hit_path(hit);
+        if path.is_empty() {
+            continue;
+        }
+        if citable_line(hit).is_some() {
+            last_lined.insert(path, i);
+        }
+    }
+    if last_lined.is_empty() {
+        return;
+    }
+    let mut bare_of_mixed: std::collections::HashMap<String, Vec<usize>> =
+        std::collections::HashMap::new();
+    for (i, hit) in hits.iter().enumerate() {
+        let path = hit_path(hit);
+        if last_lined.contains_key(&path) && citable_line(hit).is_none() {
+            bare_of_mixed.entry(path).or_default().push(i);
+        }
+    }
+    if bare_of_mixed.is_empty() {
+        return;
+    }
+    let mut order = Vec::with_capacity(hits.len());
+    for (i, hit) in hits.iter().enumerate() {
+        let path = hit_path(hit);
+        if bare_of_mixed
+            .get(&path)
+            .is_some_and(|idxs| idxs.contains(&i))
+        {
+            continue;
+        }
+        order.push(i);
+        if last_lined.get(&path) == Some(&i) {
+            if let Some(bares) = bare_of_mixed.get(&path) {
+                order.extend(bares.iter().copied());
+            }
+        }
+    }
+    debug_assert_eq!(order.len(), hits.len());
+    if order.iter().enumerate().all(|(n, i)| n == *i) {
+        return;
+    }
+    let original = hits.to_vec();
+    for (dest, src) in order.into_iter().enumerate() {
+        hits[dest] = original[src].clone();
     }
 }
 
@@ -486,40 +588,116 @@ fn catalog_run_prefixes(es: &Es) -> Option<Vec<String>> {
     Some(prefixes.into_iter().collect())
 }
 
-/// Entry point for the `search` subcommand. Returns a process exit code.
-pub fn run_search_cli() -> i32 {
-    let mut url = std::env::var("XERJ_URL")
-        .ok()
-        .filter(|s| !s.is_empty())
-        .unwrap_or_default();
-    let mut api_key = std::env::var("XERJ_API_KEY").ok().filter(|s| !s.is_empty());
+/// Default `--full` width, and the width suggested when the user asked for 0.
+const DEFAULT_FULL_CHARS: usize = 600;
+
+/// `-k` / `--full`. A value that does not parse used to be consumed and
+/// dropped, so `xerj search -k abc` kept the default of 5 and never said so.
+pub(crate) fn parse_count_arg(flag: &str, next: Option<String>) -> Result<usize, String> {
+    match next {
+        Some(v) => v
+            .parse::<usize>()
+            .map_err(|_| format!("{flag} must be a non-negative whole number, got '{v}'")),
+        None => Err(format!("{flag} needs a number")),
+    }
+}
+
+/// What `(--full N to see more)` should offer. `full * 2` when `full` is 0
+/// is 0, so the hint told the reader to pass the value that hid the passage.
+pub(crate) fn fuller_than(full: usize) -> usize {
+    if full == 0 {
+        DEFAULT_FULL_CHARS
+    } else {
+        full.saturating_mul(2)
+    }
+}
+
+#[derive(Debug)]
+struct ParsedSearch {
+    url: String,
+    api_key: Option<String>,
+    prefix: String,
+    k: usize,
+    full: usize,
+    as_json: bool,
+    query: Option<String>,
+}
+
+#[derive(Debug)]
+enum SearchCli {
+    Help,
+    Query(ParsedSearch),
+}
+
+fn parse_search_cli(
+    args: impl Iterator<Item = String>,
+    mut url: String,
+    mut api_key: Option<String>,
+) -> Result<SearchCli, String> {
     let mut prefix = "ax".to_string();
     let mut k: usize = 5;
-    let mut full: usize = 600;
+    let mut full: usize = DEFAULT_FULL_CHARS;
     let mut as_json = false;
     let mut query: Option<String> = None;
 
-    // Skip argv[0] (binary) + argv[1] ("search").
-    let mut it = xerj_common::argv::args_after_subcommand().into_iter();
+    let mut it = args;
     while let Some(a) = it.next() {
         match a.as_str() {
-            "-h" | "--help" => {
-                print!("{USAGE}");
-                return 0;
-            }
+            "-h" | "--help" => return Ok(SearchCli::Help),
             "--url" => url = it.next().unwrap_or_default(),
             "--prefix" => prefix = it.next().unwrap_or(prefix),
             "--api-key" => api_key = it.next(),
-            "-k" => k = it.next().and_then(|s| s.parse().ok()).unwrap_or(k),
-            "--full" => full = it.next().and_then(|s| s.parse().ok()).unwrap_or(full),
+            "-k" => k = parse_count_arg("-k", it.next())?,
+            "--full" => full = parse_count_arg("--full", it.next())?,
             "--json" => as_json = true,
             other if !other.starts_with('-') && query.is_none() => query = Some(other.to_string()),
-            other => {
-                eprintln!("xerj search: unexpected argument '{other}'\n\n{USAGE}");
-                return 2;
-            }
+            other => return Err(format!("unexpected argument '{other}'")),
         }
     }
+    Ok(SearchCli::Query(ParsedSearch {
+        url,
+        api_key,
+        prefix,
+        k,
+        full,
+        as_json,
+        query,
+    }))
+}
+
+/// Entry point for the `search` subcommand. Returns a process exit code.
+pub fn run_search_cli() -> i32 {
+    let url = std::env::var("XERJ_URL")
+        .ok()
+        .filter(|s| !s.is_empty())
+        .unwrap_or_default();
+    let api_key = std::env::var("XERJ_API_KEY").ok().filter(|s| !s.is_empty());
+
+    // Arguments after the subcommand, including a flag that was written before it.
+    let parsed = match parse_search_cli(
+        xerj_common::argv::args_after_subcommand().into_iter(),
+        url,
+        api_key,
+    ) {
+        Ok(SearchCli::Help) => {
+            print!("{USAGE}");
+            return 0;
+        }
+        Ok(SearchCli::Query(parsed)) => parsed,
+        Err(e) => {
+            eprintln!("xerj search: {e}\n\n{USAGE}");
+            return 2;
+        }
+    };
+    let ParsedSearch {
+        mut url,
+        mut api_key,
+        prefix,
+        k,
+        full,
+        as_json,
+        query,
+    } = parsed;
 
     let query = match query {
         Some(q) if !q.trim().is_empty() => q,
@@ -590,7 +768,7 @@ pub fn run_search_cli() -> i32 {
         .as_ref()
         .and(raw_mapping.as_ref().map(numeric_property_names));
     let body = search_query_body_for_mapping(&query, k, mapped.as_ref(), numeric.as_ref());
-    let resp = match es.search(&pattern, &body) {
+    let mut resp = match es.search(&pattern, &body) {
         Ok(v) => v,
         Err(e) => {
             eprintln!(
@@ -601,7 +779,19 @@ pub fn run_search_cli() -> i32 {
             return 1;
         }
     };
+    if let Some(hits) = resp.pointer_mut("/hits/hits").and_then(Value::as_array_mut) {
+        prefer_citable_line_on_the_same_path(hits);
+    }
 
+    // Stubs and catalogs repeat the words of a question and outrank the
+    // implementation. Same partition `xerj code` applies (#1504, candle
+    // `.pyi` report). `--json` sees the same order as the text printer.
+    if let Some(arr) = resp.pointer("/hits/hits").and_then(Value::as_array) {
+        let ordered = demote_catalog_noise(arr.clone());
+        if let Some(slot) = resp.pointer_mut("/hits/hits") {
+            *slot = Value::Array(ordered);
+        }
+    }
     if as_json {
         println!(
             "{}",
@@ -639,18 +829,16 @@ pub fn run_search_cli() -> i32 {
         // Passage-first: `_passage` is the engine's matching snippet (an
         // array-wrapped object with a text payload); `code` is the symbol
         // declaration. Never the whole file body — that is the 9x token flood
-        // this command exists to avoid.
-        let passage_owned = passage_text(h);
-        let passage = passage_owned
-            .as_deref()
-            .or_else(|| src.get("code").and_then(Value::as_str));
-        if let Some(text) = passage {
+        // this command exists to avoid. A hit with neither prints its heading
+        // or title rather than a blank block.
+        let passage_owned = hit_display_text(h);
+        if let Some(text) = passage_owned.as_deref() {
             let snippet: String = text.chars().take(full).collect();
             for l in snippet.lines() {
                 println!("    {l}");
             }
             if text.chars().count() > full {
-                println!("    … (--full {} to see more)", full * 2);
+                println!("    … (--full {} to see more)", fuller_than(full));
             }
         }
     }
@@ -665,6 +853,46 @@ pub fn run_search_cli() -> i32 {
 mod tests {
     use super::*;
     use xerj_common::code_query::normalize_code_search_query;
+
+    fn words(args: &[&str]) -> Vec<String> {
+        args.iter().map(|s| (*s).to_string()).collect()
+    }
+
+    #[test]
+    fn a_non_numeric_k_is_a_usage_error() {
+        let err = parse_search_cli(
+            words(&["-k", "abc", "flush"]).into_iter(),
+            String::new(),
+            None,
+        )
+        .expect_err("-k abc must not be ignored");
+        assert!(err.contains("-k"), "{err}");
+        assert!(err.contains("abc"), "{err}");
+        assert!(parse_count_arg("--full", Some("nope".into()))
+            .unwrap_err()
+            .contains("nope"));
+        assert!(parse_count_arg("-k", None)
+            .unwrap_err()
+            .contains("needs a number"));
+    }
+
+    #[test]
+    fn a_zero_full_hint_offers_the_default_width() {
+        assert_eq!(fuller_than(0), DEFAULT_FULL_CHARS);
+        assert_ne!(fuller_than(0), 0);
+        assert_eq!(fuller_than(600), 1200);
+        let parsed = parse_search_cli(
+            words(&["--full", "0", "rotate keys"]).into_iter(),
+            String::new(),
+            None,
+        )
+        .unwrap();
+        let SearchCli::Query(parsed) = parsed else {
+            panic!("expected a query");
+        };
+        assert_eq!(parsed.full, 0);
+        assert_eq!(parsed.query.as_deref(), Some("rotate keys"));
+    }
 
     /// #1364: multi-word natural-language queries strip repeated/glue particles
     /// (`de`, `la`, `por`, `en`, `the`, `of`) so a 2-letter function named `de`
@@ -749,6 +977,56 @@ mod tests {
             }
         });
         assert_eq!(passage_text(&hit), None);
+        assert_eq!(
+            hit_display_text(&hit).as_deref(),
+            Some("de <- function(col)")
+        );
+    }
+
+    /// A notebook hit can match on BM25 and still come back with no `_passage`.
+    /// The human line then has a path and a score and nothing under them.
+    /// Heading wins over title; a real passage still wins over both.
+    #[test]
+    fn a_hit_with_no_passage_prints_its_heading_or_title() {
+        let headed = json!({
+            "_source": {
+                "ax_path": "10-Iterators.ipynb",
+                "title": "Iterators",
+                "heading": "map and filter"
+            }
+        });
+        assert_eq!(hit_display_text(&headed).as_deref(), Some("map and filter"));
+
+        let titled = json!({
+            "_source": { "ax_path": "Index.ipynb", "title": "Index" }
+        });
+        assert_eq!(hit_display_text(&titled).as_deref(), Some("Index"));
+
+        let with_passage = json!({
+            "_source": {
+                "ax_path": "a.ipynb",
+                "title": "should not win",
+                "heading": "nope"
+            },
+            "fields": { "_passage": [{ "field": "body", "text": "the matching cell" }] }
+        });
+        assert_eq!(
+            hit_display_text(&with_passage).as_deref(),
+            Some("the matching cell")
+        );
+
+        let blank = json!({ "_source": { "ax_path": "empty.ipynb" } });
+        assert_eq!(hit_display_text(&blank), None);
+
+        let source = search_query_body("map and filter", 5);
+        assert!(
+            source["_source"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|f| f == "heading"),
+            "{source}"
+        );
     }
 
     /// #1365: whole-file hits (`ax-code-*`, `ax-docs-md-*`, `ax-text-*`) carry
@@ -810,6 +1088,72 @@ mod tests {
             hit_location(&synthetic_defs_hit),
             "crates/fjall/src/batch.rs"
         );
+    }
+
+    /// A defs catalog of `src/lib.rs` outscored `mod ensure;` at `src/lib.rs:255`
+    /// on an anyhow index. The line has to lead that path. A later file stays
+    /// after both, and a bare hit with no lined sibling is left alone.
+    #[test]
+    fn a_bare_defs_hit_does_not_outrank_a_lined_hit_on_the_same_path() {
+        let mut hits = vec![
+            json!({
+                "_score": 23.42,
+                "_source": { "ax_path": "src/lib.rs" },
+                "fields": { "_passage": [{
+                    "field": "defs",
+                    "ordinal": 0,
+                    "text": "module ensure"
+                }] }
+            }),
+            json!({
+                "_score": 15.53,
+                "_source": { "ax_path": "src/lib.rs", "line": 255, "kind": "module" },
+                "fields": { "_passage": [{
+                    "field": "code",
+                    "ordinal": 0,
+                    "text": "mod ensure;"
+                }] }
+            }),
+            json!({
+                "_score": 12.09,
+                "_source": { "ax_path": "tests/test_chain.rs" },
+                "fields": { "_passage": [{
+                    "field": "body",
+                    "ordinal": 0,
+                    "text": "ensure the chain"
+                }] }
+            }),
+        ];
+        prefer_citable_line_on_the_same_path(&mut hits);
+        assert_eq!(hit_location(&hits[0]), "src/lib.rs:255");
+        assert_eq!(hit_location(&hits[1]), "src/lib.rs");
+        assert_eq!(hit_location(&hits[2]), "tests/test_chain.rs:1");
+
+        let mut only_bare = vec![
+            json!({
+                "_source": { "ax_path": "only.rs" },
+                "fields": { "_passage": [{ "field": "defs", "ordinal": 0 }] }
+            }),
+            json!({ "_source": { "ax_path": "other.rs", "line": 4 } }),
+        ];
+        prefer_citable_line_on_the_same_path(&mut only_bare);
+        assert_eq!(hit_location(&only_bare[0]), "only.rs");
+        assert_eq!(hit_location(&only_bare[1]), "other.rs:4");
+
+        let mut sandwiched = vec![
+            json!({ "_source": { "ax_path": "src/lib.rs", "line": 10 } }),
+            json!({
+                "_source": { "ax_path": "src/lib.rs" },
+                "fields": { "_passage": [{ "field": "defs", "ordinal": 0 }] }
+            }),
+            json!({ "_source": { "ax_path": "src/lib.rs", "line": 20 } }),
+            json!({ "_source": { "ax_path": "other.rs", "line": 1 } }),
+        ];
+        prefer_citable_line_on_the_same_path(&mut sandwiched);
+        assert_eq!(hit_location(&sandwiched[0]), "src/lib.rs:10");
+        assert_eq!(hit_location(&sandwiched[1]), "src/lib.rs:20");
+        assert_eq!(hit_location(&sandwiched[2]), "src/lib.rs");
+        assert_eq!(hit_location(&sandwiched[3]), "other.rs:1");
     }
 
     fn index_mapping(fields: &[&str]) -> Value {
