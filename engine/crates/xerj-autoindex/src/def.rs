@@ -16,7 +16,8 @@ use std::collections::BTreeSet;
 use crate::esclient::Es;
 use crate::search::{
     corpus_snapshot, empty_lookup_report, field_lookup_ok, hit_location, is_identifier,
-    mapped_property_names, numeric_property_names, passage_text, weighted_query_fields,
+    mapped_property_names, numeric_property_names, parse_count_arg, passage_text,
+    weighted_query_fields,
 };
 use serde_json::{json, Value};
 
@@ -42,6 +43,38 @@ EXAMPLE:
 SEE ALSO:
     xerj search \"<plain words>\"    ranked passages when you don't know the name
 ";
+
+/// How much of a declaration `xerj def` prints. `xerj search --full`
+/// defaults to the same 600 characters. Two lines hid a constant that
+/// sat further down a real signature.
+const DECLARATION_PREVIEW_CHARS: usize = 600;
+
+/// The declaration an agent can act on: later short lines stay, and a
+/// passage longer than [`DECLARATION_PREVIEW_CHARS`] stops. The first
+/// line is always kept, cut with an ellipsis when that line alone is
+/// over the budget.
+pub(crate) fn declaration_preview(text: &str) -> String {
+    let mut out = String::new();
+    let mut chars = 0usize;
+    for (i, line) in text.lines().enumerate() {
+        let line_chars = line.chars().count();
+        let extra = line_chars + usize::from(i > 0);
+        if i > 0 && chars + extra > DECLARATION_PREVIEW_CHARS {
+            break;
+        }
+        if i > 0 {
+            out.push('\n');
+        }
+        if i == 0 && line_chars > DECLARATION_PREVIEW_CHARS {
+            out.extend(line.chars().take(DECLARATION_PREVIEW_CHARS));
+            out.push('…');
+            break;
+        }
+        out.push_str(line);
+        chars += extra;
+    }
+    out
+}
 
 /// Historical `xerj def` multi_match weights. Order is part of the
 /// code-corpus query.
@@ -161,7 +194,13 @@ fn build_def_query(
     if field_lookup_ok(mapped, numeric, "defs") {
         should.push(json!({ "match_phrase": { "defs": { "query": query, "boost": 8 } } }));
     }
-    let mut fields = weighted_query_fields(DEF_MM_FIELDS, DEF_PROSE_EXTRA_FIELDS, mapped, numeric);
+    let mut fields = weighted_query_fields(
+        DEF_MM_FIELDS,
+        DEF_PROSE_EXTRA_FIELDS,
+        mapped,
+        numeric,
+        false,
+    );
     // A phrase ("flush the tree to disk") lives in the symbol body (`impl`),
     // not in the declaration. Only when the read mapping actually has `impl`
     // and no index maps it as numeric: the historical code query
@@ -298,7 +337,15 @@ pub fn run_def_cli() -> i32 {
             "--url" => url = it.next().unwrap_or_default(),
             "--prefix" => prefix = it.next().unwrap_or(prefix),
             "--api-key" => api_key = it.next(),
-            "-k" => k = it.next().and_then(|s| s.parse().ok()).unwrap_or(k),
+            "-k" => {
+                k = match parse_count_arg("-k", it.next()) {
+                    Ok(n) => n,
+                    Err(e) => {
+                        eprintln!("xerj def: {e}\n\n{USAGE}");
+                        return 2;
+                    }
+                };
+            }
             "--kind" => kind = it.next(),
             "--lang" => lang = it.next(),
             "--json" => as_json = true,
@@ -374,7 +421,7 @@ pub fn run_def_cli() -> i32 {
         mapped.as_ref(),
         numeric.as_ref(),
     );
-    let resp = match es.search(&pattern, &body) {
+    let mut resp = match es.search(&pattern, &body) {
         Ok(v) => v,
         Err(e) => {
             eprintln!(
@@ -386,6 +433,16 @@ pub fn run_def_cli() -> i32 {
         }
     };
 
+    let hits = unique_locations(
+        resp.pointer("/hits/hits")
+            .and_then(Value::as_array)
+            .cloned()
+            .unwrap_or_default(),
+    );
+    if let Some(arr) = resp.pointer_mut("/hits/hits") {
+        *arr = Value::Array(hits.clone());
+    }
+
     if as_json {
         println!(
             "{}",
@@ -394,11 +451,6 @@ pub fn run_def_cli() -> i32 {
         return 0;
     }
 
-    let hits = resp
-        .pointer("/hits/hits")
-        .and_then(Value::as_array)
-        .cloned()
-        .unwrap_or_default();
     if hits.is_empty() {
         let snap = corpus_snapshot(&es, &prefix);
         let (lines, exit) = empty_lookup_report("def", &prefix, &query, false, &snap);
@@ -419,8 +471,9 @@ pub fn run_def_cli() -> i32 {
         };
         println!("\n─── {loc}{tag}");
         // The declaration, not the file: `code` on symbol docs is the
-        // signature block; `_passage` covers file-level hits. Two lines is
-        // enough to act on — `xerj search --full` exists for reading more.
+        // signature block; `_passage` covers file-level hits. The preview
+        // keeps later short lines up to 600 characters — `xerj search
+        // --full` exists for reading the whole file.
         let passage_owned = passage_text(h);
         let decl = src
             .get("code")
@@ -428,7 +481,7 @@ pub fn run_def_cli() -> i32 {
             .map(str::to_string)
             .or(passage_owned);
         if let Some(text) = decl {
-            for l in text.lines().take(2) {
+            for l in declaration_preview(&text).lines() {
                 println!("    {l}");
             }
         }
@@ -440,14 +493,62 @@ pub fn run_def_cli() -> i32 {
     0
 }
 
+/// The same `path:line` can come back twice: a symbol doc and a file-level
+/// hit, or two passages of one declaration. `xerj def` is a location list,
+/// so the first (highest-ranked) hit for a location is the one that is shown.
+fn unique_locations(hits: Vec<Value>) -> Vec<Value> {
+    let mut seen = BTreeSet::new();
+    let mut out = Vec::with_capacity(hits.len());
+    for hit in hits {
+        if seen.insert(hit_location(&hit)) {
+            out.push(hit);
+        }
+    }
+    out
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn declaration_preview_keeps_a_later_constant_and_caps_a_huge_line() {
+        let sig = "pub fn open(\n    path: &Path,\n    mode: u32,\n) -> Result<File> {\n    const MODE_MASK: u32 = 0o777;\n    let _ = path;\n";
+        let preview = declaration_preview(sig);
+        assert!(
+            preview.contains("const MODE_MASK: u32 = 0o777;"),
+            "a constant past line 2 is part of the signature block: {preview}"
+        );
+        assert!(preview.contains("pub fn open("), "{preview}");
+
+        let huge = format!("pub fn wide({})", "a: i32, ".repeat(200));
+        let capped = declaration_preview(&huge);
+        assert!(
+            capped.chars().count() <= DECLARATION_PREVIEW_CHARS + 1,
+            "{capped}"
+        );
+        assert!(capped.ends_with('…'), "{capped}");
+        assert!(capped.starts_with("pub fn wide("), "{capped}");
+    }
 
     /// ES `bool` semantics: once a `filter` clause is present, `should`
     /// clauses are optional unless `minimum_should_match` says otherwise. A
     /// `--kind`/`--lang` filter must narrow the definitions of the name, not
     /// replace the name with "anything of this kind".
+    #[test]
+    fn the_same_path_and_line_is_listed_once() {
+        let hit = |id: &str, line: u64| {
+            json!({
+                "_id": id,
+                "_source": { "ax_path": "qabot/agents.py", "line": line, "code": "def _run():" }
+            })
+        };
+        let kept = unique_locations(vec![hit("a", 266), hit("b", 266), hit("c", 10)]);
+        assert_eq!(kept.len(), 2, "{kept:?}");
+        assert_eq!(kept[0]["_id"], "a");
+        assert_eq!(kept[1]["_id"], "c");
+    }
+
     #[test]
     fn kind_and_lang_filters_still_require_the_name_to_match() {
         for (kind, lang) in [
