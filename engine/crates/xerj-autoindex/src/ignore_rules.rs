@@ -79,21 +79,47 @@ pub const GITIGNORE: &str = ".gitignore";
 pub const XERJIGNORE: &str = ".xerjignore";
 
 /// Build output that is junk in practice but is *not* reliably gitignored —
-/// `vendor/` is committed by Go projects, `dist/` and `build/` are gitignored
-/// in one repo and checked in the next, and a folder full of downloaded
-/// packages is very often not a git repository at all.
+/// `vendor/` is committed by Go projects, `third_party/` and `bower_components/`
+/// are committed dependency trees, `dist/` and `build/` are gitignored in one
+/// repo and checked in the next, and a folder full of downloaded packages is
+/// very often not a git repository at all.
 ///
 /// These are defaults, not law: `--no-default-ignores` turns them off, any
-/// ignore file in the tree outranks them, and `--dry-run` names them as the
-/// reason a directory disappeared.
+/// ignore file in the tree outranks them (`!third_party/` keeps a tree the
+/// operator wants searched), and `--dry-run` names them as the reason a
+/// directory disappeared.
 pub const DEFAULT_IGNORE_PATTERNS: &[&str] = &[
     "node_modules/",
+    "bower_components/",
     "vendor/",
+    "third_party/",
+    "thirdparty/",
     "target/",
     "dist/",
     "build/",
     ".venv/",
     "__pycache__/",
+    // Media and native binaries. Sniffing classifies these as binary and
+    // records each one as junk, so a repo of images and shared libraries
+    // spent the walk opening files that can never become a document. A
+    // gzipped log (`.gz`) and a PDF stay: those families are extracted.
+    // `!*.png` in an ignore file puts one extension back.
+    "*.png",
+    "*.jpg",
+    "*.jpeg",
+    "*.gif",
+    "*.webp",
+    "*.ico",
+    "*.bmp",
+    "*.woff",
+    "*.woff2",
+    "*.ttf",
+    "*.otf",
+    "*.wasm",
+    "*.so",
+    "*.dll",
+    "*.dylib",
+    "*.exe",
 ];
 
 /// Rule label used for the pre-existing dotfile skip. It is not one of the
@@ -1035,6 +1061,110 @@ mod tests {
         write(root, "vendor/lib/lib.go", "x");
         let (kept, _) = survivors(root, IgnoreOptions::default());
         assert_eq!(kept, vec!["vendor/lib/lib.go"], "{kept:?}");
+    }
+
+    /// `third_party/` and `bower_components/` are committed dependency trees.
+    /// They were only delayed to the end of the queue, so a monorepo still
+    /// walked and indexed them. A `!` line puts one back, same as `vendor/`.
+    #[test]
+    fn defaults_prune_committed_dependency_trees() {
+        let dir = tempfile::TempDir::new().unwrap();
+        let root = dir.path();
+        write(root, "src/lib.rs", "fn main() {}");
+        write(root, "third_party/llvm/Support.cpp", "x");
+        write(root, "thirdparty/dep/dep.c", "x");
+        write(root, "bower_components/jquery/jquery.js", "x");
+        write(root, "kept/third_party_notes.md", "not a directory name");
+
+        let (kept, report) = survivors(root, IgnoreOptions::default());
+        assert_eq!(
+            kept,
+            vec!["kept/third_party_notes.md", "src/lib.rs"],
+            "{kept:?}"
+        );
+        assert!(
+            report.by_rule.contains_key("<built-in>:third_party/"),
+            "{report:?}"
+        );
+        assert!(
+            report.by_rule.contains_key("<built-in>:bower_components/"),
+            "{report:?}"
+        );
+        assert_eq!(report.dirs_pruned, 3, "{report:?}");
+
+        write(root, ".xerjignore", "!third_party/\n");
+        let (reincluded, _) = survivors(root, IgnoreOptions::default());
+        assert!(
+            reincluded
+                .iter()
+                .any(|p| p == "third_party/llvm/Support.cpp"),
+            "a negation must put the tree back: {reincluded:?}"
+        );
+        assert!(
+            !reincluded.iter().any(|p| p.contains("bower_components")),
+            "the other trees stay pruned: {reincluded:?}"
+        );
+    }
+
+    /// Images, fonts and native binaries are junk after the sniff. On a repo
+    /// that contains thousands of them the walk opened every one. They are
+    /// now dropped with the built-in rules. A PDF and a gzipped log are not
+    /// on that list: both are extracted.
+    #[test]
+    fn defaults_skip_binary_assets_and_keep_extractable_files() {
+        let dir = tempfile::TempDir::new().unwrap();
+        let root = dir.path();
+        write(root, "src/lib.rs", "fn main() {}");
+        write(root, "README.md", "hi");
+        write(root, "logs/app.log.gz", "not really gzip");
+        write(root, "docs/manual.pdf", "%PDF-");
+        write(root, "assets/logo.png", "png");
+        write(root, "assets/photo.jpeg", "jpg");
+        write(root, "web/app.wasm", "wasm");
+        write(root, "native/libfoo.so", "so");
+        write(root, "native/helper.exe", "exe");
+
+        let (kept, report) = survivors(root, IgnoreOptions::default());
+        assert_eq!(
+            kept,
+            vec![
+                "README.md",
+                "docs/manual.pdf",
+                "logs/app.log.gz",
+                "src/lib.rs",
+            ],
+            "{kept:?}"
+        );
+        assert!(
+            report.by_rule.contains_key("<built-in>:*.png"),
+            "{report:?}"
+        );
+        assert!(report.by_rule.contains_key("<built-in>:*.so"), "{report:?}");
+        assert_eq!(report.files_skipped, 5, "{report:?}");
+
+        let (all, _) = survivors(
+            root,
+            IgnoreOptions {
+                defaults: false,
+                ..IgnoreOptions::default()
+            },
+        );
+        assert_eq!(
+            all.len(),
+            9,
+            "--no-default-ignores keeps the assets: {all:?}"
+        );
+
+        write(root, ".xerjignore", "!*.png\n");
+        let (reincluded, _) = survivors(root, IgnoreOptions::default());
+        assert!(
+            reincluded.iter().any(|p| p == "assets/logo.png"),
+            "a negation must put the png back: {reincluded:?}"
+        );
+        assert!(
+            !reincluded.iter().any(|p| p.ends_with(".so")),
+            "other binary extensions stay skipped: {reincluded:?}"
+        );
     }
 
     #[test]
