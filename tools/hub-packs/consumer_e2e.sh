@@ -17,8 +17,9 @@
 #      snapshot restore — all against the key compiled into <xerj>;
 #   4. `xerj code <slug> --def <symbol> --json`, the symbol taken from the pack's
 #      own defs.jsonl, must return that symbol from the local pack;
-#   5. `xerj code <slug> "<word from ask_for>" --json` must return a hit with a
-#      file and a line.
+#   5. `xerj code <slug> "<word from ask_for>" --json` must return a hit that
+#      cites a file the way `xerj code` itself does (an ax_path/ax_file/path/file
+#      provenance path; the line is optional, as the renderer never invents one).
 #
 # Any failure exits non-zero. Ports: E2E_NODE_PORT (default 19300; the node also
 # takes the next two) and E2E_HUB_PORT (default 19310). REGISTRY and BACKLOG as in
@@ -117,14 +118,28 @@ WORDS=$(tr -cs 'A-Za-z' '\n' <<<"$ASK" | tr 'A-Z' 'a-z' | awk 'length >= 4' \
         | grep -vxE 'agent|agents|working|needing|queries|query|this|that|with|from|when|into|their|about|does' \
         | awk '{ print length, $0 }' | sort -rn -k1,1 -s | cut -d' ' -f2 | awk '!seen[$0]++' | head -n 3 || true)
 [ -n "$WORDS" ] || WORDS=$SLUG
+# A hit is "real and citable" when its `_source` yields a provenance path the
+# way `xerj code` itself cites one: the first non-empty of ax_path / ax_file /
+# path / file (xccode::passage::provenance). The line is deliberately NOT
+# required. The ask_for words are prose ("optimization", "retriever"), so they
+# rank the pack's FULL-TEXT records first — file-level code docs, markdown and
+# notebooks — whose citation field is `ax_path` and which carry no per-hit line
+# (line info lives only inside their `symbols[]` sub-objects, with no path).
+# Only the per-symbol declaration records carry a bare `path`+`line`, and those
+# top the results solely for identifier queries. The earlier check demanded
+# `(file|path)`+`(line|start_line)` in ONE object, so it passed only when the
+# word happened to be a symbol name and failed on every genuine natural-
+# language question that returned real, citable hits — the backfill's ~80%
+# "question" failures. `provenance` never invents a line (its own test pins
+# this), so a path-only hit IS a real hit a user can open and cite.
+CITE='[.hits.hits[]?._source | (.ax_path // .ax_file // .path // .file // "") | select(. != "")]'
 hit=""
 for w in $WORDS; do
   if "$BIN" code "$SLUG" "$w" --json > "$WORK/q.json" 2> "$WORK/q.err" \
-     && jq -e '[.. | objects | select((.file? // .path? // "") != "" and (.line? // .start_line? // null) != null)] | length > 0' \
-          "$WORK/q.json" >/dev/null 2>&1; then
+     && jq -e "$CITE | length > 0" "$WORK/q.json" >/dev/null 2>&1; then
     hit=$w; break
   fi
 done
-[ -n "$hit" ] || { cat "$WORK/q.json" "$WORK/q.err" 2>/dev/null | head -c 4000; fail "no question from ask_for ($WORDS) returned a file:line hit"; }
-echo "question ok: \"$hit\" -> $(jq -r '[.. | objects | select((.file? // .path? // "") != "" and (.line? // .start_line? // null) != null)][0] | "\(.file // .path):\(.line // .start_line)"' "$WORK/q.json")"
+[ -n "$hit" ] || { cat "$WORK/q.json" "$WORK/q.err" 2>/dev/null | head -c 4000; fail "no question from ask_for ($WORDS) returned a citable hit"; }
+echo "question ok: \"$hit\" -> $(jq -r "$CITE[0]" "$WORK/q.json")"
 echo "consumer e2e passed for $SLUG @ $PIN8"
