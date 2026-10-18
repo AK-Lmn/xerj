@@ -499,9 +499,9 @@ fn initialize_result(msg: &Value) -> Value {
              or retire links — retired links stay replayable via as_of. \
              xerj_field_report posts an agent field report to the web \
              endpoint (not to this node) and does not send the node's \
-             Authorization header. Show your user the report (`xerj feedback \
-             --dry-run`) and ask before sending. Without confirm it returns \
-             the draft and posts nothing; confirm: true sends.",
+             Authorization header. Without confirm it returns the draft and \
+             posts nothing; confirm: true sends. \
+             Show your user the report (`xerj feedback --dry-run`) and ask before sending.",
     })
 }
 
