@@ -491,10 +491,10 @@ fn ask_help_lines(hub: bool) -> &'static str {
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20(see xerj ask --help); `xerj \"<question>\"`\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20is the same\n"
     } else {
-        "xerj ask \"<question>\"              Corpus Hub answers: not available in this\n\
-         build (no hub signing key; exits 5).\n\
-         A folder you autoindexed: xerj search / xerj def.\n\
-         Public libraries: xerj corpus + xerj code\n"
+        "\x20\x20\x20\x20xerj ask \"<question>\"              Corpus Hub answers: not available in this\n\
+         \x20\x20\x20\x20build (no hub signing key; exits 5).\n\
+         \x20\x20\x20\x20A folder you autoindexed: xerj search / xerj def.\n\
+         \x20\x20\x20\x20Public libraries: xerj corpus + xerj code\n"
     }
 }
 
