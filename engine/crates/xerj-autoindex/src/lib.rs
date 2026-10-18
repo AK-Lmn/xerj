@@ -106,7 +106,7 @@ pub fn next_hint(
     let Some(key) = api_key else {
         return format!(
             "\nnext: `xerj autoindex map --url {url}` for the data map; \
-             search via `curl '{url}/{prefix}-*/_search'`"
+             search via `xerj search --url {url} --prefix {prefix} \"<what you need>\"`"
         );
     };
     // A shell *expression* in every arm, so all renderings quote identically.
@@ -120,27 +120,25 @@ pub fn next_hint(
     };
     format!(
         "\nnext: `xerj autoindex map --url {url} --api-key \"{key_expr}\"` for the data map;\n\
-         \x20     search via `curl -H \"Authorization: ApiKey {key_expr}\" \
-         '{url}/{prefix}-*/_search'`"
+         \x20     search via `xerj search --url {url} --prefix {prefix} --api-key \"{key_expr}\" \
+         \"<what you need>\"`"
     )
 }
 
 /// The code-aware search hint that follows `next_hint` whenever source code
 /// was indexed. One copy, shared by BOTH success printers — the interactive
 /// run summary and the generated-run (`--no-graph`/brain) summary — because
-/// #1103 was exactly this text existing in one printer and not the other:
-/// a `--no-graph` run taught the user nothing while a graph run taught the
-/// `_passage` projection. The blind-usability rationale is in the comment
-/// at the interactive call site.
+/// #1103 was exactly this text existing in one printer and not the other.
+/// It names `xerj search` and `xerj def`: those commands already request
+/// `_passage`. A raw `_search` curl is what a blind run copied, and that
+/// path returns a whole file unless the caller knows the projection.
 pub(crate) fn code_search_hint(prefix: &str) -> String {
     format!(
-        "      code was indexed — for a function/class instead of a whole file:\n\
-         \x20       curl -s $URL/{prefix}-*/_search -H 'Content-Type: application/json' \\\n\
-         \x20         -d '{{\"query\":{{\"bool\":{{\"should\":[{{\"multi_match\":{{\"query\":\"<symbol or phrase>\",\
-         \"fields\":[\"body\",\"defs\"],\"type\":\"most_fields\"}}}},{{\"match_phrase\":{{\"defs\":{{\"query\":\"<symbol or phrase>\",\"boost\":4}}}}}}]}}}},\
-         \"_source\":[\"ax_path\",\"title\"],\"fields\":[\"_passage\"]}}'\n\
-         \x20       (the `match_phrase` clause ranks the file that DEFINES a symbol above files that merely call it; `_passage` returns \
-         the enclosing block, not the file)",
+        "      code was indexed — `xerj search` and `xerj def` ask for the matching\n\
+         \x20       passage, so the header is a path and a line when the index has one:\n\
+         \x20       xerj search --prefix {prefix} \"<what you need>\"\n\
+         \x20       xerj def --prefix {prefix} <symbol>\n\
+         \x20       (add the same --url and --api-key the map line above used)"
     )
 }
 
@@ -3064,6 +3062,7 @@ mod phase_a_grouping_tests {
             bulk_timeout_secs: 10,
             snapshot_max_bytes: 64 << 30,
             prefix: "t".into(),
+            replace_prefix: false,
             state_dir: None,
             fresh: true,
             follow_symlinks: false,
@@ -5865,6 +5864,35 @@ fn legacy_rebuild_argv(cfg: &IndexCfg, state_dir: &Path, prefix: &str) -> Vec<St
     argv
 }
 
+/// Run documents in the shared catalog whose `prefix` term-matches.
+///
+/// A missing catalog is an empty list: the first index of a node has nothing
+/// to collide with. Any other search failure is returned — skipping the
+/// check on a 401 or a 500 would let the overwrite this guard exists to stop
+/// proceed. The caller re-checks the prefix exactly; a legacy analyzed
+/// `prefix` field can over-return sibling corpora.
+fn catalog_runs_for_prefix(es: &Es, prefix: &str) -> Result<Vec<Value>> {
+    let body = json!({
+        "size": 500,
+        "query": {"bool": {"filter": [
+            {"term": {"doc_kind": "run"}},
+            {"term": {"prefix": prefix}}
+        ]}}
+    });
+    let Some(page) = es.search_present(catalog::CATALOG_INDEX, &body)? else {
+        return Ok(Vec::new());
+    };
+    Ok(page
+        .pointer("/hits/hits")
+        .and_then(Value::as_array)
+        .map(|hits| {
+            hits.iter()
+                .filter_map(|hit| hit.get("_source").cloned())
+                .collect()
+        })
+        .unwrap_or_default())
+}
+
 fn run_index_report_inner(
     mut cfg: IndexCfg,
     tally: &ScanTally,
@@ -5997,6 +6025,44 @@ fn run_index_report_inner(
         .state_dir
         .clone()
         .unwrap_or_else(|| state::default_state_dir(&root_str, &cfg.url, &cfg.prefix));
+    // Same --prefix on a different folder overwrites catalog ids
+    // `ds:{prefix}:{slug}` and writes into `{prefix}-*` at finalize. The
+    // journals do not share a state dir (the default key includes the root),
+    // so nothing local notices a *new* folder. Refuse before preflight
+    // creates state, and before --dry-run walks the tree. --replace-prefix
+    // is the explicit opt-in; it prints the same facts and continues.
+    //
+    // A journal that already binds this state dir to this root, url, and
+    // prefix is a resume or an incremental re-run of the same folder,
+    // including one the local plan / `--fresh` gates are about to refuse.
+    // Those refusals promise the only remote call is the readiness GET, so
+    // this guard must not search the catalog on that path. A different
+    // folder has no such journal and still hits the check.
+    if !state::journal_continues_folder(&state_dir, &root_str, &cfg.url, &cfg.prefix) {
+        let foreign_roots = catalog::foreign_prefix_roots(
+            &catalog_runs_for_prefix(&es, &cfg.prefix)?,
+            &cfg.prefix,
+            &root_str,
+        );
+        if !foreign_roots.is_empty() {
+            let message = catalog::prefix_reuse_message(
+                &cfg.prefix,
+                &root_str,
+                &foreign_roots,
+                cfg.replace_prefix,
+            );
+            if cfg.replace_prefix {
+                // `warn` replaces newlines (they are not a safe display char), so
+                // each sentence is its own line. The refusal below keeps the
+                // newlines: it is an error, not a progress record.
+                for line in message.lines() {
+                    pr.warn(line);
+                }
+            } else {
+                anyhow::bail!("{message}");
+            }
+        }
+    }
     // Acquire state authority before discovery as well as hashing. A waiter
     // must never classify a path snapshot taken while another owner was
     // publishing or replacing the durable plan.
@@ -9335,14 +9401,10 @@ fn run_index_report_inner(
                 cfg.api_key_file.as_deref(),
             )
         );
-        // This line is where an agent learns how to search, so it is where the
-        // code-aware form belongs. A blind usability run showed the cost of
-        // omitting it: the agent followed exactly this guidance, got whole
-        // files back, and reinvented client-side slicing rather than
-        // discovering `_passage` — which it never saw mentioned anywhere.
-        // Only printed when source code was actually indexed; for a PDF or log
-        // corpus it would be noise. The text itself is shared with the
-        // generated-run printer via `code_search_hint` (#1103).
+        // This line is where an agent learns how to search. Only printed when
+        // source code was actually indexed; for a PDF or log corpus it would
+        // be noise. The text itself is shared with the generated-run printer
+        // via `code_search_hint` (#1103).
         let indexed_code = plan.files.values().any(|fa| fa.family == "code");
         if indexed_code {
             println!("{}", code_search_hint(&cfg.prefix));
@@ -11244,12 +11306,10 @@ mod generation_contract_identity_tests {
             "map hint must carry the key, got: {hint}"
         );
         assert!(
-            hint.contains("Authorization: ApiKey s3cret"),
-            "search hint must carry the key, got: {hint}"
-        );
-        assert!(
-            hint.contains("http://localhost:9510/ax-*/_search"),
-            "search hint must target the run's url and prefix, got: {hint}"
+            hint.contains(
+                "xerj search --url http://localhost:9510 --prefix ax --api-key \"s3cret\""
+            ),
+            "search hint must carry the url, prefix, and key, got: {hint}"
         );
         // Nothing is left as an un-runnable `GET /…` sketch.
         assert!(
@@ -11272,7 +11332,7 @@ mod generation_contract_identity_tests {
         );
         assert!(
             hint.contains("--api-key \"$XERJ_API_KEY\"")
-                && hint.contains("Authorization: ApiKey $XERJ_API_KEY"),
+                && hint.contains("xerj search --url http://localhost:9200 --prefix ax --api-key \"$XERJ_API_KEY\""),
             "must reference the exported variable, got: {hint}"
         );
 
@@ -11296,6 +11356,20 @@ mod generation_contract_identity_tests {
             "an auth-free server must get auth-free hints, got: {hint}"
         );
         assert!(hint.contains("xerj autoindex map --url http://localhost:9200"));
+        assert!(
+            hint.contains("xerj search --url http://localhost:9200 --prefix ax"),
+            "an auth-free search hint is still the CLI, got: {hint}"
+        );
+        let code = code_search_hint("smoke-anyhow");
+        assert!(
+            code.contains("xerj search --prefix smoke-anyhow")
+                && code.contains("xerj def --prefix smoke-anyhow"),
+            "{code}"
+        );
+        assert!(
+            !code.contains("curl"),
+            "the code hint must not send the reader to a raw search, got: {code}"
+        );
     }
 
     /// A blind onboarding run found `autoindex` discovering `./data/admin.key`
