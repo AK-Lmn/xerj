@@ -1,0 +1,21 @@
+{
+ "corpus": "sergiotapia--magnetissimo",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "magnetissimo",
+   "url": "https://github.com/sergiotapia/magnetissimo.git",
+   "licence": "MIT",
+   "sha": "86b3af50626e163ff1790490e92fbb8d313b30d0",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

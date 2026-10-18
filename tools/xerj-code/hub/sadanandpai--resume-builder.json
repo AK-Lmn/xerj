@@ -1,0 +1,21 @@
+{
+ "corpus": "sadanandpai--resume-builder",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "resume-builder",
+   "url": "https://github.com/sadanandpai/resume-builder.git",
+   "licence": "MIT",
+   "sha": "2f3f0e6fdb15d62a43e089d05479aba5e5d6ddf1",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

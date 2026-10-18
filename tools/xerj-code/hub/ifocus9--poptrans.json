@@ -1,0 +1,21 @@
+{
+ "corpus": "ifocus9--poptrans",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "PopTrans",
+   "url": "https://github.com/ifocus9/PopTrans.git",
+   "licence": "MIT",
+   "sha": "ec5202e74ba01c927c7bfd2e6bb1fadb66e6fbca",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

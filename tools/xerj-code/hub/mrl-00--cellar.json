@@ -1,0 +1,21 @@
+{
+ "corpus": "mrl-00--cellar",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "cellar",
+   "url": "https://github.com/MRL-00/cellar.git",
+   "licence": "MIT",
+   "sha": "db87577710312baa0ce0d0ab7b1c69d157760243",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

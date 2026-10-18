@@ -1,0 +1,21 @@
+{
+ "corpus": "padovanl--portop",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "portop",
+   "url": "https://github.com/padovanl/portop.git",
+   "licence": "MIT",
+   "sha": "dd24c8487394a4b80d2c18d8b5869e280ee38959",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

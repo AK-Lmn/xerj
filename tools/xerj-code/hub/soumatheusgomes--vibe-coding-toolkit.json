@@ -1,0 +1,21 @@
+{
+ "corpus": "soumatheusgomes--vibe-coding-toolkit",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "vibe-coding-toolkit",
+   "url": "https://github.com/soumatheusgomes/vibe-coding-toolkit.git",
+   "licence": "MIT",
+   "sha": "de66fe371a49f5a4d3b521759e5c401f390b6424",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

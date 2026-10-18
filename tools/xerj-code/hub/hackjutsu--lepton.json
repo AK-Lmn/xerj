@@ -1,0 +1,21 @@
+{
+ "corpus": "hackjutsu--lepton",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "Lepton",
+   "url": "https://github.com/hackjutsu/Lepton.git",
+   "licence": "MIT",
+   "sha": "209f2724b2f500ad5001402b2a4735f7de35f6bb",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

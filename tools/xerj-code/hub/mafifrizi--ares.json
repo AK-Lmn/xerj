@@ -1,0 +1,21 @@
+{
+ "corpus": "mafifrizi--ares",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "ARES",
+   "url": "https://github.com/Mafifrizi/ARES.git",
+   "licence": "MIT",
+   "sha": "3e1a9dd5137cc778b19a0aae6cd4218853f4f603",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "jakubmelka--pdf4qt",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "PDF4QT",
+   "url": "https://github.com/JakubMelka/PDF4QT.git",
+   "licence": "MIT",
+   "sha": "67b6b9903cb4e318803342f2d428f02e1bb124e3",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "conwnet--github1s",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "github1s",
+   "url": "https://github.com/conwnet/github1s.git",
+   "licence": "MIT",
+   "sha": "20884d24d9bb2690894018e55f4c9a314415f3a2",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

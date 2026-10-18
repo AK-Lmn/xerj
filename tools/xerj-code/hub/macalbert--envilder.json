@@ -1,0 +1,21 @@
+{
+ "corpus": "macalbert--envilder",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "envilder",
+   "url": "https://github.com/macalbert/envilder.git",
+   "licence": "MIT",
+   "sha": "42f62420b771d104b50a059c737e37241051690d",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

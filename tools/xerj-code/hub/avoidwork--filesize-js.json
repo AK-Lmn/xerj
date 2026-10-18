@@ -1,0 +1,21 @@
+{
+ "corpus": "avoidwork--filesize-js",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "filesize.js",
+   "url": "https://github.com/avoidwork/filesize.js.git",
+   "licence": "BSD-3-Clause",
+   "sha": "181ce6a1afc09192b20e9d0af323cc9a65969d6a",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "BSD-3-Clause",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

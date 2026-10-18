@@ -1,0 +1,21 @@
+{
+ "corpus": "kylebrowning--apnswift",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "APNSwift",
+   "url": "https://github.com/kylebrowning/APNSwift.git",
+   "licence": "Apache-2.0",
+   "sha": "966909ef256af609661ed9d7610e4c9a97c869ec",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

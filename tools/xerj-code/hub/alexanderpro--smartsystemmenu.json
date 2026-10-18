@@ -1,0 +1,21 @@
+{
+ "corpus": "alexanderpro--smartsystemmenu",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "SmartSystemMenu",
+   "url": "https://github.com/AlexanderPro/SmartSystemMenu.git",
+   "licence": "MIT",
+   "sha": "fc662d666dd17bf20eff81ff2e64c91d1eda638d",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

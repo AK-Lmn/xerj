@@ -1,0 +1,21 @@
+{
+ "corpus": "samanhappy--mcphub",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "mcphub",
+   "url": "https://github.com/samanhappy/mcphub.git",
+   "licence": "Apache-2.0",
+   "sha": "2dd0ea3d6753f8c94acdc22f62a57f7a85461a68",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

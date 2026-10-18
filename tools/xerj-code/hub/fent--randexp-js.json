@@ -1,0 +1,21 @@
+{
+ "corpus": "fent--randexp-js",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "randexp.js",
+   "url": "https://github.com/fent/randexp.js.git",
+   "licence": "MIT",
+   "sha": "cbdef2c450a3f196ad364e53446fc19c1be83357",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

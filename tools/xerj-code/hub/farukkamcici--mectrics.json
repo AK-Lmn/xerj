@@ -1,0 +1,21 @@
+{
+ "corpus": "farukkamcici--mectrics",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "mectrics",
+   "url": "https://github.com/farukkamcici/mectrics.git",
+   "licence": "MIT",
+   "sha": "70031b71829e7257f660406baea5c0bbfcf5f0c7",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

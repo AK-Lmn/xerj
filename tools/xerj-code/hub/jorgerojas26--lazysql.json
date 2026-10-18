@@ -1,0 +1,21 @@
+{
+ "corpus": "jorgerojas26--lazysql",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "lazysql",
+   "url": "https://github.com/jorgerojas26/lazysql.git",
+   "licence": "MIT",
+   "sha": "c5d57d0894d8a39b2c5a9b5dfbee08fbb48b2036",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "kernalix7--winpodx",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "winpodx",
+   "url": "https://github.com/kernalix7/winpodx.git",
+   "licence": "MIT",
+   "sha": "a49a1b8ff339c7b3a17d670609a4592fa0687e31",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

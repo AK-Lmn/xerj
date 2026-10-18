@@ -1,0 +1,21 @@
+{
+ "corpus": "zihan-su--self-gradient-forcing-plus",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "Self_Gradient_Forcing_Plus",
+   "url": "https://github.com/Zihan-Su/Self_Gradient_Forcing_Plus.git",
+   "licence": "Apache-2.0",
+   "sha": "7a7734f592f1bdb51edd28f1c42ca95b9f652453",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

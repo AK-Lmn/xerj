@@ -1,0 +1,21 @@
+{
+ "corpus": "devrabiul--laravel-cookie-consent",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "laravel-cookie-consent",
+   "url": "https://github.com/devrabiul/laravel-cookie-consent.git",
+   "licence": "MIT",
+   "sha": "7d7952cfe791b5ddad6ee1cbce52235448409164",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "corpus": "awolverp--cachebox",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "cachebox",
+   "url": "https://github.com/awolverp/cachebox.git",
+   "licence": "MIT",
+   "sha": "40d4953197c40e55fe4a79c77abc8069b6c0be23",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

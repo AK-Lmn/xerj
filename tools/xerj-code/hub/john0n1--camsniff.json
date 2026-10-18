@@ -1,0 +1,21 @@
+{
+ "corpus": "john0n1--camsniff",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "CamSniff",
+   "url": "https://github.com/John0n1/CamSniff.git",
+   "licence": "MIT",
+   "sha": "7a1bb832d64c517c5e05f952dfc9ad2e82410341",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

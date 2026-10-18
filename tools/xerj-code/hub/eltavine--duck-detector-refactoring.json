@@ -1,0 +1,21 @@
+{
+ "corpus": "eltavine--duck-detector-refactoring",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "Duck-Detector-Refactoring",
+   "url": "https://github.com/eltavine/Duck-Detector-Refactoring.git",
+   "licence": "Apache-2.0",
+   "sha": "f3f430956efb625799ac0574a7314d0e6ba672b0",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

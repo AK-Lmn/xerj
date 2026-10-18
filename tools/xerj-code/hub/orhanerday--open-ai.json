@@ -1,0 +1,21 @@
+{
+ "corpus": "orhanerday--open-ai",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "open-ai",
+   "url": "https://github.com/orhanerday/open-ai.git",
+   "licence": "MIT",
+   "sha": "88097be0cd5fc219c6e2d7cbf29fe7fdf1ed2ac4",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

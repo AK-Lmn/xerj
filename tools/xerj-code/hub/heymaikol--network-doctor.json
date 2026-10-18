@@ -1,0 +1,21 @@
+{
+ "corpus": "heymaikol--network-doctor",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "network-doctor",
+   "url": "https://github.com/heymaikol/network-doctor.git",
+   "licence": "Apache-2.0",
+   "sha": "7d85219ab4d16b98b4df45b3a75177dcac4e585d",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

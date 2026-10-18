@@ -1,0 +1,21 @@
+{
+ "corpus": "janbjorge--pgqueuer",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "pgqueuer",
+   "url": "https://github.com/janbjorge/pgqueuer.git",
+   "licence": "MIT",
+   "sha": "1be0cc18f2968ce05dede61b74e27763dfbe3ffe",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

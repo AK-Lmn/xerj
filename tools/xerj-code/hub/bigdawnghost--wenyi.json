@@ -1,0 +1,21 @@
+{
+ "corpus": "bigdawnghost--wenyi",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "wenyi",
+   "url": "https://github.com/BigDawnGhost/wenyi.git",
+   "licence": "MIT",
+   "sha": "8afda90db03dda869aeb1df04f8da395c66615ed",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}

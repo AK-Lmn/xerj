@@ -1,0 +1,21 @@
+{
+ "corpus": "fjrevoredo--mini-diarium",
+ "cloned_at": "2026-10-18T00:00:00Z",
+ "repos": [
+  {
+   "repo": "mini-diarium",
+   "url": "https://github.com/fjrevoredo/mini-diarium.git",
+   "licence": "MIT",
+   "sha": "931c5260621c36eb2024efb0e88f7261dcd385ff",
+   "files": 0,
+   "bytes": 0,
+   "review": {
+    "spdx": "MIT",
+    "use": "adapt-with-attribution",
+    "by": "xerj-org",
+    "at": "2026-10-18",
+    "note": "PILOT dry-run build only, licence not yet human-reviewed; never merge this branch"
+   }
+  }
+ ]
+}
