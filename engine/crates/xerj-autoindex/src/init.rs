@@ -47,9 +47,12 @@ config for each — with a .bak backup for any file it edits:
 
     .mcp.json                    register the `xerj mcp` server (Claude Code
                                  project scope; merged, other servers kept)
+    .cursor/mcp.json             the same registration for Cursor (if .cursor/)
     .claude/skills/xerj/SKILL.md teach `xerj search` / `xerj def` (10 lines)
 {hub_skill}    .cursor/rules/xerj.mdc       same teaching file for Cursor (if .cursor/)
-{hub_rule}    AGENTS.md                    a short XERJ section (appended if the file
+{hub_rule}    .codex/config.toml           register `xerj mcp` for Codex (if .codex/;
+                                 trusted projects only; other servers kept)
+    AGENTS.md                    a short XERJ section (appended if the file
                                  exists, created otherwise)
 
 The teaching files carry an `xerj-init-version` marker. A re-run upgrades one
@@ -209,6 +212,8 @@ shell PATH. `command -v xerj` prints it (PowerShell: `(Get-Command xerj).Source`
 - VS Code (`.vscode/mcp.json`): root key `servers`, not `mcpServers`. A block under the wrong key is
   silently ignored.
   `{"servers": {"xerj": {"type": "stdio", "command": "/abs/path/to/xerj", "args": ["mcp"]}}}`
+- Codex (`.codex/config.toml`, trusted projects only; `xerj init` writes it when `.codex/` exists):
+  `[mcp_servers.xerj]` with `command`, `args = ["mcp"]`, and `[mcp_servers.xerj.env]` `XERJ_URL`.
 "##;
 
 /// The MCP tool whose presence proves `xerj mcp` is registered. It must be a
@@ -246,8 +251,10 @@ fn mcp_registration(bin: &str, url: &str) -> String {
     format!(
         "MCP registration for other clients (restart the session after; success: `{MCP_SUCCESS_TOOL}` is in the tool list):\n\
          \x20 Claude Code, every project:  claude mcp add --scope user xerj{env} -- {} mcp\n\
-         \x20 Cursor, Windsurf, Claude Desktop, Cline:  copy the \"xerj\" entry from .mcp.json; the root key is \"mcpServers\"\n\
-         \x20 VS Code (.vscode/mcp.json):  root key \"servers\", not \"mcpServers\"; the entry needs \"type\": \"stdio\"",
+         \x20 Cursor:  `.cursor/mcp.json` when that directory exists (init writes it; root key \"mcpServers\")\n\\
+         \x20 Windsurf, Claude Desktop, Cline:  copy the \"xerj\" entry from .mcp.json; the root key is \"mcpServers\"\n\\
+         \x20 VS Code (.vscode/mcp.json):  root key \"servers\", not \"mcpServers\"; the entry needs \"type\": \"stdio\"\n\\
+         \x20 Codex (.codex/config.toml, trusted projects only; xerj init writes it when .codex/ exists): [mcp_servers.xerj]",
         shell_quote(bin)
     )
 }
@@ -283,7 +290,7 @@ fn self_bin() -> String {
 /// `skill_md()` or `HUB_SKILL_MD` changes, so a file an older init wrote (and
 /// the user never edited) is upgraded on the next run. A unit test pins the
 /// texts' hashes to this number, so a text change without a bump fails CI.
-const INIT_FILES_VERSION: u32 = 3;
+const INIT_FILES_VERSION: u32 = 4;
 
 /// The marker's prefix. The full line is
 /// `<!-- xerj-init-version: <N> sha256:<16 hex> -->`: the generation, and the
@@ -363,22 +370,22 @@ fn write_teaching_file(path: &Path, content: &str, dry: bool) -> Result<String, 
         Ok(text) => text,
         Err(e) if e.kind() == std::io::ErrorKind::NotFound => {
             write_file(path, &stamped(content), dry).map_err(|e| e.to_string())?;
-            return Ok(report("wrote", path));
+            return Ok(report("wrote", path, dry));
         }
         // Present but unreadable (not UTF-8, no permission): the user's.
-        Err(_) => return Ok(report("kept", path)),
+        Err(_) => return Ok(report("kept", path, dry)),
     };
     match read_stamp(&existing) {
         Stamp::Pristine(v) if v < INIT_FILES_VERSION => {
             backup(path, dry)?;
             write_file(path, &stamped(content), dry).map_err(|e| e.to_string())?;
-            Ok(report("upgraded", path))
+            Ok(report("upgraded", path, dry))
         }
         Stamp::Edited(v) if v < INIT_FILES_VERSION => Ok(format!(
             "{} (edited since xerj init wrote it; not upgraded to v{INIT_FILES_VERSION})",
-            report("kept", path)
+            report("kept", path, dry)
         )),
-        _ => Ok(report("kept", path)),
+        _ => Ok(report("kept", path, dry)),
     }
 }
 
@@ -449,9 +456,98 @@ fn merged_mcp_json(existing: Option<&str>, url: &str) -> Result<String, String> 
     serde_json::to_string_pretty(&root).map_err(|e| e.to_string())
 }
 
+/// A TOML basic string. `command` and `XERJ_URL` are the only values init
+/// writes, and either can contain `"` or `\`.
+fn toml_basic_string(s: &str) -> String {
+    format!("\"{}\"", s.replace('\\', "\\\\").replace('"', "\\\""))
+}
+
+/// True when the file already has a xerj server table. A comment that merely
+/// mentions the header does not count. No TOML parser: xerj-autoindex does
+/// not depend on one, and a present header is enough to leave the file alone.
+fn codex_has_xerj(text: &str) -> bool {
+    text.lines().any(|line| {
+        let t = line.trim();
+        !t.starts_with('#') && (t == "[mcp_servers.xerj]" || t.starts_with("[mcp_servers.xerj."))
+    })
+}
+
+fn codex_mcp_block(url: &str) -> String {
+    format!(
+        "[mcp_servers.xerj]\ncommand = {}\nargs = [\"mcp\"]\n\n[mcp_servers.xerj.env]\nXERJ_URL = {}\n",
+        toml_basic_string(&self_bin()),
+        toml_basic_string(url)
+    )
+}
+
+/// Append `[mcp_servers.xerj]` to Codex's project config. The directory must
+/// already exist; this does not create `.codex/`.
+fn write_codex_config(path: &Path, url: &str, dry: bool) -> Result<String, String> {
+    let existing = match fs::read_to_string(path) {
+        Ok(text) => Some(text),
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => None,
+        Err(e) => {
+            return Err(format!(
+                "could not read {} ({e}); not touching it",
+                path.display()
+            ))
+        }
+    };
+    if existing.as_deref().is_some_and(codex_has_xerj) {
+        return Ok(report("kept", path));
+    }
+    let block = codex_mcp_block(url);
+    let merged = match existing {
+        Some(text) if text.is_empty() => block,
+        Some(text) => {
+            let sep = if text.ends_with("\n\n") {
+                ""
+            } else if text.ends_with('\n') {
+                "\n"
+            } else {
+                "\n\n"
+            };
+            format!("{text}{sep}{block}")
+        }
+        None => block,
+    };
+    let had = backup(path, dry)?;
+    write_file(path, &merged, dry).map_err(|e| e.to_string())?;
+    Ok(report(if had { "appended" } else { "wrote" }, path))
+}
+
 /// One detected surface, written. Returns the human line to print.
-fn report(action: &str, path: &Path) -> String {
+///
+/// A dry run used to say `wrote` for a file it did not create. The verb
+/// becomes `would write` / `would merge` / `would append` / `would upgrade`
+/// so the line matches `--dry-run`'s "write nothing".
+fn report(action: &str, path: &Path, dry: bool) -> String {
+    let action = match (dry, action) {
+        (true, "wrote") => "would write",
+        (true, "merged") => "would merge",
+        (true, "appended") => "would append",
+        (true, "upgraded") => "would upgrade",
+        _ => action,
+    };
     format!("  {action:<8} {}", path.display())
+}
+
+/// Merge the xerj server into one MCP config, or report `kept` when the
+/// file already names it. Shared by Claude Code's `.mcp.json` and Cursor's
+/// `.cursor/mcp.json` (same `mcpServers` shape).
+fn register_mcp(path: &Path, url: &str, dry: bool) -> Result<String, String> {
+    let existing = fs::read_to_string(path).ok();
+    let already = existing
+        .as_deref()
+        .map(|t| t.contains("\"xerj\""))
+        .unwrap_or(false);
+    if already {
+        return Ok(report("kept", path, dry));
+    }
+    let merged = merged_mcp_json(existing.as_deref(), url)?;
+    let had = backup(path, dry)?;
+    write_file(path, &merged, dry).map_err(|e| e.to_string())?;
+    Ok(report(if had { "merged" } else { "wrote" }, path, dry))
 }
 
 /// Entry point for the `init` subcommand. Returns a process exit code.
@@ -520,20 +616,12 @@ pub(crate) fn run_init_with(
     let mut out = Vec::new();
 
     // 1) MCP registration (.mcp.json, Claude Code project scope; other hosts
-    //    read the same shape). Merge, never clobber.
-    let mcp_path = cwd.join(".mcp.json");
-    let existing = fs::read_to_string(&mcp_path).ok();
-    let already = existing
-        .as_deref()
-        .map(|t| t.contains("\"xerj\""))
-        .unwrap_or(false);
-    if already {
-        out.push(report("kept", &mcp_path));
-    } else {
-        let merged = merged_mcp_json(existing.as_deref(), url)?;
-        let had = backup(&mcp_path, dry)?;
-        write_file(&mcp_path, &merged, dry).map_err(|e| e.to_string())?;
-        out.push(report(if had { "merged" } else { "wrote" }, &mcp_path));
+    //    read the same shape). Merge, never clobber. Cursor does not read
+    //    that file: when the project already has `.cursor/`, write the same
+    //    entry to `.cursor/mcp.json`.
+    out.push(register_mcp(&cwd.join(".mcp.json"), url, dry)?);
+    if cwd.join(".cursor").is_dir() {
+        out.push(register_mcp(&cwd.join(".cursor/mcp.json"), url, dry)?);
     }
 
     // 2) Claude Code skills — written whenever the project (or user) uses
@@ -575,18 +663,30 @@ pub(crate) fn run_init_with(
         }
     }
 
-    // 4) AGENTS.md — the cross-agent convention. Append a short section if the
+    // 4) Codex — only when the project already has a `.codex` directory.
+    //    Project MCP is `[mcp_servers.xerj]` in `.codex/config.toml`, and
+    //    Codex loads that file only for a trusted project. Init does not
+    //    create `.codex/`.
+    if cwd.join(".codex").is_dir() {
+        out.push(write_codex_config(
+            &cwd.join(".codex/config.toml"),
+            url,
+            dry,
+        )?);
+    }
+
+    // 5) AGENTS.md — the cross-agent convention. Append a short section if the
     //    file exists without one; create the file if absent.
     let agents = cwd.join("AGENTS.md");
     match fs::read_to_string(&agents) {
         Ok(text) if text.contains("xerj search") || text.contains("xerj def") => {
-            out.push(report("kept", &agents));
+            out.push(report("kept", &agents, dry));
         }
         Ok(text) => {
             backup(&agents, dry)?;
             write_file(&agents, &format!("{text}{}", agents_md_section()), dry)
                 .map_err(|e| e.to_string())?;
-            out.push(report("appended", &agents));
+            out.push(report("appended", &agents, dry));
         }
         // Unreadable but present (not UTF-8, no permission): never replace it.
         Err(e) if e.kind() != std::io::ErrorKind::NotFound => {
@@ -602,11 +702,11 @@ pub(crate) fn run_init_with(
                 dry,
             )
             .map_err(|e| e.to_string())?;
-            out.push(report("wrote", &agents));
+            out.push(report("wrote", &agents, dry));
         }
     }
 
-    // 5) Auth note — say plainly what will happen at tool-call time (#961).
+    // 6) Auth note — say plainly what will happen at tool-call time (#961).
     //
     // `.mcp.json` is Claude Code *project* scope, i.e. a file meant to be
     // committed, so init deliberately writes no credential into it; auth is
@@ -694,6 +794,72 @@ mod tests {
         );
         let agents = fs::read_to_string(d.path().join("AGENTS.md")).unwrap();
         assert!(agents.contains("xerj def"));
+        assert!(
+            !d.path().join(".codex").exists(),
+            "init must not create .codex/"
+        );
+    }
+
+    /// Codex reads `[mcp_servers.xerj]` in `.codex/config.toml`, and only in a
+    /// trusted project. Init appends that table when `.codex/` already exists
+    /// and leaves every other line in place.
+    #[test]
+    fn codex_config_is_appended_only_when_the_directory_exists() {
+        assert_eq!(toml_basic_string("a\"b\\c"), "\"a\\\"b\\\\c\"");
+
+        let bare = tmp();
+        run_init_in(bare.path(), "http://127.0.0.1:9200", false).unwrap();
+        assert!(!bare.path().join(".codex").exists());
+
+        let d = tmp();
+        fs::create_dir(d.path().join(".codex")).unwrap();
+        fs::write(d.path().join(".codex/config.toml"), "model = \"gpt-5\"\n").unwrap();
+        let lines = run_init_in(d.path(), "http://127.0.0.1:9200", false).unwrap();
+        assert!(
+            has_report(&lines, "appended", ".codex/config.toml"),
+            "{lines:?}"
+        );
+        let text = fs::read_to_string(d.path().join(".codex/config.toml")).unwrap();
+        assert!(text.starts_with("model = \"gpt-5\"\n"), "{text}");
+        assert!(text.contains("[mcp_servers.xerj]\n"), "{text}");
+        assert!(text.contains("args = [\"mcp\"]\n"), "{text}");
+        assert!(text.contains("[mcp_servers.xerj.env]\n"), "{text}");
+        assert!(
+            text.contains("XERJ_URL = \"http://127.0.0.1:9200\"\n"),
+            "{text}"
+        );
+        assert!(d.path().join(".codex/config.toml.bak").exists());
+
+        let again = run_init_in(d.path(), "http://127.0.0.1:9", false).unwrap();
+        assert!(
+            has_report(&again, "kept", ".codex/config.toml"),
+            "{again:?}"
+        );
+        assert_eq!(
+            fs::read_to_string(d.path().join(".codex/config.toml")).unwrap(),
+            text
+        );
+
+        let commented = tmp();
+        fs::create_dir(commented.path().join(".codex")).unwrap();
+        fs::write(
+            commented.path().join(".codex/config.toml"),
+            "# [mcp_servers.xerj]\n",
+        )
+        .unwrap();
+        run_init_in(commented.path(), "http://127.0.0.1:9200", false).unwrap();
+        let commented_text =
+            fs::read_to_string(commented.path().join(".codex/config.toml")).unwrap();
+        assert_eq!(
+            commented_text.matches("[mcp_servers.xerj]").count(),
+            2,
+            "a comment is not a section: {commented_text}"
+        );
+
+        let dry = tmp();
+        fs::create_dir(dry.path().join(".codex")).unwrap();
+        run_init_in(dry.path(), "http://127.0.0.1:9200", true).unwrap();
+        assert!(!dry.path().join(".codex/config.toml").exists());
     }
 
     #[test]
@@ -729,7 +895,7 @@ mod tests {
         let second = fs::read_to_string(d.path().join("AGENTS.md")).unwrap();
         assert_eq!(first, second, "AGENTS.md must not grow on re-run");
         // "kept" for every surface; the only other line init emits is the
-        // auth note (section 5), which rewrites nothing.
+        // auth note (section 6), which rewrites nothing.
         assert!(
             lines
                 .iter()
@@ -753,9 +919,25 @@ mod tests {
     #[test]
     fn dry_run_writes_nothing() {
         let d = tmp();
-        run_init_in(d.path(), "http://x:1", true).unwrap();
+        let lines = run_init_in(d.path(), "http://x:1", true).unwrap();
         assert!(!d.path().join(".mcp.json").exists());
         assert!(!d.path().join("AGENTS.md").exists());
+        assert!(
+            lines
+                .iter()
+                .any(|l| l.contains("would write") && l.contains(".mcp.json")),
+            "{lines:?}"
+        );
+        assert!(
+            lines
+                .iter()
+                .any(|l| l.contains("would write") && l.contains("AGENTS.md")),
+            "{lines:?}"
+        );
+        assert!(
+            !lines.iter().any(|l| l.contains("  wrote")),
+            "a dry run must not claim it wrote: {lines:?}"
+        );
     }
 
     #[test]
@@ -763,9 +945,21 @@ mod tests {
         let d = tmp();
         run_init_in(d.path(), "http://x:1", false).unwrap();
         assert!(!d.path().join(".cursor/rules/xerj.mdc").exists());
+        assert!(!d.path().join(".cursor/mcp.json").exists());
         fs::create_dir_all(d.path().join(".cursor")).unwrap();
-        run_init_in(d.path(), "http://x:1", false).unwrap();
+        let lines = run_init_in(d.path(), "http://x:1", false).unwrap();
         assert!(d.path().join(".cursor/rules/xerj.mdc").exists());
+        let cursor: Value =
+            serde_json::from_str(&fs::read_to_string(d.path().join(".cursor/mcp.json")).unwrap())
+                .unwrap();
+        assert!(cursor["mcpServers"]["xerj"]["args"][0] == "mcp");
+        assert!(
+            lines.iter().any(|l| {
+                let l = l.replace('\\', "/");
+                l.contains("wrote") && l.ends_with(".cursor/mcp.json")
+            }),
+            "{lines:?}"
+        );
     }
 
     // ── the hub skill (Corpus Hub v2, plan section 9) ───────────────────
@@ -840,8 +1034,18 @@ mod tests {
         let lines = run_init_in(d.path(), "http://x:1", true).unwrap();
         assert!(!d.path().join(".claude/skills").exists());
         assert!(!d.path().join(".cursor/rules").exists());
-        assert!(has_report(&lines, "wrote", "skills/xerj-hub/SKILL.md"));
-        assert!(has_report(&lines, "wrote", "rules/xerj-hub.mdc"));
+        assert!(has_report(
+            &lines,
+            "would write",
+            "skills/xerj-hub/SKILL.md"
+        ));
+        assert!(has_report(&lines, "would write", "rules/xerj-hub.mdc"));
+        assert!(has_report(&lines, "would write", ".cursor/mcp.json"));
+        assert!(!d.path().join(".cursor/mcp.json").exists());
+        assert!(
+            !lines.iter().any(|l| l.contains("  wrote")),
+            "a dry run must not claim it wrote: {lines:?}"
+        );
     }
 
     /// The second run rewrites nothing: all four teaching files are `kept`.
@@ -863,6 +1067,7 @@ mod tests {
         ] {
             assert!(has_report(&lines, "kept", tail), "{tail}: {lines:?}");
         }
+        assert!(has_report(&lines, "kept", ".cursor/mcp.json"), "{lines:?}");
     }
 
     /// The reason the file exists: the decision rule, the one line, `--def`,
@@ -1038,10 +1243,12 @@ mod tests {
         let with_hub = usage(true);
         for file in [
             ".mcp.json",
+            ".cursor/mcp.json",
             ".claude/skills/xerj/SKILL.md",
             ".claude/skills/xerj-hub/SKILL.md",
             ".cursor/rules/xerj.mdc",
             ".cursor/rules/xerj-hub.mdc",
+            ".codex/config.toml",
             "AGENTS.md",
         ] {
             assert!(with_hub.contains(file), "--help does not list {file}");
@@ -1058,6 +1265,7 @@ mod tests {
             ".mcp.json",
             ".claude/skills/xerj/SKILL.md",
             ".cursor/rules/xerj.mdc",
+            ".codex/config.toml",
             "AGENTS.md",
         ] {
             assert!(no_hub.contains(file), "--help does not list {file}");
@@ -1239,7 +1447,7 @@ mod tests {
                 content_hash(&skill_md()).as_str(),
                 content_hash(HUB_SKILL_MD).as_str()
             ),
-            (3, "c59537bc1064a30f", "6040c97600edc004"),
+            (4, "c59537bc1064a30f", "131aa9224f56d182"),
             "a teaching text changed: bump INIT_FILES_VERSION and re-pin"
         );
     }

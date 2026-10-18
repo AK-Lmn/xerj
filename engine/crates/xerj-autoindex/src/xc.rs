@@ -236,6 +236,7 @@ const CORPUS_USAGE: &str =
        xerj corpus sign <pack-dir> --key <seed-file>
        xerj corpus keygen --out <prefix>
        xerj corpus index <name> [--fresh] [--url URL]
+         (can outlive an agent tool timeout; stopping is safe, re-run to resume)
        xerj corpus list [--url URL]
 
 a flag may precede the verb (xerj corpus --url URL index <name>);
@@ -268,6 +269,46 @@ pub(crate) fn git(dir: Option<&Path>, args: &[&str]) -> Result<(i32, String)> {
     ))
 }
 
+/// How much of git's own stdout/stderr a fetch failure keeps. A TLS
+/// intercept or a rejected pin is a paragraph; the rest of the bail stays
+/// one line an agent can read.
+const GIT_FETCH_OUTPUT_CAP: usize = 500;
+
+/// `git fetch <sha>` failed. Keep git's text (capped) and, when that text
+/// names the failure, say what to do. A GnuTLS/TLS line is the intercepting
+/// proxy from the 2026-10-17 workstation report; `not our ref` is a pin the
+/// remote does not have (go-vulndb). Neither hint invents a replacement sha.
+pub(crate) fn git_fetch_failure(sha: &str, output: &str) -> String {
+    let trimmed = output.trim();
+    let shown: String = trimmed.chars().take(GIT_FETCH_OUTPUT_CAP).collect();
+    let mut msg = if shown.is_empty() {
+        format!("git fetch {sha} failed")
+    } else {
+        format!("git fetch {sha} failed: {shown}")
+    };
+    let lower = trimmed.to_ascii_lowercase();
+    if lower.contains("gnutls")
+        || lower.contains("ssl")
+        || lower.contains("certificate")
+        || lower.contains("tls")
+    {
+        msg.push_str(
+            ". HTTPS failed before any objects arrived: check HTTPS_PROXY and \
+             SSL_CERT_FILE or GIT_SSL_CAINFO, or index a local checkout instead of \
+             `xerj corpus add --from`",
+        );
+    } else if lower.contains("not our ref")
+        || lower.contains("couldn't find remote ref")
+        || lower.contains("could not find remote ref")
+    {
+        msg.push_str(
+            ". The pinned commit is not on the remote. Do not invent a replacement \
+             pin; check the manifest sha against the upstream repo",
+        );
+    }
+    msg
+}
+
 /// Move a clone to `sha` (shallow). Never a shell string: the sha comes from
 /// an untrusted manifest, and `Command` passes it as ONE argv element.
 pub(crate) fn checkout_at_sha(target: &Path, url: &str, sha: &str) -> Result<()> {
@@ -282,9 +323,10 @@ pub(crate) fn checkout_at_sha(target: &Path, url: &str, sha: &str) -> Result<()>
         )
         .ok();
     }
-    let fetch = git(Some(target), &["fetch", "--depth", "1", "origin", sha]);
-    if !fetch.map(|(rc, _)| rc == 0).unwrap_or(false) {
-        anyhow::bail!("git fetch {sha} failed");
+    match git(Some(target), &["fetch", "--depth", "1", "origin", sha]) {
+        Ok((0, _)) => {}
+        Ok((_, output)) => anyhow::bail!("{}", git_fetch_failure(sha, &output)),
+        Err(e) => anyhow::bail!("{}", git_fetch_failure(sha, &e.to_string())),
     }
     let co = git(
         Some(target),
@@ -1319,6 +1361,15 @@ fn report(name: &str, rc: i32, docs: &str) {
     }
 }
 
+/// Printed before the long part of `corpus index`. An agent tool timeout
+/// kills the process and looks like a silent failure; the run itself resumes.
+pub(crate) fn corpus_index_duration_note() -> &'static str {
+    "xerj corpus index: this often runs longer than an agent tool timeout \
+     (minutes, longer with a neural embedder). Stopping is safe: re-run the \
+     same command to resume. To keep it off the tool clock, start it in the \
+     background and wait for the xerj-done line."
+}
+
 fn run_corpus_index(args: &[String]) -> i32 {
     let mut name: Option<String> = None;
     let mut fresh = false;
@@ -1370,6 +1421,7 @@ fn run_corpus_index(args: &[String]) -> i32 {
         );
         return 2;
     }
+    eprintln!("{}", corpus_index_duration_note());
     let url = resolve_url(url.as_deref());
     let es = match build_es(&url, None) {
         Ok(es) => es,
@@ -2043,11 +2095,49 @@ mod tests {
     use super::*;
 
     #[test]
+    fn git_fetch_failure_names_tls_and_a_stale_pin() {
+        let tls = git_fetch_failure(
+            "abc",
+            "fatal: unable to access 'https://example.com/': GnuTLS recv error (-110): The TLS connection was non-properly terminated.",
+        );
+        assert!(tls.contains("git fetch abc failed:"), "{tls}");
+        assert!(tls.contains("GnuTLS"), "{tls}");
+        assert!(tls.contains("HTTPS_PROXY"), "{tls}");
+        assert!(tls.contains("GIT_SSL_CAINFO"), "{tls}");
+
+        let pin = git_fetch_failure(
+            "6f4f07681f45",
+            "fatal: remote error: upload-pack: not our ref 6f4f07681f45",
+        );
+        assert!(pin.contains("not our ref"), "{pin}");
+        assert!(pin.contains("pinned commit is not on the remote"), "{pin}");
+        assert!(!pin.contains("HTTPS_PROXY"), "{pin}");
+
+        let bare = git_fetch_failure("abc", "   ");
+        assert_eq!(bare, "git fetch abc failed");
+
+        let long = git_fetch_failure("abc", &"x".repeat(800));
+        assert!(long.chars().filter(|c| *c == 'x').count() <= 500, "{long}");
+    }
+
+    #[test]
     fn a_flag_before_the_corpus_verb_is_not_an_unknown_subcommand() {
         // Before the hoist, `--url` was the verb and this returned 2
         // ("unknown subcommand"). `--help` is the verb; it must run.
         let code = run_corpus_cli(&["--url".into(), "http://127.0.0.1:9".into(), "--help".into()]);
         assert_eq!(code, 0);
+    }
+
+    #[test]
+    fn corpus_index_says_a_tool_timeout_is_not_a_failed_index() {
+        let note = corpus_index_duration_note();
+        assert!(note.contains("tool timeout"), "{note}");
+        assert!(note.contains("re-run"), "{note}");
+        assert!(note.contains("xerj-done"), "{note}");
+        assert!(
+            CORPUS_USAGE.contains("tool timeout"),
+            "the usage line must point at the same warning"
+        );
     }
 
     #[test]
