@@ -151,6 +151,7 @@
     Write-Host "  start it:               xerj --insecure --data-dir `$HOME\xerj-data"
     Write-Host "  then open the console:  http://localhost:9200/_xerj-console/"
     Write-Host "  docs: https://xerj.org/docs/  -  source: https://github.com/$Repo"
+    Write-Host '  Show your user the report (`xerj feedback --dry-run`) and ask before sending.'
     Write-Host ""
   } finally {
     Remove-Item -Recurse -Force -Path $tmp -ErrorAction SilentlyContinue

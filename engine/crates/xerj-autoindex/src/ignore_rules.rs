@@ -79,16 +79,21 @@ pub const GITIGNORE: &str = ".gitignore";
 pub const XERJIGNORE: &str = ".xerjignore";
 
 /// Build output that is junk in practice but is *not* reliably gitignored —
-/// `vendor/` is committed by Go projects, `dist/` and `build/` are gitignored
-/// in one repo and checked in the next, and a folder full of downloaded
-/// packages is very often not a git repository at all.
+/// `vendor/` is committed by Go projects, `third_party/` and `bower_components/`
+/// are committed dependency trees, `dist/` and `build/` are gitignored in one
+/// repo and checked in the next, and a folder full of downloaded packages is
+/// very often not a git repository at all.
 ///
 /// These are defaults, not law: `--no-default-ignores` turns them off, any
-/// ignore file in the tree outranks them, and `--dry-run` names them as the
-/// reason a directory disappeared.
+/// ignore file in the tree outranks them (`!third_party/` keeps a tree the
+/// operator wants searched), and `--dry-run` names them as the reason a
+/// directory disappeared.
 pub const DEFAULT_IGNORE_PATTERNS: &[&str] = &[
     "node_modules/",
+    "bower_components/",
     "vendor/",
+    "third_party/",
+    "thirdparty/",
     "target/",
     "dist/",
     "build/",
@@ -157,6 +162,14 @@ pub const UNRESOLVED_LINK_RULE: &str = "symlink:unresolved";
 /// [`HIDDEN_RULE`] sends them looking for a dotfile in a folder that has none.
 /// Both were tried; this names the two facts that are actually true.
 pub const HIDDEN_OUTSIDE_ROOT_RULE: &str = "symlink:outside-root+hidden";
+
+/// A symlink the walk did not follow. The default is not to follow links, and
+/// an unfollowed symlink is not a file to walkdir, so it used to be skipped
+/// with no line on the ignore report — a tree of links looked empty. One
+/// warning names `--follow-symlinks`; each link is counted under this rule.
+/// A target outside the folder stays refused even when the flag is on
+/// ([`ESCAPED_ROOT_RULE`]).
+pub const NOT_FOLLOWED_RULE: &str = "symlink:not-followed";
 
 const MAX_WARNINGS: usize = 20;
 /// Directory entries the `--dry-run` deep count may examine in total. A
@@ -763,6 +776,19 @@ impl IgnoreStack {
         }
     }
 
+    /// A symlink left unfollowed. See [`NOT_FOLLOWED_RULE`]. The warning is
+    /// once per walk: the rule count already says how many links.
+    pub fn record_symlink_not_followed(&mut self) {
+        if !self.report.by_rule.contains_key(NOT_FOLLOWED_RULE) {
+            self.warn(
+                "symlink: not followed (pass --follow-symlinks to index a target inside \
+                 this folder; a target outside it stays refused)"
+                    .into(),
+            );
+        }
+        self.record_file(NOT_FOLLOWED_RULE);
+    }
+
     /// A followed entry that could not be resolved. See [`UNRESOLVED_LINK_RULE`].
     pub fn record_symlink_unresolved(&mut self, is_dir: bool) {
         if is_dir {
@@ -1035,6 +1061,49 @@ mod tests {
         write(root, "vendor/lib/lib.go", "x");
         let (kept, _) = survivors(root, IgnoreOptions::default());
         assert_eq!(kept, vec!["vendor/lib/lib.go"], "{kept:?}");
+    }
+
+    /// `third_party/` and `bower_components/` are committed dependency trees.
+    /// They were only delayed to the end of the queue, so a monorepo still
+    /// walked and indexed them. A `!` line puts one back, same as `vendor/`.
+    #[test]
+    fn defaults_prune_committed_dependency_trees() {
+        let dir = tempfile::TempDir::new().unwrap();
+        let root = dir.path();
+        write(root, "src/lib.rs", "fn main() {}");
+        write(root, "third_party/llvm/Support.cpp", "x");
+        write(root, "thirdparty/dep/dep.c", "x");
+        write(root, "bower_components/jquery/jquery.js", "x");
+        write(root, "kept/third_party_notes.md", "not a directory name");
+
+        let (kept, report) = survivors(root, IgnoreOptions::default());
+        assert_eq!(
+            kept,
+            vec!["kept/third_party_notes.md", "src/lib.rs"],
+            "{kept:?}"
+        );
+        assert!(
+            report.by_rule.contains_key("<built-in>:third_party/"),
+            "{report:?}"
+        );
+        assert!(
+            report.by_rule.contains_key("<built-in>:bower_components/"),
+            "{report:?}"
+        );
+        assert_eq!(report.dirs_pruned, 3, "{report:?}");
+
+        write(root, ".xerjignore", "!third_party/\n");
+        let (reincluded, _) = survivors(root, IgnoreOptions::default());
+        assert!(
+            reincluded
+                .iter()
+                .any(|p| p == "third_party/llvm/Support.cpp"),
+            "a negation must put the tree back: {reincluded:?}"
+        );
+        assert!(
+            !reincluded.iter().any(|p| p.contains("bower_components")),
+            "the other trees stay pruned: {reincluded:?}"
+        );
     }
 
     /// Images, fonts and native binaries are junk after the sniff. On a repo
