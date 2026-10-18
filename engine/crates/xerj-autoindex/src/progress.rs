@@ -654,12 +654,6 @@ impl Progress {
                 for (key, value) in flags {
                     doc.insert((*key).to_string(), (*value).into());
                 }
-                if ok && exit == 3 {
-                    doc.insert(
-                        "exit_meaning".into(),
-                        "success: junk was recorded, the run did not fail".into(),
-                    );
-                }
                 let line = serde_json::Value::Object(doc);
                 self.sink.write(format!("{line}\n").as_bytes());
             }
@@ -680,11 +674,6 @@ impl Progress {
                     line.push_str(&format!(" {key}={value}"));
                 }
                 line.push('\n');
-                if ok && exit == 3 {
-                    line.push_str(
-                        "xerj-note exit=3 means success: junk was recorded, the run did not fail\n",
-                    );
-                }
                 self.sink.write(line.as_bytes());
             }
         }
@@ -1222,16 +1211,21 @@ fn bar(percent: Option<f64>, cells: usize) -> String {
     }
 }
 
-/// `eta 2m10s`, `eta ~2m10s (rough)`, `eta unknown`, `eta unknown (stalled)`.
+/// `eta 2m10s`, `eta ~2m10s (rough)`, `eta unknown`,
+/// `eta unknown (stalled, no progress for 1m40s)`.
 /// The word never disappears: a missing ETA field would read as a rendering
 /// fault, while `unknown` is the honest answer and is what the machine line
-/// says too.
-fn display_eta(eta: Eta) -> String {
+/// says too. A stall also says how long, because the machine line's
+/// `since_progress_s` is not on the `xerj-bar` line an agent relays verbatim.
+fn display_eta(eta: Eta, since_progress: f64) -> String {
     match eta {
         Eta::Good(seconds) => format!("eta {}", fmt_secs(seconds)),
         Eta::Rough(seconds) => format!("eta ~{} (rough)", fmt_secs(seconds)),
         Eta::Unknown => "eta unknown".to_string(),
-        Eta::Stalled => "eta unknown (stalled)".to_string(),
+        Eta::Stalled => format!(
+            "eta unknown (stalled, no progress for {})",
+            fmt_secs(since_progress)
+        ),
     }
 }
 
@@ -1280,7 +1274,10 @@ fn render_bar_line(snapshot: &Snapshot, cells: usize) -> String {
             Basis::None => {}
         }
     }
-    line.push_str(&format!(" | {}", display_eta(snapshot.eta)));
+    line.push_str(&format!(
+        " | {}",
+        display_eta(snapshot.eta, snapshot.since_progress)
+    ));
     if snapshot.waiting_on.len() == 1 {
         line.push_str(&format!(
             " | waiting on {}",
@@ -1327,10 +1324,10 @@ fn render_tty(snapshot: &Snapshot) -> String {
             Basis::None => {}
         }
     }
-    match snapshot.eta.seconds() {
-        Some(seconds) => line.push_str(&format!("| eta {}", fmt_secs(seconds))),
-        None => line.push_str("| eta unknown"),
-    }
+    line.push_str(&format!(
+        "| {}",
+        display_eta(snapshot.eta, snapshot.since_progress)
+    ));
     if snapshot.waiting_on.len() == 1 {
         line.push_str(&format!(
             " | waiting on {}",
@@ -2034,10 +2031,6 @@ mod tests {
         assert_eq!(last["exit"], 3);
         assert_eq!(last["reason"], "completed-with-junk");
         assert_eq!(last["files"], 1922);
-        assert_eq!(
-            last["exit_meaning"],
-            "success: junk was recorded, the run did not fail"
-        );
     }
 
     /// #279. `ignored_files_in_pruned_dirs` is budget-capped, so on its own it
@@ -2185,12 +2178,6 @@ mod tests {
             "{text}"
         );
         assert!(text.contains("files=12 records=7"), "{text}");
-        assert!(
-            text.contains(
-                "xerj-note exit=3 means success: junk was recorded, the run did not fail"
-            ),
-            "{text}"
-        );
     }
 
     #[test]
@@ -2259,12 +2246,20 @@ mod tests {
             state.last_sample_units = 10_248_432;
             state.rate = Some(2_545_880.0);
             state.shown_eta = Some(10.3);
+            // The opening bar went out at phase start, before this stall.
+            // Age it past the display interval so the tick owes a new one.
+            state.last_bar_at = Some(Instant::now() - Duration::from_secs(20));
         }
         progress.tick();
-        let line = captured(&buffer).lines().last().unwrap().to_string();
+        let text = captured(&buffer);
+        let line = text.lines().last().unwrap().to_string();
         assert!(
             line.contains("eta_s=unknown") && line.contains("eta_quality=stalled"),
             "no completion in 100s is an absence of measurement, not a slow rate: {line}"
+        );
+        assert!(
+            text.contains("no progress for 1m40s"),
+            "the relayed bar must say how long the phase has been stuck: {text}"
         );
         assert!(line.contains("since_progress_s=100."), "{line}");
         assert!(
