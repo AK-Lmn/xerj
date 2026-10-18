@@ -298,45 +298,8 @@ pub fn build(opts: &Options, seed_hex: &str, pubkey_hex: &str) -> Result<Built> 
             );
         }
 
-        // Terms (plan §4): every definition symbol, every path component without
-        // extension, every lower-case 3+ letter word of ask_for and topics. Raw
-        // and lower-cased, because the router probes both forms of each token.
-        let mut terms: Vec<String> = Vec::new();
-        let mut push = |t: &str| {
-            if !t.is_empty() {
-                terms.push(t.to_string());
-                terms.push(t.to_lowercase());
-            }
-        };
-        for d in &pack.defs {
-            push(&d.symbol);
-        }
-        for f in &pack.files {
-            for comp in f.path.split('/') {
-                push(strip_extension(comp));
-            }
-        }
         let backlog_domain = field("domain");
-        let ask_for = [
-            manifest.get("ask_for").and_then(Value::as_str),
-            manifest.get("domain").and_then(Value::as_str),
-            Some(backlog_domain),
-        ]
-        .into_iter()
-        .flatten()
-        .map(str::trim)
-        .find(|s| !s.is_empty())
-        .unwrap_or("");
-        let topics: Vec<&str> = manifest
-            .get("topics")
-            .and_then(Value::as_array)
-            .map(|a| a.iter().filter_map(Value::as_str).collect())
-            .unwrap_or_default();
-        for text in std::iter::once(ask_for).chain(topics) {
-            for w in words(text) {
-                terms.push(w);
-            }
-        }
+        let terms = sketch_terms(&pack.defs, &pack.files, &manifest, backlog_domain);
 
         let tag = opts
             .tags
@@ -389,6 +352,57 @@ pub fn build(opts: &Options, seed_hex: &str, pubkey_hex: &str) -> Result<Built> 
         without_pack,
         unmatched,
     })
+}
+
+/// The terms a corpus's [`Sketch`](xerj_common::hub::Sketch) is built over
+/// (plan §4): every definition symbol, every path component without extension,
+/// every lower-case 3+ letter word of `ask_for` and `topics`. Symbols and path
+/// components go in raw and lower-cased, because the router probes both forms of
+/// each token. `ask_for` is the manifest's `ask_for`, else its `domain`, else
+/// the backlog row's `domain`.
+///
+/// Public so the scale measurement (`examples/hub_scale.rs`) builds sketches
+/// from a cloned tree with exactly the terms `build-catalogue` would use.
+pub fn sketch_terms(
+    defs: &[DefRecord],
+    files: &[PackFileEntry],
+    manifest: &Value,
+    backlog_domain: &str,
+) -> Vec<String> {
+    let mut terms: Vec<String> = Vec::new();
+    let mut push = |t: &str| {
+        if !t.is_empty() {
+            terms.push(t.to_string());
+            terms.push(t.to_lowercase());
+        }
+    };
+    for d in defs {
+        push(&d.symbol);
+    }
+    for f in files {
+        for comp in f.path.split('/') {
+            push(strip_extension(comp));
+        }
+    }
+    let ask_for = [
+        manifest.get("ask_for").and_then(Value::as_str),
+        manifest.get("domain").and_then(Value::as_str),
+        Some(backlog_domain),
+    ]
+    .into_iter()
+    .flatten()
+    .map(str::trim)
+    .find(|s| !s.is_empty())
+    .unwrap_or("");
+    let topics: Vec<&str> = manifest
+        .get("topics")
+        .and_then(Value::as_array)
+        .map(|a| a.iter().filter_map(Value::as_str).collect())
+        .unwrap_or_default();
+    for text in std::iter::once(ask_for).chain(topics) {
+        terms.extend(words(text));
+    }
+    terms
 }
 
 /// The members of a verified pack the catalogue needs.
@@ -611,11 +625,15 @@ mod tests {
         assert_eq!(e.pack_sha256, hex(&Sha256::digest(&raw)));
         assert_eq!(e.quality_grade, None);
         assert!(e.ask_for.contains("block compression"));
+        // The sketch holds terms lower-cased (so raw and lower no longer both
+        // occupy it), plus the sub-words of symbols and paths, plus the curated
+        // description words.
         for term in [
-            "LZ4_compress_default",
-            "lz4_compress_default",
-            "lz4frame",
-            "decoder",
+            "lz4_compress_default", // a symbol, lower-cased
+            "compress",             // its sub-word
+            "lz4frame",             // a path component
+            "decoder",              // an ask_for word
+            "lz4",                  // the slug
         ] {
             assert!(sketch::contains(&e.term_sketch, term), "{term} in sketch");
         }

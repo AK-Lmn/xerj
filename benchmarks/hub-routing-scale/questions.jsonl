@@ -1,0 +1,196 @@
+{"group":"compression","q":"how does lz4 encode a match offset in the block format","deps":["lz4"],"expected":"lz4"}
+{"group":"compression","q":"what does LZ4_decompress_safe check before copying a literal run","deps":["lz4-sys"],"expected":"lz4"}
+{"group":"compression","q":"what is the maximum block size of an lz4 frame","deps":[],"expected":"lz4"}
+{"group":"compression","q":"LZ4_compress_HC acceleration and compression level","deps":[],"expected":"lz4"}
+{"group":"compression","q":"how does zstd pick the window size for a compression level","deps":["zstd"],"expected":"zstd"}
+{"group":"compression","q":"what is ZSTD_CLEVEL_DEFAULT","deps":["zstd-sys"],"expected":"zstd"}
+{"group":"compression","q":"how are zstd dictionaries trained with zdict","deps":[],"expected":"zstd"}
+{"group":"compression","q":"zstd frame header magic number and the skippable frame","deps":[],"expected":"zstd"}
+{"group":"compression","q":"how does snappy decide when to emit a copy vs a literal","deps":["snap"],"expected":"snappy"}
+{"group":"compression","q":"snappy framing format chunk types and crc masking","deps":[],"expected":"snappy"}
+{"group":"compression","q":"how does brotli use its static dictionary transforms","deps":["brotli"],"expected":"brotli"}
+{"group":"compression","q":"brotli quality level and the window bits lgwin","deps":[],"expected":"brotli"}
+{"group":"compression","q":"how does zlib-ng use SIMD for adler32 and crc32","deps":["libz-ng-sys"],"expected":"zlib-ng"}
+{"group":"compression","q":"deflate longest_match implementation in zlib-ng","deps":[],"expected":"zlib-ng"}
+{"group":"compression","q":"how does xz liblzma configure the lzma2 filter chain","deps":["xz2"],"expected":"xz"}
+{"group":"compression","q":"lzma_stream_decoder memory limit handling","deps":[],"expected":"xz"}
+{"group":"compression","q":"density chameleon cheetah lion algorithm differences","deps":[],"expected":"density"}
+{"group":"compression","q":"which compression library has the fastest byte-oriented kernel named cheetah","deps":[],"expected":"density"}
+{"group":"rust","q":"how does hyper manage the http1 connection state machine","deps":["hyper"],"expected":"hyper"}
+{"group":"rust","q":"hyper client connection pool checkout and idle timeout","deps":[],"expected":"hyper"}
+{"group":"rust","q":"how does the h2 crate implement flow control window updates","deps":["h2"],"expected":"h2"}
+{"group":"rust","q":"HPACK dynamic table size update in h2","deps":[],"expected":"h2"}
+{"group":"rust","q":"httparse parse request headers zero copy","deps":["httparse"],"expected":"httparse"}
+{"group":"rust","q":"what error does httparse return for a header name with an invalid token","deps":[],"expected":"httparse"}
+{"group":"rust","q":"how does the url crate apply IDNA to the host","deps":["url"],"expected":"rust-url"}
+{"group":"rust","q":"rust url crate Url::join relative path resolution","deps":[],"expected":"rust-url"}
+{"group":"rust","q":"which syscall does getrandom use on linux and what is the fallback","deps":["getrandom"],"expected":"getrandom"}
+{"group":"rust","q":"getrandom wasm js backend custom implementation","deps":[],"expected":"getrandom"}
+{"group":"rust","q":"blake3 keyed hash derive_key context string","deps":["blake3"],"expected":"blake3"}
+{"group":"rust","q":"how does blake3 parallelize chunk hashing with SIMD","deps":[],"expected":"blake3"}
+{"group":"rust","q":"curve25519-dalek scalar multiplication constant time","deps":["curve25519-dalek"],"expected":"curve25519-dalek"}
+{"group":"rust","q":"ristretto point compression in dalek","deps":[],"expected":"curve25519-dalek"}
+{"group":"rust","q":"quinn congestion controller cubic and new reno","deps":["quinn"],"expected":"quinn"}
+{"group":"rust","q":"how does quinn handle 0-RTT data acceptance","deps":[],"expected":"quinn"}
+{"group":"rust","q":"raft-rs Ready struct and how to advance after persisting entries","deps":["raft"],"expected":"raft-rs"}
+{"group":"rust","q":"raft progress tracker probe and replicate state","deps":[],"expected":"raft-rs"}
+{"group":"rust","q":"bson document encoding of a datetime element","deps":["bson"],"expected":"bson-rust"}
+{"group":"rust","q":"how does the bson crate serialize ObjectId","deps":[],"expected":"bson-rust"}
+{"group":"rust","q":"jsonwebtoken decode with Validation leeway and audience","deps":["jsonwebtoken"],"expected":"jsonwebtoken-rust"}
+{"group":"rust","q":"rust jsonwebtoken EncodingKey from rsa pem","deps":[],"expected":"jsonwebtoken-rust"}
+{"group":"rust","q":"borsh serialization of enums and the variant index byte","deps":["borsh"],"expected":"borsh-rs"}
+{"group":"rust","q":"borsh BorshSerialize derive for a HashMap ordering","deps":[],"expected":"borsh-rs"}
+{"group":"rust","q":"rustls ServerConfig with client certificate verification","deps":["rustls"],"expected":"rustls"}
+{"group":"rust","q":"how does rustls choose a cipher suite in the handshake","deps":[],"expected":"rustls"}
+{"group":"rust","q":"RustCrypto sha2 compress function with sha-ni","deps":["sha2"],"expected":"rustcrypto-hashes"}
+{"group":"rust","q":"Digest trait finalize_reset in the sha3 crate","deps":[],"expected":"rustcrypto-hashes"}
+{"group":"rust","q":"etherparse slice an ipv6 packet with extension headers","deps":["etherparse"],"expected":"etherparse"}
+{"group":"rust","q":"parse a tcp header zero copy from an ethernet frame","deps":[],"expected":"etherparse"}
+{"group":"rust","q":"cssparser tokenizer handling of url tokens","deps":["cssparser"],"expected":"rust-cssparser"}
+{"group":"rust","q":"servo css tokenizer parse_nested_block","deps":[],"expected":"rust-cssparser"}
+{"group":"rust","q":"arrow-rs RecordBatch IPC writer","deps":["arrow"],"expected":"arrow-rs"}
+{"group":"rust","q":"arrow array take kernel for dictionary arrays","deps":[],"expected":"arrow-rs"}
+{"group":"rust","q":"polars lazy frame predicate pushdown optimizer","deps":["polars"],"expected":"polars"}
+{"group":"rust","q":"polars group_by agg implementation","deps":[],"expected":"polars"}
+{"group":"rust","q":"datafusion physical planner for hash join","deps":["datafusion"],"expected":"datafusion"}
+{"group":"rust","q":"datafusion logical plan optimizer rule trait","deps":[],"expected":"datafusion"}
+{"group":"rust","q":"tikv percolator prewrite and commit transaction","deps":[],"expected":"tikv"}
+{"group":"rust","q":"tikv raftstore region split","deps":[],"expected":"tikv"}
+{"group":"rust","q":"candle tensor matmul on cuda","deps":["candle-core"],"expected":"candle"}
+{"group":"rust","q":"candle-transformers bert model embeddings","deps":[],"expected":"candle"}
+{"group":"rust","q":"delta-rs transaction log checkpoint parquet","deps":["deltalake"],"expected":"delta-rs"}
+{"group":"rust","q":"delta lake optimistic concurrency commit conflict","deps":[],"expected":"delta-rs"}
+{"group":"rust","q":"lightningcss minify vendor prefixes for browser targets","deps":["lightningcss"],"expected":"lightningcss"}
+{"group":"rust","q":"boringtun wireguard handshake noise implementation","deps":["boringtun"],"expected":"boringtun"}
+{"group":"rust","q":"mls-rs group commit and welcome message","deps":["mls-rs"],"expected":"mls-rs"}
+{"group":"vulns","q":"which versions of the time crate are affected by the localtime_r soundness advisory","deps":[],"expected":"rustsec-advisories"}
+{"group":"vulns","q":"RUSTSEC advisory for smallvec buffer overflow patched version","deps":[],"expected":"rustsec-advisories"}
+{"group":"vulns","q":"rust crate vulnerability advisories for tokio","deps":[],"expected":"rustsec-advisories"}
+{"group":"vulns","q":"GHSA advisory for lodash prototype pollution with CVSS score","deps":[],"expected":"ghsa-db"}
+{"group":"vulns","q":"github reviewed advisory patched range for an npm package","deps":[],"expected":"ghsa-db"}
+{"group":"vulns","q":"PYSEC advisory for urllib3 fixed version","deps":[],"expected":"pysec"}
+{"group":"vulns","q":"python package vulnerability record for pillow","deps":[],"expected":"pysec"}
+{"group":"vulns","q":"GO-2023 vulnerability in golang.org/x/net affected symbols","deps":[],"expected":"go-vulndb"}
+{"group":"vulns","q":"go module vulnerability database entry for net/http","deps":[],"expected":"go-vulndb"}
+{"group":"vulns","q":"CWE-79 definition and its parent weakness","deps":[],"expected":"mitre-cwe"}
+{"group":"vulns","q":"what is the CWE for improper input validation","deps":[],"expected":"mitre-cwe"}
+{"group":"vulns","q":"CAPEC attack pattern for SQL injection prerequisites","deps":[],"expected":"mitre-capec"}
+{"group":"vulns","q":"ATT&CK technique T1059 command and scripting interpreter detection","deps":[],"expected":"mitre-attck"}
+{"group":"vulns","q":"mitre attack tactic lateral movement techniques","deps":[],"expected":"mitre-attck"}
+{"group":"vulns","q":"is CVE-2021-44228 in the known exploited vulnerabilities catalog","deps":[],"expected":"cisa"}
+{"group":"vulns","q":"CISA KEV due date for a vendor product","deps":[],"expected":"cisa"}
+{"group":"vulns","q":"which commit fixed CVE-2018-1000632","deps":[],"expected":"vuln-fix-commits"}
+{"group":"vulns","q":"nuclei template for detecting an exposed git config","deps":[],"expected":"nuclei-templates"}
+{"group":"vulns","q":"falco rule for a shell spawned in a container","deps":[],"expected":"falco-rules"}
+{"group":"vulns","q":"kube-bench CIS benchmark check for the kubelet anonymous auth","deps":[],"expected":"kube-bench"}
+{"group":"vulns","q":"owasp cheat sheet for password storage argon2id parameters","deps":[],"expected":"owasp-cheatsheets"}
+{"group":"vulns","q":"owasp web security testing guide test for session fixation","deps":[],"expected":"owasp-wstg"}
+{"group":"vulns","q":"payloads for server side template injection in jinja2","deps":[],"expected":"payloadsallthethings"}
+{"group":"prose","q":"retext-passive word list for passive voice detection","deps":[],"expected":"retext-passive"}
+{"group":"prose","q":"how does retext detect passive voice","deps":[],"expected":"retext-passive"}
+{"group":"prose","q":"retext-simplify replacement for utilize","deps":[],"expected":"retext-simplify"}
+{"group":"prose","q":"list of wordy phrases and simpler replacements","deps":[],"expected":"retext-simplify"}
+{"group":"prose","q":"retext-intensify list of weak intensifiers and hedges","deps":[],"expected":"retext-intensify"}
+{"group":"prose","q":"retext-readability how are the formulas combined","deps":[],"expected":"retext-readability"}
+{"group":"prose","q":"dale-chall and gunning fog readability threshold","deps":[],"expected":"retext-readability"}
+{"group":"prose","q":"write-good weasel words check","deps":[],"expected":"write-good"}
+{"group":"prose","q":"proselint check for redundancy with citation","deps":[],"expected":"proselint"}
+{"group":"prose","q":"alex inclusive language replacement for whitelist","deps":[],"expected":"alex-inclusive-language"}
+{"group":"prose","q":"keep a changelog unreleased section format","deps":[],"expected":"keep-a-changelog"}
+{"group":"prose","q":"conventional commits breaking change footer","deps":[],"expected":"conventional-commits"}
+{"group":"prose","q":"standard readme required sections order","deps":[],"expected":"standard-readme"}
+{"group":"misc","q":"sqlite btree balance_nonroot page split","deps":[],"expected":"sqlite-src"}
+{"group":"misc","q":"sqlite pager journal mode wal checkpoint","deps":[],"expected":"sqlite-src"}
+{"group":"misc","q":"leveldb memtable skiplist and version set manifest","deps":[],"expected":"leveldb"}
+{"group":"misc","q":"lmdb mdb_cursor_get page copy on write","deps":[],"expected":"lmdb"}
+{"group":"misc","q":"rocksdb level compaction picker score","deps":[],"expected":"rocksdb"}
+{"group":"misc","q":"badger value log garbage collection","deps":[],"expected":"badger"}
+{"group":"misc","q":"pebble range deletion tombstones in Go","deps":[],"expected":"pebble"}
+{"group":"misc","q":"faiss IndexIVFPQ training and nprobe","deps":[],"expected":"faiss"}
+{"group":"misc","q":"annoy build forest of random projection trees","deps":[],"expected":"annoy"}
+{"group":"misc","q":"etcd mvcc backend compaction and watch revision","deps":[],"expected":"etcd-src"}
+{"group":"misc","q":"nats jetstream consumer ack policy","deps":[],"expected":"nats-server"}
+{"group":"misc","q":"dragonboat multi raft snapshot streaming","deps":[],"expected":"dragonboat"}
+{"group":"misc","q":"libuv uv_run event loop phases","deps":[],"expected":"libuv"}
+{"group":"misc","q":"nghttp2 session flow control in C","deps":[],"expected":"nghttp2"}
+{"group":"misc","q":"curl CURLOPT_FOLLOWLOCATION redirect handling","deps":[],"expected":"curl-src"}
+{"group":"misc","q":"caddy automatic https certificate management","deps":[],"expected":"caddy"}
+{"group":"misc","q":"nginx ngx_http_upstream module request phases","deps":[],"expected":"nginx"}
+{"group":"misc","q":"protobuf varint wire format zigzag encoding","deps":[],"expected":"protobuf"}
+{"group":"misc","q":"flatbuffers vtable layout and verifier","deps":[],"expected":"flatbuffers"}
+{"group":"misc","q":"capnproto promise pipelining in rpc","deps":[],"expected":"capnproto"}
+{"group":"misc","q":"msgpack-c unpack ext type","deps":[],"expected":"msgpack-c"}
+{"group":"misc","q":"libsodium crypto_secretstream_xchacha20poly1305 push","deps":[],"expected":"libsodium"}
+{"group":"misc","q":"age file encryption x25519 recipient stanza","deps":[],"expected":"age"}
+{"group":"misc","q":"mbedtls ssl handshake client tls 1.3","deps":[],"expected":"mbedtls"}
+{"group":"misc","q":"monocypher crypto_eddsa_sign","deps":[],"expected":"monocypher"}
+{"group":"misc","q":"libhydrogen hydro_sign keygen","deps":[],"expected":"libhydrogen"}
+{"group":"misc","q":"mkcert install local CA into the system trust store","deps":[],"expected":"mkcert"}
+{"group":"misc","q":"minisign trusted comment signature format","deps":[],"expected":"minisign"}
+{"group":"misc","q":"golang-jwt ParseWithClaims and signing method HS256","deps":[],"expected":"golang-jwt"}
+{"group":"misc","q":"go-jose JWE encryption with A256GCM","deps":[],"expected":"go-jose"}
+{"group":"misc","q":"miekg dns client exchange with EDNS0","deps":[],"expected":"miekg-dns"}
+{"group":"misc","q":"c-ares ares_getaddrinfo async resolver","deps":[],"expected":"c-ares"}
+{"group":"misc","q":"llhttp parser callbacks on_header_value","deps":[],"expected":"llhttp"}
+{"group":"misc","q":"aiohttp websocket upgrade server handler","deps":[],"expected":"aiohttp"}
+{"group":"misc","q":"httpx AsyncClient connection pooling limits","deps":[],"expected":"httpx"}
+{"group":"misc","q":"aioquic QPACK header compression","deps":[],"expected":"aioquic"}
+{"group":"misc","q":"openapi 3.1 discriminator mapping keyword","deps":[],"expected":"openapi-spec"}
+{"group":"misc","q":"json schema unevaluatedProperties semantics 2020-12","deps":[],"expected":"json-schema-spec"}
+{"group":"misc","q":"graphql spec field merging validation rule","deps":[],"expected":"graphql-spec"}
+{"group":"misc","q":"asyncapi channel bindings for kafka","deps":[],"expected":"asyncapi-spec"}
+{"group":"misc","q":"cloudevents required attributes specversion source","deps":[],"expected":"cloudevents-spec"}
+{"group":"misc","q":"rust api guidelines naming conventions for conversion methods","deps":[],"expected":"rust-api-guidelines"}
+{"group":"misc","q":"google code review standard what to look for","deps":[],"expected":"google-eng-practices"}
+{"group":"misc","q":"navigation rules rule 9 narrow channels","deps":[],"expected":"navrules"}
+{"group":"misc","q":"ada 2010 standards wheelchair turning space","deps":[],"expected":"ada-2010"}
+{"group":"misc","q":"fda food code cold holding temperature","deps":[],"expected":"fda-food-code"}
+{"group":"misc","q":"12 factor agents own your context window","deps":[],"expected":"12-factor-agents"}
+{"group":"misc","q":"dspy teleprompter optimizer compile","deps":[],"expected":"dspy"}
+{"group":"misc","q":"instructor pydantic response_model retries","deps":[],"expected":"instructor"}
+{"group":"misc","q":"guidance constrained generation with a regex grammar","deps":[],"expected":"guidance"}
+{"group":"misc","q":"simonw llm plugin hook register_models","deps":[],"expected":"simonw-llm"}
+{"group":"misc","q":"jsonformer generate json from a schema with a local model","deps":[],"expected":"jsonformer"}
+{"group":"misc","q":"esbuild linker tree shaking of unused exports","deps":[],"expected":"esbuild"}
+{"group":"misc","q":"postcss plugin visitor Declaration","deps":[],"expected":"postcss"}
+{"group":"misc","q":"preact diff children reconciliation and hooks","deps":[],"expected":"preact"}
+{"group":"misc","q":"parse5 html tree construction adoption agency algorithm","deps":[],"expected":"parse5"}
+{"group":"misc","q":"whatwg url standard host parser state machine","deps":[],"expected":"whatwg-url"}
+{"group":"misc","q":"fetch standard cors preflight request","deps":[],"expected":"whatwg-fetch"}
+{"group":"misc","q":"streams standard readable stream backpressure","deps":[],"expected":"whatwg-streams"}
+{"group":"misc","q":"content security policy strict-dynamic nonce source","deps":[],"expected":"csp"}
+{"group":"misc","q":"alertmanager inhibit rules and route grouping","deps":[],"expected":"alertmanager"}
+{"group":"misc","q":"fortio load test latency histogram percentiles","deps":[],"expected":"fortio"}
+{"group":"misc","q":"goss gossfile http check","deps":[],"expected":"goss"}
+{"group":"misc","q":"helm chart dependency update and values merging","deps":[],"expected":"helm"}
+{"group":"misc","q":"karpenter consolidation of underutilized nodes","deps":[],"expected":"karpenter"}
+{"group":"misc","q":"choosealicense permissions conditions limitations metadata for mit","deps":[],"expected":"choosealicense-data"}
+{"group":"misc","q":"spdx license expression syntax WITH exception","deps":[],"expected":"spdx-spec"}
+{"group":"misc","q":"licensee license file matcher dice coefficient","deps":[],"expected":"licensee"}
+{"group":"misc","q":"eyecite extract legal citations from opinion text","deps":[],"expected":"eyecite"}
+{"group":"misc","q":"reporters-db abbreviation for federal reporter third series","deps":[],"expected":"reporters-db"}
+{"group":"oob","q":"how long should I proof sourdough bread overnight","deps":[],"expected":null}
+{"group":"oob","q":"best chord progression for a melancholic pop song","deps":[],"expected":null}
+{"group":"oob","q":"how far is the andromeda galaxy from earth","deps":[],"expected":null}
+{"group":"oob","q":"offside rule in football explained","deps":[],"expected":null}
+{"group":"oob","q":"how do I make a pivot table in excel","deps":[],"expected":null}
+{"group":"oob","q":"swiftui navigationstack programmatic navigation","deps":[],"expected":null}
+{"group":"oob","q":"unity shader graph dissolve effect","deps":[],"expected":null}
+{"group":"oob","q":"what temperature should I roast a chicken","deps":[],"expected":null}
+{"group":"oob","q":"how to change a bicycle tire tube","deps":[],"expected":null}
+{"group":"oob","q":"photosynthesis light dependent reactions","deps":[],"expected":null}
+{"group":"oob","q":"how to knit a scarf for beginners","deps":[],"expected":null}
+{"group":"oob","q":"history of the roman empire decline","deps":[],"expected":null}
+{"group":"oob","q":"wordpress gutenberg custom block registration","deps":[],"expected":null}
+{"group":"oob","q":"blender geometry nodes scatter instances","deps":[],"expected":null}
+{"group":"oob","q":"how to tune a guitar to drop d","deps":[],"expected":null}
+{"group": "lz4-e2e", "q": "In the current development source of lz4, what is the exact value of LZ4F_ENDMARK_SIZE? Answer with the value only.", "deps": [], "expected": "lz4"}
+{"group": "lz4-e2e", "q": "In the current development source of lz4, what is the exact value of LZ4_VERSION_MINOR? Answer with the value only.", "deps": [], "expected": "lz4"}
+{"group": "lz4-e2e", "q": "In the current development source of lz4, what is the exact value of LZ4_VERSION_RELEASE? Answer with the value only.", "deps": [], "expected": "lz4"}
+{"group": "lz4-e2e", "q": "In the current development source of lz4, what is the exact value of ENV_CLEVEL? Answer with the value only.", "deps": [], "expected": "lz4"}
+{"group": "lz4-e2e", "q": "In the current development source of lz4, what is the exact value of ENV_NBTHREADS? Answer with the value only.", "deps": [], "expected": "lz4"}
+{"group": "lz4-e2e", "q": "In the current development source of lz4, what is the exact value of OUTBUFF_QUEUE? Answer with the value only.", "deps": [], "expected": "lz4"}
+{"group": "lz4-e2e", "q": "In the current development source of lz4, what is the exact value of NB_BUFFSETS? Answer with the value only.", "deps": [], "expected": "lz4"}
+{"group": "lz4-e2e", "q": "In the current development source of lz4, what is the exact value of DISTRIB_SIZE_MAX? Answer with the value only.", "deps": [], "expected": "lz4"}
+{"group": "lz4-e2e", "q": "In the current development source of lz4, what is the exact value of LZ4MID_HASHSIZE? Answer with the value only.", "deps": [], "expected": "lz4"}
+{"group": "lz4-e2e", "q": "In the current development source of lz4, what is the exact value of LZ4HC_CLEVEL_MIN? Answer with the value only.", "deps": [], "expected": "lz4"}

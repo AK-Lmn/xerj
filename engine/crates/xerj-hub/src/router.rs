@@ -14,11 +14,16 @@
 //!    is consulted, its ranked hits are normalised to the best one so a strong
 //!    hosted match sits just under a dependency match. The node lives behind the
 //!    [`HostedSearch`] trait so this module stays node-free and unit-testable.
-//! 3. **Term sketch** (score `≤ 0.8`). Offline, from the catalogue alone: how
-//!    many of the question's tokens the corpus's Bloom [`sketch`](crate::sketch)
-//!    reports present, as a fraction of all tokens. A token present in more than
-//!    a quarter of all corpora is common vocabulary and counts half, so the
-//!    distinctive words drive the score.
+//! 3. **Term sketch** (score `≤ 0.8`). Offline, from the catalogue alone: the
+//!    idf-weighted share of the question's terms a corpus's Bloom
+//!    [`sketch`](crate::sketch) reports present. Each term is weighted by its
+//!    inverse document frequency over the catalogue (`ln((N + 1) / (df + 0.5))`),
+//!    so a word most corpora hold says little and one few hold says a lot. The
+//!    score is then scaled by the fraction of the question's terms *any* corpus
+//!    holds, so a question full of out-of-hub words cannot reach a confident
+//!    score on its one in-hub term.
+//! 4. **The corpus the question names** (score `1.0`, [`named_slugs`]). The
+//!    asker spelling a slug is the plainest signal of all.
 //!
 //! The merged scores decide: a dominant, high-scoring corpus is
 //! [`Routing::Confident`]; a cluster of plausible ones is
@@ -26,6 +31,14 @@
 //! `--corpus`); nothing credible is [`Routing::NoCorpus`]. A corpus already
 //! cached locally gets a small nudge so a tie breaks toward the pack the agent
 //! already has.
+//!
+//! Why idf and not a fixed "common" cut: the first rule halved a term present in
+//! more than 25% of the corpora. In a catalogue of four or fewer corpora a term
+//! held by ONE corpus is already over 25%, so every match was halved and no
+//! question could score above `0.4` — below the `0.6` confident bar
+//! (`xerj "how does zstd pick the window level"` against the three published
+//! packs returned "no hub corpus matches"). `benchmarks/hub-routing-scale/` has
+//! the measurement.
 
 use std::collections::{HashMap, HashSet};
 use std::fs;
@@ -81,13 +94,8 @@ pub trait HostedSearch {
 const DEP_SCORE: f32 = 1.0;
 /// Hosted hits are scaled by this, relative to the top hosted hit.
 const HOSTED_WEIGHT: f32 = 0.9;
-/// A perfect sketch match (every token present, none common) earns this.
+/// Full idf-weighted coverage of the question earns this.
 const SKETCH_WEIGHT: f32 = 0.8;
-/// A token present in more than this fraction of all corpora is common
-/// vocabulary and contributes half.
-const COMMON_FRACTION: f32 = 0.25;
-/// What a common token contributes instead of a full `1.0`.
-const COMMON_CREDIT: f32 = 0.5;
 /// A cached corpus gets this added to its merged score.
 const CACHED_BONUS: f32 = 0.05;
 /// The top score must reach this to be `Confident`.
@@ -170,57 +178,15 @@ pub fn route_ranked(
         }
     }
 
-    // 3. Term sketch — offline token overlap against each corpus's Bloom filter.
-    let tokens = tokenize(question);
-    if !tokens.is_empty() && !cat.corpora.is_empty() {
-        let total = tokens.len() as f32;
-        let n = cat.corpora.len() as f32;
-
-        // present[corpus][token]: does this corpus's sketch report the token?
-        let present: Vec<Vec<bool>> = cat
-            .corpora
-            .iter()
-            .map(|entry| {
-                tokens
-                    .iter()
-                    .map(|t| sketch::contains(&entry.term_sketch, t))
-                    .collect()
-            })
-            .collect();
-
-        // How many corpora hold each token → down-weight common vocabulary.
-        let mut col_counts = vec![0usize; tokens.len()];
-        for row in &present {
-            for (ti, &p) in row.iter().enumerate() {
-                if p {
-                    col_counts[ti] += 1;
-                }
-            }
-        }
-        let weights: Vec<f32> = col_counts
-            .iter()
-            .map(|&c| {
-                if c as f32 / n > COMMON_FRACTION {
-                    COMMON_CREDIT
-                } else {
-                    1.0
-                }
-            })
-            .collect();
-
-        for (entry, row) in cat.corpora.iter().zip(&present) {
-            let num: f32 = row
-                .iter()
-                .zip(&weights)
-                .filter_map(|(&p, &w)| p.then_some(w))
-                .sum();
-            if num > 0.0 {
-                evidence.push(Evidence {
-                    slug: entry.slug.clone(),
-                    score: num / total * SKETCH_WEIGHT,
-                    source: EvidenceSource::Sketch,
-                });
-            }
+    // 3. Term sketch — the question's terms against each corpus, idf-weighted.
+    let Coverage { share, known } = coverage(question, cat);
+    for (entry, &cov) in cat.corpora.iter().zip(&share) {
+        if cov > 0.0 {
+            evidence.push(Evidence {
+                slug: entry.slug.clone(),
+                score: SKETCH_WEIGHT * cov * known,
+                source: EvidenceSource::Sketch,
+            });
         }
     }
 
@@ -323,15 +289,143 @@ fn decide(evidence: Vec<Evidence>, cached: &[String]) -> (Routing, Vec<(String, 
     (Routing::NoCorpus, ranked)
 }
 
-/// Tokenize a question into the terms matched against a sketch: each identifier
-/// run (regex `[A-Za-z_][A-Za-z0-9_]{2,}`) in its original case **and**
-/// lowercased, deduplicated, in order. The original case lets a symbol like
-/// `LZ4_compress` match a sketch's symbol term; the lowercase form lets prose
-/// match the sketch's lowercase vocabulary.
-fn tokenize(question: &str) -> Vec<String> {
-    let chars: Vec<char> = question.chars().collect();
-    let mut tokens: Vec<String> = Vec::new();
+/// English function words and question scaffolding. They carry no routing
+/// signal, and a word no corpus holds would otherwise weigh as much as the
+/// rarest real term and drag every corpus's coverage down.
+const STOP_WORDS: &[&str] = &[
+    "about",
+    "after",
+    "all",
+    "also",
+    "and",
+    "any",
+    "are",
+    "been",
+    "before",
+    "best",
+    "between",
+    "but",
+    "can",
+    "could",
+    "current",
+    "development",
+    "did",
+    "does",
+    "doing",
+    "done",
+    "each",
+    "exact",
+    "explain",
+    "explained",
+    "for",
+    "from",
+    "get",
+    "had",
+    "has",
+    "have",
+    "here",
+    "how",
+    "into",
+    "its",
+    "let",
+    "may",
+    "more",
+    "most",
+    "much",
+    "must",
+    "need",
+    "not",
+    "off",
+    "one",
+    "only",
+    "other",
+    "our",
+    "out",
+    "over",
+    "should",
+    "show",
+    "some",
+    "source",
+    "such",
+    "than",
+    "that",
+    "the",
+    "their",
+    "them",
+    "then",
+    "there",
+    "these",
+    "they",
+    "this",
+    "those",
+    "through",
+    "under",
+    "use",
+    "used",
+    "uses",
+    "using",
+    "value",
+    "via",
+    "want",
+    "was",
+    "way",
+    "were",
+    "what",
+    "when",
+    "where",
+    "which",
+    "while",
+    "who",
+    "why",
+    "will",
+    "with",
+    "would",
+    "you",
+    "your",
+];
+
+/// One question term: the forms probed for it (raw, lower case, and the
+/// lower-case singular of a word ending in `s`). The term is held by a corpus
+/// when any form is.
+struct Term {
+    forms: Vec<String>,
+}
+
+/// Tokenize a question into terms: each identifier run (regex
+/// `[A-Za-z_][A-Za-z0-9_]{2,}`), stop words dropped, deduplicated by lower
+/// case. The original case lets a symbol like `LZ4_compress` match a sketch's
+/// symbol term; the lower case lets prose match the sketch's lower-case
+/// vocabulary; the singular lets `formats` match `format`.
+fn question_terms(question: &str) -> Vec<Term> {
+    let mut terms: Vec<Term> = Vec::new();
     let mut seen: HashSet<String> = HashSet::new();
+    for raw in identifiers(question) {
+        let lower = raw.to_ascii_lowercase();
+        if STOP_WORDS.contains(&lower.as_str()) || !seen.insert(lower.clone()) {
+            continue;
+        }
+        let mut forms = vec![raw.clone()];
+        if lower != raw {
+            forms.push(lower.clone());
+        }
+        if let Some(singular) = singular(&lower) {
+            forms.push(singular.to_string());
+        }
+        terms.push(Term { forms });
+    }
+    terms
+}
+
+/// `formats` → `format`; not `class`/`ss`, not 3-letter words (`has`, `bus`).
+fn singular(lower: &str) -> Option<&str> {
+    (lower.len() > 3 && lower.ends_with('s') && !lower.ends_with("ss"))
+        .then(|| &lower[..lower.len() - 1])
+}
+
+/// The identifier runs of `text` (regex `[A-Za-z_][A-Za-z0-9_]{2,}`), in order.
+fn identifiers(text: &str) -> Vec<String> {
+    let chars: Vec<char> = text.chars().collect();
+    let mut out = Vec::new();
     let mut i = 0;
     while i < chars.len() {
         if !is_ident_char(chars[i]) {
@@ -346,14 +440,11 @@ fn tokenize(question: &str) -> Vec<String> {
         // The regex must start at a letter/underscore and span ≥3 chars.
         if let Some(p) = run.iter().position(|&c| is_ident_start(c)) {
             if run.len() - p >= 3 {
-                let raw: String = run[p..].iter().collect();
-                let lower = raw.to_ascii_lowercase();
-                push_unique(&mut tokens, &mut seen, raw);
-                push_unique(&mut tokens, &mut seen, lower);
+                out.push(run[p..].iter().collect());
             }
         }
     }
-    tokens
+    out
 }
 
 fn is_ident_char(c: char) -> bool {
@@ -364,9 +455,86 @@ fn is_ident_start(c: char) -> bool {
     c.is_ascii_alphabetic() || c == '_'
 }
 
-fn push_unique(tokens: &mut Vec<String>, seen: &mut HashSet<String>, t: String) {
-    if seen.insert(t.clone()) {
-        tokens.push(t);
+/// What the question's terms say about every corpus.
+struct Coverage {
+    /// Per corpus (catalogue order): the idf-weighted share of the question's
+    /// known terms it holds, in `[0, 1]`.
+    share: Vec<f32>,
+    /// The fraction of the question's terms that at least one corpus holds.
+    known: f32,
+}
+
+/// See the module docs for the weighting. Each corpus's sketch is decoded once
+/// (not re-base64-decoded per probe) because every question term is probed
+/// against every corpus, and a full catalogue has hundreds.
+fn coverage(question: &str, cat: &Catalogue) -> Coverage {
+    let terms = question_terms(question);
+    let n = cat.corpora.len();
+    if terms.is_empty() || n == 0 {
+        return Coverage {
+            share: vec![0.0; n],
+            known: 0.0,
+        };
+    }
+
+    // present[corpus][term]: does the corpus's sketch report the term? The
+    // sketch holds the corpus's curated words (slug, ask_for, topics) as well as
+    // its symbols and paths — the catalogue builder puts the curated words in
+    // first, before the per-corpus cap — so a description word and a symbol are
+    // both found here.
+    let present: Vec<Vec<bool>> = cat
+        .corpora
+        .iter()
+        .map(|entry| {
+            let decoded = sketch::Decoded::new(&entry.term_sketch);
+            terms
+                .iter()
+                .map(|t| {
+                    decoded
+                        .as_ref()
+                        .is_some_and(|d| t.forms.iter().any(|f| d.contains(f)))
+                })
+                .collect()
+        })
+        .collect();
+
+    // idf over the terms SOME corpus holds: a word no corpus holds cannot tell
+    // corpora apart, and at max idf it would outweigh the corpus's own name (the
+    // plain English of "what is the exact value of …" is in no sketch). Unknown
+    // words instead dilute every score linearly, through `known`.
+    let df: Vec<usize> = (0..terms.len())
+        .map(|ti| present.iter().filter(|row| row[ti]).count())
+        .collect();
+    let idf: Vec<f32> = df
+        .iter()
+        .map(|&d| {
+            if d == 0 {
+                0.0
+            } else {
+                (((n + 1) as f32) / (d as f32 + 0.5)).ln().max(0.0)
+            }
+        })
+        .collect();
+    let known = df.iter().filter(|&&d| d > 0).count() as f32 / terms.len() as f32;
+    let total: f32 = idf.iter().sum();
+    if total <= 0.0 {
+        return Coverage {
+            share: vec![0.0; n],
+            known,
+        };
+    }
+    Coverage {
+        share: present
+            .iter()
+            .map(|row| {
+                row.iter()
+                    .zip(&idf)
+                    .map(|(&p, w)| if p { *w } else { 0.0 })
+                    .sum::<f32>()
+                    / total
+            })
+            .collect(),
+        known,
     }
 }
 
@@ -886,16 +1054,19 @@ mod tests {
     }
 
     #[test]
-    fn tokenizer_keeps_identifiers_and_lowercases() {
-        let toks = tokenize("How does LZ4_compress handle a 64 byte block?");
-        // "How" -> How/how, "does" -> does, "LZ4_compress" -> raw + lower,
-        // "handle" -> handle, "byte" -> byte, "block" -> block.
-        assert!(toks.contains(&"LZ4_compress".to_string()));
-        assert!(toks.contains(&"lz4_compress".to_string()));
-        assert!(toks.contains(&"how".to_string()));
-        assert!(toks.contains(&"block".to_string()));
-        // "a" and "64" are too short / not identifier-starting → dropped.
-        assert!(!toks.iter().any(|t| t == "a"));
-        assert!(!toks.iter().any(|t| t == "64"));
+    fn question_terms_drop_stop_words_and_probe_case_and_singular() {
+        let terms = question_terms("How does LZ4_compress handle a 64 byte block formats");
+        let firsts: Vec<&str> = terms.iter().map(|t| t.forms[0].as_str()).collect();
+        // "How"/"does" are stop words; "a"/"64" are not identifiers.
+        assert_eq!(
+            firsts,
+            ["LZ4_compress", "handle", "byte", "block", "formats"]
+        );
+        // A mixed-case symbol is probed raw and lower-cased.
+        assert_eq!(terms[0].forms, ["LZ4_compress", "lz4_compress"]);
+        // A plural is probed as itself and its singular.
+        assert_eq!(terms[4].forms, ["formats", "format"]);
+        // A lower-case word that is neither plural nor mixed case: one form.
+        assert_eq!(terms[1].forms, ["handle"]);
     }
 }
