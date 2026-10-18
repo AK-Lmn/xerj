@@ -545,6 +545,98 @@ pub fn file_matches_prefix(doc: &Value, prefix: &str) -> bool {
         == Some(prefix)
 }
 
+/// Label used when a catalog run under `prefix` has no `root`.
+///
+/// An empty root cannot be proved to be this folder, so it counts as a
+/// different source. The string is stable so the refusal can name it.
+pub const UNRECORDED_PREFIX_ROOT: &str = "(root not recorded on the catalog run)";
+
+/// Source roots of the *latest* catalog run under `prefix` that are not `root`.
+///
+/// Only `doc_kind: run` documents whose prefix matches exactly are considered.
+/// A sibling prefix (`ax-2` when this run is `ax`) is not a collision: the
+/// server filter can over-match a legacy analyzed `prefix` field. Older run
+/// documents are history: after `--replace-prefix` the new folder's run is
+/// the latest, and re-running that folder must not keep demanding the flag.
+/// `started` is an ISO-8601 timestamp, so the greatest string is the latest.
+/// Runs that share that timestamp are one cohort. Duplicate roots collapse
+/// to one line.
+pub fn foreign_prefix_roots(runs: &[Value], prefix: &str, root: &str) -> Vec<String> {
+    let matching: Vec<&Value> = runs
+        .iter()
+        .filter(|run| run.get("doc_kind").and_then(Value::as_str) == Some("run"))
+        .filter(|run| {
+            run.get("prefix")
+                .or_else(|| run.get(CORPUS_SCOPE_FIELD))
+                .and_then(Value::as_str)
+                == Some(prefix)
+        })
+        .collect();
+    let latest = matching
+        .iter()
+        .filter_map(|run| run.get("started").and_then(Value::as_str))
+        .max()
+        .map(str::to_owned);
+    let mut foreign = std::collections::BTreeSet::new();
+    for run in matching {
+        if let Some(started) = &latest {
+            if run.get("started").and_then(Value::as_str) != Some(started.as_str()) {
+                continue;
+            }
+        }
+        let recorded_root = run.get("root").and_then(Value::as_str).unwrap_or("");
+        if recorded_root == root {
+            continue;
+        }
+        if recorded_root.is_empty() {
+            foreign.insert(UNRECORDED_PREFIX_ROOT.to_string());
+        } else {
+            foreign.insert(recorded_root.to_string());
+        }
+    }
+    foreign.into_iter().collect()
+}
+
+/// What a reused prefix will do, for both the refusal and the
+/// `--replace-prefix` warning. `replacing` is true only when the operator
+/// passed the flag and the run is going to continue.
+pub fn prefix_reuse_message(
+    prefix: &str,
+    root: &str,
+    others: &[String],
+    replacing: bool,
+) -> String {
+    let listed = others
+        .iter()
+        .map(|other| format!("  {other}"))
+        .collect::<Vec<_>>()
+        .join("\n");
+    let ending = if replacing {
+        format!(
+            "--replace-prefix is set, so this run continues. Finalize will overwrite catalog \
+             documents keyed ds:{prefix}:<slug> and write into {prefix}-* indices, retiring the \
+             earlier datasets."
+        )
+    } else {
+        "Nothing was written. Pass --replace-prefix to retire those datasets on purpose, or use \
+         one --prefix per source folder. --dry-run does not bypass this check."
+            .to_string()
+    };
+    format!(
+        "autoindex: --prefix {prefix} already indexes a different folder.\n\
+         this run: {root}\n\
+         already indexed from:\n\
+         {listed}\n\
+         Catalog datasets are keyed ds:{prefix}:<slug> and indices are named {prefix}-*. \
+         Finalizing this run overwrites those catalog documents and retires the earlier datasets.\n\
+         A shared prefix also drops per-repo provenance. Each repository indexed as its own \
+         folder has an empty scope, so every one of them becomes the single dataset \
+         {prefix}-docs (catalog id ds:{prefix}:docs). Index the parent folder that contains \
+         the repositories, or pass a distinct --prefix per repository.\n\
+         {ending}"
+    )
+}
+
 /// How many dataset detail sections the default map prints before it asks
 /// for a page. The summary table always lists every dataset; the per-dataset
 /// field tables and sample queries are what blow the map up to hundreds of
@@ -605,15 +697,29 @@ pub fn render_map_page(
         } else {
             format!(", wall {wall}s")
         };
+        // `junk_records_total` is records that failed extraction. A run can
+        // list junk *files* (css, fonts, encrypted PDFs, "no records
+        // extracted") while that counter stays 0. The headline has to name
+        // the files the section below lists, and stay byte-identical when
+        // the list is empty.
+        let junk_records = g("junk_records_total");
+        let junk_clause = if junk_files.is_empty() {
+            format!("{junk_records} junk records")
+        } else {
+            format!(
+                "{junk_records} junk records, {} junk/skipped files",
+                junk_files.len()
+            )
+        };
         s.push_str(&format!(
-            "run `{}` — root `{}` — {} paths ({} unique content, {} duplicate aliases), {} records indexed, {} junk records{}\n\n",
+            "run `{}` — root `{}` — {} paths ({} unique content, {} duplicate aliases), {} records indexed, {}{}\n\n",
             g("run_id"),
             g("root"),
             g("files_total"),
             g("unique_content_files"),
             g("duplicate_files"),
             g("records_total"),
-            g("junk_records_total"),
+            junk_clause,
             wall_clause,
         ));
     }
@@ -641,9 +747,12 @@ pub fn render_map_page(
         }
         s.push('\n');
     }
-    s.push_str("## Datasets\n\n");
-    s.push_str("| index | records | files | formats | time field | time range |\n");
-    s.push_str("|---|---|---|---|---|---|\n");
+    s.push_str(&format!("## Datasets ({})\n\n", datasets.len()));
+    // `slug` is the argument to `--dataset`. The index name is
+    // `{prefix}-{slug}`, and a hyphenated prefix makes the slug impossible
+    // to recover from the index column alone.
+    s.push_str("| slug | index | records | files | formats | time field | time range |\n");
+    s.push_str("|---|---|---|---|---|---|---|\n");
     for d in datasets {
         let g = |k: &str| d.get(k).map(pretty_val).unwrap_or_default();
         let range = match (d.get("time_min"), d.get("time_max")) {
@@ -652,8 +761,14 @@ pub fn render_map_page(
             }
             _ => "—".into(),
         };
+        let slug = g("slug");
         s.push_str(&format!(
-            "| `{}` | {} | {} | {} | {} | {} |\n",
+            "| {} | `{}` | {} | {} | {} | {} | {} |\n",
+            if slug.is_empty() {
+                "—".into()
+            } else {
+                format!("`{slug}`")
+            },
             g("index_name"),
             g("record_count"),
             g("file_count"),
@@ -725,10 +840,7 @@ pub fn render_map_page(
                         f.null_ratio * 100.0,
                         f.examples
                             .iter()
-                            .map(|e| {
-                                let short: String = clean(e).chars().take(40).collect();
-                                format!("`{}`", short.replace('|', "\\|").replace('`', "'"))
-                            })
+                            .map(|e| map_example_cell(e))
                             .collect::<Vec<_>>()
                             .join(", ")
                     ));
@@ -879,6 +991,22 @@ fn pretty_val(v: &Value) -> String {
     clean(&s)
 }
 
+/// One markdown table cell for a field example.
+///
+/// [`clean`] keeps newlines and tabs, and this cell is interpolated into a
+/// `| field | ... | examples |` row. A newline ends the row, so an example
+/// whose next line starts with `##` is rendered as a heading. Collapse
+/// whitespace onto one line, then cap the cell.
+fn map_example_cell(raw: &str) -> String {
+    let flat = clean(raw).split_whitespace().collect::<Vec<_>>().join(" ");
+    let mut short: String = flat.chars().take(40).collect();
+    if flat.chars().count() > 40 {
+        short = flat.chars().take(39).collect();
+        short.push('…');
+    }
+    format!("`{}`", short.replace('|', "\\|").replace('`', "'"))
+}
+
 /// Strip control characters (raw data can contain NULs etc. — they would
 /// make the rendered map read as a binary file).
 fn clean(s: &str) -> String {
@@ -941,6 +1069,18 @@ mod duplicate_tests {
             "summary table lists every dataset"
         );
         assert!(rendered.contains("`ax-d19`"));
+        assert!(
+            rendered.contains("## Datasets (20)"),
+            "the heading names how many datasets the table holds: {rendered}"
+        );
+        assert!(
+            rendered.contains("| slug |"),
+            "the summary names the slug `--dataset` takes"
+        );
+        assert!(
+            rendered.contains("`d00`") && rendered.contains("`d19`"),
+            "every row carries its slug, not only its index name: {rendered}"
+        );
         assert_eq!(
             rendered.matches("### `").count(),
             super::MAP_DETAIL_PAGE,
@@ -953,6 +1093,62 @@ mod duplicate_tests {
         assert!(page.contains("### `ax-d09`"));
         assert!(!page.contains("### `ax-d10`"));
         assert!(page.contains("Field detail for datasets 9–10 of 20"));
+    }
+
+    fn one_field(name: &str, example: &str) -> crate::infer::FieldSpec {
+        crate::infer::FieldSpec {
+            name: name.into(),
+            es_type: "text".into(),
+            date_enc: None,
+            semantic: None,
+            cardinality_est: 1,
+            cardinality_overflow: false,
+            null_ratio: 0.0,
+            avg_len: 3.0,
+            coverage: 1.0,
+            examples: vec![example.into()],
+            notes: vec![],
+            date_min: None,
+            date_max: None,
+            date_evidence: vec![],
+            num_min: None,
+            num_max: None,
+        }
+    }
+
+    /// A newline in an example used to end the markdown row. The next line
+    /// (`## Branded types…`) was then a heading in the middle of the table.
+    #[test]
+    fn an_example_newline_stays_inside_its_table_row() {
+        let dataset = json!({
+            "index_name": "ax-branded",
+            "slug": "branded",
+            "record_count": 1,
+            "file_count": 1,
+            "formats": "json",
+            "fields_json": serde_json::to_string(&vec![
+                one_field("code", "code\n## Branded types for type guard"),
+                one_field("wide", &format!("alpha\tbeta {}", "n".repeat(40))),
+            ]).unwrap()
+        });
+        let rendered = render_map(None, &[dataset], &[], &[], &[], 0);
+        assert!(
+            !rendered.lines().any(|l| l.starts_with("## Branded")),
+            "a newline in an example forged a heading:\n{rendered}"
+        );
+        let row = rendered
+            .lines()
+            .find(|l| l.contains("code ## Branded"))
+            .expect("the example stays on the field row");
+        assert!(row.starts_with('|'), "{row}");
+        assert!(!row.contains('\n'));
+        let wide = rendered
+            .lines()
+            .find(|l| l.contains("alpha beta"))
+            .expect("a tab is a space");
+        assert!(wide.starts_with('|'), "{wide}");
+        assert!(wide.contains('…'), "a long example is capped: {wide}");
+        assert!(!wide.contains(&"n".repeat(40)), "{wide}");
     }
 
     #[test]
@@ -1012,6 +1208,33 @@ mod duplicate_tests {
             rendered_legacy.contains("0 junk records, wall 1.4s\n\n"),
             "legacy wall_seconds must still render: {rendered_legacy}"
         );
+    }
+
+    /// The summary used to say "0 junk records" on a map whose later section
+    /// listed 17 skipped files. The file count belongs in the headline when
+    /// the list is non-empty, and only then.
+    #[test]
+    fn the_summary_names_junk_files_when_the_list_is_nonempty() {
+        let run = json!({
+            "doc_kind": "run",
+            "run_id": "nb",
+            "root": "/corpus",
+            "files_total": 36,
+            "unique_content_files": 36,
+            "duplicate_files": 0,
+            "records_total": 286,
+            "junk_records_total": 0
+        });
+        let junk = vec![
+            json!({"path": "style.css", "status": "skipped", "reason": "no records extracted"}),
+            json!({"path": "font.woff", "status": "skipped", "reason": "no records extracted"}),
+        ];
+        let rendered = render_map(Some(&run), &[], &[], &junk, &[], junk.len() as u64);
+        assert!(
+            rendered.contains("286 records indexed, 0 junk records, 2 junk/skipped files\n\n"),
+            "{rendered}"
+        );
+        assert!(rendered.contains("## Junk / skipped (2 files recorded"));
     }
 
     #[test]
@@ -1188,5 +1411,83 @@ mod sample_query_tests {
         assert_eq!(super::file_id("ax-a", "k"), super::file_id("ax-a", "k"));
         // The prefix is actually in the id (not just concatenated key).
         assert!(super::file_id("ax-a", "k").starts_with("file:ax-a:"));
+    }
+}
+
+#[cfg(test)]
+mod prefix_reuse_tests {
+    use super::*;
+
+    fn run(prefix: &str, root: &str) -> Value {
+        json!({"doc_kind": "run", "prefix": prefix, "root": root})
+    }
+
+    /// Same prefix, different folder: the earlier root is named, and the
+    /// message says finalize retires `ds:<prefix>:<slug>` and that separately
+    /// indexed repos collapse into `<prefix>-docs`.
+    #[test]
+    fn a_different_folder_under_the_same_prefix_is_named() {
+        let runs = vec![
+            run("ref", "/data/stockfish"),
+            run("ref", "/data/stockfish"),
+            run("ref-other", "/data/elsewhere"),
+            json!({"doc_kind": "dataset", "prefix": "ref", "root": "/data/not-a-run"}),
+        ];
+        let foreign = foreign_prefix_roots(&runs, "ref", "/data/lucaschess");
+        assert_eq!(foreign, vec!["/data/stockfish".to_string()]);
+        let message = prefix_reuse_message("ref", "/data/lucaschess", &foreign, false);
+        assert!(message.contains("this run: /data/lucaschess"), "{message}");
+        assert!(message.contains("/data/stockfish"), "{message}");
+        assert!(message.contains("ds:ref:<slug>"), "{message}");
+        assert!(message.contains("ref-*"), "{message}");
+        assert!(message.contains("ref-docs"), "{message}");
+        assert!(message.contains("ds:ref:docs"), "{message}");
+        assert!(message.contains("Nothing was written"), "{message}");
+        assert!(message.contains("--replace-prefix"), "{message}");
+        assert!(
+            !message.contains("/data/elsewhere"),
+            "a sibling prefix is not this corpus: {message}"
+        );
+    }
+
+    /// Re-running the same folder is not a collision, even when older run
+    /// documents for that root are still in the catalog.
+    #[test]
+    fn the_same_folder_is_not_a_collision() {
+        let runs = vec![run("ref", "/data/stockfish"), run("ref", "/data/stockfish")];
+        assert!(foreign_prefix_roots(&runs, "ref", "/data/stockfish").is_empty());
+    }
+
+    /// After `--replace-prefix`, the new folder's run is the latest. Re-running
+    /// that folder must not keep seeing the folder it replaced.
+    #[test]
+    fn the_latest_run_owns_the_prefix() {
+        let runs = vec![
+            json!({"doc_kind":"run","prefix":"ref","root":"/data/old","started":"2026-10-01T00:00:00Z"}),
+            json!({"doc_kind":"run","prefix":"ref","root":"/data/new","started":"2026-10-02T00:00:00Z"}),
+        ];
+        assert!(foreign_prefix_roots(&runs, "ref", "/data/new").is_empty());
+        assert_eq!(
+            foreign_prefix_roots(&runs, "ref", "/data/old"),
+            vec!["/data/new".to_string()]
+        );
+    }
+
+    /// A run that never recorded its root cannot be proved to be this folder.
+    #[test]
+    fn a_run_with_no_root_is_a_collision() {
+        let runs = vec![json!({"doc_kind": "run", "prefix": "ref"})];
+        assert_eq!(
+            foreign_prefix_roots(&runs, "ref", "/data/stockfish"),
+            vec![UNRECORDED_PREFIX_ROOT.to_string()]
+        );
+    }
+
+    #[test]
+    fn replace_prefix_says_the_run_continues() {
+        let message = prefix_reuse_message("ref", "/data/new", &["/data/old".into()], true);
+        assert!(message.contains("--replace-prefix is set"), "{message}");
+        assert!(message.contains("this run continues"), "{message}");
+        assert!(!message.contains("Nothing was written"), "{message}");
     }
 }
