@@ -1,0 +1,22 @@
+{
+ "corpus": "dorimommy--studio-lab",
+ "cloned_at": null,
+ "status": "draft",
+ "shelf": "API",
+ "domain": "an agent working on JavaScript queries this for how dorimommy/Studio.lab implements it: Studio.lab adds response recovery, chat memory management, and workspace controls for long-context workflows. Response Recovery keeps availa (selected work: modules, the project root)",
+ "repos": [
+  {
+   "repo": "Studio.lab",
+   "url": "https://github.com/dorimommy/Studio.lab",
+   "sha": "8ac7261657ce359436e0019bf5e4f55135d3e446",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "review": {
+    "spdx": "Apache-2.0",
+    "use": "UNREVIEWED",
+    "by": "",
+    "at": "",
+    "note": "author permission by email 2026-10-18 (reply to Corpus Hub outreach); selected commit 8ac7261657ce: \"v2.1 RELEASE\". suggested use: adapt-with-attribution \u2014 G4 review of the LICENSE file at this pin still required."
+   }
+  }
+ ]
+}

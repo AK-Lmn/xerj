@@ -1,0 +1,22 @@
+{
+ "corpus": "akshayvr-programmer--risc-v-rv32i-single-cycle-processor",
+ "cloned_at": null,
+ "status": "draft",
+ "shelf": "API",
+ "domain": "an agent working on Verilog queries this for how akshayvr-programmer/RISC-V-RV32I-Single-Cycle-Processor implements it: akshayvr-programmer/RISC-V-RV32I-Single-Cycle-Processor (Verilog) (selected work: tb, rtl, programs)",
+ "repos": [
+  {
+   "repo": "RISC-V-RV32I-Single-Cycle-Processor",
+   "url": "https://github.com/akshayvr-programmer/RISC-V-RV32I-Single-Cycle-Processor",
+   "sha": "5db13547b3aef5b8cc5199a3ae1296fbf196f162",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "review": {
+    "spdx": "MIT",
+    "use": "UNREVIEWED",
+    "by": "",
+    "at": "",
+    "note": "author permission by email 2026-10-18 (reply to Corpus Hub outreach); selected commit 5db13547b3ae: \"Phase 4: branch predictor on, FPGA synthesis, first Artix-7 timing\". suggested use: adapt-with-attribution \u2014 G4 review of the LICENSE file at this pin still required."
+   }
+  }
+ ]
+}

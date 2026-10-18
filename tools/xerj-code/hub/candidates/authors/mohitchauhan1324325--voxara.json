@@ -1,0 +1,22 @@
+{
+ "corpus": "mohitchauhan1324325--voxara",
+ "cloned_at": null,
+ "status": "draft",
+ "shelf": "AI",
+ "domain": "an agent working on ai, ai-voice-agent, ai-voice-assistant queries this for how mohitchauhan1324325/Voxara implements it: **Voxara** is an AI-powered work assistant that turns natural-language conversations into actionable workflows. It can view, create, find, a (selected work: backend)",
+ "repos": [
+  {
+   "repo": "Voxara",
+   "url": "https://github.com/mohitchauhan1324325/Voxara",
+   "sha": "5cefddd031e7e458f5994d13e498ed8619d1a05f",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "review": {
+    "spdx": "MIT",
+    "use": "UNREVIEWED",
+    "by": "",
+    "at": "",
+    "note": "author permission by email 2026-10-17 (reply to Corpus Hub outreach); selected commit 5cefddd031e7: \"feat: add task management UI and functionality\". suggested use: adapt-with-attribution \u2014 G4 review of the LICENSE file at this pin still required."
+   }
+  }
+ ]
+}
