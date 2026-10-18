@@ -570,7 +570,7 @@ jobs:
             # Never leave the report without this corpus: a minimal row naming the cause.
             jq -cn --arg slug "$SLUG" --arg pin8 "$PIN8" --arg run "$GITHUB_RUN_ID" \
               '{run: $run, slug: $slug, pin8: $pin8, bytes: null, defs: null, result: "failed",
-                tag: "", stage: "record", error: "result-row failed; see this job's log"}' > "$OUT"
+                tag: "", stage: "record", error: "result-row failed; see the job log"}' > "$OUT"
           fi
           cat "$OUT"
 

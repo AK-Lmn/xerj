@@ -758,6 +758,83 @@ class ReportTests(unittest.TestCase):
             self.assertIn("| `b` | `22222222` |  |  | no result | pack: cancelled |", md)
 
 
+class RecordStepShellTests(unittest.TestCase):
+    """The record-result step is a shell block in hub-packs.yml, not Python, so a
+    quoting slip there is invisible to the rest of this suite. One such slip —
+    `error: "...this job's log"` inside a single-quoted jq program — closed the
+    quote early and broke the whole script at parse time, so EVERY pack job's
+    `if: always()` record step died with `unexpected EOF` and no row was written.
+    These tests parse and run the real block so that class of bug cannot return."""
+
+    REPO_ROOT = pathlib.Path(__file__).resolve().parents[2]
+    WORKFLOW = REPO_ROOT / ".github" / "workflows" / "hub-packs.yml"
+    STEP_NAME = "Record this corpus's result for the backfill report"
+
+    def record_step_run_block(self) -> str:
+        lines = self.WORKFLOW.read_text().splitlines()
+        start = next(i for i, ln in enumerate(lines)
+                     if ln.strip() == f"- name: {self.STEP_NAME}")
+        run_i = next(i for i in range(start, len(lines))
+                     if lines[i].strip() == "run: |")
+        run_indent = len(lines[run_i]) - len(lines[run_i].lstrip())
+        body = []
+        for ln in lines[run_i + 1:]:
+            if ln.strip() and (len(ln) - len(ln.lstrip())) <= run_indent:
+                break
+            body.append(ln)
+        block = textwrap.dedent("\n".join(body)) + "\n"
+        self.assertIn("args=(result-row", block, "extracted the wrong block")
+        return block
+
+    def _env(self, tmp: str, **over) -> dict:
+        e = dict(os.environ)
+        e.update({"RUNNER_TEMP": tmp, "SLUG": "aioquic", "PIN8": "974e9349",
+                  "GITHUB_RUN_ID": "42", "JOB_STATUS": "success", "DRY_RUN": "false",
+                  "PUBLISHED_TAG": "pack-aioquic-974e9349-r3"})
+        e.update(over)
+        for sub in ("log", "node", "result"):
+            pathlib.Path(tmp, sub).mkdir(parents=True, exist_ok=True)
+        return e
+
+    def test_the_record_step_shell_block_parses(self):
+        block = self.record_step_run_block()
+        out = subprocess.run(["bash", "-n", "/dev/stdin"], input=block,
+                             text=True, capture_output=True)
+        self.assertEqual(out.returncode, 0,
+                         f"record step does not parse (a quoting bug is back):\n{out.stderr}")
+
+    def test_the_record_step_writes_a_valid_row_for_a_success(self):
+        block = self.record_step_run_block()
+        # STEPS carries an apostrophe and a newline (as a real toJSON(steps) can).
+        steps = json.dumps({"checkout": {"outcome": "success"},
+                            "build": {"outcome": "success",
+                                      "outputs": {"n": "this job's build\nline two"}},
+                            "verify": {"outcome": "success"},
+                            "publish": {"outcome": "success"}})
+        with tempfile.TemporaryDirectory() as t:
+            out = subprocess.run(["bash", "-euo", "pipefail", "/dev/stdin"], input=block,
+                                 text=True, capture_output=True, cwd=self.REPO_ROOT,
+                                 env=self._env(t, STEPS=steps))
+            self.assertEqual(out.returncode, 0, out.stderr)
+            row = json.loads((pathlib.Path(t) / "result" / "aioquic.json").read_text())
+            self.assertEqual((row["result"], row["tag"]),
+                             ("published", "pack-aioquic-974e9349-r3"))
+
+    def test_the_record_step_fallback_still_writes_a_row_when_result_row_fails(self):
+        block = self.record_step_run_block()
+        with tempfile.TemporaryDirectory() as t:
+            # Invalid STEPS JSON makes result-row exit non-zero; the fallback jq
+            # row (the line the apostrophe used to break) must run and exit 0.
+            out = subprocess.run(["bash", "-euo", "pipefail", "/dev/stdin"], input=block,
+                                 text=True, capture_output=True, cwd=self.REPO_ROOT,
+                                 env=self._env(t, STEPS="{not json", JOB_STATUS="failure",
+                                               PUBLISHED_TAG=""))
+            self.assertEqual(out.returncode, 0, out.stderr)
+            row = json.loads((pathlib.Path(t) / "result" / "aioquic.json").read_text())
+            self.assertEqual((row["result"], row["stage"]), ("failed", "record"))
+            self.assertNotIn("'", row["error"], "no apostrophe in the fallback error string")
+
+
 class CommandLineTests(unittest.TestCase):
     def run_cli(self, *argv: str) -> tuple[int, str, str]:
         out = subprocess.run(
