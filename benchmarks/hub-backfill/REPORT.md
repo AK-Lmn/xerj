@@ -6,7 +6,7 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 
 ## Current state
 
-131 corpora attempted: 60 published at their latest attempt, 71 not.
+132 corpora attempted: 60 published at their latest attempt, 72 not.
 
 ### Latest attempt did not publish (fix or delist on purpose)
 
@@ -18,26 +18,26 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 | `accord-legal-models` | `a23b30a1` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `ada-2010` | `d2be9eb3` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `adalflow` | `810de99d` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `adyen-openapi` | `45520ee6` | 127754427 | 0 | failed at `e2e` | xerj hub pull adyen-openapi failed (exit 1) |
-| `aeron` | `d3499bb1` | 52538358 | 28139 | failed at `e2e` | xerj hub pull aeron failed (exit 1) |
+| `adyen-openapi` | `45520ee6` | 126960436 | 0 | failed at `e2e` | xerj hub pull adyen-openapi failed (exit 1) |
+| `aeron` | `d3499bb1` | 52533050 | 28139 | failed at `e2e` | xerj hub pull aeron failed (exit 1) |
 | `agentbench` | `d1e4a10d` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `agentscope` | `812eaecd` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `agno` | `1f2aac51` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":3,"errors":true,"items":[{"index":{"_index":"xc-agno-b1792328145-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"status |
+| `agno` | `1f2aac51` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":6,"errors":true,"items":[{"index":{"_index":"xc-agno-b1792332835-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"status |
 | `aider` | `5dc9490b` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `aioquic` | `974e9349` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `alex-inclusive-language` | `9a57595d` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `ann-benchmarks` | `2e081ad3` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `annoy` | `379f7446` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `anthropic-cookbook` | `9c1e493d` | 84932498 | 901 | failed at `e2e` | xerj hub pull anthropic-cookbook failed (exit 1) |
+| `anthropic-cookbook` | `9c1e493d` | 84952353 | 901 | failed at `e2e` | xerj hub pull anthropic-cookbook failed (exit 1) |
 | `anything-llm` | `3e4f9411` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `api-blueprint` | `86fc3a12` | 660551 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
+| `api-blueprint` | `86fc3a12` | 660357 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
 | `api-common-protos` | `3332dec5` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `api-linter` | `836098d5` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `arazzo-spec` | `79ddb24a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `argo-cd` | `03a10c74` | 116107182 | 25467 | failed at `e2e` | xerj hub pull argo-cd failed (exit 1) |
-| `argo-workflows` | `8f57ec73` | 91726225 | 14769 | failed at `e2e` | xerj hub pull argo-workflows failed (exit 1) |
+| `argo-cd` | `03a10c74` | 89675248 | 25467 | failed at `e2e` | xerj hub pull argo-cd failed (exit 1) |
+| `argo-workflows` | `8f57ec73` | 91723997 | 14769 | failed at `e2e` | xerj hub pull argo-workflows failed (exit 1) |
 | `aria-practices` | `0f765e4d` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `arrow-rs` | `73595d58` | 56275737 | 24047 | failed at `e2e` | xerj hub pull arrow-rs failed (exit 1) |
+| `arrow-rs` | `73595d58` | 56224466 | 24047 | failed at `e2e` | xerj hub pull arrow-rs failed (exit 1) |
 | `astro-docs` | `f29faa41` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `asyncapi-bindings` | `1f418fe7` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `asyncapi-spec` | `1dd65fd2` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
@@ -50,41 +50,87 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 | `autorag` | `ccb70c12` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `avro` | `28cb08c1` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `awesome-ai-system-prompts` | `74964625` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `awesome-llm-apps` | `4bf51ab7` | 56865501 | 7418 | failed at `e2e` | xerj hub pull awesome-llm-apps failed (exit 1) |
-| `awesome-mcp-servers` | `cc7f1f42` | 2809818 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
-| `awesome-sre` | `e91ef69a` | 115470 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
+| `awesome-llm-apps` | `4bf51ab7` | 56874481 | 7418 | failed at `e2e` | xerj hub pull awesome-llm-apps failed (exit 1) |
+| `awesome-mcp-servers` | `cc7f1f42` | 2809167 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
+| `awesome-sre` | `e91ef69a` | 115143 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
 | `axe-core` | `7e287a6a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `axolotl` | `e767fe07` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `biome` | `39d7595b` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":10,"errors":true,"items":[{"index":{"_index":"xc-biome-b1792328708-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"stat |
-| `bookkeeper` | `773a988d` | 66876332 | 29420 | failed at `e2e` | xerj hub pull bookkeeper failed (exit 1) |
-| `botan` | `9fc28d5b` | 143946617 | 18513 | failed at `e2e` | xerj hub pull botan failed (exit 1) |
-| `boulder` | `f877538d` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":12,"errors":true,"items":[{"index":{"_index":"xc-boulder-b1792328766-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"st |
-| `brex-prompt-engineering` | `50871be1` | 475043 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
-| `calcite` | `8f27e24a` | 108974500 | 49987 | failed at `e2e` | xerj hub pull calcite failed (exit 1) |
-| `caliber-ehr-phenotypes` | `f4f614fc` | 8245403 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
-| `camel` | `e5e55256` | 265294230 | 10924 | failed at `e2e` | xerj hub pull camel failed (exit 1) |
+| `biome` | `39d7595b` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":8,"errors":true,"items":[{"index":{"_index":"xc-biome-b1792333542-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"statu |
+| `bookkeeper` | `773a988d` | 66617715 | 29420 | failed at `e2e` | xerj hub pull bookkeeper failed (exit 1) |
+| `botan` | `9fc28d5b` | 136280066 | 18513 | failed at `e2e` | xerj hub pull botan failed (exit 1) |
+| `boulder` | `f877538d` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":12,"errors":true,"items":[{"index":{"_index":"xc-boulder-b1792333798-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"st |
+| `brex-prompt-engineering` | `50871be1` | 473218 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
+| `calcite` | `8f27e24a` | 151971261 | 49987 | failed at `e2e` | xerj hub pull calcite failed (exit 1) |
+| `caliber-ehr-phenotypes` | `f4f614fc` | 8252746 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
+| `camel` | `e5e55256` | 265562482 | 10924 | failed at `e2e` | xerj hub pull camel failed (exit 1) |
 | `cassandra` | `ec2c276b` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `cdk8s` | `ed80049b` | 105235963 | 127 | failed at `e2e` | xerj hub pull cdk8s failed (exit 1) |
-| `cell-ontology` | `b7cb31d4` | 196634883 | 67 | failed at `e2e` | xerj hub pull cell-ontology failed (exit 1) |
-| `cfssl` | `ab47f0d9` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":8,"errors":true,"items":[{"index":{"_index":"xc-cfssl-b1792330206-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"statu |
-| `chatdoctor` | `e77bd7eb` |  |  | failed at `build` | xerj hub build-pack: bulk /xc-chatdoctor-b1792330247-defs/_bulk -> HTTP 429: {"took":4,"errors":true,"items":[{"index":{"_index":"xc-chatdoctor-b1792330247-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no |
-| `checkov` | `456c7e53` | 86690974 | 19706 | failed at `e2e` | xerj hub pull checkov failed (exit 1) |
-| `chroma` | `5f30478c` | 73053753 | 22136 | failed at `e2e` | xerj hub pull chroma failed (exit 1) |
-| `clipboard-apis` | `6201fd15` | 825790 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
-| `cloud-custodian` | `a75de191` | 101645034 | 18800 | failed at `e2e` | xerj hub pull cloud-custodian failed (exit 1) |
-| `cloudnative-pg` | `f2a7162e` | 52721392 | 6086 | failed at `e2e` | xerj hub pull cloudnative-pg failed (exit 1) |
-| `cluster-api` | `557ad73a` | 74354486 | 16324 | failed at `e2e` | xerj hub pull cluster-api failed (exit 1) |
-| `commonpaper-contracts` | `3efceb01` | 252276 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
-| `complianceascode-content` | `f0f3396f` | 116075483 | 3975 | failed at `e2e` | xerj hub pull complianceascode-content failed (exit 1) |
-| `compose-spec` | `914ec15d` | 1939488 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
+| `cdk8s` | `ed80049b` | 105197459 | 127 | failed at `e2e` | xerj hub pull cdk8s failed (exit 1) |
+| `cell-ontology` | `b7cb31d4` | 195507029 | 67 | failed at `e2e` | xerj hub pull cell-ontology failed (exit 1) |
+| `cfssl` | `ab47f0d9` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":7,"errors":true,"items":[{"index":{"_index":"xc-cfssl-b1792334669-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"statu |
+| `chatdoctor` | `e77bd7eb` |  |  | failed at `build` | xerj hub build-pack: bulk /xc-chatdoctor-b1792334771-defs/_bulk -> HTTP 429: {"took":3,"errors":true,"items":[{"index":{"_index":"xc-chatdoctor-b1792334771-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no |
+| `checkov` | `456c7e53` | 87209289 | 19706 | failed at `e2e` | xerj hub pull checkov failed (exit 1) |
+| `chroma` | `5f30478c` | 73053867 | 22136 | failed at `e2e` | xerj hub pull chroma failed (exit 1) |
+| `clipboard-apis` | `6201fd15` | 914173 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
+| `cloud-custodian` | `a75de191` | 109620666 | 18800 | failed at `e2e` | xerj hub pull cloud-custodian failed (exit 1) |
+| `cloudnative-pg` | `f2a7162e` | 52699766 | 6086 | failed at `e2e` | xerj hub pull cloudnative-pg failed (exit 1) |
+| `cluster-api` | `557ad73a` | 74342965 | 16324 | failed at `e2e` | xerj hub pull cluster-api failed (exit 1) |
+| `commonpaper-contracts` | `3efceb01` | 251803 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
+| `complianceascode-content` | `f0f3396f` | 108496603 | 3975 | failed at `e2e` | xerj hub pull complianceascode-content failed (exit 1) |
+| `compose-spec` | `914ec15d` | 1939597 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
 | `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `containerd` | `92f321c8` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":15,"errors":true,"items":[{"index":{"_index":"xc-containerd-b1792331335-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1, |
+| `containerd` | `92f321c8` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":15,"errors":true,"items":[{"index":{"_index":"xc-containerd-b1792336006-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1, |
 | `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `cri-o` | `617265f3` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":18,"errors":true,"items":[{"index":{"_index":"xc-cri-o-b1792331566-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"stat |
-| `csp` | `b1bad631` | 5846101 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
-| `ctakes` | `80e0d8e9` | 53151499 | 17779 | failed at `e2e` | xerj hub pull ctakes failed (exit 1) |
+| `cri-o` | `617265f3` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":19,"errors":true,"items":[{"index":{"_index":"xc-cri-o-b1792338447-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"stat |
+| `csp` | `b1bad631` | 5844155 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
+| `ctakes` | `80e0d8e9` | 53128565 | 17779 | failed at `e2e` | xerj hub pull ctakes failed (exit 1) |
+| `cue` | `71c80626` | 55207467 | 12842 | failed at `e2e` | xerj hub pull cue failed (exit 1) |
 
 ## Runs (newest first)
+
+### Run [39134588401](https://github.com/xerj-org/xerj/actions/runs/39134588401), 2026-10-18: 0 of 40 published
+
+| slug | pin8 | bytes | defs | result | error |
+|---|---|---:|---:|---|---|
+| `adyen-openapi` | `45520ee6` | 126960436 | 0 | failed at `e2e` | xerj hub pull adyen-openapi failed (exit 1) |
+| `aeron` | `d3499bb1` | 52533050 | 28139 | failed at `e2e` | xerj hub pull aeron failed (exit 1) |
+| `agno` | `1f2aac51` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":6,"errors":true,"items":[{"index":{"_index":"xc-agno-b1792332835-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"status |
+| `anthropic-cookbook` | `9c1e493d` | 84952353 | 901 | failed at `e2e` | xerj hub pull anthropic-cookbook failed (exit 1) |
+| `api-blueprint` | `86fc3a12` | 660357 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
+| `argo-cd` | `03a10c74` | 89675248 | 25467 | failed at `e2e` | xerj hub pull argo-cd failed (exit 1) |
+| `argo-workflows` | `8f57ec73` | 91723997 | 14769 | failed at `e2e` | xerj hub pull argo-workflows failed (exit 1) |
+| `arrow-rs` | `73595d58` | 56224466 | 24047 | failed at `e2e` | xerj hub pull arrow-rs failed (exit 1) |
+| `awesome-llm-apps` | `4bf51ab7` | 56874481 | 7418 | failed at `e2e` | xerj hub pull awesome-llm-apps failed (exit 1) |
+| `awesome-mcp-servers` | `cc7f1f42` | 2809167 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
+| `awesome-sre` | `e91ef69a` | 115143 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
+| `biome` | `39d7595b` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":8,"errors":true,"items":[{"index":{"_index":"xc-biome-b1792333542-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"statu |
+| `bookkeeper` | `773a988d` | 66617715 | 29420 | failed at `e2e` | xerj hub pull bookkeeper failed (exit 1) |
+| `botan` | `9fc28d5b` | 136280066 | 18513 | failed at `e2e` | xerj hub pull botan failed (exit 1) |
+| `boulder` | `f877538d` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":12,"errors":true,"items":[{"index":{"_index":"xc-boulder-b1792333798-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"st |
+| `brex-prompt-engineering` | `50871be1` | 473218 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
+| `calcite` | `8f27e24a` | 151971261 | 49987 | failed at `e2e` | xerj hub pull calcite failed (exit 1) |
+| `caliber-ehr-phenotypes` | `f4f614fc` | 8252746 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
+| `camel` | `e5e55256` | 265562482 | 10924 | failed at `e2e` | xerj hub pull camel failed (exit 1) |
+| `cassandra` | `ec2c276b` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `cdk8s` | `ed80049b` | 105197459 | 127 | failed at `e2e` | xerj hub pull cdk8s failed (exit 1) |
+| `cell-ontology` | `b7cb31d4` | 195507029 | 67 | failed at `e2e` | xerj hub pull cell-ontology failed (exit 1) |
+| `cfssl` | `ab47f0d9` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":7,"errors":true,"items":[{"index":{"_index":"xc-cfssl-b1792334669-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"statu |
+| `chatdoctor` | `e77bd7eb` |  |  | failed at `build` | xerj hub build-pack: bulk /xc-chatdoctor-b1792334771-defs/_bulk -> HTTP 429: {"took":3,"errors":true,"items":[{"index":{"_index":"xc-chatdoctor-b1792334771-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no |
+| `checkov` | `456c7e53` | 87209289 | 19706 | failed at `e2e` | xerj hub pull checkov failed (exit 1) |
+| `chroma` | `5f30478c` | 73053867 | 22136 | failed at `e2e` | xerj hub pull chroma failed (exit 1) |
+| `clipboard-apis` | `6201fd15` | 914173 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
+| `cloud-custodian` | `a75de191` | 109620666 | 18800 | failed at `e2e` | xerj hub pull cloud-custodian failed (exit 1) |
+| `cloudnative-pg` | `f2a7162e` | 52699766 | 6086 | failed at `e2e` | xerj hub pull cloudnative-pg failed (exit 1) |
+| `cluster-api` | `557ad73a` | 74342965 | 16324 | failed at `e2e` | xerj hub pull cluster-api failed (exit 1) |
+| `commonpaper-contracts` | `3efceb01` | 251803 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
+| `complianceascode-content` | `f0f3396f` | 108496603 | 3975 | failed at `e2e` | xerj hub pull complianceascode-content failed (exit 1) |
+| `compose-spec` | `914ec15d` | 1939597 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
+| `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `containerd` | `92f321c8` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":15,"errors":true,"items":[{"index":{"_index":"xc-containerd-b1792336006-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1, |
+| `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `cri-o` | `617265f3` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":19,"errors":true,"items":[{"index":{"_index":"xc-cri-o-b1792338447-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"stat |
+| `csp` | `b1bad631` | 5844155 | 0 | failed at `e2e` | defs.jsonl has no identifier to look up |
+| `ctakes` | `80e0d8e9` | 53128565 | 17779 | failed at `e2e` | xerj hub pull ctakes failed (exit 1) |
+| `cue` | `71c80626` | 55207467 | 12842 | failed at `e2e` | xerj hub pull cue failed (exit 1) |
 
 ### Run [39128294372](https://github.com/xerj-org/xerj/actions/runs/39128294372), 2026-10-18: 1 of 40 published
 
