@@ -84,6 +84,29 @@ pub(crate) fn lexical_semantic_note(resp: &Value) -> Option<&'static str> {
     )
 }
 
+/// Text to print for one hit.
+///
+/// Passage first, then the symbol `code`. When the engine matched a document
+/// but selected no passage and there is no `code`, a section `heading` or
+/// document `title` is what the header would otherwise sit on top of — a
+/// blank block.
+pub(crate) fn hit_display_text(hit: &Value) -> Option<String> {
+    if let Some(text) = passage_text(hit) {
+        return Some(text);
+    }
+    let src = hit.get("_source")?;
+    for key in ["code", "heading", "title"] {
+        if let Some(text) = src
+            .get(key)
+            .and_then(Value::as_str)
+            .filter(|s| !s.is_empty())
+        {
+            return Some(text.to_string());
+        }
+    }
+    None
+}
+
 /// True when the query looks like a single code identifier (`IOSIntfLine`,
 /// `euler_to_rotationmatrix`) rather than a plain-words phrase — the case
 /// where `xerj def` is the better tool.
@@ -91,6 +114,25 @@ pub(crate) fn is_identifier(q: &str) -> bool {
     !q.is_empty()
         && !q.contains(char::is_whitespace)
         && q.chars().all(|c| c.is_alphanumeric() || c == '_')
+}
+
+/// Whether a zero-hit `xerj search` should point at `xerj def`.
+///
+/// [`is_identifier`] stays the narrower predicate `xerj def` uses to shape
+/// its query. This one also accepts a qualified name (`Tree::flush`): a
+/// search that misses still reads as "try def", without changing how def
+/// ranks that name. A phrase and a `path/file.rs` do not.
+pub(crate) fn suggests_def(q: &str) -> bool {
+    if is_identifier(q) {
+        return true;
+    }
+    !q.is_empty()
+        && !q.contains(char::is_whitespace)
+        && !q.contains('/')
+        && q.chars().any(|c| c.is_alphabetic())
+        && q.contains(':')
+        && q.chars()
+            .all(|c| c.is_alphanumeric() || c == '_' || c == ':')
 }
 
 /// `name` / `code` / `defs` are the code-shaped legs (#916). A corpus that
@@ -239,28 +281,38 @@ pub(crate) fn code_symbol_fields_absent(mapped: Option<&BTreeSet<String>>) -> bo
     }
 }
 
-/// `preferred` entries whose base field is mapped, then `extras` (bare names)
-/// when the corpus maps no code-symbol field.
+/// `preferred` entries whose base field is mapped, then `extras` (bare names).
+///
+/// `prose_beside_code`: also name `text` and `message` when a code field is
+/// mapped. A folded `docs` index stores changelog and config lines in `text`
+/// next to `name`/`code`/`defs`. Leaving `text` off made `xerj search` miss
+/// `tokio/CHANGELOG.md` (122 sections) while a direct `match_phrase` on
+/// `text` hit them. `impl` stays off in that case so a code corpus does not
+/// grow a second body leg (#916). A corpus with no code field still gets
+/// every extra it maps, including `impl`.
 pub(crate) fn weighted_query_fields(
     preferred: &[(&str, &str)],
     extras: &[&str],
     mapped: Option<&BTreeSet<String>>,
     numeric: Option<&BTreeSet<String>>,
+    prose_beside_code: bool,
 ) -> Vec<String> {
     let mut out: Vec<String> = preferred
         .iter()
         .filter(|(name, _)| field_lookup_ok(mapped, numeric, name))
         .map(|(_, weighted)| (*weighted).to_string())
         .collect();
-    if code_symbol_fields_absent(mapped) {
-        if let Some(set) = mapped {
-            for name in extras {
-                if set.contains(*name)
-                    && !numeric.is_some_and(|nums| nums.contains(*name))
-                    && !out.iter().any(|f| f.split('^').next() == Some(*name))
-                {
-                    out.push((*name).to_string());
-                }
+    let code_present = !code_symbol_fields_absent(mapped);
+    if let Some(set) = mapped.filter(|set| !set.is_empty()) {
+        for name in extras {
+            if code_present && (*name == "impl" || !prose_beside_code) {
+                continue;
+            }
+            if set.contains(*name)
+                && !numeric.is_some_and(|nums| nums.contains(*name))
+                && !out.iter().any(|f| f.split('^').next() == Some(*name))
+            {
+                out.push((*name).to_string());
             }
         }
     }
@@ -314,7 +366,7 @@ fn build_search_query(
 ) -> Value {
     let shaped = xerj_common::code_query::normalize_code_search_query(query);
     let mut should = Vec::new();
-    let fields = weighted_query_fields(SEARCH_MM_FIELDS, PROSE_EXTRA_FIELDS, mapped, numeric);
+    let fields = weighted_query_fields(SEARCH_MM_FIELDS, PROSE_EXTRA_FIELDS, mapped, numeric, true);
     if !fields.is_empty() {
         should.push(json!({ "multi_match": {
             "query": shaped,
@@ -333,7 +385,7 @@ fn build_search_query(
         "query": { "bool": { "should": should }},
         // No `body` here: whole-file bodies are the token flood (measured ~9x
         // the size of the matching passage). `_passage` carries the snippet.
-        "_source": ["ax_path", "line", "start_line", "language", "kind", "code", "title"],
+        "_source": ["ax_path", "line", "start_line", "language", "kind", "code", "title", "heading"],
         "fields": ["_passage"]
     })
 }
@@ -371,7 +423,7 @@ pub(crate) fn hit_location(hit: &Value) -> String {
         .and_then(Value::as_u64)
         .or_else(|| passage_line(hit));
     match line {
-        Some(n) => format!("{path}:{n}"),
+        Some(n) => xerj_common::xccode::passage::cite_path_line(path, n),
         None => path.to_string(),
     }
 }
@@ -805,7 +857,7 @@ pub fn run_search_cli() -> i32 {
     if hits.is_empty() {
         let snap = corpus_snapshot(&es, &prefix);
         let (lines, exit) =
-            empty_lookup_report("search", &prefix, &query, is_identifier(&query), &snap);
+            empty_lookup_report("search", &prefix, &query, suggests_def(&query), &snap);
         for line in lines {
             println!("{line}");
         }
@@ -826,12 +878,10 @@ pub fn run_search_cli() -> i32 {
         // Passage-first: `_passage` is the engine's matching snippet (an
         // array-wrapped object with a text payload); `code` is the symbol
         // declaration. Never the whole file body — that is the 9x token flood
-        // this command exists to avoid.
-        let passage_owned = passage_text(h);
-        let passage = passage_owned
-            .as_deref()
-            .or_else(|| src.get("code").and_then(Value::as_str));
-        if let Some(text) = passage {
+        // this command exists to avoid. A hit with neither prints its heading
+        // or title rather than a blank block.
+        let passage_owned = hit_display_text(h);
+        if let Some(text) = passage_owned.as_deref() {
             let snippet: String = text.chars().take(full).collect();
             for l in snippet.lines() {
                 println!("    {l}");
@@ -976,6 +1026,56 @@ mod tests {
             }
         });
         assert_eq!(passage_text(&hit), None);
+        assert_eq!(
+            hit_display_text(&hit).as_deref(),
+            Some("de <- function(col)")
+        );
+    }
+
+    /// A notebook hit can match on BM25 and still come back with no `_passage`.
+    /// The human line then has a path and a score and nothing under them.
+    /// Heading wins over title; a real passage still wins over both.
+    #[test]
+    fn a_hit_with_no_passage_prints_its_heading_or_title() {
+        let headed = json!({
+            "_source": {
+                "ax_path": "10-Iterators.ipynb",
+                "title": "Iterators",
+                "heading": "map and filter"
+            }
+        });
+        assert_eq!(hit_display_text(&headed).as_deref(), Some("map and filter"));
+
+        let titled = json!({
+            "_source": { "ax_path": "Index.ipynb", "title": "Index" }
+        });
+        assert_eq!(hit_display_text(&titled).as_deref(), Some("Index"));
+
+        let with_passage = json!({
+            "_source": {
+                "ax_path": "a.ipynb",
+                "title": "should not win",
+                "heading": "nope"
+            },
+            "fields": { "_passage": [{ "field": "body", "text": "the matching cell" }] }
+        });
+        assert_eq!(
+            hit_display_text(&with_passage).as_deref(),
+            Some("the matching cell")
+        );
+
+        let blank = json!({ "_source": { "ax_path": "empty.ipynb" } });
+        assert_eq!(hit_display_text(&blank), None);
+
+        let source = search_query_body("map and filter", 5);
+        assert!(
+            source["_source"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|f| f == "heading"),
+            "{source}"
+        );
     }
 
     #[test]
@@ -1042,6 +1142,15 @@ mod tests {
             }
         });
         assert_eq!(hit_location(&symbol_hit), "crates/fjall/src/batch.rs:108");
+
+        let windows_hit = json!({
+            "_source": { "ax_path": "C:/src/main.rs", "line": 12 }
+        });
+        assert_eq!(
+            hit_location(&windows_hit),
+            "C:/src/main.rs (line 12)",
+            "a drive letter must not be parsed as the line"
+        );
 
         let synthetic_defs_hit = json!({
             "_source": {
@@ -1187,11 +1296,30 @@ mod tests {
             historical
         );
         assert!(mapped_property_names(&json!({"error": "no such index"})).is_none());
-        let code = names_of(&["name", "code", "body", "defs", "title", "text", "impl"]);
+        let code_only = names_of(&["name", "code", "body", "defs", "title"]);
         assert_eq!(
-            search_query_body_for_mapping(query, 5, Some(&code), Some(&BTreeSet::new())),
-            historical
+            search_query_body_for_mapping(query, 5, Some(&code_only), Some(&BTreeSet::new())),
+            historical,
+            "a code corpus with no prose field keeps the #916 field list"
         );
+        // A folded docs index maps `text` (changelogs, line-oriented files)
+        // beside the code fields. Search it. `impl` stays off so the code
+        // legs do not grow a second body.
+        let mixed = names_of(&[
+            "name", "code", "body", "defs", "title", "text", "impl", "message",
+        ]);
+        let body = search_query_body_for_mapping(query, 5, Some(&mixed), Some(&BTreeSet::new()));
+        let fields = body["query"]["bool"]["should"][0]["multi_match"]["fields"]
+            .as_array()
+            .unwrap();
+        let bare: Vec<&str> = fields
+            .iter()
+            .map(|f| f.as_str().unwrap().split('^').next().unwrap())
+            .collect();
+        assert!(bare.contains(&"text"), "{bare:?}");
+        assert!(bare.contains(&"message"), "{bare:?}");
+        assert!(!bare.contains(&"impl"), "{bare:?}");
+        assert!(bare.contains(&"body") && bare.contains(&"defs"), "{bare:?}");
         // One index in the union mapping `defs` is enough to keep the leg:
         // strict mode refuses a field no resolved index maps, not a field
         // some index does not map.
@@ -1263,6 +1391,34 @@ mod tests {
         let text = lines.join("\n");
         assert!(text.contains("xerj autoindex <folder>"), "{text}");
         assert!(text.contains("xerj def Db"), "{text}");
+        assert!(suggests_def("Tree::flush"));
+        assert!(suggests_def("Db"));
+        assert!(!suggests_def("flush the tree"));
+        assert!(!suggests_def("src/lib.rs"));
+        assert!(
+            !is_identifier("Tree::flush"),
+            "def's query shape stays the narrower predicate"
+        );
+        let (qualified, _) = empty_lookup_report(
+            "search",
+            "eng",
+            "Tree::flush",
+            suggests_def("Tree::flush"),
+            &snap(
+                Some(vec!["eng-docs"]),
+                Some(vec!["eng-docs"]),
+                Some(vec!["eng"]),
+            ),
+        );
+        let qualified = qualified.join("\n");
+        assert!(
+            qualified.contains("no match in eng-* for: Tree::flush"),
+            "{qualified}"
+        );
+        assert!(
+            qualified.contains("xerj def Tree::flush"),
+            "a qualified name with zero hits must name def: {qualified}"
+        );
         assert!(!text.contains("prefixes on this node"), "{text}");
 
         let (missing_catalog, exit) = empty_lookup_report(

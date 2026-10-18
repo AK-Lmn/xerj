@@ -142,6 +142,28 @@ pub(crate) fn code_search_hint(prefix: &str) -> String {
     )
 }
 
+/// What to print when a run indexed both code and prose.
+///
+/// The previous text pasted a `match` on `body` only. Line files (a
+/// changelog is `txt-lines`) are stored in `text`, so that fragment misses
+/// them and teaches a query that cannot see half the corpus. Name the
+/// `ax_format` values this run actually wrote, and say which field holds
+/// which side.
+pub(crate) fn mixed_corpus_hint(formats: &[&str]) -> String {
+    let listed = if formats.is_empty() {
+        "none recorded".to_string()
+    } else {
+        formats.join(", ")
+    };
+    format!(
+        "      this corpus mixes code and prose — code volume can swamp prose on\n\
+         \x20     shared words. Scope one side with a filter on `ax_format`\n\
+         \x20     (values in this run: {listed}).\n\
+         \x20     Prose sections are stored in `body`; line files such as changelogs\n\
+         \x20     are stored in `text`, so a match on `body` alone misses them."
+    )
+}
+
 fn prepared_records_identity(cfg: &IndexCfg) -> Result<String> {
     let mut value = json!({
         "contract": PREPARED_RECORDS_IDENTITY,
@@ -3658,6 +3680,9 @@ fn build_phase_a(
         }
     }
     let mut clusters = dataset::cluster(sketches, &rels, &scopes);
+    // `{prefix}-{slug}` must not stutter (`logs-logs-syslog`) when the slug's
+    // first segment is the prefix the operator already chose.
+    dataset::drop_repeated_prefix(&cfg.prefix, &mut clusters);
 
     // Demoted one-off config files (#173) were sampled as flattened records;
     // phase B will index them as documents. Re-sample them through the same
@@ -5681,24 +5706,39 @@ fn truncation_note_message(rels: &[String]) -> Option<String> {
     // name only the first — so a mailbox holding one 2.3 GB message was told it
     // had "hit the per-file record cap (4096)" with 205 records, and to "raise
     // the cap", which is advice for a cap it never reached (review finding on
-    // PR #949). The flag does not say which cap fired, so the note names all
-    // three and what each one kept.
-    //
-    // "The file's tail" is right only for the first cause. A mailbox with one
-    // oversized message loses THAT message's tail; every message after it is
-    // indexed (review of PR #949: 201 of 201 messages after a 2.3 GB one were
-    // found), so the note says what was dropped per cause.
+    // PR #949). The flag does not say which cap fired. A path that looks like
+    // mail keeps all three causes. A plain document does not: telling the
+    // reader of an 8 MB `.txt` that a later mail message might still be
+    // indexed is false, and it is the note they actually saw.
+    let cause = if names.iter().any(|rel| rel_looks_like_mail(rel)) {
+        format!(
+            "one of: a single document over the per-document record cap ({} sections; its later \
+             sections were dropped), a mail message over the {} MB per-message cap (only that \
+             message's head was parsed; the messages after it are indexed), or a message with more \
+             MIME parts than the attachment cap (its later parts were dropped). Split the document \
+             or the message if the dropped part matters (#381)",
+            extract::MAX_RECORDS_PER_FILE,
+            extract::eml::MAX_EML >> 20,
+        )
+    } else {
+        format!(
+            "the per-document record cap is {} sections; later sections were dropped. Split the \
+             document if the dropped part matters (#381)",
+            extract::MAX_RECORDS_PER_FILE,
+        )
+    };
     Some(format!(
-        "{} file(s) had content cut short that was NOT indexed: {listed}{tail} — one of: a \
-         single document over the per-document record cap ({} sections; its later sections \
-         were dropped), a mail message over the {} MB per-message cap (only that message's \
-         head was parsed; the messages after it are indexed), or a message with more MIME \
-         parts than the attachment cap (its later parts were dropped). Split the document or \
-         the message if the dropped part matters (#381)",
+        "{} file(s) had content cut short that was NOT indexed: {listed}{tail} — {cause}",
         names.len(),
-        extract::MAX_RECORDS_PER_FILE,
-        extract::eml::MAX_EML >> 20,
     ))
+}
+
+/// The mail caps only apply to a mailbox. The last path component is enough:
+/// `inbox.eml`, `lists.mbox`, `note.msg`.
+fn rel_looks_like_mail(rel: &str) -> bool {
+    let name = rel.rsplit(['/', '\\']).next().unwrap_or(rel);
+    let lower = name.to_ascii_lowercase();
+    lower.ends_with(".eml") || lower.ends_with(".mbox") || lower.ends_with(".msg")
 }
 
 fn note_truncated_files(pr: &Progress, rels: &[String]) {
@@ -5727,15 +5767,35 @@ mod truncation_note_tests {
         );
         assert!(msg.contains("4096") && msg.contains("#381"), "{msg}");
         assert!(!msg.contains("and 0 more"), "{msg}");
-        // Every cap that can set the flag is named — an oversized mail message
-        // is not a "record cap" and must not be reported as one.
+        assert!(msg.contains("later sections were dropped"), "{msg}");
+        assert!(!msg.contains("raise the cap"), "{msg}");
+        // Neither file is mail. The mail caps must not be offered as a reason
+        // the tail might still be indexed.
+        assert!(!msg.contains("per-message cap"), "{msg}");
+        assert!(!msg.contains("MIME parts"), "{msg}");
+        assert!(!msg.contains("the messages after it are indexed"), "{msg}");
+    }
+
+    #[test]
+    fn a_mailbox_keeps_the_three_causes() {
+        let msg = truncation_note_message(&["mail/inbox.mbox".into(), "big.txt".into()]).unwrap();
+        assert!(
+            msg.contains("mail/inbox.mbox") && msg.contains("big.txt"),
+            "{msg}"
+        );
+        // The flag does not say which file hit which cap, so a list that
+        // contains any mailbox still names all three.
         assert!(msg.contains("64 MB per-message cap"), "{msg}");
         assert!(msg.contains("MIME parts"), "{msg}");
-        assert!(!msg.contains("raise the cap"), "{msg}");
-        // An oversized message costs that message's tail, not the mailbox's:
-        // the note must not tell a mailbox owner the rest of the file is gone.
+        assert!(msg.contains("4096"), "{msg}");
         assert!(!msg.contains("their tail"), "{msg}");
         assert!(msg.contains("the messages after it are indexed"), "{msg}");
+        assert!(truncation_note_message(&["Notes.EML".into()])
+            .unwrap()
+            .contains("MIME parts"));
+        assert!(!truncation_note_message(&["notes.eml.txt".into()])
+            .unwrap()
+            .contains("MIME parts"));
     }
 
     #[test]
@@ -5971,21 +6031,9 @@ fn run_index_report_inner(
     // #1102: ping's raw context is honest but teaches a first-time user
     // nothing — autoindex is the onboarding verb, so the no-node case here
     // gets the same recipe `xerj def` already prints: start one, or aim at
-    // an existing node.
+    // an existing node. `xerj autoindex map` uses the same wording.
     if let Err(e) = es.ping() {
-        if esclient::Es::ping_failure_is_auth(&e) {
-            anyhow::bail!(
-                "the node at {url} answered, but authentication failed.\n{e:#}",
-                url = cfg.url
-            );
-        }
-        anyhow::bail!(
-            "no XERJ node reachable at {url} ({e:#})\n\n\
-             Start one, then re-run this command:\n  \
-             xerj --insecure --data-dir ./.xerj-data &\n\n\
-             (or point at an existing node with --url / $XERJ_URL)",
-            url = cfg.url
-        );
+        anyhow::bail!("{}", node_ping_failure(&cfg.url, &e));
     }
 
     // `--label <question-set>` (#1062): every record's payload goes through
@@ -7050,26 +7098,7 @@ fn run_index_report_inner(
     for exclude in &run_estimate.excludes {
         pr.note(&format!("  estimate excludes: {exclude}"));
     }
-    pr.note(&format!(
-        "work order: {} — {} inside each band at {} worker(s); a file that outlasts everything \
-         above it starts first regardless of band",
-        bands
-            .iter()
-            .map(|band| format!(
-                "{} ({} files, {})",
-                band.band,
-                band.files,
-                estimate::human_bytes(band.bytes)
-            ))
-            .collect::<Vec<_>>()
-            .join(" → "),
-        if cfg.workers == 1 {
-            "smallest first"
-        } else {
-            "biggest first"
-        },
-        cfg.workers,
-    ));
+    pr.note(&order::work_order_line(&bands, cfg.workers));
     for band in &bands {
         pr.note(&format!("  {:<16} {}", band.band, band.why));
     }
@@ -9433,20 +9462,10 @@ fn run_index_report_inner(
             .values()
             .any(|fa| fa.family.starts_with("txt") || fa.family == "html");
         if indexed_code && indexed_prose {
-            println!(
-                "      this corpus mixes code and prose — code volume can swamp prose on\n\
-                 \x20     shared words. Scope the side you want:\n\
-                 \x20       …,\"query\":{{\"bool\":{{\"must\":[{{\"match\":{{\"body\":\"<text>\"}}}}],\
-                 \"filter\":[{{\"term\":{{\"ax_format\":\"code\"}}}}]}}}}\n\
-                 \x20       (values for `ax_format` in this run: {})",
-                {
-                    let mut fams: Vec<&str> =
-                        plan.files.values().map(|fa| fa.family.as_str()).collect();
-                    fams.sort_unstable();
-                    fams.dedup();
-                    fams.join(", ")
-                }
-            );
+            let mut fams: Vec<&str> = plan.files.values().map(|fa| fa.family.as_str()).collect();
+            fams.sort_unstable();
+            fams.dedup();
+            println!("{}", mixed_corpus_hint(&fams));
         }
     }
     // Exit 3 means "completed, some input was unusable". Backend rejections
@@ -9539,12 +9558,66 @@ fn format_str(sn: Option<&Sniffed>) -> String {
 
 // ─── map subcommand ──────────────────────────────────────────────────────
 
+/// What autoindex and `xerj map` say when the node does not answer.
+///
+/// A connect error is the common first-run miss (`xerj map` with nothing
+/// listening). An auth failure is the opposite — the node is up — so it must
+/// not tell the reader to start one.
+fn node_ping_failure(url: &str, err: &anyhow::Error) -> String {
+    if esclient::Es::ping_failure_is_auth(err) {
+        format!("the node at {url} answered, but authentication failed.\n{err:#}")
+    } else {
+        format!(
+            "no XERJ node reachable at {url} ({err:#})\n\n\
+             Start one, then re-run this command:\n  \
+             xerj --insecure --data-dir ./.xerj-data &\n\n\
+             (or point at an existing node with --url / $XERJ_URL)"
+        )
+    }
+}
+
+#[cfg(test)]
+mod node_ping_failure_tests {
+    use super::node_ping_failure;
+
+    #[test]
+    fn an_unreachable_node_gets_the_start_recipe() {
+        let err = anyhow::anyhow!(
+            "endpoint unreachable: http://127.0.0.1:9: Connection refused (os error 111)"
+        );
+        let msg = node_ping_failure("http://127.0.0.1:9", &err);
+        assert!(
+            msg.contains("no XERJ node reachable at http://127.0.0.1:9"),
+            "{msg}"
+        );
+        assert!(
+            msg.contains("xerj --insecure --data-dir ./.xerj-data"),
+            "{msg}"
+        );
+        assert!(msg.contains("--url"), "{msg}");
+        assert!(!msg.contains("authentication failed"), "{msg}");
+    }
+
+    #[test]
+    fn an_auth_failure_does_not_say_the_node_is_down() {
+        let err = anyhow::anyhow!("GET / failed (HTTP 401)");
+        let msg = node_ping_failure("http://127.0.0.1:9200", &err);
+        assert!(msg.contains("authentication failed"), "{msg}");
+        assert!(!msg.contains("no XERJ node reachable"), "{msg}");
+        assert!(!msg.contains("xerj --insecure"), "{msg}");
+    }
+}
+
 fn run_map(cfg: MapCfg) -> Result<i32> {
     if let Some(note) = &cfg.xerj_url_note {
         eprintln!("autoindex: {note}");
     }
     let es = Es::new(&cfg.url, cfg.api_key.clone())?;
-    es.ping()?;
+    // The same first-run miss as `xerj search`: nothing is listening, and a
+    // raw `endpoint unreachable` does not say how to start a node.
+    if let Err(e) = es.ping() {
+        anyhow::bail!("{}", node_ping_failure(&cfg.url, &e));
+    }
     let fetch = |query: Value, size: usize, sort: Option<Value>| -> Result<Vec<Value>> {
         let mut body = json!({"query": query, "size": size});
         if let Some(s) = sort {
@@ -11328,6 +11401,36 @@ mod generation_contract_identity_tests {
             !code.contains("curl"),
             "the code hint must not send the reader to a raw search, got: {code}"
         );
+    }
+
+    /// A tokio index stored CHANGELOG.md as `txt-lines` in `text`. The done
+    /// banner pasted a `match` on `body` only, so following it cannot see
+    /// that file. The hint names `text` and the run's `ax_format` values.
+    #[test]
+    fn mixed_corpus_hint_names_text_and_does_not_match_body_only() {
+        let hint = mixed_corpus_hint(&["code", "json", "txt-lines", "txt-prose"]);
+        assert!(
+            hint.contains("values in this run: code, json, txt-lines, txt-prose"),
+            "{hint}"
+        );
+        assert!(hint.contains("`text`"), "{hint}");
+        assert!(hint.contains("`body`"), "{hint}");
+        assert!(
+            hint.contains("ax_format"),
+            "the scope field must still be named, got: {hint}"
+        );
+        assert!(
+            !hint.contains("\"match\""),
+            "must not teach a body-only JSON filter, got: {hint}"
+        );
+        assert!(
+            !hint.contains("<text>"),
+            "must not leave a JSON placeholder, got: {hint}"
+        );
+
+        let empty = mixed_corpus_hint(&[]);
+        assert!(empty.contains("none recorded"), "{empty}");
+        assert!(!empty.contains("\"match\""), "{empty}");
     }
 
     /// A blind onboarding run found `autoindex` discovering `./data/admin.key`

@@ -290,7 +290,7 @@ fn help_text(feedback: bool) -> String {
          \x20\x20\x20\x20xerj corpus add|index|list          the corpus lifecycle behind `xerj code`\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20(see xerj corpus --help)\n\
          {ask_lines}\
-         xerj index [OPTIONS]                direct NDJSON → engine ingest (see xerj\n\
+         \x20\x20\x20\x20xerj index [OPTIONS]                direct NDJSON → engine ingest (see xerj\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20index --help)\n\
          \x20\x20\x20\x20xerj brain <folder>                 index + browse in one command (see xerj\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20brain --help)\n\
@@ -319,7 +319,13 @@ fn help_text(feedback: bool) -> String {
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20Auth is ON by default, so without this flag every client\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20(`xerj autoindex` and `xerj brain` included) must send the\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20key this server writes to <data_dir>/admin.key on first\n\
-         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20start — export XERJ_API_KEY=$(cat ./data/admin.key)\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20start. The default data directory is ./data. Keep it outside any folder\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20you will autoindex — ./data inside that tree gets indexed, because data/\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20is not in the built-in ignore list. Start it with xerj --data-dir ~/xerj-data\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20(Windows: $HOME\\xerj-data), then:\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20export XERJ_API_KEY=\"$(cat ~/xerj-data/admin.key)\"\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20On Windows PowerShell:\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20$env:XERJ_API_KEY = Get-Content \"$env:USERPROFILE\\xerj-data\\admin.key\"\n\
          \x20\x20\x20\x20--embed-mode <MODE>    Embedding backend: lexical | neural | proxy | auto |\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20onnx-experimental\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20lexical  built-in feature-hash (default; offline, not neural)\n\
@@ -475,15 +481,19 @@ fn help_text(feedback: bool) -> String {
 /// pack, so there the line says the command is unavailable instead of
 /// promising a pull that will only ever exit 5.
 fn ask_help_lines(hub: bool) -> &'static str {
+    // A trailing `\` eats the next line's source indent. The four spaces on
+    // the command, and the wrap under the description, are `\x20` so they
+    // survive. Descriptions in this block start at column 40, same as the
+    // other USAGE lines.
     if hub {
-        "xerj ask \"<question>\"              answer a question from a hub corpus: the\n\
-         pre-indexed pack is pulled the first time\n\
-         (see xerj ask --help); `xerj \"<question>\"`\n\
-         is the same\n"
+        "\x20\x20\x20\x20xerj ask \"<question>\"               answer a question from a hub corpus: the\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20pre-indexed pack is pulled the first time\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20(see xerj ask --help); `xerj \"<question>\"`\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20is the same\n"
     } else {
-        "xerj ask \"<question>\"              Corpus Hub answers: not available in this\n\
-         build (no hub signing key; exits 5) - use\n\
-         xerj corpus + xerj code instead\n"
+        "\x20\x20\x20\x20xerj ask \"<question>\"               Corpus Hub answers: not available in this\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20build (no hub signing key; exits 5) - use\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20xerj corpus + xerj code instead\n"
     }
 }
 
@@ -527,6 +537,17 @@ struct BoundAddrs {
     rest: SocketAddr,
     es: SocketAddr,
     grpc: SocketAddr,
+}
+
+/// The auth-disabled posture line. On loopback the bind line says nothing
+/// off this host can reach the listeners, so this line must not then say
+/// the network can write.
+fn auth_disabled_line(loopback: bool) -> &'static str {
+    if loopback {
+        " │ ⚠  Auth:   DISABLED (--insecure) — every caller on this machine can write"
+    } else {
+        " │ ⚠  Auth:   DISABLED (--insecure) — anyone on the network can write"
+    }
 }
 
 fn print_banner(cfg: &Config, bound: &BoundAddrs, startup_ms: u128) {
@@ -617,7 +638,10 @@ fn print_banner(cfg: &Config, bound: &BoundAddrs, startup_ms: u128) {
         }
     }
     if !cfg.auth.enabled {
-        println!(" │ ⚠  Auth:   DISABLED (--insecure) — anyone on the network can write");
+        // The bind line above already said whether anything off this host can
+        // connect. Repeating "anyone on the network" on a loopback node
+        // contradicts that line.
+        println!("{}", auth_disabled_line(cfg.bind_address_is_loopback()));
     } else {
         println!(
             " │ ✓  Auth:   single API-key (no RBAC; per-doc / per-field controls roadmap v0.9)"
@@ -1273,9 +1297,27 @@ async fn serve(
 /// can never advertise a port another process owns — the failure mode that
 /// sent one user's contracts, invoices and bank export into a stranger's data
 /// directory under `ok=true exit=0` (issue #465).
+/// What a bare `xerj` prints when the default port is taken.
+///
+/// The old context was `ES-compat: bind 127.0.0.1:9200` plus the OS error.
+/// A bare `xerj` starts the server. When that port is taken, the error did
+/// not mention `--port`, `--auto-port`, or that `--help` lists subcommands.
+fn addr_in_use_message(name: &str, addr: SocketAddr) -> String {
+    format!(
+        "{name}: {addr} is already in use. Pass --port <PORT> to pick a different one, or \
+         --auto-port to take the next free port. If you did not mean to start a server, \
+         `xerj --help` lists the subcommands."
+    )
+}
+
 fn bind_listener(addr: SocketAddr, name: &str) -> Result<std::net::TcpListener> {
-    let listener =
-        std::net::TcpListener::bind(addr).with_context(|| format!("{name}: bind {addr}"))?;
+    let listener = match std::net::TcpListener::bind(addr) {
+        Ok(listener) => listener,
+        Err(e) if e.kind() == std::io::ErrorKind::AddrInUse => {
+            anyhow::bail!("{}", addr_in_use_message(name, addr));
+        }
+        Err(e) => return Err(e).with_context(|| format!("{name}: bind {addr}")),
+    };
     // Both axum's accept loop and axum-server's rustls acceptor drive this
     // listener from the reactor; a blocking fd would stall the runtime thread
     // on the first accept.
@@ -1283,6 +1325,24 @@ fn bind_listener(addr: SocketAddr, name: &str) -> Result<std::net::TcpListener> 
         .set_nonblocking(true)
         .with_context(|| format!("{name}: set the listener on {addr} non-blocking"))?;
     Ok(listener)
+}
+
+#[cfg(test)]
+mod bind_listener_tests {
+    use super::{addr_in_use_message, bind_listener};
+
+    #[test]
+    fn a_taken_port_names_port_and_auto_port() {
+        let held = std::net::TcpListener::bind("127.0.0.1:0").expect("bind a free port");
+        let addr = held.local_addr().expect("read the held address");
+        let err = bind_listener(addr, "ES-compat").expect_err("the port is held");
+        let msg = format!("{err:#}");
+        assert!(msg.contains("--port"), "{msg}");
+        assert!(msg.contains("--auto-port"), "{msg}");
+        assert!(msg.contains("xerj --help"), "{msg}");
+        assert!(msg.contains(&addr.to_string()), "{msg}");
+        assert_eq!(msg, addr_in_use_message("ES-compat", addr));
+    }
 }
 
 /// If `data_dir` is currently locked by another live process, find the first
@@ -2211,7 +2271,53 @@ fn build_runtime(worker_threads: usize) -> Result<tokio::runtime::Runtime> {
 
 #[cfg(test)]
 mod help_text_tests {
-    use super::help_text;
+    use super::{auth_disabled_line, help_text};
+
+    /// A loopback `--insecure` boot says nothing off this host can connect,
+    /// then used to say anyone on the network can write. Those two lines
+    /// cannot both be true.
+    #[test]
+    fn insecure_loopback_does_not_say_the_network_can_write() {
+        let loopback = auth_disabled_line(true);
+        assert!(
+            loopback.contains("this machine"),
+            "loopback auth line must name this machine: {loopback}"
+        );
+        assert!(
+            !loopback.contains("network"),
+            "loopback auth line must not claim the network can write: {loopback}"
+        );
+        let exposed = auth_disabled_line(false);
+        assert!(
+            exposed.contains("anyone on the network can write"),
+            "a non-loopback bind is the network case: {exposed}"
+        );
+    }
+
+    /// `--help` used to show `cat ./data/admin.key`. The default data dir is
+    /// `./data`, and llms.txt says that path inside a folder you autoindex
+    /// indexes the node's own storage. The installer starts with `~/xerj-data`.
+    /// Help outranks the website, so the example agents copy has to be that path.
+    #[test]
+    fn insecure_help_example_keeps_the_data_dir_outside_the_tree() {
+        let help = help_text(true);
+        assert!(
+            help.contains("~/xerj-data/admin.key"),
+            "the export example must be the outside-the-tree data dir:\n{help}"
+        );
+        assert!(
+            help.contains("USERPROFILE"),
+            "Windows must get a path too:\n{help}"
+        );
+        assert!(
+            !help.contains("cat ./data/admin.key"),
+            "the old in-tree example is what agents copy"
+        );
+        assert!(
+            help.contains("default data directory is ./data"),
+            "omitting --data-dir still writes ./data, and the help must say so"
+        );
+    }
 
     /// `--insecure` disables TLS **and** auth (see `apply_overrides`, which
     /// sets `cfg.tls.enabled = false; cfg.auth.enabled = false;`), but the
@@ -2292,6 +2398,43 @@ mod help_text_tests {
             index_lines[fb + 1].starts_with(' '),
             "index help wrap lost its indent: {:?}",
             index_lines[fb + 1]
+        );
+    }
+
+    /// `xerj ask` and the `xerj index` line after it used to start at column 0.
+    /// A trailing `\` in the help string eats the next line's source indent,
+    /// and those two lines were the ones that still relied on it.
+    #[test]
+    fn usage_command_lines_keep_their_indent() {
+        for hub in [false, true] {
+            for line in super::ask_help_lines(hub).lines().filter(|l| !l.is_empty()) {
+                assert!(
+                    line.starts_with("    "),
+                    "ask usage line lost its indent (hub={hub}): {line:?}"
+                );
+            }
+        }
+        let help = help_text(false);
+        let usage = help
+            .split_once("USAGE:")
+            .expect("USAGE")
+            .1
+            .split_once("\nOPTIONS ")
+            .expect("OPTIONS")
+            .0;
+        for line in usage.lines().filter(|l| l.contains("xerj ")) {
+            assert!(
+                line.starts_with("    "),
+                "a USAGE line lost its indent: {line:?}"
+            );
+        }
+        assert!(
+            usage.contains("\n    xerj index "),
+            "xerj index lost the indent the other commands have:\n{usage}"
+        );
+        assert!(
+            usage.contains("\n    xerj ask "),
+            "xerj ask lost the indent the other commands have:\n{usage}"
         );
     }
 }
