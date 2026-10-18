@@ -1007,6 +1007,7 @@ mod tests {
             "search /ax-* HTTP 403: {\"error\":{\"type\":\"security_exception\"}}",
         );
         assert!(!other.contains("is the prefix right"), "{other}");
+    }
 
     #[test]
     fn search_refuses_a_mode_flag_and_names_the_embedder() {
