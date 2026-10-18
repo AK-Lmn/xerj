@@ -16,6 +16,7 @@ use xerj_common::xccode::demote_catalog_noise;
 
 const USAGE: &str = "\
 xerj search — retrieve code from a running XERJ node (reference coding, no scripts)
+Default ranking is lexical: it matches the words you typed, and it is not a neural reading of the code.
 
 USAGE:
     xerj search [OPTIONS] \"<what you need, in plain words>\"
@@ -65,6 +66,40 @@ pub(crate) fn passage_text(hit: &Value) -> Option<String> {
         }
         _ => None,
     }
+}
+
+/// `xerj search` has no mode flag. `--mode semantic` and `--mode hybrid`
+/// belong to `xerj code`. Saying "unexpected argument" and dumping USAGE
+/// hides that, and it hides that those modes still use lexical feature
+/// hashing unless the node was started with `--embed-mode neural`.
+pub(crate) fn search_mode_refusal(asked: &str) -> String {
+    let which = if asked.is_empty() {
+        String::new()
+    } else {
+        format!(" ({asked})")
+    };
+    format!(
+        "xerj search: no --mode{which}. This command always sends a lexical query. \
+         xerj code --mode semantic and xerj code --mode hybrid are the commands that take a mode; \
+         unless the node was started with --embed-mode neural they still embed with lexical feature hashing."
+    )
+}
+
+/// One line for the human printer when the node says this lexical query
+/// scored a `semantic_text` field and did not consult the embedding.
+///
+/// The response already carries `_xerj.hints[].reason`, which tells the
+/// caller to POST a `semantic` query. That reason is the wrong sentence for
+/// `xerj search`: this command has no semantic mode. `--json` returns the
+/// hint unchanged.
+pub(crate) fn lexical_semantic_note(resp: &Value) -> Option<&'static str> {
+    let hints = resp.pointer("/_xerj/hints")?.as_array()?;
+    let flagged = hints
+        .iter()
+        .any(|hint| hint.get("code").and_then(Value::as_str) == Some("lexical_on_semantic_text"));
+    flagged.then_some(
+        "xerj search: these hits are lexical; this command does not consult the embedding.",
+    )
 }
 
 /// Text to print for one hit.
@@ -368,7 +403,7 @@ fn build_search_query(
         "query": { "bool": { "should": should }},
         // No `body` here: whole-file bodies are the token flood (measured ~9x
         // the size of the matching passage). `_passage` carries the snippet.
-        "_source": ["ax_path", "line", "start_line", "language", "kind", "code", "title", "heading"],
+        "_source": ["ax_path", "line", "start_line", "language", "kind", "code", "title", "heading", "page", "cell"],
         "fields": ["_passage"]
     })
 }
@@ -392,7 +427,12 @@ pub(crate) fn passage_line(hit: &Value) -> Option<u64> {
     first.get("ordinal").and_then(Value::as_u64).map(|o| o + 1)
 }
 
-/// Format the `path[:line]` header token for a search or definition hit.
+/// Format the header token for a search or definition hit.
+///
+/// A source line wins (`path:line`). A PDF page or a notebook cell is cited
+/// as `path page N` / `path cell N` — never as `:1` from a passage ordinal of
+/// 0, which is a chunk or a section start, not a line. A body passage with no
+/// page and no cell still uses the 1-based lexical ordinal.
 pub(crate) fn hit_location(hit: &Value) -> String {
     let src = hit.get("_source").unwrap_or(&Value::Null);
     let path = src
@@ -400,12 +440,25 @@ pub(crate) fn hit_location(hit: &Value) -> String {
         .or_else(|| src.get("path"))
         .and_then(Value::as_str)
         .unwrap_or("?");
-    let line = src
+    if let Some(n) = src
         .get("line")
         .or_else(|| src.get("start_line"))
         .and_then(Value::as_u64)
-        .or_else(|| passage_line(hit));
-    match line {
+    {
+        return xerj_common::xccode::passage::cite_path_line(path, n);
+    }
+    let page = hit
+        .pointer("/fields/_passage/0/page")
+        .and_then(Value::as_u64)
+        .filter(|n| *n > 0)
+        .or_else(|| src.get("page").and_then(Value::as_u64).filter(|n| *n > 0));
+    if let Some(n) = page {
+        return format!("{path} page {n}");
+    }
+    if let Some(n) = src.get("cell").and_then(Value::as_u64).filter(|n| *n > 0) {
+        return format!("{path} cell {n}");
+    }
+    match passage_line(hit) {
         Some(n) => xerj_common::xccode::passage::cite_path_line(path, n),
         None => path.to_string(),
     }
@@ -617,6 +670,30 @@ fn catalog_run_prefixes(es: &Es) -> Option<Vec<String>> {
     Some(prefixes.into_iter().collect())
 }
 
+/// What `xerj search` / `xerj def` print when the query request itself fails.
+///
+/// A missing index (`index_not_found_exception`, or a body that says
+/// `no such index`) is the case the prefix sentence was written for. Every
+/// other failure — including HTTP 400 `For input string`, which is a numeric
+/// field being queried as text — must not tell the reader to change `--prefix`.
+pub(crate) fn query_failure_message(
+    command: &str,
+    url: &str,
+    pattern: &str,
+    err: impl std::fmt::Display,
+) -> String {
+    let err = err.to_string();
+    let mut msg = format!("xerj {command}: query failed against {url}/{pattern}: {err}");
+    let lower = err.to_ascii_lowercase();
+    if lower.contains("index_not_found") || lower.contains("no such index") {
+        msg.push_str(
+            "\n(is the prefix right? `xerj autoindex` writes 'ax' by default — \
+             pass --prefix if you indexed under another.)",
+        );
+    }
+    msg
+}
+
 /// Default `--full` width, and the width suggested when the user asked for 0.
 const DEFAULT_FULL_CHARS: usize = 600;
 
@@ -655,6 +732,10 @@ struct ParsedSearch {
 #[derive(Debug)]
 enum SearchCli {
     Help,
+    /// A flag the command refuses (e.g. `--mode`): the one-line reason is
+    /// already printed to stderr, and the caller exits 2 without the USAGE
+    /// dump the generic `Err` path adds.
+    Refuse,
     Query(ParsedSearch),
 }
 
@@ -679,6 +760,11 @@ fn parse_search_cli(
             "-k" => k = parse_count_arg("-k", it.next())?,
             "--full" => full = parse_count_arg("--full", it.next())?,
             "--json" => as_json = true,
+            "--mode" => {
+                let asked = it.next().unwrap_or_default();
+                eprintln!("{}", search_mode_refusal(&asked));
+                return Ok(SearchCli::Refuse);
+            }
             other if !other.starts_with('-') && query.is_none() => query = Some(other.to_string()),
             other => return Err(format!("unexpected argument '{other}'")),
         }
@@ -712,6 +798,8 @@ pub fn run_search_cli() -> i32 {
             print!("{USAGE}");
             return 0;
         }
+        // The refusal line is already on stderr; exit 2 without a USAGE dump.
+        Ok(SearchCli::Refuse) => return 2,
         Ok(SearchCli::Query(parsed)) => parsed,
         Err(e) => {
             eprintln!("xerj search: {e}\n\n{USAGE}");
@@ -800,11 +888,7 @@ pub fn run_search_cli() -> i32 {
     let mut resp = match es.search(&pattern, &body) {
         Ok(v) => v,
         Err(e) => {
-            eprintln!(
-                "xerj search: query failed against {url}/{pattern}: {e}\n\
-                 (is the prefix right? `xerj autoindex` writes 'ax' by default — \
-                 pass --prefix if you indexed under another.)"
-            );
+            eprintln!("{}", query_failure_message("search", &url, &pattern, e));
             return 1;
         }
     };
@@ -827,6 +911,9 @@ pub fn run_search_cli() -> i32 {
             serde_json::to_string_pretty(&resp).unwrap_or_default()
         );
         return 0;
+    }
+    if let Some(note) = lexical_semantic_note(&resp) {
+        eprintln!("{note}");
     }
 
     let hits = resp
@@ -882,6 +969,76 @@ pub fn run_search_cli() -> i32 {
 mod tests {
     use super::*;
     use xerj_common::code_query::normalize_code_search_query;
+
+    #[test]
+    fn help_says_the_default_ranking_is_lexical() {
+        assert!(
+            USAGE.contains("Default ranking is lexical") && USAGE.contains("not a neural reading"),
+            "{USAGE}"
+        );
+    }
+
+    /// HTTP 400 `For input string` is a numeric field, not a wrong prefix.
+    /// A missing index still gets the prefix sentence.
+    #[test]
+    fn query_failure_blames_the_prefix_only_when_the_index_is_missing() {
+        let numeric = query_failure_message(
+            "search",
+            "http://127.0.0.1:9200",
+            "ax-*",
+            "search /ax-* HTTP 400: {\"error\":{\"reason\":\"For input string: \\\"fingerprint dedupe comment\\\"\"}}",
+        );
+        assert!(numeric.contains("For input string"), "{numeric}");
+        assert!(
+            !numeric.contains("is the prefix right"),
+            "a parse failure must not blame --prefix, got: {numeric}"
+        );
+        assert!(
+            numeric.starts_with("xerj search: query failed against http://127.0.0.1:9200/ax-*: ")
+        );
+
+        let missing = query_failure_message(
+            "def",
+            "http://127.0.0.1:9200",
+            "nope-*",
+            "search /nope-* HTTP 404: {\"error\":{\"type\":\"index_not_found_exception\"}}",
+        );
+        assert!(missing.contains("index_not_found_exception"), "{missing}");
+        assert!(missing.contains("is the prefix right"), "{missing}");
+        assert!(missing.contains("xerj def:"), "{missing}");
+
+        let phrase = query_failure_message(
+            "search",
+            "http://localhost:9200",
+            "ax-*",
+            "no such index: ax-missing",
+        );
+        assert!(phrase.contains("is the prefix right"), "{phrase}");
+
+        let other = query_failure_message(
+            "search",
+            "http://localhost:9200",
+            "ax-*",
+            "search /ax-* HTTP 403: {\"error\":{\"type\":\"security_exception\"}}",
+        );
+        assert!(!other.contains("is the prefix right"), "{other}");
+    }
+
+    #[test]
+    fn search_refuses_a_mode_flag_and_names_the_embedder() {
+        for asked in ["semantic", "hybrid", "bm25"] {
+            let line = search_mode_refusal(asked);
+            assert!(line.contains(&format!("({asked})")), "{line}");
+            assert!(line.contains("always sends a lexical query"), "{line}");
+            assert!(line.contains("xerj code --mode semantic"), "{line}");
+            assert!(line.contains("--embed-mode neural"), "{line}");
+            assert!(line.contains("lexical feature hashing"), "{line}");
+            assert!(!line.contains("POST"), "{line}");
+        }
+        let bare = search_mode_refusal("");
+        assert!(bare.contains("no --mode."));
+        assert!(!bare.contains("()"), "{bare}");
+    }
 
     fn words(args: &[&str]) -> Vec<String> {
         args.iter().map(|s| (*s).to_string()).collect()
@@ -1058,6 +1215,28 @@ mod tests {
         );
     }
 
+    #[test]
+    fn a_lexical_on_semantic_text_hint_is_one_line_and_not_the_post_recipe() {
+        let flagged = json!({
+            "_xerj": { "hints": [{
+                "code": "lexical_on_semantic_text",
+                "reason": "body is semantic_text, but this query scored it with BM25. POST a semantic query.",
+                "try": { "request": "POST /smoke-nb-docs/_search" }
+            }] }
+        });
+        let note = lexical_semantic_note(&flagged).unwrap();
+        assert!(note.contains("lexical"));
+        assert!(note.contains("does not consult the embedding"));
+        assert!(!note.contains("POST"), "{note}");
+        assert!(!note.contains('\n'), "{note}");
+
+        let other = json!({
+            "_xerj": { "hints": [{ "code": "unknown_field", "reason": "no such field" }] }
+        });
+        assert!(lexical_semantic_note(&other).is_none());
+        assert!(lexical_semantic_note(&json!({"hits": []})).is_none());
+    }
+
     /// #1365: whole-file hits (`ax-code-*`, `ax-docs-md-*`, `ax-text-*`) carry
     /// no `_source.line` or `_source.start_line`, so `hit_location` must
     /// convert `fields._passage[0].ordinal` (0-based line index of the snippet)
@@ -1126,6 +1305,57 @@ mod tests {
             hit_location(&synthetic_defs_hit),
             "crates/fjall/src/batch.rs"
         );
+    }
+
+    /// A PDF passage with ordinal 0 is page 4, not line 1. A notebook section
+    /// heading is cell 19, not line 1. A symbol line still wins over a page.
+    #[test]
+    fn pdf_page_and_notebook_cell_are_not_cited_as_line_one() {
+        let pdf = json!({
+            "_source": { "ax_path": "nonfree/naacl06-shinyama.pdf" },
+            "fields": { "_passage": [{
+                "field": "body",
+                "ordinal": 0,
+                "page": 4,
+                "text": "extractable text"
+            }] }
+        });
+        let loc = hit_location(&pdf);
+        assert_eq!(loc, "nonfree/naacl06-shinyama.pdf page 4");
+        assert!(!loc.ends_with(":1"), "{loc}");
+
+        let from_source = json!({
+            "_source": { "ax_path": "samples/rc4-40.pdf", "page": 2 }
+        });
+        assert_eq!(hit_location(&from_source), "samples/rc4-40.pdf page 2");
+
+        let notebook = json!({
+            "_source": {
+                "ax_path": "11-List-Comprehensions.ipynb",
+                "cell": 19,
+                "title": "Conditionals on the Value"
+            },
+            "fields": { "_passage": [{
+                "field": "body",
+                "ordinal": 0,
+                "text": "a list comprehension filters"
+            }] }
+        });
+        assert_eq!(
+            hit_location(&notebook),
+            "11-List-Comprehensions.ipynb cell 19"
+        );
+
+        let symbol_on_a_page = json!({
+            "_source": { "ax_path": "notes.pdf", "line": 12, "page": 3 },
+            "fields": { "_passage": [{ "field": "code", "ordinal": 0, "page": 3 }] }
+        });
+        assert_eq!(hit_location(&symbol_on_a_page), "notes.pdf:12");
+
+        let source = search_query_body("list comprehension", 5);
+        let fields = source["_source"].as_array().unwrap();
+        assert!(fields.iter().any(|f| f == "page"), "{source}");
+        assert!(fields.iter().any(|f| f == "cell"), "{source}");
     }
 
     /// A defs catalog of `src/lib.rs` outscored `mod ensure;` at `src/lib.rs:255`
