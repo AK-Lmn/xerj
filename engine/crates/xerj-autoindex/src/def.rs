@@ -16,7 +16,8 @@ use std::collections::BTreeSet;
 use crate::esclient::Es;
 use crate::search::{
     corpus_snapshot, empty_lookup_report, field_lookup_ok, hit_location, is_identifier,
-    mapped_property_names, numeric_property_names, passage_text, weighted_query_fields,
+    mapped_property_names, numeric_property_names, parse_count_arg, passage_text,
+    weighted_query_fields,
 };
 use serde_json::{json, Value};
 
@@ -298,7 +299,15 @@ pub fn run_def_cli() -> i32 {
             "--url" => url = it.next().unwrap_or_default(),
             "--prefix" => prefix = it.next().unwrap_or(prefix),
             "--api-key" => api_key = it.next(),
-            "-k" => k = it.next().and_then(|s| s.parse().ok()).unwrap_or(k),
+            "-k" => {
+                k = match parse_count_arg("-k", it.next()) {
+                    Ok(n) => n,
+                    Err(e) => {
+                        eprintln!("xerj def: {e}\n\n{USAGE}");
+                        return 2;
+                    }
+                };
+            }
             "--kind" => kind = it.next(),
             "--lang" => lang = it.next(),
             "--json" => as_json = true,
@@ -374,7 +383,7 @@ pub fn run_def_cli() -> i32 {
         mapped.as_ref(),
         numeric.as_ref(),
     );
-    let resp = match es.search(&pattern, &body) {
+    let mut resp = match es.search(&pattern, &body) {
         Ok(v) => v,
         Err(e) => {
             eprintln!(
@@ -386,6 +395,16 @@ pub fn run_def_cli() -> i32 {
         }
     };
 
+    let hits = unique_locations(
+        resp.pointer("/hits/hits")
+            .and_then(Value::as_array)
+            .cloned()
+            .unwrap_or_default(),
+    );
+    if let Some(arr) = resp.pointer_mut("/hits/hits") {
+        *arr = Value::Array(hits.clone());
+    }
+
     if as_json {
         println!(
             "{}",
@@ -394,11 +413,6 @@ pub fn run_def_cli() -> i32 {
         return 0;
     }
 
-    let hits = resp
-        .pointer("/hits/hits")
-        .and_then(Value::as_array)
-        .cloned()
-        .unwrap_or_default();
     if hits.is_empty() {
         let snap = corpus_snapshot(&es, &prefix);
         let (lines, exit) = empty_lookup_report("def", &prefix, &query, false, &snap);
@@ -440,6 +454,20 @@ pub fn run_def_cli() -> i32 {
     0
 }
 
+/// The same `path:line` can come back twice: a symbol doc and a file-level
+/// hit, or two passages of one declaration. `xerj def` is a location list,
+/// so the first (highest-ranked) hit for a location is the one that is shown.
+fn unique_locations(hits: Vec<Value>) -> Vec<Value> {
+    let mut seen = BTreeSet::new();
+    let mut out = Vec::with_capacity(hits.len());
+    for hit in hits {
+        if seen.insert(hit_location(&hit)) {
+            out.push(hit);
+        }
+    }
+    out
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -448,6 +476,20 @@ mod tests {
     /// clauses are optional unless `minimum_should_match` says otherwise. A
     /// `--kind`/`--lang` filter must narrow the definitions of the name, not
     /// replace the name with "anything of this kind".
+    #[test]
+    fn the_same_path_and_line_is_listed_once() {
+        let hit = |id: &str, line: u64| {
+            json!({
+                "_id": id,
+                "_source": { "ax_path": "qabot/agents.py", "line": line, "code": "def _run():" }
+            })
+        };
+        let kept = unique_locations(vec![hit("a", 266), hit("b", 266), hit("c", 10)]);
+        assert_eq!(kept.len(), 2, "{kept:?}");
+        assert_eq!(kept[0]["_id"], "a");
+        assert_eq!(kept[1]["_id"], "c");
+    }
+
     #[test]
     fn kind_and_lang_filters_still_require_the_name_to_match() {
         for (kind, lang) in [
