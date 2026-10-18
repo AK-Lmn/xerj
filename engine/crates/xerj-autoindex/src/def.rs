@@ -17,12 +17,13 @@ use crate::esclient::Es;
 use crate::search::{
     corpus_snapshot, empty_lookup_report, field_lookup_ok, hit_location, is_identifier,
     mapped_property_names, numeric_property_names, parse_count_arg, passage_text,
-    weighted_query_fields,
+    query_failure_message, weighted_query_fields,
 };
 use serde_json::{json, Value};
 
 const USAGE: &str = "\
 xerj def — find where a symbol is defined (go-to-definition, no scripts)
+Default ranking is lexical: it matches the words you typed, and it is not a neural reading of the code.
 
 USAGE:
     xerj def [OPTIONS] \"<symbol or capability>\"
@@ -253,7 +254,7 @@ fn build_def_query(
                 "minimum_should_match": 1
             }
         },
-        "_source": ["ax_path", "path", "line", "start_line", "kind", "language", "name", "code"],
+        "_source": ["ax_path", "path", "line", "start_line", "kind", "language", "name", "code", "page", "cell"],
         "fields": ["_passage"]
     })
 }
@@ -482,11 +483,7 @@ pub fn run_def_cli() -> i32 {
     let mut resp = match es.search(&pattern, &body) {
         Ok(v) => v,
         Err(e) => {
-            eprintln!(
-                "xerj def: query failed against {url}/{pattern}: {e}\n\
-                 (is the prefix right? `xerj autoindex` writes 'ax' by default — \
-                 pass --prefix if you indexed under another.)"
-            );
+            eprintln!("{}", query_failure_message("def", &url, &pattern, e));
             return 1;
         }
     };
@@ -575,6 +572,14 @@ mod tests {
     use super::*;
 
     #[test]
+    fn help_says_the_default_ranking_is_lexical() {
+        assert!(
+            USAGE.contains("Default ranking is lexical") && USAGE.contains("not a neural reading"),
+            "{USAGE}"
+        );
+    }
+
+    #[test]
     fn declaration_preview_keeps_a_later_constant_and_caps_a_huge_line() {
         let sig = "pub fn open(\n    path: &Path,\n    mode: u32,\n) -> Result<File> {\n    const MODE_MASK: u32 = 0o777;\n    let _ = path;\n";
         let preview = declaration_preview(sig);
@@ -627,6 +632,17 @@ mod tests {
             let filters = b["filter"].as_array().unwrap().len();
             assert_eq!(filters, kind.is_some() as usize + lang.is_some() as usize);
         }
+    }
+
+    /// `xerj def` prints with the same `hit_location` as search, so a PDF or
+    /// notebook definition can cite `page` / `cell` only when the projection
+    /// asks for them.
+    #[test]
+    fn def_source_projection_includes_page_and_cell() {
+        let body = def_query("open_path", None, None, 5, None, None);
+        let fields = body["_source"].as_array().unwrap();
+        assert!(fields.iter().any(|f| f == "page"), "{body}");
+        assert!(fields.iter().any(|f| f == "cell"), "{body}");
     }
 
     fn names_of(fields: &[&str]) -> BTreeSet<String> {
