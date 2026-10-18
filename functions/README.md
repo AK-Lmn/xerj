@@ -48,12 +48,17 @@ spam cannot push KV past the free-tier 1000 writes/day (each accepted report =
 **Privacy** — the raw IP is never stored; `ip_hash` is `sha-256(IP + salt)`.
 No secrets stored, input is length-capped and never echoed as HTML.
 
-**Storage is KV only — never R2** (R2 is frozen by owner order). Create the
-namespace once before deploy:
+**Storage is KV only — never R2** (R2 is frozen by owner order). The namespace
+id is not committed (`../wrangler.toml` has no `[[kv_namespaces]]` block for
+it). Deploy looks the namespace up by title `FIELD_REPORTS`, or reads the
+GitHub secret `FIELD_REPORTS_KV_NAMESPACE_ID`. Until the owner sets that
+secret — or the Cloudflare token can create the namespace — the site still
+deploys and this function accepts reports without storing them.
 
 ```sh
 wrangler kv namespace create FIELD_REPORTS
-# paste the printed id into [[kv_namespaces]] in ../wrangler.toml, then redeploy
+# set the printed id as the GitHub secret FIELD_REPORTS_KV_NAMESPACE_ID
+# do not commit it
 ```
 
 Machine-readable body schema:

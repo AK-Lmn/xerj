@@ -6,6 +6,14 @@ name: Deploy site (Cloudflare Pages)
 # CLOUDFLARE_API_TOKEN repo secret (needs the "Cloudflare Pages:Edit" permission)
 # plus CLOUDFLARE_ACCOUNT_ID. Both are configured in repo Settings → Secrets.
 #
+# FIELD_REPORTS (Workers KV) is not committed. The resolve step looks the
+# namespace up by title, creates it when the token can, or reads the
+# FIELD_REPORTS_KV_NAMESPACE_ID secret. If none of those yield an id, the
+# binding is left off and the site still deploys — the function accepts
+# reports and does not store them. The owner must set that secret (or grant
+# the token Workers KV edit) before reports are stored. A committed stand-in
+# id fails the guard job, which is what froze deploys after #1760.
+#
 # This replaces reliance on Cloudflare's git integration with an explicit,
 # auditable deploy that only fires after CI/SEO gates on main have the chance to
 # run, and whose logs live in Actions.
@@ -15,7 +23,18 @@ on:
     branches: [main]
     paths:
       - 'landing/**'
+      - 'functions/**'
       - 'wrangler.toml'
+      - '.github/scripts/deploy_guard.sh'
+      - '.github/scripts/resolve-field-reports-kv.sh'
+      - '.github/workflows/deploy-pages.yml'
+  pull_request:
+    paths:
+      - 'landing/_routes.json'
+      - 'functions/**'
+      - 'wrangler.toml'
+      - '.github/scripts/deploy_guard.sh'
+      - '.github/scripts/resolve-field-reports-kv.sh'
       - '.github/workflows/deploy-pages.yml'
   workflow_dispatch: {}          # allow manual redeploy from the Actions tab
 
@@ -24,17 +43,35 @@ permissions:
   deployments: write
 
 concurrency:
-  group: pages-deploy
+  group: pages-deploy-${{ github.ref }}
   cancel-in-progress: false      # never abort a deploy mid-upload
 
 jobs:
+  guard:
+    name: Reject stand-in KV ids and unrouted functions
+    runs-on: ubuntu-latest
+    # A grep plus a few Python checks. 5 minutes is far more than it takes
+    # and keeps a hung runner from holding the non-cancelling deploy slot.
+    timeout-minutes: 5
+    steps:
+      - name: Check out the site
+        uses: actions/checkout@v4
+
+      - name: Deploy guard (lint + self-test)
+        run: |
+          bash .github/scripts/deploy_guard.sh self-test
+          bash .github/scripts/deploy_guard.sh lint
+
   deploy:
     name: Publish landing/ to Cloudflare Pages
+    needs: guard
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     # `pages-deploy` is a single non-cancelling slot shared by every deploy,
     # so an upload that wedges blocks ALL later site deploys for as long as
-    # it runs. Measured max 0.7 min; 20 is generous for a network upload and
-    # turns a 6-hour block into a 20-minute one.
+    # it runs. Measured max 0.7 min before the KV lookup; 20 is generous for
+    # a network upload plus a namespace lookup and turns a 6-hour block into
+    # a 20-minute one.
     timeout-minutes: 20
     environment:
       name: production
@@ -51,6 +88,13 @@ jobs:
           fi
           [ -d landing ] || { echo "::error::landing/ not found — nothing to deploy."; exit 1; }
 
+      - name: Resolve FIELD_REPORTS KV id, or deploy without the binding
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          FIELD_REPORTS_KV_NAMESPACE_ID: ${{ secrets.FIELD_REPORTS_KV_NAMESPACE_ID }}
+        run: bash .github/scripts/resolve-field-reports-kv.sh
+
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
@@ -58,8 +102,13 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           # Upload landing/ verbatim to the existing "xerj" project, tagged with
           # the commit so a bad deploy is one rollback away in the CF dashboard.
+          # commit-dirty: the resolve step may have injected a KV id into the
+          # checkout copy of wrangler.toml. That id is not committed.
           command: >-
             pages deploy landing
             --project-name=xerj
             --branch=main
             --commit-dirty=true
+
+      - name: Smoke /api/field-report (no writes)
+        run: bash .github/scripts/deploy_guard.sh smoke

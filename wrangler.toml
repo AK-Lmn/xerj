@@ -12,14 +12,14 @@
 #              accepted agent field report as a small JSON value. This is the
 #              GitHub-unavailable FALLBACK to `xerj feedback --open-pr`; the
 #              PR path stays primary. KV only — NEVER R2 (R2 is frozen by
-#              owner order). The namespace must be created ONCE and its id
-#              pasted below, replacing the placeholder; until then the
-#              function accepts requests but does not store (fail-open, like
-#              get.js). One-time setup (owner runs it; do NOT run against the
-#              live account from CI/agents):
+#              owner order). The namespace id is not committed. Deploy looks
+#              it up (secret, then title FIELD_REPORTS, then create) and
+#              injects the binding for that run only. Until that succeeds the
+#              binding is omitted and the function accepts requests but does
+#              not store (fail-open, like get.js). The owner sets the id:
 #                  wrangler kv namespace create FIELD_REPORTS
-#              then copy the printed id into `id = "..."` under the
-#              [[kv_namespaces]] block below and redeploy.
+#              then the GitHub secret FIELD_REPORTS_KV_NAMESPACE_ID. Do not
+#              commit the id. A stand-in id fails .github/scripts/deploy_guard.sh.
 #
 # Routing: landing/_routes.json pins Function invocation to /get, /get.ps1,
 # /lead and /api/field-report. A NEW FUNCTION ADDED UNDER functions/ WILL NOT
@@ -37,18 +37,16 @@ binding = "INSTALLS"
 bucket_name = "xerj-installs"
 
 # Workers KV for agent field reports (functions/api/field-report.js).
-# PLACEHOLDER id — NOT a real namespace. Create the namespace once with
-#   wrangler kv namespace create FIELD_REPORTS
-# and replace the id below with the one it prints. Do not commit a real id
-# from the live account via an automated run; the owner wires this at deploy.
-# [[kv_namespaces]]  — COMMENTED OUT until the owner wires the real namespace.
-# A placeholder id here makes `wrangler pages deploy` fail with
-# "Error 8000022: Invalid KV namespace ID", which blocks EVERY xerj.org deploy
-# (this file is on the deploy trigger path). With no binding declared, the
-# Function fails open: /api/field-report accepts a report and returns 200 but
-# does NOT store it (see functions/api/field-report.js, the `!env.FIELD_REPORTS`
-# branch). To activate storage, create the namespace and restore this block:
-#     wrangler kv namespace create FIELD_REPORTS   # prints an id
-# [[kv_namespaces]]
-# binding = "FIELD_REPORTS"
-# id = "<the id it printed>"
+# The namespace id is not committed. Deploy
+# (.github/scripts/resolve-field-reports-kv.sh) fills it in for that run only:
+#   1. GitHub secret FIELD_REPORTS_KV_NAMESPACE_ID, if the owner set it
+#   2. else `wrangler kv namespace list`, matched by title FIELD_REPORTS
+#   3. else `wrangler kv namespace create FIELD_REPORTS` when the token can
+# If none of those yield a 32-hex id, the binding is left off and the site
+# still deploys. The function then accepts reports and does not store them
+# (fail-open, same as get.js without its bucket).
+# The owner must create the namespace and set FIELD_REPORTS_KV_NAMESPACE_ID
+# (or grant this token Workers KV edit) before reports are stored.
+# Do not uncomment a placeholder id. `wrangler pages deploy` rejects one with
+# Error 8000022 and that blocks every xerj.org deploy (#1769). A committed
+# stand-in id is also rejected by .github/scripts/deploy_guard.sh.
