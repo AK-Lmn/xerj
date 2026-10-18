@@ -1247,10 +1247,59 @@ type BuiltRequest = (Method, String, Option<Value>);
 // ── Argument helpers ────────────────────────────────────────────────────────
 
 fn req_str<'a>(args: &'a Value, key: &str) -> Result<&'a str, String> {
-    args.get(key)
-        .and_then(Value::as_str)
-        .filter(|s| !s.is_empty())
-        .ok_or_else(|| format!("missing or empty required string field `{key}`"))
+    match args.get(key) {
+        None | Some(Value::Null) => Err(missing_string(key, false)),
+        Some(Value::String(s)) if s.is_empty() => Err(missing_string(key, true)),
+        Some(Value::String(s)) => Ok(s.as_str()),
+        Some(other) => {
+            let got = match other {
+                Value::Number(_) => "a number",
+                Value::Bool(_) => "a boolean",
+                Value::Array(_) => "an array",
+                Value::Object(_) => "an object",
+                _ => "the wrong JSON type",
+            };
+            Err(format!(
+                "`{key}` must be a non-empty string, got {got}. {}",
+                string_field_hint(key)
+            ))
+        }
+    }
+}
+
+fn missing_string(key: &str, empty: bool) -> String {
+    let lead = if empty {
+        format!("`{key}` is empty")
+    } else {
+        format!("missing required string field `{key}`")
+    };
+    format!("{lead}. {}", string_field_hint(key))
+}
+
+/// What to pass next. The old error named the field and stopped, so the
+/// following call was a guess.
+fn string_field_hint(key: &str) -> &'static str {
+    match key {
+        "index" => "Pass the index or wildcard, for example {\"index\": \"ax-*\"}.",
+        "field" => "Pass the mapped field name, for example {\"field\": \"body\"}.",
+        "query" => "Pass the text to search for, for example {\"query\": \"rotate keys\"}.",
+        "namespace" => "Pass the memory namespace, for example {\"namespace\": \"agent\"}.",
+        "brain" => "Pass the brain name printed by `xerj brain <folder>`.",
+        "prompt" => "Pass the question, for example {\"prompt\": \"where is the parser?\"}.",
+        "node" => "Pass a document id, for example {\"node\": \"src/lib.rs\"}.",
+        "src" | "dst" => "Pass a document id from xerj_brain_ego.",
+        "type" => "Pass the edge type, for example {\"type\": \"calls\"}.",
+        "edge_id" => "Pass the edge id xerj_brain_ego returned.",
+        "corpus" => "Pass a corpus name from `xerj corpus list`.",
+        _ => "Pass a non-empty string.",
+    }
+}
+
+fn code_search_missing(which: &str) -> String {
+    format!(
+        "xerj_code_search: missing required string field `{which}`. {}",
+        string_field_hint(which)
+    )
 }
 
 /// Copy an optional field from `args` into `body` under the same key, if present.
@@ -1260,6 +1309,22 @@ fn copy_opt(args: &Value, body: &mut serde_json::Map<String, Value>, key: &str) 
             body.insert(key.to_string(), v.clone());
         }
     }
+}
+
+/// Optional non-negative integer. Absent is fine. Present-but-mistyped is an
+/// error that names the field: copying a string `"size"` through produced
+/// `invalid type: string "", expected usize at line 1 column 21`, which does
+/// not say which argument to fix or what to send instead.
+fn opt_u64(args: &Value, key: &str) -> Result<Option<u64>, String> {
+    match args.get(key) {
+        None | Some(Value::Null) => Ok(None),
+        Some(Value::Number(n)) => n.as_u64().map(Some).ok_or_else(|| integer_arg_error(key)),
+        Some(_) => Err(integer_arg_error(key)),
+    }
+}
+
+fn integer_arg_error(key: &str) -> String {
+    format!("`{key}` must be a non-negative integer, for example {{\"{key}\": 10}}")
 }
 
 /// Percent-encode one path segment or query value (RFC 3986 unreserved set
@@ -1493,7 +1558,13 @@ fn build_search(args: &Value) -> Result<BuiltRequest, String> {
             body.insert("query".into(), json!({ "match_all": {} }));
         }
     }
-    for k in ["size", "from", "sort", "_source"] {
+    if let Some(n) = opt_u64(args, "size")? {
+        body.insert("size".into(), json!(n));
+    }
+    if let Some(n) = opt_u64(args, "from")? {
+        body.insert("from".into(), json!(n));
+    }
+    for k in ["sort", "_source"] {
         copy_opt(args, &mut body, k);
     }
     let plain_query = match args.get("query") {
@@ -1533,7 +1604,7 @@ fn build_semantic(args: &Value) -> Result<BuiltRequest, String> {
     let index = req_str(args, "index")?;
     let field = req_str(args, "field")?;
     let query = req_str(args, "query")?;
-    let k = args.get("k").and_then(Value::as_u64).unwrap_or(10);
+    let k = opt_u64(args, "k")?.unwrap_or(10);
 
     let mut semantic = json!({ "field": field, "query": query, "k": k });
     if let Some(f) = args.get("filter") {
@@ -1553,13 +1624,13 @@ fn build_vector(args: &Value) -> Result<BuiltRequest, String> {
         .get("query_vector")
         .filter(|v| v.is_array())
         .ok_or_else(|| "missing required array field `query_vector`".to_string())?;
-    let k = args.get("k").and_then(Value::as_u64).unwrap_or(10);
+    let k = opt_u64(args, "k")?.unwrap_or(10);
 
     let mut knn = serde_json::Map::new();
     knn.insert("field".into(), json!(field));
     knn.insert("query_vector".into(), vector.clone());
     knn.insert("k".into(), json!(k));
-    if let Some(nc) = args.get("num_candidates").and_then(Value::as_u64) {
+    if let Some(nc) = opt_u64(args, "num_candidates")? {
         knn.insert("num_candidates".into(), json!(nc));
     }
     if let Some(f) = args.get("filter") {
@@ -1588,7 +1659,9 @@ fn build_hybrid(args: &Value) -> Result<BuiltRequest, String> {
     }
     let mut body = serde_json::Map::new();
     body.insert("query".into(), json!({ "hybrid": Value::Object(hybrid) }));
-    copy_opt(args, &mut body, "size");
+    if let Some(n) = opt_u64(args, "size")? {
+        body.insert("size".into(), json!(n));
+    }
     apply_rerank(args, &mut body, None, true)?;
     apply_judge(args, &mut body, None, true)?;
     Ok((
@@ -1662,13 +1735,19 @@ fn build_memory_recall(args: &Value) -> Result<BuiltRequest, String> {
 fn build_plan(args: &Value) -> Result<BuiltRequest, String> {
     // Whitespace-only is refused here rather than shipped to the engine's
     // 400: the caller should hear it from the tool they called.
-    let prompt = args
-        .get("prompt")
-        .and_then(Value::as_str)
-        .map(str::trim)
-        .filter(|s| !s.is_empty())
-        .ok_or_else(|| "missing or empty required string field `prompt`".to_string())?
-        .to_string();
+    let prompt = match args.get("prompt") {
+        None | Some(Value::Null) => return Err(missing_string("prompt", false)),
+        Some(Value::String(s)) if s.trim().is_empty() => {
+            return Err(missing_string("prompt", true));
+        }
+        Some(Value::String(s)) => s.trim().to_string(),
+        Some(_) => {
+            return Err(format!(
+                "`prompt` must be a non-empty string. {}",
+                string_field_hint("prompt")
+            ));
+        }
+    };
     let index = args
         .get("index")
         .and_then(Value::as_str)
@@ -1865,11 +1944,11 @@ impl xerj_common::xccode::XcHttp for McpXc {
 async fn run_code_search(ctx: &Ctx, args: &Value) -> Value {
     let corpus = match args.get("corpus").and_then(Value::as_str) {
         Some(c) if !c.is_empty() => c.to_string(),
-        _ => return tool_text("xerj_code_search: `corpus` is required", true),
+        _ => return tool_text(code_search_missing("corpus"), true),
     };
     let query = match args.get("query").and_then(Value::as_str) {
         Some(q) if !q.is_empty() => q.to_string(),
-        _ => return tool_text("xerj_code_search: `query` is required", true),
+        _ => return tool_text(code_search_missing("query"), true),
     };
     // #1058: the budget is enforced on the RENDERED text (this tool's payload
     // is the shared renderer's output, not the engine JSON). Refused here so
@@ -2025,6 +2104,43 @@ mod tests {
     }
 
     #[test]
+    fn required_string_errors_say_what_to_pass_next() {
+        let err = build_semantic(&json!({})).unwrap_err();
+        assert!(err.contains("`index`"), "{err}");
+        assert!(err.contains("ax-*"), "{err}");
+
+        let err = build_semantic(&json!({"index": 1})).unwrap_err();
+        assert!(
+            err.contains("must be a non-empty string") && err.contains("a number"),
+            "{err}"
+        );
+
+        let err = build_memory_store(&json!({"text": "hi"})).unwrap_err();
+        assert!(
+            err.contains("`namespace`") && err.contains("agent"),
+            "{err}"
+        );
+
+        let err = build_plan(&json!({})).unwrap_err();
+        assert!(
+            err.contains("`prompt`") && err.contains("where is the parser"),
+            "{err}"
+        );
+
+        let err = build_plan(&json!({"prompt": "   "})).unwrap_err();
+        assert!(err.contains("`prompt` is empty"), "{err}");
+    }
+
+    #[test]
+    fn code_search_missing_corpus_names_corpus_list() {
+        let msg = code_search_missing("corpus");
+        assert!(msg.contains("xerj corpus list"), "{msg}");
+        assert!(msg.contains("`corpus`"), "{msg}");
+        let query = code_search_missing("query");
+        assert!(query.contains("rotate keys"), "{query}");
+    }
+
+    #[test]
     fn search_defaults_to_match_all() {
         let (method, path, body) = built(build_search(&json!({ "index": "docs" })));
         assert_eq!(method, Method::Post);
@@ -2041,6 +2157,68 @@ mod tests {
         })));
         assert_eq!(body["query"]["match"]["body"], "rust");
         assert_eq!(body["size"], 5);
+    }
+
+    /// A blank or string `size` used to be forwarded and come back as
+    /// `expected usize at line 1 column 21`, which does not name the field.
+    #[test]
+    fn search_rejects_a_mistyped_size_and_from_by_name() {
+        for (args, field) in [
+            (json!({"size": ""}), "size"),
+            (json!({"size": "10"}), "size"),
+            (json!({"from": true}), "from"),
+            (json!({"size": -1}), "size"),
+        ] {
+            let err = build_search(&args).unwrap_err();
+            assert!(
+                err.contains(&format!("`{field}`")) && err.contains("non-negative integer"),
+                "{args} -> {err}"
+            );
+            assert!(
+                err.contains(&format!("{{\"{field}\": 10}}")),
+                "the error must show what to send: {err}"
+            );
+            assert!(!err.contains("expected usize"), "{err}");
+        }
+        // A real integer still round-trips.
+        let (_, _, body) = built(build_search(&json!({"size": 0, "from": 2})));
+        assert_eq!(body["size"], 0);
+        assert_eq!(body["from"], 2);
+    }
+
+    #[test]
+    fn semantic_and_vector_reject_a_mistyped_k() {
+        let err = build_semantic(&json!({
+            "index": "docs",
+            "field": "body",
+            "query": "keys",
+            "k": "10"
+        }))
+        .unwrap_err();
+        assert!(err.contains("`k`") && err.contains("integer"), "{err}");
+
+        let err = build_vector(&json!({
+            "index": "docs",
+            "field": "embedding",
+            "query_vector": [0.1, 0.2],
+            "num_candidates": "100"
+        }))
+        .unwrap_err();
+        assert!(
+            err.contains("`num_candidates`") && err.contains("integer"),
+            "{err}"
+        );
+    }
+
+    #[test]
+    fn hybrid_rejects_a_mistyped_size() {
+        let err = build_hybrid(&json!({
+            "index": "docs",
+            "queries": [{"match": {"body": "rust"}}],
+            "size": ""
+        }))
+        .unwrap_err();
+        assert!(err.contains("`size`") && err.contains("integer"), "{err}");
     }
 
     #[test]
