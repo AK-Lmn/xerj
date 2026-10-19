@@ -16,7 +16,7 @@
 //   same source within RATE_WINDOW_MS → 429 · daily cap → 503
 //   No HUB_STARS binding → GET { ok:true, enabled:false }, POST 503 enabled:false
 //   (the pages hide the star control when enabled is false).
-//   One star per source (ip hash) per target; there is no un-star.
+//   One star per source (hash of the IPv4 address or IPv6 /64) per target; no un-star.
 //
 // ─────────────────────── STORAGE: R2, free-tier-safe ────────────────────
 // Binding HUB_STARS → bucket xerj-hub-stars (see wrangler.toml). Objects:
@@ -72,9 +72,23 @@ async function readCount(bucket, kind, id) {
   } catch (_) { return 0; }
 }
 
+// One "source" is an IPv4 address or an IPv6 /64. A single IPv6 host commonly
+// rotates through its /64 (privacy addresses, WARP-style egress), so hashing the
+// full address let one visitor star the same target again on every request.
+export function sourceKey(ip) {
+  ip = String(ip || '').trim().toLowerCase();
+  if (!ip.includes(':')) return ip;                           // IPv4 (or empty)
+  if (/^::ffff:\d+\.\d+\.\d+\.\d+$/.test(ip)) return ip.slice(7);    // IPv4-mapped
+  const [head, tail = ''] = ip.split('::');
+  const h = head ? head.split(':') : [];
+  const t = tail ? tail.split(':') : [];
+  const groups = ip.includes('::') ? [...h, ...Array(Math.max(0, 8 - h.length - t.length)).fill('0'), ...t] : h;
+  return groups.slice(0, 4).map((g) => (parseInt(g || '0', 16) || 0).toString(16)).join(':') + '::/64';
+}
+
 async function sourceHash(request, env) {
-  const ip = request.headers.get('CF-Connecting-IP') || '';
-  return ip ? sha256hex(ip + (env.HUB_STARS_SALT || 'xerj-hub-stars-v1')) : 'noip';
+  const key = sourceKey(request.headers.get('CF-Connecting-IP'));
+  return key ? sha256hex(key + (env.HUB_STARS_SALT || 'xerj-hub-stars-v1')) : 'noip';
 }
 
 export async function onRequest(context) {
