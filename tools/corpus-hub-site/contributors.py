@@ -1,9 +1,11 @@
 """Contributor pages for hub.xerj.org: one GitHub-profile-style page per author
 who agreed to contribute, a wall of all of them, and a README badge each.
 
-Source: tools/xerj-code/hub/candidates/authors/CONTRIBUTORS.jsonl (written by
-the outreach pipeline; one row per approved contribution). Every number on a
-page is read from that ledger or the registry; a number we do not have is left off the page,
+Sources: tools/xerj-code/hub/candidates/authors/CONTRIBUTORS.jsonl (written by
+the outreach pipeline; one row per approved contribution), the themed candidate
+corpora's CONTRIBUTORS-2026-10.md, and the registry manifests. A person is one
+login however many corpora they appear in (see load()). Every number on a
+page is read from those files; a number we do not have is left off the page,
 never estimated. There is no per-author retrieval counter yet (nothing here is
 live), so the pages show no retrieval figure at all rather than a placeholder.
 
@@ -63,19 +65,128 @@ document.querySelectorAll('[data-copy]').forEach(function(b){b.addEventListener(
 </script>"""
 
 
-def load(hub_dir):
-    p = pathlib.Path(hub_dir) / "candidates" / "authors" / "CONTRIBUTORS.jsonl"
-    if not p.exists():
-        return {}
-    people = collections.defaultdict(list)
-    for line in p.read_text().splitlines():
-        if not line.strip():
-            continue
-        r = json.loads(line)
-        login = (r.get("contributor") or {}).get("login") or ""
-        if LOGIN_RE.match(login):
-            people[login].append(r)
-    return people
+THEMED_MD = "CONTRIBUTORS-2026-10.md"
+# | [owner/repo](url) | @login | [sha10](commit_url) title | SPDX | YYYY-MM-DD |
+THEMED_ROW = re.compile(r"^\| \[([^\]]+)\]\((https://github\.com/[^)]+)\) \| @([A-Za-z0-9-]+) \| "
+                        r"\[([0-9a-f]{7,40})\]\(([^)]+)\) ?(.*?) \| ([^|]*) \| (\d{4}-\d{2}-\d{2}) \|$")
+GH_OWNER = re.compile(r"^https://github\.com/([A-Za-z0-9-]+)/", re.I)
+
+
+def _reviewed(review):
+    """A source counts as licence-reviewed only when its review block records a
+    verdict (use is not UNREVIEWED) and who made it. Never inferred."""
+    use = (review or {}).get("use", "UNREVIEWED")
+    return bool(use and use != "UNREVIEWED" and (review or {}).get("by"))
+
+
+def _person(people, login, name=""):
+    key = login.lower()                    # GitHub logins are case-insensitive
+    if key not in people:
+        people[key] = {"login": login, "name": name, "work": {}, "corpora": {}, "agreed": []}
+    elif name and not people[key]["name"]:
+        people[key]["name"] = name
+    return people[key]
+
+
+def load(hub_dir, registry=None):
+    """Every contributor who agreed by email, keyed on login (case-insensitive),
+    with their contributions gathered from EVERY corpus they appear in:
+
+      * candidates/authors/CONTRIBUTORS.jsonl  one corpus per approved repo
+      * candidates/CONTRIBUTORS-2026-10.md     authors in the themed candidate
+                                               corpora (agent-engineering, ...)
+      * the registry's lane-A manifests        corpora that pin a repository
+                                               the contributor owns
+
+    A contribution is one selected commit; the same commit reached through two
+    corpora is counted once (files and lines too), but both corpora are listed.
+    `registry` is gen.load_registry()'s list; only its slug/status/repos are used.
+    """
+    hub = pathlib.Path(hub_dir)
+    people = {}
+    ledger = hub / "candidates" / "authors" / "CONTRIBUTORS.jsonl"
+    if ledger.exists():
+        for line in ledger.read_text().splitlines():
+            if not line.strip():
+                continue
+            r = json.loads(line)
+            c = r.get("contributor") or {}
+            login = c.get("login") or ""
+            if not LOGIN_RE.match(login):
+                continue
+            pp = _person(people, login, c.get("name") or "")
+            k = r.get("contribution") or {}
+            lic = r.get("licence") or {}
+            key = (k.get("commit") or f'{r["corpus"]}:nocommit').lower()
+            w = pp["work"].setdefault(key, {
+                "repo": r.get("repo", ""), "repo_url": r.get("repo_url", ""), "repo_stars": r.get("repo_stars"),
+                "commit": k.get("commit") or "", "commit_url": k.get("commit_url") or "", "title": k.get("title") or "",
+                "files": k.get("files"), "lines": k.get("lines"), "langs": k.get("langs") or [], "areas": k.get("areas") or [],
+                "topics": r.get("topics") or [], "shelf": r.get("shelf") or "", "spdx": lic.get("spdx") or "",
+                "reviewed": lic.get("reviewed") is True, "agreed": (r.get("consent") or {}).get("at", ""), "corpora": [],
+            })
+            if r["corpus"] not in w["corpora"]:
+                w["corpora"].append(r["corpus"])
+            pp["corpora"].setdefault(r["corpus"], "author corpus")
+            if w["agreed"]:
+                pp["agreed"].append(w["agreed"])
+    md = hub / "candidates" / THEMED_MD
+    if md.exists():
+        corpus = None
+        for line in md.read_text().splitlines():
+            if line.startswith("## "):
+                corpus = line[3:].split(" (")[0].strip()
+                continue
+            m = THEMED_ROW.match(line.strip())
+            if not (m and corpus):
+                continue
+            repo, url, login, sha, curl, title, spdx, date = m.groups()
+            if not LOGIN_RE.match(login):
+                continue
+            pp = _person(people, login)
+            manifest = hub / "candidates" / f"{corpus}.json"
+            review = {}
+            if manifest.exists():
+                for src in json.loads(manifest.read_text()).get("repos", []):
+                    if src.get("url", "").rstrip("/").lower() == url.rstrip("/").lower():
+                        review = src.get("review") or {}
+            # an abbreviated sha in the table matches the ledger's full sha
+            key = next((k for k in pp["work"] if k.startswith(sha.lower())), sha.lower())
+            w = pp["work"].setdefault(key, {
+                "repo": repo, "repo_url": url, "repo_stars": None, "commit": sha, "commit_url": curl,
+                "title": title.strip(), "files": None, "lines": None, "langs": [], "areas": [], "topics": [],
+                "shelf": "", "spdx": spdx.strip(), "reviewed": _reviewed(review), "agreed": date, "corpora": [],
+            })
+            if corpus not in w["corpora"]:
+                w["corpora"].append(corpus)
+            pp["corpora"].setdefault(corpus, "candidate corpus")
+            pp["agreed"].append(date)
+    # corpora in the registry that pin a repository the contributor owns
+    for c in registry or []:
+        for src in c.get("repos") or []:
+            m = GH_OWNER.match(src.get("url", ""))
+            if m and m.group(1).lower() in people:
+                people[m.group(1).lower()]["corpora"][c["slug"]] = c.get("status") or "registry"
+    return {pp["login"]: pp for pp in people.values() if pp["work"]}
+
+
+def volume(pp, live_slugs=()):
+    """The numbers on a profile, all summed over distinct commits / repos."""
+    work = list(pp["work"].values())
+    stars_by_repo = {}
+    for w in work:
+        if isinstance(w.get("repo_stars"), int):
+            stars_by_repo[w["repo_url"].lower()] = w["repo_stars"]
+    return {
+        "commits": sum(1 for w in work if w["commit"]),
+        "files": sum(w["files"] for w in work if isinstance(w.get("files"), int)),
+        "lines": sum(w["lines"] for w in work if isinstance(w.get("lines"), int)),
+        "corpora": len(pp["corpora"]),
+        "live": sorted(s for s in pp["corpora"] if s in live_slugs),
+        "repos": len({w["repo_url"].lower() for w in work}),
+        "gh_stars": sum(stars_by_repo.values()),
+        "since": min(pp["agreed"]) if pp["agreed"] else "",
+    }
 
 
 def badge_svg(label="XERJ Corpus Hub", value="contributor"):
@@ -94,64 +205,78 @@ def _n(x):
     return f"{x:,}" if isinstance(x, int) else "—"
 
 
-def person_body(login, rows, esc, live_slugs):
-    rows = sorted(rows, key=lambda r: -(r.get("repo_stars") or 0))
-    c0 = rows[0]["contributor"]
-    name = c0.get("name") or login
-    stars = sum(r.get("repo_stars") or 0 for r in rows)
-    lines = sum((r.get("contribution") or {}).get("lines") or 0 for r in rows)
-    first = min(r["consent"]["at"] for r in rows)
+def person_body(pp, esc, live_slugs, pages=()):
+    login = pp["login"]
+    work = sorted(pp["work"].values(), key=lambda w: (-(w.get("repo_stars") or 0), w["repo"].lower()))
+    name = pp["name"] or login
+    v = volume(pp, live_slugs)
     url = f"{SITE}/contributors/{login}.html"
-    repos = ", ".join(r["repo"] for r in rows[:2])
+    repos = ", ".join(w["repo"] for w in work[:2])
     tweet = f"My work in {repos} was selected for the XERJ Corpus Hub: AI coding agents retrieve it as a worked reference instead of guessing. {url}"
     cards = []
-    for r in rows:
-        k = r.get("contribution") or {}
-        lic = r.get("licence") or {}
-        status = ('<span class="chip ok">live in the hub</span>' if r["corpus"] in live_slugs
+    for w in work:
+        live = [c for c in w["corpora"] if c in live_slugs]
+        status = ('<span class="chip ok">live in the hub</span>' if live
                   else '<span class="chip warn">selected · in licence review</span>')
-        commit = (f'<div class="commit"><a href="{esc(k["commit_url"])}">{esc(k["commit"][:10])}</a> {esc(k.get("title") or "")}</div>'
-                  if k.get("commit") else "")
-        size = " · ".join(x for x in [f'{k["files"]} files' if k.get("files") else "", f'{_n(k.get("lines"))} lines' if k.get("lines") else "",
-                                         ", ".join(k.get("langs") or [])] if x)
-        chips = "".join(f'<span class="chip">{esc(t)}</span>' for t in (r.get("topics") or [])[:6])
-        cards.append(f"""<div class="contrib"><span class="stars">★ {_n(r.get("repo_stars"))}</span>
-<h3><a href="{esc(r["repo_url"])}">{esc(r["repo"])}</a></h3>{commit}
-<div class="commit">{esc(size)}{" · " + esc(", ".join(k.get("areas") or [])[:120]) if k.get("areas") else ""}</div>
-<div class="chips">{status}<span class="chip">{esc(r.get("shelf") or "")}</span><span class="chip">{esc(lic.get("spdx") or "")}</span>{chips}
-<span class="chip">agreed {esc(r["consent"]["at"][:10])}</span></div></div>""")
+        commit = (f'<div class="commit"><a href="{esc(w["commit_url"])}">{esc(w["commit"][:10])}</a> {esc(w["title"])}</div>'
+                  if w["commit"] else "")
+        size = " · ".join(x for x in [f'{w["files"]} files' if w.get("files") else "", f'{_n(w.get("lines"))} lines' if w.get("lines") else "",
+                                         ", ".join(w["langs"])] if x)
+        chips = "".join(f'<span class="chip">{esc(t)}</span>' for t in w["topics"][:6])
+        corp = "".join(f'<a class="chip" href="../corpus/{esc(c)}.html">corpus {esc(c)}</a>' if c in pages
+                       else f'<span class="chip">corpus {esc(c)}</span>' for c in w["corpora"])
+        gh = f'<span class="stars" title="GitHub stars on the repository">GitHub ★ {_n(w.get("repo_stars"))}</span>' if isinstance(w.get("repo_stars"), int) else ""
+        cards.append(f"""<div class="contrib">{gh}
+<h3><a href="{esc(w["repo_url"])}">{esc(w["repo"])}</a></h3>{commit}
+<div class="commit">{esc(size)}{" · " + esc(", ".join(w["areas"])[:120]) if w["areas"] else ""}</div>
+<div class="chips">{status}{corp}{f'<span class="chip">{esc(w["shelf"])}</span>' if w["shelf"] else ""}<span class="chip">{esc(w["spdx"])}</span>{chips}
+<span class="chip">agreed {esc(w["agreed"][:10])}</span></div></div>""")
+    other = sorted(c for c in pp["corpora"] if not any(c in w["corpora"] for w in work))
+    also = ""
+    if other:
+        links = ", ".join(f'<a href="../corpus/{esc(c)}.html">{esc(c)}</a>' if c in pages else esc(c) for c in other)
+        also = f'<p class="note">Their repositories are also pinned in: {links}.</p>'
     md = f"[![XERJ Corpus Hub contributor]({SITE}/contributors/{login}/badge.svg)]({url})"
+    kpi = lambda val, label: f'<div class="kpi"><b>{val}</b><span>{label}</span></div>'
+    s_ = lambda n, w: w if n == 1 else w + "s"
+    kpis = (kpi(v["corpora"], s_(v["corpora"], "corpus").replace("corpuss", "corpora"))
+            + kpi(v["commits"], s_(v["commits"], "selected commit"))
+            + (kpi(_n(v["files"]), s_(v["files"], "file")) if v["files"] else "")
+            + (kpi(_n(v["lines"]), s_(v["lines"], "line")) if v["lines"] else "")
+            + (kpi("★ " + _n(v["gh_stars"]), "GitHub stars on " + s_(v["repos"], "repo")) if v["gh_stars"] else ""))
     return f"""<main class="cwrap">
 <section class="prof"><img class="av" src="https://github.com/{esc(login)}.png?size=480" alt="{esc(name)}">
 <div><h1>{esc(name)}</h1><div class="login"><a href="https://github.com/{esc(login)}">@{esc(login)}</a></div>
-<div class="ribbon">Corpus Hub contributor since {esc(first[:10])}</div>
+<div class="ribbon">Corpus Hub contributor since {esc(v["since"][:10])}</div>
 <p>{esc(name)}'s work was selected for the XERJ Corpus Hub, the open reference memory AI coding agents search before they write code.
 When an agent meets the same problem, it gets this implementation back as a worked example, with the author and the repository attached.</p>
-<div class="kpis"><div class="kpi"><b>{len(rows)}</b><span>contribution{"s" if len(rows) != 1 else ""}</span></div>
-<div class="kpi"><b>★ {_n(stars)}</b><span>GitHub stars on the repo{"s" if len(rows) != 1 else ""}</span></div>
-<div class="kpi"><b>{_n(lines) if lines else "—"}</b><span>lines in the selected work</span></div></div>
+<div class="kpis">{kpis}</div>
+<p class="note">Totals across every corpus @{esc(login)} appears in; a commit selected for two corpora counts once.</p>
 <div class="share"><a href="https://twitter.com/intent/tweet?text={urllib.parse.quote(tweet)}" target="_blank" rel="noopener">Share on X</a>
 <a href="https://www.linkedin.com/sharing/share-offsite/?url={urllib.parse.quote(url)}" target="_blank" rel="noopener">Share on LinkedIn</a>
 <a href="https://news.ycombinator.com/submitlink?u={urllib.parse.quote(url)}&t={urllib.parse.quote(name + ' on the XERJ Corpus Hub')}" target="_blank" rel="noopener">Hacker News</a>
 <button data-copy="badge-{esc(login)}">Copy README badge</button></div>
 </div></section>
-<h2>Selected work</h2>{"".join(cards)}
+<h2>Selected work</h2>{"".join(cards)}{also}
 <div class="badgebox"><img src="{esc(login)}/badge.svg" alt="XERJ Corpus Hub contributor badge">
 <pre id="badge-{esc(login)}">{esc(md)}</pre></div>
-<p style="color:var(--z-mute);font-size:var(--fs-13)">Included with the author's permission (email, {esc(first[:10])}), under each repository's own licence, with attribution.
+<p style="color:var(--z-mute);font-size:var(--fs-13)">Included with the author's permission (email, {esc(v["since"][:10])}), under each repository's own licence, with attribution.
 Want it removed? Reply to the email or open an issue on <a href="https://github.com/xerj-org/xerj">xerj-org/xerj</a>.</p>
 </main>{COPY_BADGE_JS}"""
 
 
-def wall_body(people, esc):
-    order = sorted(people.items(), key=lambda kv: -sum(r.get("repo_stars") or 0 for r in kv[1]))
+def wall_body(people, esc, live_slugs=()):
+    vols = {l: volume(pp, live_slugs) for l, pp in people.items()}
+    order = sorted(people, key=lambda l: (-vols[l]["gh_stars"], l.lower()))
     tiles = "".join(f'<a href="{esc(l)}.html"><img src="https://github.com/{esc(l)}.png?size=88" alt="" loading="lazy">'
-                    f'<div><b>{esc(rs[0]["contributor"].get("name") or l)}</b><span>@{esc(l)} · {esc(rs[0]["repo"])}</span></div></a>'
-                    for l, rs in order)
-    repos = len({r["repo"] for rs in people.values() for r in rs})
+                    f'<div><b>{esc(people[l]["name"] or l)}</b><span>@{esc(l)} · {vols[l]["corpora"]} corp{"us" if vols[l]["corpora"] == 1 else "ora"}'
+                    f'{" · " + _n(vols[l]["lines"]) + " lines" if vols[l]["lines"] else ""} · GitHub ★ {_n(vols[l]["gh_stars"])}</span></div></a>'
+                    for l in order)
+    repos = len({w["repo_url"].lower() for pp in people.values() for w in pp["work"].values()})
+    corpora = len({c for pp in people.values() for c in pp["corpora"]})
     return f"""<main class="cwrap"><section class="whead"><h1>The people behind the hub</h1>
-<p>{len(people):,} developers agreed to let AI agents learn from their work: {repos:,} repositories, each included with the author's permission,
-under its own licence, with attribution. When an agent hits the same problem, it builds on their solution instead of guessing.</p>
+<p>{len(people):,} developers agreed to let AI agents learn from their work: {repos:,} repositories across {corpora:,} corpora, each included with the author's permission,
+under its own licence, with attribution. Sorted by GitHub stars on their repositories. Every source is still in licence review; none is live yet unless its card says so.</p>
 <a class="cta" href="../contribute.html">Add yours</a></section><div class="wall">{tiles}</div></main>"""
 
 
@@ -162,21 +287,23 @@ def og(html, title, desc, url, image):
     return html.replace("</head>", tags + "</head>", 1)
 
 
-def generate(out, hub_dir, page, esc, live_slugs):
-    people = load(hub_dir)
+def generate(out, hub_dir, page, esc, live_slugs, registry=None):
+    people = load(hub_dir, registry)
     if not people:
         return 0
+    pages = {c["slug"] for c in registry or []}
     d = pathlib.Path(out) / "contributors"
     d.mkdir(exist_ok=True)
-    for login, rows in people.items():
-        name = rows[0]["contributor"].get("name") or login
+    for login, pp in people.items():
+        name = pp["name"] or login
+        first = sorted(pp["work"].values(), key=lambda w: -(w.get("repo_stars") or 0))[0]
         title = f"{name} (@{login}): XERJ Corpus Hub contributor"
-        desc = f"{name}'s work in {rows[0]['repo']} is in the XERJ Corpus Hub, the reference memory AI coding agents search before writing code."
-        html = page(title, desc, person_body(login, rows, esc, live_slugs), rel="../")
+        desc = f"{name}'s work in {first['repo']} is in the XERJ Corpus Hub, the reference memory AI coding agents search before writing code."
+        html = page(title, desc, person_body(pp, esc, live_slugs, pages), rel="../")
         (d / f"{login}.html").write_text(og(html, esc(title), esc(desc), f"{SITE}/contributors/{login}.html", f"https://github.com/{login}.png?size=400"))
         (d / login).mkdir(exist_ok=True)
         (d / login / "badge.svg").write_text(badge_svg())
-    html = page("Contributors: XERJ Corpus Hub", "The developers whose work AI agents retrieve from the XERJ Corpus Hub", wall_body(people, esc), rel="../")
+    html = page("Contributors: XERJ Corpus Hub", "The developers whose work AI agents retrieve from the XERJ Corpus Hub", wall_body(people, esc, live_slugs), rel="../")
     (d / "index.html").write_text(og(html, "The people behind the XERJ Corpus Hub", "Developers who agreed to let AI agents learn from their work",
                                      f"{SITE}/contributors/", "https://github.com/xerj-org.png"))
     return len(people)
