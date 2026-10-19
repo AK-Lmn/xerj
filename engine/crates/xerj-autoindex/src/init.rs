@@ -1188,7 +1188,10 @@ mod tests {
                 i + 1
             );
         }
-        assert!(printed.contains("Windsurf, Claude Desktop, Cline"), "{printed}");
+        assert!(
+            printed.contains("Windsurf, Claude Desktop, Cline"),
+            "{printed}"
+        );
     }
 
     /// What init prints and what the skill teaches are one registration, not
