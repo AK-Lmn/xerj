@@ -127,6 +127,7 @@ fn note_line(note: &str, meatl: bool) -> String {
 /// `file:line` when the record or a lexical `_passage` carries one.
 /// Otherwise `file (line unknown)` — a bare path reads as a finished
 /// citation, and a semantic chunk ordinal is not a line.
+#[cfg(test)]
 fn citation(hit: &Value, lexical_lines: bool) -> String {
     citation_in(hit, lexical_lines, None)
 }
@@ -879,16 +880,25 @@ mod tests {
         });
         assert_eq!(citation_in(&hit, true, Some(&dir)), "book/Concurrency.md:6");
         // without the checkout a section-relative ordinal is never passed off as a line
-        assert_eq!(citation_in(&hit, true, None), "book/Concurrency.md (line unknown)");
+        assert_eq!(
+            citation_in(&hit, true, None),
+            "book/Concurrency.md (line unknown)"
+        );
         // a single-section file (locator s0, no `section` field) is prose too
         let single = json!({
             "_source": { "ax_path": "book/Concurrency.md", "ax_locator": "s0", "body": "Intro paragraph that is long." },
             "fields": { "_passage": [{ "field": "body", "ordinal": 0, "start_offset": 0, "text": "Intro paragraph." }]}
         });
-        assert_eq!(citation_in(&single, true, Some(&dir)), "book/Concurrency.md:3");
+        assert_eq!(
+            citation_in(&single, true, Some(&dir)),
+            "book/Concurrency.md:3"
+        );
         // a path that would leave the checkout is not opened
         let escape = json!({ "_source": { "ax_path": "../etc/passwd", "ax_locator": "s0", "body": "root:x:0:0:root:/root" } });
-        assert_eq!(citation_in(&escape, true, Some(&dir)), "../etc/passwd (line unknown)");
+        assert_eq!(
+            citation_in(&escape, true, Some(&dir)),
+            "../etc/passwd (line unknown)"
+        );
         // code records keep the lexical ordinal line
         let code = json!({
             "_source": { "ax_path": "a.rs", "ax_locator": "code" },
