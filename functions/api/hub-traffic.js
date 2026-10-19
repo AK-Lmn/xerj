@@ -3,7 +3,8 @@
 //   GET /api/hub-traffic?corpus=<slug>
 //   → { ok, enabled, corpus, window_days:14, days:[{date, views, unique_views, pulls, searches}],
 //       totals:{views, unique_views, pulls, pulls_unique:null, searches},
-//       agents:[{family,count}], referrers:[{host,count}], pulls_since, k }
+//       agents:[{family,count}], referrers:[{host,count}], pulls_since, recording_since, k }
+//   A day before recording_since (views, searches) or pulls_since (pulls) is null.
 //   No HUB_USAGE binding → { ok:true, enabled:false }
 //
 // views / unique_views: GETs of the corpus page (functions/corpus/[[path]].js);
@@ -93,17 +94,23 @@ export async function onRequest({ request, env, waitUntil }) {
     const { days: usageDays } = await loadDays(bucket, now);
     const days = [];
     const agents = {}, refs = {};
+    // Days before counting began anywhere on the hub are unknown (null), not 0.
+    let recordingSince = null;
     let pullsSince = null;
     for (let i = TRAFFIC_DAYS - 1; i >= 0; i--) {
       const d = day(now - i * 86400000);
-      const v = (await viewsFor(bucket, d, today, now))[corpus] || { v: 0, vu: 0, a: {}, f: {} };
+      const vroll = await viewsFor(bucket, d, today, now);
+      if (!recordingSince && (Object.keys(vroll).length || Object.keys(usageDays[d] || {}).length)) recordingSince = d;
+      const v = vroll[corpus] || { v: 0, vu: 0, a: {}, f: {} };
       const u = (usageDays[d] || {})[corpus] || { n: 0, a: {}, r: {} };
+      const known = !!recordingSince;
       const prev = await snapFor(bucket, day(now - (i + 1) * 86400000));
       const cur = await snapFor(bucket, d);
       const delta = pullsBetween(prev, cur);
       if (delta && !pullsSince) pullsSince = d;
-      days.push({ date: d, views: v.v, unique_views: v.vu, pulls: delta ? (delta[corpus] || 0) : null,
-                  searches: (u.r.code || 0) + (u.r.def || 0) });
+      days.push({ date: d, views: known ? v.v : null, unique_views: known ? v.vu : null,
+                  pulls: delta ? (delta[corpus] || 0) : null,
+                  searches: known ? (u.r.code || 0) + (u.r.def || 0) : null });
       for (const src of [v.a, u.a]) for (const [f, n] of Object.entries(src || {})) agents[f] = (agents[f] || 0) + n;
       for (const [h, n] of Object.entries(v.f || {})) refs[h] = (refs[h] || 0) + n;
     }
@@ -113,7 +120,7 @@ export async function onRequest({ request, env, waitUntil }) {
       ok: true, enabled: true, corpus, window_days: TRAFFIC_DAYS, k: REFERRER_K, days,
       totals: { views: sum('views'), unique_views: sum('unique_views'), pulls: pullsSince ? sum('pulls') : null,
                 pulls_unique: null, searches: sum('searches') },
-      pulls_since: pullsSince,
+      pulls_since: pullsSince, recording_since: recordingSince,
       agents: sorted(agents, 'family').filter((x) => x.family !== 'unknown'),
       referrers: sorted(refs, 'host').filter((x) => x.count >= REFERRER_K).slice(0, 10),
     }, 200, 'public, max-age=120');

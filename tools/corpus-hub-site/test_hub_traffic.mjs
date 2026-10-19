@@ -83,6 +83,7 @@ test('corpus page views: counted per corpus with daily uniques; crawler, opt-out
   assert.deepEqual([last.views, last.unique_views, last.searches, last.pulls], [3, 2, 1, null]);
   assert.deepEqual(t.totals, { views: 3, unique_views: 2, pulls: null, pulls_unique: null, searches: 1 });
   assert.deepEqual(t.referrers, [{ host: 'github.com', count: 3 }]);
+  assert.equal(t.recording_since, last.date); assert.equal(t.days[0].views, null);
   assert.deepEqual(t.agents.map((a) => a.family), ['claude-code', 'codex']);
 });
 
