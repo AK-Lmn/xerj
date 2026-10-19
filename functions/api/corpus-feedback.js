@@ -18,7 +18,11 @@
 //       query_template?:"how to <verb> <term>",      // placeholders, never a raw query
 //       coverage_gaps?:["short string", ...],         // <= 5 × 60 chars
 //       problems?:{kinds:["error"|"slow"|"stale"|"wrong"], note:"<= 280 chars"},
-//       install_id?:"<16-64 random chars, generated locally>", source?:"hub-pull"|"mcp"|"agent" }
+//       install_id?:"<16-64 random chars, generated locally>", source?:"hub-pull"|"mcp"|"agent"|"cli",
+//       basis?:"agent"|"auto" }   // auto = the client derived it from signals, not the agent's judgement
+//     A basis:"auto", source:"hub-pull" note may omit usefulness and found: it
+//     feeds problem counts (and pull_reports), never the score.
+//     An auto review never overwrites an agent review of the same week.
 //     200 { ok, stored, replaced, week }       400 invalid · 413 · 415 · 403 cross-origin
 //     429 rate limited / weekly volume · 503 daily cap or storage down
 //   GET /api/corpus-feedback?corpus=<slug>  → { ok, enabled, corpus, ...aggregate }
@@ -204,6 +208,13 @@ async function handlePost({ request, env }) {
 
   let existing = null;
   try { existing = await bucket.head(voteKey); } catch (_) { existing = null; }
+  // Never let an automatic signal overwrite what an agent said this week, and
+  // never let a pull-only note overwrite any review. Nothing is written.
+  if (existing) {
+    const prevBasis = (existing.customMetadata || {}).b === 'u' ? 'auto' : 'agent';
+    if (r.usefulness === null || (r.basis === 'auto' && prevBasis === 'agent'))
+      return json({ ok: true, enabled: true, stored: false, kept: 'earlier review this week', week });
+  }
 
   const volKey = `vol/${week}/${voter}`;
   const ipcKey = `ipc/${week}/${r.corpus}/${ipHash}`;
@@ -231,7 +242,7 @@ async function handlePost({ request, env }) {
     received_at: new Date(now).toISOString(), week, corpus: r.corpus, pack: r.pack,
     agent: { family: r.family, version: r.agent_version }, usefulness: r.usefulness, found: r.found,
     freshness: r.freshness, query_template: r.query_template, coverage_gaps: r.coverage_gaps,
-    problems: { kinds: r.problems, note: r.problem_note }, source: r.source, has_install_id: !!r.install_id,
+    problems: { kinds: r.problems, note: r.problem_note }, source: r.source, basis: r.basis, has_install_id: !!r.install_id,
   };
   try {
     await bucket.put(`rl/${ipHash}`, String(now));

@@ -190,3 +190,42 @@ test('isoWeek', () => {
   assert.equal(isoWeek(new Date('2021-01-03T12:00:00Z')), '2020-W53');
   assert.equal(isoWeek(new Date('2026-01-01T00:00:00Z')), '2026-W01');
 });
+
+test('basis: an automatic review never overwrites the agent review of the same week', async () => {
+  const env = { CORPUS_FEEDBACK: r2(), ASSETS };
+  let [s, b] = await call('POST', { body: good({ install_id: id(300), usefulness: 2, basis: 'auto', source: 'mcp' }), env, ip: nextIp() });
+  assert.equal(b.stored, true);
+  [s, b] = await call('POST', { body: good({ install_id: id(300), usefulness: 5 }), env, ip: nextIp() });   // agent replaces auto
+  assert.equal(b.replaced, true);
+  const w = env.CORPUS_FEEDBACK.writes;
+  [s, b] = await call('POST', { body: good({ install_id: id(300), usefulness: 1, basis: 'auto', source: 'mcp' }), env, ip: nextIp() });
+  assert.equal(s, 200); assert.equal(b.stored, false);
+  assert.equal(env.CORPUS_FEEDBACK.writes, w, 'nothing written');
+  [, b] = await call('GET', { query: '?corpus=aider', env });
+  assert.equal(b.raw_mean, 5); assert.equal(b.agent_reviews, 1);
+});
+
+test('pull-only notes: no usefulness, feed problems and pull_reports, never the score', async () => {
+  assert.equal(validateReview({ corpus: 'aider', basis: 'auto', source: 'mcp' }).ok, false);   // only hub-pull may omit
+  assert.equal(validateReview({ corpus: 'aider', source: 'hub-pull' }).ok, false);              // and only when auto
+  const v = validateReview({ corpus: 'aider', basis: 'auto', source: 'hub-pull', problems: { kinds: ['slow'] } });
+  assert.equal(v.ok, true); assert.equal(v.review.usefulness, null);
+  const env = { CORPUS_FEEDBACK: r2(), ASSETS };
+  const pull = (n, kinds = []) => ({ corpus: 'aider', basis: 'auto', source: 'hub-pull', install_id: id(n), problems: { kinds } });
+  let [s, b] = await call('POST', { body: pull(400, ['slow']), env, ip: nextIp() });
+  assert.equal(b.stored, true);
+  await call('POST', { body: good({ install_id: id(401), usefulness: 4 }), env, ip: nextIp() });
+  [s, b] = await call('POST', { body: pull(401, ['error']), env, ip: nextIp() });   // does not replace 401's review
+  assert.equal(b.stored, false);
+  [s, b] = await call('POST', { body: good({ install_id: id(400), usefulness: 2, basis: 'auto', source: 'mcp' }), env, ip: nextIp() });
+  assert.equal(b.replaced, true);                                                   // a scored review replaces a pull note
+  [, b] = await call('GET', { query: '?corpus=aider', env });
+  assert.equal(b.reviews, 2); assert.equal(b.raw_mean, 3);
+  // a pull note in a later week is a separate record and does not hide the scored one
+  const W = isoWeek();
+  const agg = aggregate([
+    { week: W, voter: 'p', t: 2, usefulness: null, found: null, freshness: null, family: 'x', coverage_gaps: [], problems: ['slow'], basis: 'auto' },
+    { week: '2026-W40', voter: 'p', t: 1, usefulness: 4, found: 'yes', freshness: 3, family: 'x', coverage_gaps: [], problems: ['slow'], basis: 'agent' },
+  ], { cutoff: '2026-W01' });
+  assert.equal(agg.reviews, 1); assert.equal(agg.pull_reports, 1); assert.equal(agg.problems.slow, 1);
+});

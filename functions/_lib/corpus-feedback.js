@@ -9,6 +9,7 @@ export const LIMITS = {
 };
 export const FOUND = ['yes', 'partial', 'no'];
 export const PROBLEMS = ['error', 'slow', 'stale', 'wrong'];
+export const SOURCES = ['hub-pull', 'mcp', 'agent', 'cli'];
 
 // Bayesian mean: (PRIOR_WEIGHT * PRIOR_MEAN + sum) / (PRIOR_WEIGHT + n).
 // A corpus with two 5/5 reviews reads 3.57, not 5.0; it takes many agreeing
@@ -77,10 +78,18 @@ export function validateReview(body) {
   if (!body || typeof body !== 'object' || Array.isArray(body)) return { ok: false, error: 'body must be a JSON object' };
   const corpus = typeof body.corpus === 'string' ? body.corpus.trim().toLowerCase() : '';
   if (!SLUG_RE.test(corpus)) return { ok: false, error: 'corpus: a hub corpus slug is required' };
-  const usefulness = intIn(body.usefulness, 1, 5);
-  if (usefulness === null) return { ok: false, error: 'usefulness: integer 1-5 is required' };
-  const found = typeof body.found === 'string' ? body.found.toLowerCase() : '';
-  if (!FOUND.includes(found)) return { ok: false, error: 'found: one of yes, partial, no is required' };
+  const source = typeof body.source === 'string' && SOURCES.includes(body.source) ? body.source : 'agent';
+  const basis = body.basis === 'auto' ? 'auto' : 'agent';
+  // A client's automatic note right after `xerj hub pull` knows only whether the
+  // pull worked: it may omit usefulness/found. It never counts toward the score.
+  const pullOnly = basis === 'auto' && source === 'hub-pull' && body.usefulness == null && body.found == null;
+  let usefulness = null; let found = null;
+  if (!pullOnly) {
+    usefulness = intIn(body.usefulness, 1, 5);
+    if (usefulness === null) return { ok: false, error: 'usefulness: integer 1-5 is required' };
+    found = typeof body.found === 'string' ? body.found.toLowerCase() : '';
+    if (!FOUND.includes(found)) return { ok: false, error: 'found: one of yes, partial, no is required' };
+  }
   let freshness = null;
   if (body.freshness !== undefined && body.freshness !== null) {
     freshness = intIn(body.freshness, 1, 5);
@@ -109,13 +118,12 @@ export function validateReview(body) {
     if (!/^[A-Za-z0-9_-]{16,64}$/.test(body.install_id)) return { ok: false, error: 'install_id: 16-64 chars of [A-Za-z0-9_-] (a random local id)' };
     installId = body.install_id;
   }
-  const source = typeof body.source === 'string' && ['hub-pull', 'mcp', 'agent', 'cli'].includes(body.source) ? body.source : 'agent';
   return {
     ok: true,
     review: {
       corpus, pack, family, agent_version: agentVersion, usefulness, found, freshness,
       query_template: normaliseTemplate(body.query_template), coverage_gaps: gaps,
-      problems: kinds, problem_note: note, source, install_id: installId,
+      problems: kinds, problem_note: note, source, basis, install_id: installId,
     },
   };
 }
@@ -140,7 +148,8 @@ const P_BY_CODE = Object.fromEntries(Object.entries(P_CODE).map(([k, c]) => [c, 
 // Compact form kept in R2 customMetadata so the aggregate needs only LIST calls.
 export function toMeta(r, ts) {
   return {
-    u: String(r.usefulness), f: r.found[0], r: r.freshness ? String(r.freshness) : '',
+    u: r.usefulness ? String(r.usefulness) : '', f: r.found ? r.found[0] : '', r: r.freshness ? String(r.freshness) : '',
+    b: r.basis === 'auto' ? 'u' : 'a',
     a: r.family, g: r.coverage_gaps.join('|').slice(0, 320), p: r.problems.map((k) => P_CODE[k]).join(''),
     t: String(ts),
   };
@@ -148,7 +157,8 @@ export function toMeta(r, ts) {
 
 export function fromMeta(m) {
   return {
-    usefulness: parseInt(m.u, 10), found: ({ y: 'yes', p: 'partial', n: 'no' })[m.f] || 'no',
+    usefulness: m.u ? parseInt(m.u, 10) : null, found: ({ y: 'yes', p: 'partial', n: 'no' })[m.f] || null,
+    basis: m.b === 'u' ? 'auto' : 'agent',
     freshness: m.r ? parseInt(m.r, 10) : null, family: m.a || 'unknown',
     coverage_gaps: m.g ? m.g.split('|').filter(Boolean) : [],
     problems: (m.p || '').split('').map((c) => P_BY_CODE[c]).filter(Boolean),
@@ -175,15 +185,18 @@ const r2 = (x) => Math.round(x * 100) / 100;
 // whose volume was abnormal (see the write path). One voice per voter: its
 // latest vote in the window counts; flagged voters are dropped.
 export function aggregate(votes, { flagged = new Set(), cutoff = '' } = {}) {
-  const latest = new Map();
-  let dropped = 0;
+  const latest = new Map();      // voter -> latest scored review
+  const pulls = new Map();       // voter -> latest pull-only note (no usefulness)
+  const droppedVoters = new Set();
+  const newer = (a, b) => !b || a.week > b.week || (a.week === b.week && a.t > b.t);
   for (const v of votes) {
     if (cutoff && v.week < cutoff) continue;
+    if (flagged.has(v.voter)) { droppedVoters.add(v.voter); continue; }
+    if (v.usefulness == null) { if (newer(v, pulls.get(v.voter))) pulls.set(v.voter, v); continue; }
     if (!Number.isInteger(v.usefulness) || v.usefulness < 1 || v.usefulness > 5) continue;
-    if (flagged.has(v.voter)) { dropped++; continue; }
-    const prev = latest.get(v.voter);
-    if (!prev || v.week > prev.week || (v.week === prev.week && v.t > prev.t)) latest.set(v.voter, v);
+    if (newer(v, latest.get(v.voter))) latest.set(v.voter, v);
   }
+  const dropped = droppedVoters.size;
   const rs = [...latest.values()];
   const n = rs.length;
   const sum = rs.reduce((a, v) => a + v.usefulness, 0);
@@ -197,11 +210,15 @@ export function aggregate(votes, { flagged = new Set(), cutoff = '' } = {}) {
     freshness_median: median(rs.map((v) => v.freshness).filter((x) => Number.isInteger(x))),
     families: [], coverage_gaps: [],
     problems: Object.fromEntries(PROBLEMS.map((k) => [k, 0])),
+    agent_reviews: rs.filter((v) => v.basis !== 'auto').length,
+    pull_reports: pulls.size,
     dropped_outliers: dropped, k_min: K_MIN, window_weeks: WINDOW_WEEKS,
   };
-  for (const v of rs) {
-    out.found[v.found] = (out.found[v.found] || 0) + 1;
-    for (const k of v.problems) if (k in out.problems) out.problems[k]++;
+  for (const v of rs) out.found[v.found] = (out.found[v.found] || 0) + 1;
+  // Problems: each voter counts once per kind, from its latest review and its latest pull note.
+  for (const voter of new Set([...latest.keys(), ...pulls.keys()])) {
+    const kinds = new Set([...((latest.get(voter) || {}).problems || []), ...((pulls.get(voter) || {}).problems || [])]);
+    for (const k of kinds) if (k in out.problems) out.problems[k]++;
   }
   if (n) out.found.rate = r2((out.found.yes + 0.5 * out.found.partial) / n);
   const fam = new Map();
