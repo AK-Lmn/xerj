@@ -319,7 +319,6 @@ pub fn resolve_draft(cfg: &Cfg, indexed: Option<String>, date: &str) -> Draft {
     }
 }
 
-
 /// On `--submit`, optional opinion slots that are still template placeholders
 /// must not be filed. Replace them with short defaults so R2 / GitHub never
 /// store angle-bracket template text (field-report #1835).
@@ -1318,7 +1317,10 @@ mod tests {
         assert!(!report.contains(PH_POINTED_AT), "{report}");
         assert!(!report.contains(PH_NUMBERS), "{report}");
         assert!(!report.contains(PH_FILED), "{report}");
-        assert!(!report.contains('<'), "no angle-bracket template left:\n{report}");
+        assert!(
+            !report.contains('<'),
+            "no angle-bracket template left:\n{report}"
+        );
     }
 
     #[test]
