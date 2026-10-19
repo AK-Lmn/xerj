@@ -16,6 +16,13 @@
 #              Merge this binding only AFTER the bucket exists: a binding to a
 #              missing bucket can block the Pages deploy.
 #
+#   HUB_USAGE — functions/_lib/hub-usage.js counts requests to the hosted hub
+#              API (/api/v1/code|def|search) per corpus for the usage stats on
+#              hub.xerj.org corpus pages (functions/api/hub-usage.js). Stores a
+#              query template, route and user-agent family per request; no raw
+#              query, no IP, no user id. Bucket `xerj-hub-usage` (exists;
+#              lifecycle: ev/ and agg/ expire after 40 days, meta/ after 2).
+#
 # Routing: landing/_routes.json pins Function invocation to /get, /get.ps1 and
 # /lead. A NEW FUNCTION ADDED UNDER functions/ WILL NOT BE ROUTED until its
 # path is added to that include list.
@@ -37,3 +44,8 @@ bucket_name = "xerj-installs"
 [[r2_buckets]]
 binding = "HUB_STARS"
 bucket_name = "xerj-hub-stars"
+
+# Hub usage counts (hub.xerj.org; functions/_lib/hub-usage.js, /api/hub-usage).
+[[r2_buckets]]
+binding = "HUB_USAGE"
+bucket_name = "xerj-hub-usage"
