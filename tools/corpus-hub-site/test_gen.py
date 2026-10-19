@@ -146,6 +146,16 @@ class ContributorVolumeTest(unittest.TestCase):
         live = contributors.person_body(people["Ann"], gen.esc, {"ann--one", "bob--two", "themed"})
         self.assertNotIn("Not installable yet", live)
 
+    def test_page_says_the_corpus_is_the_whole_repo(self):
+        # issue #1894: "9 files, 809 lines" read as the corpus size, but the manifest
+        # indexes the whole repository at the pin.
+        import contributors
+        with tempfile.TemporaryDirectory() as d:
+            people = contributors.load(self._hub(d))
+        html = contributors.person_body(people["Ann"], gen.esc, set())
+        self.assertIn("selected commit: 3 files", html)
+        self.assertIn("whole repository at the pinned commit", html)
+
 
 class SignInNavTest(unittest.TestCase):
     def test_sign_in_box_ships_hidden_and_asks_api_me(self):

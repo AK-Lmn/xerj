@@ -252,7 +252,8 @@ def person_body(pp, esc, live_slugs, pages=()):
         gh = f'<span class="stars" title="GitHub stars on the repository">GitHub ★ {_n(w.get("repo_stars"))}</span>' if isinstance(w.get("repo_stars"), int) else ""
         cards.append(f"""<div class="contrib">{gh}
 <h3><a href="{esc(w["repo_url"])}">{esc(w["repo"])}</a></h3>{commit}
-<div class="commit">{esc(size)}{" · " + esc(", ".join(w["areas"])[:120]) if w["areas"] else ""}</div>
+<div class="commit">{"selected commit: " + esc(size) if size else ""}{" · " + esc(", ".join(w["areas"])[:120]) if w["areas"] else ""}</div>
+<p class="note">The corpus is the whole repository at the pinned commit, not only the files of the selected commit.</p>
 <div class="chips">{status}{corp}{f'<span class="chip">{esc(w["shelf"])}</span>' if w["shelf"] else ""}<span class="chip">{esc(w["spdx"])}</span>{chips}
 <span class="chip">agreed {esc(w["agreed"][:10])}</span></div>{pending}</div>""")
     other = sorted(c for c in pp["corpora"] if not any(c in w["corpora"] for w in work))
@@ -276,7 +277,7 @@ def person_body(pp, esc, live_slugs, pages=()):
 <p>{esc(name)}'s work was selected for the XERJ Corpus Hub, the open reference memory AI coding agents search before they write code.
 When an agent meets the same problem, it gets this implementation back as a worked example, with the author and the repository attached.</p>
 <div class="kpis">{kpis}</div>
-<p class="note">Totals across every corpus @{esc(login)} appears in; a commit selected for two corpora counts once.</p>
+<p class="note">Totals across every corpus @{esc(login)} appears in; a commit selected for two corpora counts once. Files and lines count the selected commits; each corpus indexes the whole repository at its pinned commit.</p>
 <div class="share"><a href="https://twitter.com/intent/tweet?text={urllib.parse.quote(tweet)}" target="_blank" rel="noopener">Share on X</a>
 <a href="https://www.linkedin.com/sharing/share-offsite/?url={urllib.parse.quote(url)}" target="_blank" rel="noopener">Share on LinkedIn</a>
 <a href="https://news.ycombinator.com/submitlink?u={urllib.parse.quote(url)}&t={urllib.parse.quote(name + ' on the XERJ Corpus Hub')}" target="_blank" rel="noopener">Hacker News</a>
