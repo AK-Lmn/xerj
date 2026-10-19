@@ -23,6 +23,13 @@
 #              query, no IP, no user id. Bucket `xerj-hub-usage` (exists;
 #              lifecycle: ev/ and agg/ expire after 40 days, meta/ after 2).
 #
+# Hub sign-in (hub.xerj.org only; functions/auth/*, functions/api/me.js, helpers
+# in functions/_lib/): no binding, only Pages SECRETS on the xerj-hub project:
+#   HUB_SESSION_SECRET (>= 32 chars; signs the session cookie),
+#   GITHUB_OAUTH_CLIENT_ID / GITHUB_OAUTH_CLIENT_SECRET,
+#   HF_OAUTH_CLIENT_ID / HF_OAUTH_CLIENT_SECRET.
+# Any missing → /api/me says enabled:false and the pages hide Sign in.
+#
 # Routing: landing/_routes.json pins Function invocation to /get, /get.ps1 and
 # /lead. A NEW FUNCTION ADDED UNDER functions/ WILL NOT BE ROUTED until its
 # path is added to that include list.
