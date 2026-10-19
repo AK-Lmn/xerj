@@ -29,8 +29,8 @@ STYLE = """
 .ribbon{display:inline-block;margin:var(--sp-4) 0;font-family:var(--font-data);font-size:var(--fs-11);font-weight:700;
 text-transform:uppercase;letter-spacing:var(--track-ui);color:#fff;padding:.5em 1em;
 background:linear-gradient(100deg,#6d28d9,#9333ea,#7c3aed,#6d28d9);background-size:280% 100%;animation:ctaflow 5s ease infinite}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--z-line);border:1px solid var(--z-line);margin:var(--sp-6) 0}
-.kpi{background:#fff;padding:var(--sp-5)}
+.kpis{display:flex;flex-wrap:wrap;gap:1px;background:var(--z-line);border:1px solid var(--z-line);margin:var(--sp-6) 0}
+.kpi{flex:1 1 150px;background:#fff;padding:var(--sp-5)}
 .kpi b{display:block;font-family:var(--font-display);font-weight:800;font-size:var(--fs-32);line-height:1.1}
 .kpi span{font-family:var(--font-data);font-size:var(--fs-11);text-transform:uppercase;letter-spacing:var(--track-label);color:var(--z-mute)}
 .kpi.pending b{color:var(--z-mute);font-size:var(--fs-20);padding-top:.35em}
@@ -57,12 +57,13 @@ letter-spacing:var(--track-ui);text-decoration:none;color:var(--z-ink);border:1p
 .whead h1{font-family:var(--font-display);font-weight:900;font-size:var(--fs-96);line-height:.95;margin:0}
 .whead p{max-width:760px;color:var(--z-mute)}
 .hubstar[hidden]{display:none}
+.kpi.hubstar b [data-n]{font:inherit;color:inherit;letter-spacing:normal;text-transform:none}
 .hubstar button{margin-top:var(--sp-2);font-family:var(--font-data);font-size:var(--fs-11);font-weight:700;text-transform:uppercase;
 letter-spacing:var(--track-ui);border:1px solid var(--z-accent);color:var(--z-accent);background:none;padding:.35em .8em;cursor:pointer}
 .hubstar button[disabled]{opacity:.6;cursor:default}
 .hubstar.inline{display:inline-flex;gap:var(--sp-3);align-items:center;border:1px solid var(--z-line);background:#fff;padding:var(--sp-2) var(--sp-4);margin:var(--sp-3) 0}
 .hubstar.inline b{font-family:var(--font-data)}.hubstar.inline button{margin:0}
-@media (max-width:820px){.prof{grid-template-columns:1fr}.prof .av{width:140px;height:140px}.kpis{grid-template-columns:repeat(2,1fr)}.whead h1{font-size:var(--fs-56)}}
+@media (max-width:820px){.prof{grid-template-columns:1fr}.prof .av{width:140px;height:140px}.kpi{flex-basis:40%}.whead h1{font-size:var(--fs-56)}}
 """
 
 COPY_BADGE_JS = """<script>
