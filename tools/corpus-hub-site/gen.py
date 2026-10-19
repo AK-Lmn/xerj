@@ -412,6 +412,20 @@ background:none;transition:color .2s,border-color .2s}
 .nav a.navcta.on{color:#fff;border:0;
 background:linear-gradient(100deg,#6d28d9,#9333ea,#7c3aed,#6d28d9);background-size:280% 100%;animation:ctaflow 5s ease infinite}
 .nav a.navcta.on:hover{color:#fff;filter:brightness(1.12)}
+/* sign-in (functions/auth/*): hidden until /api/me says enabled; see AUTH_JS */
+.authbox[hidden]{display:none}
+.authbox{position:relative;align-self:center}
+.authbox summary{list-style:none;cursor:pointer;color:var(--z-mute);display:inline-flex;align-items:center;gap:var(--sp-2)}
+.authbox summary::-webkit-details-marker{display:none}
+.authbox summary:hover{color:var(--z-ink)}
+.authbox summary img{width:24px;height:24px;border-radius:50%;border:1px solid var(--z-line);display:block}
+.authbox .menu{position:absolute;right:0;top:calc(100% + 8px);min-width:220px;background:#fff;border:1px solid var(--z-line);
+padding:var(--sp-2) 0;display:flex;flex-direction:column;z-index:60;box-shadow:0 6px 24px rgba(0,0,0,.06)}
+.authbox .menu a,.authbox .menu span{padding:var(--sp-2) var(--sp-4);display:block}
+.authbox .menu span{color:var(--z-ink);text-transform:none;letter-spacing:normal;font-size:var(--fs-13)}
+.authbox .menu a:hover{background:var(--z-faint);color:var(--z-ink)}
+.authnote{position:fixed;bottom:var(--sp-5);right:var(--sp-5);background:var(--z-ink);color:#fff;padding:var(--sp-3) var(--sp-5);
+font-family:var(--font-data);font-size:var(--fs-13);z-index:70}
 .cta{display:inline-block;margin-top:var(--sp-5);font-family:var(--font-data);font-size:var(--fs-13);
 font-weight:600;text-transform:uppercase;letter-spacing:var(--track-ui);text-decoration:none;color:#fff;
 background:linear-gradient(100deg,#6d28d9,#9333ea,#7c3aed,#6d28d9);background-size:280% 100%;animation:ctaflow 5s ease infinite;padding:.72em 1.25em;border:0}
@@ -602,13 +616,13 @@ PAGE = """<!doctype html><html lang="en"><head><meta charset="utf-8">
 <a href="{rel}contributors/index.html">CONTRIBUTORS</a>
 <a href="{rel}about.html">ABOUT</a>
 <a href="https://github.com/xerj-org/xerj/tree/corpus-hub/tools/xerj-code/hub">REGISTRY (GIT)</a>
-<span class="spacer"></span><a class="navicon" href="https://x.com/xerj_org" title="XERJ on X" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a><a class="navicon" href="https://discord.com/invite/yetXFusXfs" title="XERJ on Discord" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.37a19.79 19.79 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.74 19.74 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.1 13.1 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.3 12.3 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.84 19.84 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></a><a href="https://xerj.org">XERJ.ORG</a><a href="{rel}contribute.html" class="navcta">ADD YOUR CORPUS</a></nav>
+<span class="spacer"></span><details class="authbox" id="hubauth" hidden></details><a class="navicon" href="https://x.com/xerj_org" title="XERJ on X" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a><a class="navicon" href="https://discord.com/invite/yetXFusXfs" title="XERJ on Discord" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.37a19.79 19.79 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.74 19.74 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.1 13.1 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.3 12.3 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.84 19.84 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></a><a href="https://xerj.org">XERJ.ORG</a><a href="{rel}contribute.html" class="navcta">ADD YOUR CORPUS</a></nav>
 {body}
 <footer><span>XERJ · CORPUS HUB · {stamp}</span>
 <span>PINNED SOURCES · VERIFIED LICENCES · MEASURED RETRIEVAL</span>
 <span><a href="{rel}index.html">CORPORA</a> · <a href="{rel}about.html">ABOUT</a> ·
 <a href="{rel}llms.txt">LLMS.TXT</a></span></footer>
-{navjs}
+{navjs}{authjs}
 </body></html>"""
 
 
@@ -633,9 +647,48 @@ STYLE += contributors.STYLE
 STYLE_VER = hashlib.sha1(STYLE.encode("utf-8")).hexdigest()[:8]
 
 
+# Sign in / avatar / sign out in the nav. Asks /api/me (functions/api/me.js); the
+# box stays hidden unless sign-in is enabled (HUB_SESSION_SECRET and at least one
+# provider's OAuth app configured), and if the Function is absent or errors.
+# Only offered providers are listed. window.hubMe is the same /api/me answer for
+# other page scripts. User text goes in via textContent, never as HTML.
+AUTH_JS = """<script>
+(function(){
+  var box=document.getElementById('hubauth');
+  window.hubMe=fetch('/api/me',{credentials:'same-origin'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null});
+  function el(t,a,txt){var e=document.createElement(t);for(var k in a)e.setAttribute(k,a[k]);if(txt)e.textContent=txt;return e}
+  var here=encodeURIComponent(location.pathname+location.search.replace(/([?&])signin=[^&]*&?/,'$1').replace(/[?&]$/,''));
+  var m=location.search.match(/[?&]signin=(failed|cancelled|disabled)/);
+  if(m){
+    var n=el('div',{'class':'authnote',role:'status'},m[1]==='failed'?'Sign-in did not complete. Try again.':m[1]==='cancelled'?'Sign-in cancelled.':'Sign-in is not available yet.');
+    document.body.appendChild(n);setTimeout(function(){n.remove()},5000);
+    history.replaceState(null,'',decodeURIComponent(here)+location.hash);
+  }
+  window.hubMe.then(function(me){
+    if(!box||!me||!me.ok||!me.enabled)return;
+    var sum=el('summary'),menu=el('div',{'class':'menu'});
+    if(me.user){
+      var u=me.user;
+      if(u.avatar)sum.appendChild(el('img',{src:u.avatar,alt:'',referrerpolicy:'no-referrer'}));
+      sum.appendChild(el('span',{},u.login));
+      menu.appendChild(el('span',{},(u.name||u.login)+' · '+(u.provider==='hf'?'Hugging Face':'GitHub')));
+      (me.links||[]).forEach(function(l){menu.appendChild(el('a',{href:l.href},l.label))});
+      menu.appendChild(el('a',{href:'/auth/logout?return='+here},'Sign out'));
+    }else{
+      sum.textContent='Sign in';
+      if(me.providers.github)menu.appendChild(el('a',{href:'/auth/github/login?return='+here},'with GitHub'));
+      if(me.providers.hf)menu.appendChild(el('a',{href:'/auth/hf/login?return='+here},'with Hugging Face'));
+    }
+    box.appendChild(sum);box.appendChild(menu);box.hidden=false;
+    document.addEventListener('click',function(e){if(!box.contains(e.target))box.open=false});
+  });
+})();
+</script>"""
+
+
 def page(title, desc, body, rel=""):
     return PAGE.format(title=esc(title), desc=esc(desc), body=body, rel=rel,
-                       fonts=FONTS, stamp=STAMP, ver=STYLE_VER, navjs=NAVCTA_JS)
+                       fonts=FONTS, stamp=STAMP, ver=STYLE_VER, navjs=NAVCTA_JS, authjs=AUTH_JS)
 
 
 FILTER_JS = """<script>
