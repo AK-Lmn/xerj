@@ -114,7 +114,7 @@ test('no binding: usage says disabled; hosted route still answers', async () => 
 test('hosted route records template only; usage publishes after k; opt-out respected', async () => {
   _resetCaches();
   const bucket = r2();
-  const env = { HUB_USAGE: bucket, ASSETS };
+  const env = { HUB_USAGE: bucket, ASSETS, HUB_USAGE_DETAIL_SIGNIN: '0' };
   const ask = (q, headers) => code({ request: req(`/api/v1/code/lz4?q=${encodeURIComponent(q)}`, headers), env, params: { slug: 'lz4' } });
   assert.equal((await ask('compression ratio of LZ4_compress_fast at level 9')).status, 503);
   const evs = [...bucket.m.entries()].filter(([k]) => k.startsWith('ev/'));
@@ -151,11 +151,20 @@ test('unknown corpus is a 404 and is not counted; def counts the symbol as <symb
   assert.equal(evs[0][1].meta.t, '<symbol>');
 });
 
-test('detail can be gated: summary stays public', async () => {
+test('detail is behind sign-in by default; summary stays public; a session opens it', async () => {
   _resetCaches();
-  const env = { HUB_USAGE: r2(), ASSETS, HUB_USAGE_DETAIL_SIGNIN: '1' };
-  const u = await (await usage({ request: req('/api/hub-usage?corpus=lz4'), env })).json();
-  assert.equal(u.detail, null); assert.equal(u.detail_requires_signin, true); assert.equal(u.d30, 0);
+  const env = { HUB_USAGE: r2(), ASSETS };
+  let u = await (await usage({ request: req('/api/hub-usage?corpus=lz4'), env })).json();
+  assert.equal(u.detail, null); assert.equal(u.detail_requires_signin, true); assert.equal(u.signin_enabled, false); assert.equal(u.d30, 0);
+  const secret = 's'.repeat(40);
+  const { makeSessionCookie } = await import('../../functions/_lib/session.js');
+  const set = await makeSessionCookie(secret, { provider: 'github', id: '1', login: 'ann', name: 'Ann', avatar: '' });
+  const cookie = set.split(';')[0];
+  const env2 = { ...env, HUB_SESSION_SECRET: secret, GITHUB_OAUTH_CLIENT_ID: 'i', GITHUB_OAUTH_CLIENT_SECRET: 's' };
+  u = await (await usage({ request: req('/api/hub-usage?corpus=lz4', { cookie }), env: env2 })).json();
+  assert.deepEqual(u.detail, { templates: [], topics: [] }); assert.equal(u.signin_enabled, true);
+  u = await (await usage({ request: req('/api/hub-usage?corpus=lz4'), env: env2 })).json();
+  assert.equal(u.detail, null);
 });
 
 test('record: daily cap and missing binding never throw', async () => {

@@ -19,12 +19,15 @@
 // words seen fewer than k times are generalised to <term> (see kTemplates).
 //
 // ─────────────────────────────── SIGN-IN GATE ───────────────────────────
-// Summary numbers are always public. The detail block (templates, topics) can be
-// put behind hub sign-in by setting the Pages variable HUB_USAGE_DETAIL_SIGNIN=1
-// and implementing viewerSignedIn() below with the hub's session helper.
+// Summary numbers (counts, agent families) are always public. The detail block
+// (templates, topics) is shown to signed-in visitors only (hub sign-in,
+// functions/_lib/session.js). HUB_USAGE_DETAIL_SIGNIN=0 makes it public.
+// While sign-in itself is not enabled, nobody sees the detail; the response
+// says so (signin_enabled:false) and the page explains it.
 //
 // Cost: closed days are rolled up once into agg/<day>.json (one list + one put
 // per day, ever); later reads are one Class-B get per day, cached per isolate.
+import { config as signinConfig, currentUser } from '../_lib/session.js';
 import { aggregate, rollup, day, K, WINDOW_DAYS, SEARCH_CORPUS } from '../_lib/hub-usage.js';
 
 const SLUG_RE = /^[a-z0-9][a-z0-9._-]{0,99}$/;
@@ -33,11 +36,11 @@ const json = (obj, status = 200, cache = 'no-store') => new Response(JSON.string
   status, headers: { 'content-type': 'application/json', 'cache-control': cache },
 });
 
-export function detailRequiresSignin(env) { return String((env && env.HUB_USAGE_DETAIL_SIGNIN) || '') === '1'; }
+export function detailRequiresSignin(env) { return String((env && env.HUB_USAGE_DETAIL_SIGNIN) ?? '') !== '0'; }
 
-// Hook for the hub's sign-in (the /api/me session). Until it is wired in, a
-// gated detail block is shown to nobody, which is the safe failure.
-export async function viewerSignedIn(_request, _env) { return false; }
+export async function viewerSignedIn(request, env) {
+  try { return !!(await currentUser(request, env || {})); } catch (_) { return false; }
+}
 
 const closedDays = new Map();          // day → rollup; immutable once the day is over
 let todayCache = { day: '', at: 0, roll: null };
@@ -118,6 +121,6 @@ export async function onRequest({ request, env }) {
     ok: true, enabled: true, corpus, k: K, window_days: WINDOW_DAYS, since,
     d7: s.d7, d30: s.d30, agents30: s.agents30, agent_families: s.agent_families, routes: s.routes,
     detail: showDetail ? { templates: s.templates, topics: s.topics } : null,
-    detail_requires_signin: gated,
+    detail_requires_signin: gated, signin_enabled: signinConfig(env || {}).enabled,
   }, 200, gated ? 'private, no-store' : 'public, max-age=120');
 }
