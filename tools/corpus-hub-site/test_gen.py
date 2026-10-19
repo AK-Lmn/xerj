@@ -137,5 +137,17 @@ class ContributorVolumeTest(unittest.TestCase):
         self.assertFalse(any(w["reviewed"] for p in people.values() for w in p["work"].values()))
 
 
+class SignInNavTest(unittest.TestCase):
+    def test_sign_in_box_ships_hidden_and_asks_api_me(self):
+        html = gen.page("t", "d", "<main></main>")
+        # hidden in the static HTML: an anonymous visitor on a hub without the
+        # OAuth secrets sees exactly the page they saw before
+        self.assertIn('<details class="authbox" id="hubauth" hidden></details>', html)
+        self.assertIn("fetch('/api/me'", html)
+        self.assertIn("if(!box||!me||!me.ok||!me.enabled)return;", html)
+        # user-controlled text is never written as HTML
+        self.assertNotIn("innerHTML", gen.AUTH_JS)
+
+
 if __name__ == "__main__":
     unittest.main()
