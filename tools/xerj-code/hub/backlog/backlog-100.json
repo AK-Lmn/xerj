@@ -13253,6 +13253,52 @@
      "supply-chain"
     ]
    }
+  },
+  {
+   "cat": "API",
+   "domain": "An agent writing Swift queries this for The Swift Programming Language book: syntax and semantics of concurrency (async/await, async let, actors), generics, optionals, error handling and the language reference grammar.",
+   "lane": "A",
+   "refresh": "weekly",
+   "slug": "swift-book",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/swiftlang/swift-book"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "swift",
+     "language-guide",
+     "concurrency",
+     "language-reference"
+    ]
+   }
+  },
+  {
+   "cat": "API",
+   "domain": "An agent writing Swift queries this for the accepted Swift Evolution proposals (SE-NNNN): the motivation, exact semantics and API of language and standard-library features such as Result, async let, typed throws and macros.",
+   "lane": "A",
+   "refresh": "weekly",
+   "slug": "swift-evolution",
+   "sources": [
+    {
+     "licence_hint": "Apache-2.0",
+     "url": "https://github.com/swiftlang/swift-evolution"
+    }
+   ],
+   "status": "live",
+   "tags": {
+    "region": "GLOBAL",
+    "topics": [
+     "swift",
+     "evolution-proposals",
+     "stdlib",
+     "language-design"
+    ]
+   }
   }
  ],
  "lanes": [
