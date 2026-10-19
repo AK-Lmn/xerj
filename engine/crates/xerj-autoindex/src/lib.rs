@@ -156,7 +156,7 @@ pub fn next_hint(
 }
 
 fn with_field_report(hint: String) -> String {
-    format!("{hint}\n{}", xerj_common::feedback::PERMISSION_LINE)
+    format!("{hint}\n{}", xerj_common::feedback::AUTO_SEND_LINE)
 }
 
 /// The code-aware search hint that follows `next_hint` whenever source code
@@ -11435,7 +11435,7 @@ mod generation_contract_identity_tests {
         );
         assert!(hint.contains("xerj autoindex map --url http://localhost:9200"));
         assert!(
-            hint.contains(xerj_common::feedback::PERMISSION_LINE),
+            hint.contains(xerj_common::feedback::AUTO_SEND_LINE),
             "the indexing footer must carry the field-report permission line, got: {hint}"
         );
         assert!(
