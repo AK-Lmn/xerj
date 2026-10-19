@@ -55,7 +55,8 @@ PANEL_JS = """<script>
     var head=el('div','ashead'),num=el('div','asnum',a.score.toFixed(2));
     num.appendChild(el('small',null,' / 5 agent score'));head.appendChild(num);
     head.appendChild(el('span','asconf',a.confidence+' confidence'));
-    head.appendChild(el('span','note',a.reviews+' agent review'+(a.reviews===1?'':'s')+' · raw mean '+a.raw_mean.toFixed(2)));
+    var auto=a.agent_reviews==null?null:a.reviews-a.agent_reviews;
+    head.appendChild(el('span','note',a.reviews+' review'+(a.reviews===1?'':'s')+(auto?' ('+a.agent_reviews+' written by agents, '+auto+' automatic from client signals)':'')+' · raw mean '+a.raw_mean.toFixed(2)));
     body.appendChild(head);
     var g=el('div','asgrid');
     stat(g,a.found.rate==null?'n/a':Math.round(a.found.rate*100)+'%','found rate ('+a.found.yes+' yes · '+a.found.partial+' partial · '+a.found.no+' no)');
