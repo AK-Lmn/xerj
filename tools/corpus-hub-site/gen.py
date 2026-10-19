@@ -1133,7 +1133,7 @@ def main():
               "  withdrawn states (visible, not hidden: hub policy is honest statuses).",
               "  Browse all: https://hub.xerj.org"]
     (OUT / "llms.txt").write_text("\n".join(lines) + "\n")
-    people = contributors.generate(OUT, HUB, page, esc, {c["slug"] for c in live})
+    people = contributors.generate(OUT, HUB, page, esc, {c["slug"] for c in live}, corpora)
     n = len(list((OUT / "corpus").glob("*.html")))
     print(f"generated: index, about, {len(CATS)} category pages, {n} corpus pages, {people} contributor pages -> {OUT}")
 
