@@ -391,30 +391,52 @@ fn create_defs_index(node: &HubNode, index: &str) -> Result<()> {
     Ok(())
 }
 
-/// Bulk-index every def document (`symbol_text` mirrors `symbol`, analysed).
+/// Most index actions a single defs `_bulk` request may carry. A large code
+/// corpus has far more symbols than the engine's `max_actions_per_bulk`
+/// (default 50 000 — biome alone extracts 107 317), and the engine rejects an
+/// over-cap bulk *whole*, with a per-item 413 (`exceeds max_actions_per_bulk`),
+/// so the builder must split. 10 000 actions per request mirrors the autoindex
+/// client's `BULK_MAX_ACTIONS` (xerj-autoindex `esclient.rs`) and keeps each
+/// request's intermediate heap bounded on the small CI builder node.
+const DEFS_BULK_CHUNK: usize = 10_000;
+
+/// Serialize `defs` into NDJSON `_bulk` bodies of at most `chunk` index actions
+/// each (one action = one `{"index":{}}` line plus one document line). Returns
+/// one body per chunk; empty input yields no bodies, hence no request.
+fn defs_bulk_bodies(defs: &[xerj_common::hub::DefRecord], chunk: usize) -> Vec<String> {
+    let chunk = chunk.max(1);
+    defs.chunks(chunk)
+        .map(|batch| {
+            let mut ndjson = String::with_capacity(batch.len() * 160);
+            for d in batch {
+                ndjson.push_str("{\"index\":{}}\n");
+                let doc = json!({
+                    "symbol": d.symbol,
+                    "symbol_text": d.symbol,
+                    "kind": d.kind,
+                    "lang": d.lang,
+                    "file": d.file,
+                    "line": d.line,
+                    "text": d.text,
+                    "value": d.value,
+                });
+                ndjson.push_str(&doc.to_string());
+                ndjson.push('\n');
+            }
+            ndjson
+        })
+        .collect()
+}
+
+/// Bulk-index every def document (`symbol_text` mirrors `symbol`, analysed),
+/// split into [`DEFS_BULK_CHUNK`]-action requests so a corpus with more symbols
+/// than the engine's `max_actions_per_bulk` is not rejected whole.
 fn index_defs(node: &HubNode, index: &str, defs: &[xerj_common::hub::DefRecord]) -> Result<()> {
-    if defs.is_empty() {
-        return Ok(());
-    }
-    let mut ndjson = String::with_capacity(defs.len() * 160);
-    for d in defs {
-        ndjson.push_str("{\"index\":{}}\n");
-        let doc = json!({
-            "symbol": d.symbol,
-            "symbol_text": d.symbol,
-            "kind": d.kind,
-            "lang": d.lang,
-            "file": d.file,
-            "line": d.line,
-            "text": d.text,
-            "value": d.value,
-        });
-        ndjson.push_str(&doc.to_string());
-        ndjson.push('\n');
-    }
-    let resp = node.bulk_ndjson(&format!("/{index}/_bulk"), ndjson)?;
-    if resp.get("errors").and_then(Value::as_bool) == Some(true) {
-        bail!("defs bulk index reported errors: {resp}");
+    for ndjson in defs_bulk_bodies(defs, DEFS_BULK_CHUNK) {
+        let resp = node.bulk_ndjson(&format!("/{index}/_bulk"), ndjson)?;
+        if resp.get("errors").and_then(Value::as_bool) == Some(true) {
+            bail!("defs bulk index reported errors: {resp}");
+        }
     }
     Ok(())
 }
@@ -1571,6 +1593,41 @@ mod tests {
             "/nonexistent/key".into(),
         ]);
         assert_eq!(rc, 2, "missing --url is a usage error");
+    }
+
+    #[test]
+    fn defs_bulk_bodies_split_under_the_engine_action_cap() {
+        let defs: Vec<xerj_common::hub::DefRecord> = (0..5)
+            .map(|i| xerj_common::hub::DefRecord {
+                symbol: format!("s{i}"),
+                kind: "function".into(),
+                lang: "rust".into(),
+                file: "a.rs".into(),
+                line: i + 1,
+                text: format!("fn s{i}()"),
+                value: None,
+            })
+            .collect();
+
+        // 5 defs at 2 actions per body -> three bodies (2, 2, 1).
+        let bodies = defs_bulk_bodies(&defs, 2);
+        assert_eq!(bodies.len(), 3);
+        let per_body: Vec<usize> = bodies
+            .iter()
+            .map(|b| b.matches("{\"index\":{}}").count())
+            .collect();
+        assert_eq!(per_body, vec![2, 2, 1]);
+        // No body exceeds the chunk, and every def is indexed exactly once.
+        assert!(per_body.iter().all(|&n| n <= 2));
+        assert_eq!(per_body.iter().sum::<usize>(), defs.len());
+
+        // Empty input issues no request at all.
+        assert!(defs_bulk_bodies(&[], DEFS_BULK_CHUNK).is_empty());
+        // The production chunk can never trip the engine's default cap, which is
+        // exactly the 413 that failed biome/dagger/duckdb before this split.
+        assert!(
+            DEFS_BULK_CHUNK < xerj_common::config::LimitsConfig::default().max_actions_per_bulk
+        );
     }
 
     // ── xerj ask: argument parsing ───────────────────────────────────────────
