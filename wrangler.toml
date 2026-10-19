@@ -9,6 +9,13 @@
 #              until it exists the function serves the installer normally and
 #              simply does not count. Fail-open is deliberate.
 #
+#   HUB_STARS — functions/api/hub-stars.js keeps hub-native stars for
+#              contributors and corpora on hub.xerj.org (R2 bucket
+#              `xerj-hub-stars`, created once in the dashboard: R2 → Create
+#              bucket). Per-IP-hash rate limit + daily cap, raw IP never stored.
+#              Merge this binding only AFTER the bucket exists: a binding to a
+#              missing bucket can block the Pages deploy.
+#
 # Routing: landing/_routes.json pins Function invocation to /get, /get.ps1 and
 # /lead. A NEW FUNCTION ADDED UNDER functions/ WILL NOT BE ROUTED until its
 # path is added to that include list.
@@ -23,3 +30,10 @@ bucket_name = "xerj-leads"
 [[r2_buckets]]
 binding = "INSTALLS"
 bucket_name = "xerj-installs"
+
+# Hub-native stars (hub.xerj.org; functions/api/hub-stars.js). The hub deploy
+# (deploy-hub-pages.yml / hub-packs.yml) runs `wrangler pages deploy` from the
+# repo root, so this file is that project's configuration too.
+[[r2_buckets]]
+binding = "HUB_STARS"
+bucket_name = "xerj-hub-stars"
