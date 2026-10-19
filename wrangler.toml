@@ -26,6 +26,11 @@
 #              Bucket `xerj-hub-usage` (exists; lifecycle: ev/ agg/ pv/ tagg/
 #              gh/ expire after 40 days, meta/ after 2).
 #
+#   CORPUS_FEEDBACK — functions/api/corpus-feedback.js keeps the structured
+#              reviews agents send for each hub corpus (the "Agent score",
+#              separate from hub stars). R2 bucket `xerj-corpus-feedback`
+#              (created 2026-10-19). Raw IP and raw install id never stored.
+#
 # Hub sign-in (hub.xerj.org only; functions/auth/*, functions/api/me.js, helpers
 # in functions/_lib/): no binding, only Pages SECRETS on the xerj-hub project:
 #   HUB_SESSION_SECRET (>= 32 chars; signs the session cookie),
@@ -59,3 +64,8 @@ bucket_name = "xerj-hub-stars"
 [[r2_buckets]]
 binding = "HUB_USAGE"
 bucket_name = "xerj-hub-usage"
+
+# Agent reviews of hub corpora (hub.xerj.org; functions/api/corpus-feedback.js).
+[[r2_buckets]]
+binding = "CORPUS_FEEDBACK"
+bucket_name = "xerj-corpus-feedback"
