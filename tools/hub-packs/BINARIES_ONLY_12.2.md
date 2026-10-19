@@ -55,14 +55,17 @@ and the hubpack-asset test and aborts the whole run on a single mismatch.
 hubpack release exists for **both** record slugs (published, unless
 `--allow-draft-replacement`). As of 2026-10-19 that guard is **UNMET**: zero
 `pack-rust-vulns-<pin>` / `pack-agent-session-trajectories-<pin>` hubpack
-releases exist yet, and #1736 (`feat/record-hubpacks`) is open and conflicting.
+releases exist yet. #1736 (`feat/record-hubpacks`) adds the `hubpack` job that
+builds them; it publishes only once the `RECORD_HUBPACKS` variable says so.
 Retiring the live JSON packs before their binary replacements are live would
 strand those two corpora.
 
 **Durability precondition:** retiring the 31 releases is only permanent once
 `pack-publish.yml` no longer publishes the JSON lane — otherwise the daily cron
-re-creates a new dated JSON release. #1736 is the PR that converts that workflow;
-confirm its merged form publishes **only** hubpacks before (or with) the retire.
+re-creates a new dated JSON release. With #1736 merged, the JSON jobs are gated
+on the repository variable `RECORD_HUBPACKS`: `publish` publishes the hubpacks
+beside the JSON packs, `only` skips the JSON jobs. Set it to `only` (or remove
+the `schedule:` from `pack-publish.yml`) before, or together with, the retire.
 
 ## hub.xerj.org today
 
@@ -85,8 +88,9 @@ is complete when:
 Preconditions
 - [ ] #1736 merged; `pack-publish.yml` publishes the two corpora as hubpacks and
       **no longer** publishes the JSON record packs.
-      Verify: `gh pr view 1736 --json state` → `MERGED`; grep the merged
-      `pack-publish.yml` for the removed `*-pack.zip` upload steps.
+      Verify: `gh pr view 1736 --json state` → `MERGED`;
+      `gh variable get RECORD_HUBPACKS` → `only` (the JSON jobs are skipped),
+      or the `schedule:` block is gone from `pack-publish.yml`.
 - [ ] A published `pack-rust-vulns-<pin>` **and**
       `pack-agent-session-trajectories-<pin>` hubpack release exists.
       Verify: `retire_v1_releases.sh` prints the guard as satisfied.
@@ -101,7 +105,11 @@ Retire the GitHub releases
 
 Consumer surfaces (may be separate PRs / owners — this script does not touch them)
 - [ ] `landing/llms.txt` (line ~54) and `landing/llms-full.txt` (lines ~1625)
-      stop presenting `xerj corpus add --from ./<slug>.json` as the hub path.
+      stop presenting `xerj corpus add --from ./<slug>.json` as the hub path
+      (draft PR #1410, into `main`).
+- [ ] Hub pages (`tools/corpus-hub-site/gen.py`, deployed to hub.xerj.org on
+      push to `corpus-hub`) print `xerj hub pull <slug>` and the one line
+      instead of manifest JSON links (draft PR #1407, into `corpus-hub`).
 - [ ] `landing/docs/corpus-hub.html`, `landing/demo/index.html`,
       `landing/blog/the-corpus-hub.html` stop linking per-corpus manifest JSON.
 - [ ] `hub.xerj.org/api/v1/catalogue.json` serves signed JSON (not the HTML 200).
