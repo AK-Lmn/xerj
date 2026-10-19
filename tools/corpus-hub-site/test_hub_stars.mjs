@@ -2,7 +2,7 @@
 // Exercises /api/hub-stars against an in-memory stand-in for the R2 binding.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { onRequest } from '../../functions/api/hub-stars.js';
+import { onRequest, sourceKey } from '../../functions/api/hub-stars.js';
 
 function r2() {
   const m = new Map();
@@ -59,4 +59,19 @@ test('rejects unknown targets, bad kinds, cross-origin', async () => {
   assert.equal((await call('POST', { body: { kind: 'contributor', id: 'ann' }, origin: 'https://evil.example', env }))[0], 403);
   assert.equal((await call('GET', { query: '?kind=x', env }))[0], 400);
   assert.equal(env.HUB_STARS.writes, 0);
+});
+
+test('an IPv6 /64 is one source (rotating addresses cannot re-star)', async () => {
+  assert.equal(sourceKey('2a09:bac5:1b2b:db9::15e:ce'), '2a09:bac5:1b2b:db9::/64');
+  assert.equal(sourceKey('2a09:bac5:1b2b:0db9:1:2:3:4'), '2a09:bac5:1b2b:db9::/64');
+  assert.equal(sourceKey('2001:db8::1'), '2001:db8:0:0::/64');
+  assert.equal(sourceKey('::ffff:1.2.3.4'), '1.2.3.4');
+  assert.equal(sourceKey('1.2.3.4'), '1.2.3.4');
+  const env = { HUB_STARS: r2(), ASSETS };
+  let [, b] = await call('POST', { body: { kind: 'corpus', id: 'aider' }, ip: '2a09:bac5:1b2b:db9::15e:ce', env });
+  assert.equal(b.count, 1);
+  [, b] = await call('POST', { body: { kind: 'corpus', id: 'aider' }, ip: '2a09:bac5:1b2b:db9::99:1', env });
+  assert.equal(b.already, true); assert.equal(b.count, 1);
+  [, b] = await call('GET', { query: '?kind=corpus&id=aider', ip: '2a09:bac5:1b2b:db9::abcd', env });
+  assert.equal(b.starred, true);
 });
