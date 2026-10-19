@@ -425,6 +425,9 @@ padding:var(--sp-2) 0;display:flex;flex-direction:column;z-index:60;box-shadow:0
 .authbox .menu a,.authbox .menu span{padding:var(--sp-2) var(--sp-4);display:block}
 .authbox .menu span{color:var(--z-ink);text-transform:none;letter-spacing:normal;font-size:var(--fs-13)}
 .authbox .menu a:hover{background:var(--z-faint);color:var(--z-ink)}
+.mystars{width:100%;border-collapse:collapse;margin-top:var(--sp-6);background:#fff}
+.mystars th,.mystars td{border:1px solid var(--z-line);padding:var(--sp-2) var(--sp-3);text-align:left}
+.spark{width:160px;height:32px;display:block}.spark polyline{fill:none;stroke:var(--z-accent);stroke-width:1.5}
 .authnote{position:fixed;bottom:var(--sp-5);right:var(--sp-5);background:var(--z-ink);color:#fff;padding:var(--sp-3) var(--sp-5);
 font-family:var(--font-data);font-size:var(--fs-13);z-index:70}
 .cta{display:inline-block;margin-top:var(--sp-5);font-family:var(--font-data);font-size:var(--fs-13);
@@ -652,12 +655,11 @@ STYLE_VER = hashlib.sha1(STYLE.encode("utf-8")).hexdigest()[:8]
 # Sign in / avatar / sign out in the nav. Asks /api/me (functions/api/me.js); the
 # box stays hidden unless sign-in is enabled (HUB_SESSION_SECRET and at least one
 # provider's OAuth app configured), and if the Function is absent or errors.
-# Only offered providers are listed. window.hubMe is the same /api/me answer for
-# other page scripts. User text goes in via textContent, never as HTML.
+# Only offered providers are listed. window.hubMe is the one shared /api/me request
+# (whichever page script runs first starts it). User text goes in via textContent, never as HTML.
 AUTH_JS = """<script>
 (function(){
   var box=document.getElementById('hubauth');
-  window.hubMe=fetch('/api/me',{credentials:'same-origin'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null});
   function el(t,a,txt){var e=document.createElement(t);for(var k in a)e.setAttribute(k,a[k]);if(txt)e.textContent=txt;return e}
   var here=encodeURIComponent(location.pathname+location.search.replace(/([?&])signin=[^&]*&?/,'$1').replace(/[?&]$/,''));
   var m=location.search.match(/[?&]signin=(failed|cancelled|disabled)/);
@@ -666,7 +668,7 @@ AUTH_JS = """<script>
     document.body.appendChild(n);setTimeout(function(){n.remove()},5000);
     history.replaceState(null,'',decodeURIComponent(here)+location.hash);
   }
-  window.hubMe.then(function(me){
+  (window.hubMe=window.hubMe||fetch('/api/me',{credentials:'same-origin'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})).then(function(me){
     if(!box||!me||!me.ok||!me.enabled)return;
     var sum=el('summary'),menu=el('div',{'class':'menu'});
     if(me.user){
@@ -683,6 +685,52 @@ AUTH_JS = """<script>
     }
     box.appendChild(sum);box.appendChild(menu);box.hidden=false;
     document.addEventListener('click',function(e){if(!box.contains(e.target))box.open=false});
+  });
+})();
+</script>"""
+
+
+# /me.html: the signed-in visitor's own hub page. The static file is an empty
+# shell; everything on it comes from the authenticated API at view time
+# (/api/v1/me/stars; functions/api/v1/me/stars.js), so nothing personal is ever
+# in the generated site.
+ME_BODY = """<main class="cwrap"><section class="whead"><h1>Your hub</h1>
+<p id="me-lead">Sign in from the header to see the corpora and contributors you starred, and how their hub stars grew.</p></section>
+<div id="me-stars"></div></main>"""
+
+ME_JS = """<script>
+(function(){
+  var lead=document.getElementById('me-lead'),box=document.getElementById('me-stars');
+  function el(t,a,txt){var e=document.createElement(t);for(var k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e}
+  function spark(h){ // cumulative hub stars over the days we have history for
+    if(!h||!h.length)return null;
+    var c=0,pts=h.map(function(d){c+=d[1];return c}),mx=pts[pts.length-1]||1,w=160,ht=32,n=pts.length;
+    var d=pts.map(function(v,i){return (n===1?w:i*w/(n-1)).toFixed(1)+','+(ht-v/mx*(ht-2)-1).toFixed(1)}).join(' ');
+    if(n===1)d='0,'+(ht-1)+' '+d;
+    var s=document.createElementNS('http://www.w3.org/2000/svg','svg');s.setAttribute('viewBox','0 0 '+w+' '+ht);s.setAttribute('class','spark');
+    var p=document.createElementNS('http://www.w3.org/2000/svg','polyline');p.setAttribute('points',d);s.appendChild(p);
+    var t=document.createElementNS('http://www.w3.org/2000/svg','title');t.textContent='+'+c+' hub stars from '+h[0][0]+' to '+h[h.length-1][0];s.appendChild(t);
+    return s;
+  }
+  (window.hubMe=window.hubMe||fetch('/api/me',{credentials:'same-origin'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})).then(function(me){
+    if(!me||!me.enabled){lead.textContent='Sign-in is not enabled on this hub yet.';return}
+    if(!me.user)return;
+    lead.textContent='Signed in as '+me.user.login+'. Everything you starred on the hub, newest first.';
+    fetch('/api/v1/me/stars',{credentials:'same-origin'}).then(function(r){return r.json()}).then(function(r){
+      if(!r||!r.ok){lead.textContent='Could not load your stars right now.';return}
+      if(!r.enabled){lead.textContent='Hub stars are not enabled on this hub yet.';return}
+      if(!r.stars.length){box.appendChild(el('p',{'class':'note'},'No stars yet. Star a corpus or a contributor from its page.'));return}
+      var t=el('table',{'class':'mystars'}),hd=el('tr');
+      ['','starred','hub stars','since daily history began'].forEach(function(x){hd.appendChild(el('th',{},x))});t.appendChild(hd);
+      r.stars.forEach(function(s){
+        var tr=el('tr'),a=el('td');a.appendChild(el('a',{href:s.href},(s.kind==='corpus'?'corpus ':'@')+s.id));tr.appendChild(a);
+        tr.appendChild(el('td',{'class':'mono'},(s.starred_at||'').slice(0,10)));
+        tr.appendChild(el('td',{'class':'mono'},'\u2605 '+Number(s.count||0).toLocaleString('en-US')));
+        var h=el('td'),sp=spark(s.history);if(sp)h.appendChild(sp);else h.textContent=s.history?'no new stars yet':'';tr.appendChild(h);
+        t.appendChild(tr);
+      });
+      box.appendChild(t);
+    }).catch(function(){lead.textContent='Could not load your stars right now.'});
   });
 })();
 </script>"""
@@ -1086,6 +1134,7 @@ def main():
         (OUT / "category" / f"{k}.html").write_text(
             page(f"{k}: {title} domain", what, category_body(k, cs, g7, graded, impact), rel="../"))
     (OUT / "about.html").write_text(page("About: XERJ Corpus Hub", "How corpora are gated, scored, tagged, and licenced", ABOUT, rel=""))
+    (OUT / "me.html").write_text(page("Your hub: XERJ Corpus Hub", "Your hub stars, after you sign in", ME_BODY + ME_JS, rel=""))
     (OUT / "contribute.html").write_text(page("Contribute: XERJ Corpus Hub", "Share your knowledge: index a corpus and open a pull request", contribute_body(), rel=""))
     # llms.txt - agent-facing index of the registry, generated like everything
     # else. Short first screen (study rule 7), no obligation language, every
