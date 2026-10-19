@@ -3,9 +3,9 @@ who agreed to contribute, a wall of all of them, and a README badge each.
 
 Source: tools/xerj-code/hub/candidates/authors/CONTRIBUTORS.jsonl (written by
 the outreach pipeline; one row per approved contribution). Every number on a
-page is read from that ledger or the registry; a number we do not have yet
-(agent retrievals before the corpus is live) is shown as not counted yet,
-never estimated.
+page is read from that ledger or the registry; a number we do not have is left off the page,
+never estimated. There is no per-author retrieval counter yet (nothing here is
+live), so the pages show no retrieval figure at all rather than a placeholder.
 
   out/contributors/index.html          the wall
   out/contributors/<login>.html        one author
@@ -27,7 +27,7 @@ STYLE = """
 .ribbon{display:inline-block;margin:var(--sp-4) 0;font-family:var(--font-data);font-size:var(--fs-11);font-weight:700;
 text-transform:uppercase;letter-spacing:var(--track-ui);color:#fff;padding:.5em 1em;
 background:linear-gradient(100deg,#6d28d9,#9333ea,#7c3aed,#6d28d9);background-size:280% 100%;animation:ctaflow 5s ease infinite}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--z-line);border:1px solid var(--z-line);margin:var(--sp-6) 0}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--z-line);border:1px solid var(--z-line);margin:var(--sp-6) 0}
 .kpi{background:#fff;padding:var(--sp-5)}
 .kpi b{display:block;font-family:var(--font-display);font-weight:800;font-size:var(--fs-32);line-height:1.1}
 .kpi span{font-family:var(--font-data);font-size:var(--fs-11);text-transform:uppercase;letter-spacing:var(--track-label);color:var(--z-mute)}
@@ -101,7 +101,6 @@ def person_body(login, rows, esc, live_slugs):
     stars = sum(r.get("repo_stars") or 0 for r in rows)
     lines = sum((r.get("contribution") or {}).get("lines") or 0 for r in rows)
     first = min(r["consent"]["at"] for r in rows)
-    live = [r for r in rows if r["corpus"] in live_slugs]
     url = f"{SITE}/contributors/{login}.html"
     repos = ", ".join(r["repo"] for r in rows[:2])
     tweet = f"My work in {repos} was selected for the XERJ Corpus Hub: AI coding agents retrieve it as a worked reference instead of guessing. {url}"
@@ -122,8 +121,6 @@ def person_body(login, rows, esc, live_slugs):
 <div class="chips">{status}<span class="chip">{esc(r.get("shelf") or "")}</span><span class="chip">{esc(lic.get("spdx") or "")}</span>{chips}
 <span class="chip">agreed {esc(r["consent"]["at"][:10])}</span></div></div>""")
     md = f"[![XERJ Corpus Hub contributor]({SITE}/contributors/{login}/badge.svg)]({url})"
-    agent_kpi = (f'<div class="kpi pending"><b>counting from launch</b><span>agent retrievals</span></div>' if not live else
-                 f'<div class="kpi pending"><b>counting</b><span>agent retrievals</span></div>')
     return f"""<main class="cwrap">
 <section class="prof"><img class="av" src="https://github.com/{esc(login)}.png?size=480" alt="{esc(name)}">
 <div><h1>{esc(name)}</h1><div class="login"><a href="https://github.com/{esc(login)}">@{esc(login)}</a></div>
@@ -131,8 +128,8 @@ def person_body(login, rows, esc, live_slugs):
 <p>{esc(name)}'s work was selected for the XERJ Corpus Hub, the open reference memory AI coding agents search before they write code.
 When an agent meets the same problem, it gets this implementation back as a worked example, with the author and the repository attached.</p>
 <div class="kpis"><div class="kpi"><b>{len(rows)}</b><span>contribution{"s" if len(rows) != 1 else ""}</span></div>
-<div class="kpi"><b>★ {_n(stars)}</b><span>stars on the repo{"s" if len(rows) != 1 else ""}</span></div>
-<div class="kpi"><b>{_n(lines) if lines else "—"}</b><span>lines in the selected work</span></div>{agent_kpi}</div>
+<div class="kpi"><b>★ {_n(stars)}</b><span>GitHub stars on the repo{"s" if len(rows) != 1 else ""}</span></div>
+<div class="kpi"><b>{_n(lines) if lines else "—"}</b><span>lines in the selected work</span></div></div>
 <div class="share"><a href="https://twitter.com/intent/tweet?text={urllib.parse.quote(tweet)}" target="_blank" rel="noopener">Share on X</a>
 <a href="https://www.linkedin.com/sharing/share-offsite/?url={urllib.parse.quote(url)}" target="_blank" rel="noopener">Share on LinkedIn</a>
 <a href="https://news.ycombinator.com/submitlink?u={urllib.parse.quote(url)}&t={urllib.parse.quote(name + ' on the XERJ Corpus Hub')}" target="_blank" rel="noopener">Hacker News</a>
