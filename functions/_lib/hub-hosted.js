@@ -17,7 +17,7 @@ const SLUG_RE = /^[a-z0-9][a-z0-9._-]{0,99}$/;
 const MAX_Q = 4096;
 const TARGETS_PATH = '/contributors/stars-targets.json';   // written by gen.py each deploy
 let corporaCache = null;
-async function knownCorpora(env, request) {
+export async function knownCorpora(env, request) {
   if (corporaCache) return corporaCache;
   try {
     const res = env && env.ASSETS ? await env.ASSETS.fetch(new URL(TARGETS_PATH, request.url)) : null;

@@ -71,7 +71,12 @@ test('uaFamily keeps only a coarse family', () => {
   assert.equal(uaFamily('xerj-mcp/0.9'), 'xerj-mcp');
   assert.equal(uaFamily('curl/8.5.0'), 'curl');
   assert.equal(uaFamily('python-httpx/0.27'), 'python');
-  assert.equal(uaFamily('Mozilla/5.0; Claude-User'), 'claude');
+  assert.equal(uaFamily('Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Claude-User/1.0; +Claude-User@anthropic.com)'), 'claude');
+  assert.equal(uaFamily('claude-code/2.1.0'), 'claude-code');
+  assert.equal(uaFamily('codex_cli_rs/0.46.0 (Mac OS 15.1; arm64)'), 'codex');
+  assert.equal(uaFamily('GeminiCLI/0.9.0 (linux; x64)'), 'gemini-cli');
+  assert.equal(uaFamily('Mozilla/5.0 (compatible; Googlebot/2.1)'), 'crawler');
+  assert.equal(uaFamily('Mozilla/5.0 (compatible; ClaudeBot/1.0)'), 'crawler');
   assert.equal(uaFamily(''), 'unknown');
   assert.equal(uaFamily('SomethingElse/1'), 'other');
 });

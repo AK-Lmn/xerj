@@ -87,11 +87,18 @@ export function templateOf(query, slug = '') {
 }
 
 // ── User agent → family (the full string is never stored) ──────────────────
+// Coding agents first (their UA often also says Mozilla or node), then crawlers,
+// then generic HTTP clients. Order matters: the first match wins.
 const FAMILIES = [
+  [/claude-code|claude_code/i, 'claude-code'], [/codex/i, 'codex'], [/gemini[-_ ]?cli/i, 'gemini-cli'],
+  [/cursor/i, 'cursor'], [/copilot/i, 'copilot'], [/aider/i, 'aider'], [/cline|roo-?code/i, 'cline'],
+  [/windsurf|codeium/i, 'windsurf'], [/opencode/i, 'opencode'], [/goose/i, 'goose'],
   [/xerj[-_ ]?mcp/i, 'xerj-mcp'], [/^xerj\b|xerj-hub|xerj\//i, 'xerj-cli'],
-  [/claude|anthropic/i, 'claude'], [/chatgpt|openai|gptbot/i, 'openai'],
-  [/gemini|google-extended|googleother/i, 'google'], [/perplexity/i, 'perplexity'],
-  [/cursor/i, 'cursor'], [/copilot|github-copilot/i, 'copilot'],
+  [/claude-user|claude-searchbot/i, 'claude'], [/chatgpt-user|oai-searchbot/i, 'chatgpt'],
+  [/perplexity-user/i, 'perplexity'],
+  [/bot\b|bot\/|crawl|spider|slurp|bingpreview|facebookexternalhit|headless/i, 'crawler'],
+  [/anthropic/i, 'claude'], [/openai/i, 'chatgpt'], [/gemini|google-extended|googleother/i, 'gemini'],
+  [/perplexity/i, 'perplexity'],
   [/^curl\//i, 'curl'], [/^wget/i, 'wget'],
   [/python|httpx|aiohttp|urllib/i, 'python'], [/node|undici|axios|deno|bun\//i, 'node-js'],
   [/go-http-client/i, 'go'], [/reqwest|hyper|ureq/i, 'rust'],
@@ -115,7 +122,7 @@ export function optedOut(request) {
 // only, never written; the map is dropped every minute.
 const RATE_PER_MIN = 30;
 let rateMinute = 0, rateMap = new Map();
-async function overRate(request) {
+export async function overRate(request) {
   const ip = String(request.headers.get('CF-Connecting-IP') || '');
   const key = ip.includes(':') ? ip.split(':').slice(0, 4).join(':') : ip;
   const d = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(key));

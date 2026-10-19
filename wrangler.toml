@@ -20,8 +20,11 @@
 #              API (/api/v1/code|def|search) per corpus for the usage stats on
 #              hub.xerj.org corpus pages (functions/api/hub-usage.js). Stores a
 #              query template, route and user-agent family per request; no raw
-#              query, no IP, no user id. Bucket `xerj-hub-usage` (exists;
-#              lifecycle: ev/ and agg/ expire after 40 days, meta/ after 2).
+#              query, no IP, no user id. Also the corpus-page Traffic panel
+#              (functions/_lib/hub-traffic.js, /api/hub-traffic): page views
+#              with a daily-salted visitor hash, UA family and referrer host.
+#              Bucket `xerj-hub-usage` (exists; lifecycle: ev/ agg/ pv/ tagg/
+#              gh/ expire after 40 days, meta/ after 2).
 #
 # Hub sign-in (hub.xerj.org only; functions/auth/*, functions/api/me.js, helpers
 # in functions/_lib/): no binding, only Pages SECRETS on the xerj-hub project:
