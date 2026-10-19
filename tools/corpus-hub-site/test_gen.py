@@ -235,5 +235,27 @@ def private_data_stub():
     return private_data.STUB
 
 
+class AgentScorePanelTest(unittest.TestCase):
+    """The Agent score is its own section, never mixed with hub stars, and
+    ships with no number in the HTML (the API fills it, or says there is none)."""
+
+    def test_panel_is_separate_and_honest(self):
+        import agent_score
+        html = agent_score.section("Tokio", gen.esc)
+        self.assertIn('id="agent-score"', html)
+        self.assertIn('data-corpus="tokio"', html)
+        self.assertIn("not</b> the human hub star count", html)
+        self.assertNotIn("★", html)
+        self.assertIn("No agent reviews yet", agent_score.PANEL_JS)
+        self.assertIn("not being collected yet", agent_score.PANEL_JS)
+        self.assertNotIn("innerHTML", agent_score.PANEL_JS + agent_score.CARDS_JS)
+
+    def test_cards_carry_the_slug_for_the_agent_sort(self):
+        c = {"slug": "Tokio", "cat": "DB", "status": "live", "lane": "A", "usecase": "x", "repos": [],
+             "tags": {}, "kind": "reference corpus"}
+        html = gen.card(c, {}, {}, {})
+        self.assertIn('data-slug="tokio"', html)
+
+
 if __name__ == "__main__":
     unittest.main()
