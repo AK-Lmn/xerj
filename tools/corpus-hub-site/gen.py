@@ -19,6 +19,8 @@ registry change.
 import datetime as dt
 import hashlib
 import contributors
+import os
+import private_data
 import usage
 import html
 import json
@@ -1015,9 +1017,10 @@ def detail_body(c, g7, graded, impact, prov, contrib=""):
 <section class="detail"><h2>Rights</h2><p>{esc(' + '.join(licences) or '?')}.
 {esc('Redistribution permitted with attribution per the licence review' if any(r.get('review',{}).get('use')=='adapt-with-attribution' for r in c['repos']) else 'See per-source review blocks')}.
 The review block records a human opening each licence file at the pin. Detector output is a hint, never the verdict.</p></section>
+{contributors.more_block("corpus", c["slug"], esc)}
 {g7sec}{impsec}{usage.traffic_section(c["slug"], esc)}{usage.corpus_section(c["slug"], esc)}{contrib}
 </main>
-{COPY_JS}{contributors.STARS_JS}{usage.USAGE_JS}'''
+{COPY_JS}{contributors.STARS_JS}{contributors.MORE_JS}{usage.USAGE_JS}'''
 
 
 def category_body(k, cs, g7, graded, impact):
@@ -1244,6 +1247,12 @@ def main():
               "  Browse all: https://hub.xerj.org"]
     (OUT / "llms.txt").write_text("\n".join(lines) + "\n")
     n_people = contributors.generate(OUT, HUB, page, esc, {c["slug"] for c in live}, corpora, people)
+    # Signed-in details: bundled into the Pages Functions, never written to out/.
+    if os.environ.get("GITHUB_ACTIONS") == "true" or os.environ.get("HUB_FUNCTION_DATA") == "1":
+        mod = private_data.module(private_data.build(ROOT, HUB, PACKS, corpora, people,
+                                                         dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d")))
+        (ROOT / "functions" / "_lib" / "hubdata.js").write_text(mod)
+        print(f"signed-in details: functions/_lib/hubdata.js, {len(mod):,} bytes")
     n = len(list((OUT / "corpus").glob("*.html")))
     print(f"generated: index, about, {len(CATS)} category pages, {n} corpus pages, {n_people} contributor pages -> {OUT}")
 
