@@ -148,6 +148,11 @@ class SignInNavTest(unittest.TestCase):
         # user-controlled text is never written as HTML
         self.assertNotIn("innerHTML", gen.AUTH_JS)
 
+    def test_me_page_is_an_empty_shell(self):
+        # personal data only ever arrives from the authenticated API
+        self.assertIn("/api/v1/me/stars", gen.ME_JS)
+        self.assertNotIn("innerHTML", gen.ME_JS)
+
 
 if __name__ == "__main__":
     unittest.main()

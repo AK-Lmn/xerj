@@ -315,7 +315,9 @@ def star_widget(kind, sid, esc, inline=False):
 def stars_targets(people, registry):
     """The ids /api/hub-stars accepts: only pages this deploy actually has."""
     return {"contributor": sorted(l.lower() for l in people),
-            "corpus": sorted(c["slug"].lower() for c in registry or [])}
+            "corpus": sorted(c["slug"].lower() for c in registry or []),
+            # page file names keep the login's case; ids are lower-case
+            "pages": {l.lower(): l for l in sorted(people) if l != l.lower()}}
 
 
 def wall_body(people, esc, live_slugs=()):

@@ -17,6 +17,10 @@
 //   No HUB_STARS binding → GET { ok:true, enabled:false }, POST 503 enabled:false
 //   (the pages hide the star control when enabled is false).
 //   One star per source (hash of the IPv4 address or IPv6 /64) per target; no un-star.
+//   Signed in (functions/_lib/session.js): ALSO one star per account per target,
+//   whatever network it comes from, and the star is listed under /api/v1/me/stars.
+//   A signed-in star from a network that already starred adds the target to the
+//   account's list without counting it twice. Anonymous stars work as before.
 //
 // ─────────────────────── STORAGE: R2, free-tier-safe ────────────────────
 // Binding HUB_STARS → bucket xerj-hub-stars (see wrangler.toml). Objects:
@@ -24,8 +28,13 @@
 //   who/<kind>/<id>/<ipHash>   marker: this source already starred it
 //   rl/<ipHash>                last accepted star (ms); rate limit
 //   meta/count-<YYYY-MM-DD>    accepted stars today; daily cap
-// An accepted star = 4 Class-A writes; DAILY_CAP×4 = 8,000/day ≈ 240k/mo, far
-// under R2's free 1M Class-A/mo. Rejected and duplicate stars write nothing.
+//   day/<kind>/<id>/<YYYY-MM-DD>  stars accepted that day (star history)
+//   me/<userHash>/<kind>/<id>  this account starred it (body: ISO time); dedup
+//                              for signed-in stars and the "my stars" list.
+//                              userHash = sha256(provider:id + salt), so keys
+//                              never carry an account id or login.
+// An accepted star = 5 Class-A writes, 6 signed in; DAILY_CAP×6 = 12,000/day
+// ≈ 360k/mo, under R2's free 1M Class-A/mo. Rejected and duplicate stars write nothing.
 // The listing GET (one Class-A list per page of 1000) is edge-cached for 60s.
 // The count is read-modify-write: two stars on the same target in the same
 // instant can lose one. Acceptable for a vanity counter; no money depends on it.
@@ -34,6 +43,8 @@
 // Valid targets come from the static file /contributors/stars-targets.json that
 // tools/corpus-hub-site/gen.py writes on every deploy, so a star can only land on
 // a page that exists.
+
+import { currentUser } from '../_lib/session.js';
 
 const DAILY_CAP = 2000;
 const RATE_WINDOW_MS = 5_000;   // one accepted star per source every 5s
@@ -91,6 +102,15 @@ async function sourceHash(request, env) {
   return key ? sha256hex(key + (env.HUB_STARS_SALT || 'xerj-hub-stars-v1')) : 'noip';
 }
 
+/** R2 key part for a signed-in account; null when nobody is signed in. */
+export async function userHash(user, env) {
+  return user ? sha256hex(`user:${user.provider}:${user.id}` + (env.HUB_STARS_SALT || 'xerj-hub-stars-v1')) : null;
+}
+
+async function has(bucket, key) {
+  try { return !!(await bucket.head(key)); } catch (_) { return false; }
+}
+
 export async function onRequest(context) {
   const method = context.request.method.toUpperCase();
   if (method === 'GET') return handleGet(context);
@@ -109,8 +129,8 @@ async function handleGet({ request, env, waitUntil }) {
 
   if (id) {
     const ipHash = await sourceHash(request, env);
-    let starred = false;
-    try { starred = !!(await bucket.head(`who/${kind}/${id}/${ipHash}`)); } catch (_) { /* unknown → false */ }
+    const uh = await userHash(await currentUser(request, env), env);
+    const starred = (uh && await has(bucket, `me/${uh}/${kind}/${id}`)) || await has(bucket, `who/${kind}/${id}/${ipHash}`);
     return json({ ok: true, enabled: true, count: await readCount(bucket, kind, id), starred });
   }
 
@@ -167,10 +187,15 @@ async function handlePost({ request, env }) {
 
   const ipHash = await sourceHash(request, env);
   const whoKey = `who/${kind}/${id}/${ipHash}`;
-  try {
-    if (await bucket.head(whoKey))   // already starred by this source: no writes
-      return json({ ok: true, enabled: true, count: await readCount(bucket, kind, id), starred: true, already: true });
-  } catch (_) { /* fall through; the rate limit still bounds writes */ }
+  const uh = await userHash(await currentUser(request, env), env);
+  const meKey = uh ? `me/${uh}/${kind}/${id}` : null;
+  const now = new Date();
+  if (meKey && await has(bucket, meKey))   // this account already starred it: no writes
+    return json({ ok: true, enabled: true, count: await readCount(bucket, kind, id), starred: true, already: true });
+  if (await has(bucket, whoKey)) {         // this network already starred it: count once
+    if (meKey) { try { await bucket.put(meKey, now.toISOString()); } catch (_) { /* list only */ } }
+    return json({ ok: true, enabled: true, count: await readCount(bucket, kind, id), starred: true, already: true });
+  }
 
   const rlKey = `rl/${ipHash}`;
   try {
@@ -179,18 +204,23 @@ async function handlePost({ request, env }) {
       return json({ ok: false, error: 'rate limited: one star every few seconds' }, 429);
   } catch (_) { /* fail open; the daily cap still bounds writes */ }
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = now.toISOString().slice(0, 10);
   const cntKey = `meta/count-${today}`;
   let today_n = 0;
   try { const c = await bucket.get(cntKey); if (c) today_n = parseInt(await c.text(), 10) || 0; } catch (_) { today_n = 0; }
   if (today_n >= DAILY_CAP) return json({ ok: false, error: 'daily star capacity reached; try again tomorrow' }, 503);
 
   const count = (await readCount(bucket, kind, id)) + 1;
+  const dayKey = `day/${kind}/${id}/${today}`;
+  let day_n = 0;
+  try { const d = await bucket.get(dayKey); if (d) day_n = parseInt(await d.text(), 10) || 0; } catch (_) { day_n = 0; }
   try {
     await bucket.put(rlKey, String(Date.now()));
     await bucket.put(whoKey, '1');
+    if (meKey) await bucket.put(meKey, now.toISOString());
     await bucket.put(`stars/${kind}/${id}`, String(count), { customMetadata: { count: String(count) } });
     await bucket.put(cntKey, String(today_n + 1));
+    await bucket.put(dayKey, String(day_n + 1), { customMetadata: { count: String(day_n + 1) } });
   } catch (e) {
     console.log('[hub-stars] R2 write failed:', String(e));
     return json({ ok: false, enabled: true, error: 'storage unavailable' }, 503);
