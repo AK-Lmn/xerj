@@ -339,8 +339,29 @@ def og(html, title, desc, url, image):
     return html.replace("</head>", tags + "</head>", 1)
 
 
-def generate(out, hub_dir, page, esc, live_slugs, registry=None):
-    people = load(hub_dir, registry)
+def by_corpus(people):
+    """corpus slug -> logins appearing in it, for the corpus pages' Contributors block."""
+    out = {}
+    for login, pp in people.items():
+        for slug in pp["corpora"]:
+            out.setdefault(slug, []).append(login)
+    return {k: sorted(v, key=str.lower) for k, v in out.items()}
+
+
+def corpus_section(logins, esc, people):
+    """The Contributors block on /corpus/<slug>.html (empty when nobody is listed)."""
+    if not logins:
+        return ""
+    tiles = "".join(f'<a href="../contributors/{esc(l)}.html"><img src="https://github.com/{esc(l)}.png?size=88" alt="" loading="lazy">'
+                    f'<div><b>{esc(people[l]["name"] or l)}</b><span>@{esc(l)}</span></div></a>' for l in logins)
+    return (f'<section class="detail" id="contributors"><h2>Contributors ({len(logins)})</h2>'
+            f'<p class="note">People whose work this corpus selects or pins, each with their permission. '
+            f'<a href="../contributors/index.html">All contributors</a>.</p><div class="wall">{tiles}</div></section>')
+
+
+def generate(out, hub_dir, page, esc, live_slugs, registry=None, people=None):
+    if people is None:
+        people = load(hub_dir, registry)
     if not people:
         return 0
     pages = {c["slug"] for c in registry or []}

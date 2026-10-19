@@ -837,7 +837,7 @@ that loads one works like a domain expert.</p>
                 body)
 
 
-def detail_body(c, g7, graded, impact, prov):
+def detail_body(c, g7, graded, impact, prov, contrib=""):
     files, nbytes, licences = corpus_stats(c)
     st, stcls = STATUSES.get(c["status"], (c["status"], "mute"))
     cat_desc = CATS.get(c["cat"], ("", ""))
@@ -911,7 +911,7 @@ def detail_body(c, g7, graded, impact, prov):
 <section class="detail"><h2>Rights</h2><p>{esc(' + '.join(licences) or '?')}.
 {esc('Redistribution permitted with attribution per the licence review' if any(r.get('review',{}).get('use')=='adapt-with-attribution' for r in c['repos']) else 'See per-source review blocks')}.
 The review block records a human opening each licence file at the pin. Detector output is a hint, never the verdict.</p></section>
-{g7sec}{impsec}
+{g7sec}{impsec}{contrib}
 </main>
 {COPY_JS}{contributors.STARS_JS}'''
 
@@ -1018,9 +1018,12 @@ def main():
     graded = parse_graded_suites()
     impact, prov = load_impact()
     (OUT / "index.html").write_text(render_index(corpora, g7, graded, impact, prov))
+    people = contributors.load(HUB, corpora)
+    in_corpus = contributors.by_corpus(people)
     for c in corpora:
+        contrib = contributors.corpus_section(in_corpus.get(c["slug"], []), esc, people)
         (OUT / "corpus" / f"{c['slug']}.html").write_text(
-            page(f"{c['slug']}: XERJ Corpus Hub", c["usecase"][:150], detail_body(c, g7, graded, impact, prov), rel="../"))
+            page(f"{c['slug']}: XERJ Corpus Hub", c["usecase"][:150], detail_body(c, g7, graded, impact, prov, contrib), rel="../"))
     for k, (title, what) in CATS.items():
         cs = [c for c in corpora if c["cat"] == k]
         (OUT / "category" / f"{k}.html").write_text(
@@ -1134,9 +1137,9 @@ def main():
               "  withdrawn states (visible, not hidden: hub policy is honest statuses).",
               "  Browse all: https://hub.xerj.org"]
     (OUT / "llms.txt").write_text("\n".join(lines) + "\n")
-    people = contributors.generate(OUT, HUB, page, esc, {c["slug"] for c in live}, corpora)
+    n_people = contributors.generate(OUT, HUB, page, esc, {c["slug"] for c in live}, corpora, people)
     n = len(list((OUT / "corpus").glob("*.html")))
-    print(f"generated: index, about, {len(CATS)} category pages, {n} corpus pages, {people} contributor pages -> {OUT}")
+    print(f"generated: index, about, {len(CATS)} category pages, {n} corpus pages, {n_people} contributor pages -> {OUT}")
 
 
 if __name__ == "__main__":
