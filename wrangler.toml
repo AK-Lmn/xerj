@@ -16,6 +16,13 @@
 #              Merge this binding only AFTER the bucket exists: a binding to a
 #              missing bucket can block the Pages deploy.
 #
+#   HUB_USAGE — functions/_lib/hub-usage.js counts requests to the hosted hub
+#              API (/api/v1/code|def|search) per corpus for the usage stats on
+#              hub.xerj.org corpus pages (functions/api/hub-usage.js). Stores a
+#              query template, route and user-agent family per request; no raw
+#              query, no IP, no user id. Bucket `xerj-hub-usage` (exists;
+#              lifecycle: ev/ and agg/ expire after 40 days, meta/ after 2).
+#
 # Hub sign-in (hub.xerj.org only; functions/auth/*, functions/api/me.js, helpers
 # in functions/_lib/): no binding, only Pages SECRETS on the xerj-hub project:
 #   HUB_SESSION_SECRET (>= 32 chars; signs the session cookie),
@@ -44,3 +51,8 @@ bucket_name = "xerj-installs"
 [[r2_buckets]]
 binding = "HUB_STARS"
 bucket_name = "xerj-hub-stars"
+
+# Hub usage counts (hub.xerj.org; functions/_lib/hub-usage.js, /api/hub-usage).
+[[r2_buckets]]
+binding = "HUB_USAGE"
+bucket_name = "xerj-hub-usage"
