@@ -229,7 +229,16 @@ fn build_entry(input: &CorpusBuildInput) -> Result<CatalogueEntry> {
         .or_else(|| non_empty(m.domain.as_deref()))
         .unwrap_or_else(|| input.ask_for.clone());
 
-    let term_sketch = crate::sketch::build(input.terms.iter().cloned());
+    // The curated words (slug, ask_for, topics) always make the sketch; the
+    // corpus's symbols and paths fill it up to the cap.
+    let curated: Vec<String> = std::iter::once(m.corpus.as_str())
+        .chain(std::iter::once(ask_for.as_str()))
+        .chain(m.topics.iter().map(String::as_str))
+        .flat_map(|t| t.split(|c: char| !c.is_ascii_alphanumeric() && c != '_'))
+        .filter(|w| w.len() >= 3)
+        .map(str::to_ascii_lowercase)
+        .collect();
+    let term_sketch = crate::sketch::build_for_corpus(input.terms.iter().cloned(), &curated);
 
     Ok(CatalogueEntry {
         slug: m.corpus,
@@ -697,7 +706,7 @@ mod tests {
         assert_eq!(a.quality_grade.as_deref(), Some("G7 4/5"));
         // caller fallback, since the fixture manifest has no ask_for field
         assert!(a.ask_for.contains("alpha"));
-        assert!(a.term_sketch.m_bits >= 8 * 1024);
+        assert!(u64::from(a.term_sketch.m_bits) >= crate::sketch::MIN_BITS);
 
         let b = entry(&cat, "beta");
         assert_eq!(b.licence_spdx, "GPL-3.0-only");
