@@ -275,9 +275,10 @@ NEITHER  a fact you can already state exactly. Retrieval adds cost there.</pre>
     no document text and no credential to the hub. <code class="inline">--hosted on</code> prints
     <code class="inline">hosted answers were requested but this build has no hosted client; answering from a local pack</code>
     and answers locally.</li>
-    <li><strong>Size cap: 50 MiB per pack</strong> (<code class="inline">AUTO_PULL_MAX_BYTES</code>,
-    52,428,800 bytes). <code class="inline">xerj ask</code> does not download a larger pack, and
-    <code class="inline">xerj hub pull</code> refuses it too. No flag overrides the cap.</li>
+    <li><strong>Auto-pull cap: 50 MiB per pack</strong> (<code class="inline">AUTO_PULL_MAX_BYTES</code>,
+    52,428,800 bytes). A question does not auto-download a larger pack; an explicit
+    <code class="inline">xerj hub pull &lt;slug&gt;</code> does fetch it, bounded by the 4 GiB disk budget
+    (<code class="inline">DISK_BUDGET_BYTES</code>, the largest pack the cache can hold).</li>
     <li><strong>Licences.</strong> A corpus with the licence class <code class="inline">excluded</code>
     is never pulled. An <code class="inline">approach-only</code> corpus is pulled, and every hit
     carries <code class="inline">read, do not copy</code>.</li>
@@ -475,11 +476,9 @@ no local pack for 'zstd' and --no-fetch forbids downloading it; run: xerj hub pu
 pulled snappy 9c28114a 15034490 → 3 indices, 382 definitions</pre>
   <p>Verify: <code class="inline">pulled &lt;slug&gt; &lt;pin8&gt; &lt;bytes&gt; → &lt;n&gt; indices, &lt;defs&gt; definitions</code>
   and exit 0.</p>
-  <p>For a pack over the 50 MiB cap, <code class="inline">xerj ask</code> prints
-  <code class="inline">'&lt;slug&gt;' is &lt;MB&gt; MB, over the 50.0 MB limit for pulling a pack, so it is not downloaded; no hosted answer is available</code>
-  and exits 1, and <code class="inline">xerj hub pull &lt;slug&gt;</code> prints
-  <code class="inline">pack '&lt;slug&gt;' is &lt;bytes&gt; bytes, over the 52428800-byte auto-pull cap; not downloaded</code>
-  and exits 1. In this build such a corpus cannot be used through the hub.</p>
+  <p>For a pack over the 50 MiB auto-pull cap, <code class="inline">xerj ask</code> prints
+  <code class="inline">'&lt;slug&gt;' is &lt;MB&gt; MB, over the 50.0 MB auto-pull cap, so a question does not download it automatically and no hosted answer is available; run `xerj hub pull &lt;slug&gt;` to fetch it once, then ask again</code>
+  and exits 1. The explicit <code class="inline">xerj hub pull &lt;slug&gt;</code> does fetch it, bounded by the 4 GiB disk budget (<code class="inline">DISK_BUDGET_BYTES</code>), so the corpus is usable once pulled; only a pack larger than the whole disk budget is refused.</p>
 
   <h2 id="hosted">The hosted setting</h2>
   <p><code class="inline">--hosted on|off|auto</code> on <code class="inline">xerj ask</code>, or
