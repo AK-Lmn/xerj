@@ -154,5 +154,60 @@ class SignInNavTest(unittest.TestCase):
         self.assertNotIn("innerHTML", gen.ME_JS)
 
 
+class PrivateDataTest(unittest.TestCase):
+    """The signed-in details (private_data.py) carry no consent data and never land in out/."""
+
+    def _hub(self, d):
+        hub = pathlib.Path(d) / "hub"
+        (hub / "candidates" / "authors").mkdir(parents=True)
+        row = {"corpus": "ann--one", "repo": "ann/one", "repo_url": "https://github.com/ann/one",
+               "contributor": {"login": "Ann", "name": "Ann A", "email": "ann@example.com"},
+               "consent": {"at": "2026-10-05T10:00Z", "channel": "email reply", "scope": "s", "from": "ann@example.com"},
+               "contribution": {"commit": "a" * 40, "commit_url": "https://github.com/ann/one/commit/" + "a" * 40,
+                                "title": "feat: x", "committed_at": "2026-10-01T00:00:00Z", "files": 3, "lines": 90,
+                                "areas": ["src/a", "src/b"], "langs": ["Go"]},
+               "pin": {"sha": "a" * 40}, "licence": {"spdx": "MIT", "suggested_use": "adapt-with-attribution"}}
+        (hub / "candidates" / "authors" / "CONTRIBUTORS.jsonl").write_text(json.dumps(row) + "\n")
+        (hub / "candidates" / "authors" / "ann--one.json").write_text(json.dumps({"corpus": "ann--one", "status": "draft"}))
+        root = pathlib.Path(d)
+        (root / "benchmarks" / "hub-backfill").mkdir(parents=True)
+        rows = [{"run": "2", "date": "2026-10-19", "slug": "live-one", "pin8": "bbbbbbbb", "result": "published", "tag": "pack-live-one-bbbbbbbb", "bytes": 10, "defs": 5, "url": "u2"},
+                {"run": "1", "date": "2026-10-18", "slug": "live-one", "pin8": "cccccccc", "result": "failed", "tag": "", "error": "e2e", "url": "u1"}]
+        (root / "benchmarks" / "hub-backfill" / "rows.jsonl").write_text("".join(json.dumps(r) + "\n" for r in rows))
+        return root, hub
+
+    def test_details_shape_and_no_consent(self):
+        import contributors
+        import private_data
+        with tempfile.TemporaryDirectory() as d:
+            root, hub = self._hub(d)
+            reg = [{"slug": "live-one", "lane": "A", "status": "live", "repos": [{"repo": "one", "url": "https://github.com/ann/one", "sha": "b" * 40,
+                    "review": {"spdx": "MIT", "use": "adapt-with-attribution", "by": "xerj-org", "at": "2026-10-13", "note": "ok"}}]}]
+            people = contributors.load(hub, reg)
+            data = private_data.build(root, hub, root / "packs", reg, people, "2026-10-19")
+            raw = private_data.module(data)
+        self.assertNotIn("example.com", raw)
+        self.assertNotIn("email reply", raw)
+        w = data["contributors"]["ann"]["work"][0]
+        self.assertEqual((w["committed_at"], w["areas"], w["files"]), ("2026-10-01T00:00:00Z", ["src/a", "src/b"], 3))
+        self.assertNotIn("commit_url", w)                  # derivable, rebuilt by the API
+        self.assertEqual(w["corpora"][0]["manifest"], "draft")
+        c = data["corpora"]["live-one"]
+        self.assertEqual([b["run"] for b in c["builds"]], ["2", "1"])     # newest first
+        self.assertEqual([p["pin8"] for p in c["pins"]], ["cccccccc", "bbbbbbbb"])
+        self.assertEqual(c["pins"][1]["published"], "pack-live-one-bbbbbbbb")
+        self.assertEqual(c["repos"][0]["review"]["by"], "xerj-org")
+        self.assertEqual(data["contributors"]["ann"]["also_pinned_in"], {"live-one": "live"})
+        self.assertTrue(raw.startswith("// GENERATED"))
+
+    def test_details_never_written_to_the_site(self):
+        self.assertIn('export default null;', private_data_stub())
+
+
+def private_data_stub():
+    import private_data
+    return private_data.STUB
+
+
 if __name__ == "__main__":
     unittest.main()

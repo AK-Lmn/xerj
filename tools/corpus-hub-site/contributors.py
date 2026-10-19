@@ -57,6 +57,14 @@ letter-spacing:var(--track-ui);text-decoration:none;color:var(--z-ink);border:1p
 .whead h1{font-family:var(--font-display);font-weight:900;font-size:var(--fs-96);line-height:.95;margin:0}
 .whead p{max-width:760px;color:var(--z-mute)}
 .hubstar[hidden]{display:none}
+section.more[hidden],.signin-hint[hidden]{display:none}
+section.more{margin:var(--sp-8) 0}
+.signin-hint{border:1px dashed var(--z-line);padding:var(--sp-3) var(--sp-5);color:var(--z-mute);font-size:var(--fs-13);background:#fff}
+.moretable{width:100%;border-collapse:collapse;margin:var(--sp-3) 0;font-size:var(--fs-13);background:#fff}
+.moretable th,.moretable td{border:1px solid var(--z-line);padding:var(--sp-1) var(--sp-3);text-align:left;vertical-align:top;word-break:break-word}
+.moretable th:empty{display:none}
+.thisisme{border:2px solid var(--z-accent);background:#fff;padding:var(--sp-5) var(--sp-6);margin:var(--sp-4) 0}
+.thisisme h2{margin-top:0}
 .kpi.hubstar b [data-n]{font:inherit;color:inherit;letter-spacing:normal;text-transform:none}
 .hubstar button{margin-top:var(--sp-2);font-family:var(--font-data);font-size:var(--fs-11);font-weight:700;text-transform:uppercase;
 letter-spacing:var(--track-ui);border:1px solid var(--z-accent);color:var(--z-accent);background:none;padding:.35em .8em;cursor:pointer}
@@ -131,6 +139,8 @@ def load(hub_dir, registry=None):
                 "files": k.get("files"), "lines": k.get("lines"), "langs": k.get("langs") or [], "areas": k.get("areas") or [],
                 "topics": r.get("topics") or [], "shelf": r.get("shelf") or "", "spdx": lic.get("spdx") or "",
                 "reviewed": lic.get("reviewed") is True, "agreed": (r.get("consent") or {}).get("at", ""), "corpora": [],
+                "committed_at": k.get("committed_at") or "", "suggested_use": lic.get("suggested_use") or "",
+                "pin": (r.get("pin") or {}).get("sha") or "",
             })
             if r["corpus"] not in w["corpora"]:
                 w["corpora"].append(r["corpus"])
@@ -163,6 +173,7 @@ def load(hub_dir, registry=None):
                 "repo": repo, "repo_url": url, "repo_stars": None, "commit": sha, "commit_url": curl,
                 "title": title.strip(), "files": None, "lines": None, "langs": [], "areas": [], "topics": [],
                 "shelf": "", "spdx": spdx.strip(), "reviewed": _reviewed(review), "agreed": date, "corpora": [],
+                "committed_at": "", "suggested_use": review.get("use", "") if _reviewed(review) else "", "pin": "",
             })
             if corpus not in w["corpora"]:
                 w["corpora"].append(corpus)
@@ -266,11 +277,12 @@ When an agent meets the same problem, it gets this implementation back as a work
 <button data-copy="badge-{esc(login)}">Copy README badge</button></div>
 </div></section>
 <h2>Selected work</h2>{"".join(cards)}{also}
+{more_block("contributor", login, esc)}
 <div class="badgebox"><img src="{esc(login)}/badge.svg" alt="XERJ Corpus Hub contributor badge">
 <pre id="badge-{esc(login)}">{esc(md)}</pre></div>
 <p style="color:var(--z-mute);font-size:var(--fs-13)">Included with the author's permission (email, {esc(v["since"][:10])}), under each repository's own licence, with attribution.
 Want it removed? Reply to the email or open an issue on <a href="https://github.com/xerj-org/xerj">xerj-org/xerj</a>.</p>
-</main>{COPY_BADGE_JS}{STARS_JS}"""
+</main>{COPY_BADGE_JS}{STARS_JS}{MORE_JS}"""
 
 
 # Hub stars: counts and the Star button come from /api/hub-stars
@@ -298,6 +310,108 @@ STARS_JS = """<script>
     wall.querySelectorAll('[data-id]').forEach(function(a){var n=r.counts[a.dataset.id]||0,s=a.querySelector('.hs');
       s.textContent=' · hub ★ '+fmt(n);s.hidden=false});
   }).catch(function(){});
+})();
+</script>"""
+
+
+# Signed-in extras (functions/api/v1/contributors/[login].js, functions/api/v1/corpus/[slug].js).
+# The static page carries only this empty block. Anonymous visitors on a hub with
+# sign-in enabled see one "Sign in to see more" line; with sign-in disabled the
+# block stays hidden and the page is exactly what it was. The details are fetched
+# from the authenticated API after sign-in and never baked into the HTML.
+MORE_HINT = {
+    "contributor": "Sign in with GitHub or Hugging Face to see more: every selected commit in full "
+                   "(commit date, every folder, licence review state, pin) and the pack builds of each corpus.",
+    "corpus": "Sign in with GitHub or Hugging Face to see more: this corpus's pack build and pin history, "
+              "full source pins and review records, and how its packs are signed.",
+}
+
+
+def more_block(kind, sid, esc):
+    return (f'<section class="more" data-more="{kind}" data-id="{esc(sid)}" hidden>'
+            f'<p class="signin-hint">{esc(MORE_HINT[kind])}</p><div class="more-body"></div></section>')
+
+
+MORE_JS = """<script>
+(function(){
+  var sec=document.querySelector('section.more[data-more]'); if(!sec) return;
+  var kind=sec.dataset.more,id=sec.dataset.id,hint=sec.querySelector('.signin-hint'),body=sec.querySelector('.more-body');
+  function el(t,a,txt){var e=document.createElement(t);for(var k in a)if(a[k]!=null)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e}
+  function add(p,c){p.appendChild(c);return c}
+  function fmt(n){return typeof n==='number'?n.toLocaleString('en-US'):''}
+  function mb(n){return typeof n==='number'?(n/1048576).toFixed(1)+' MB':''}
+  function link(href,txt){return href?el('a',{href:href,rel:'noopener'},txt):el('span',{},txt)}
+  function table(head,rows){var t=el('table',{'class':'moretable'}),tr=add(t,el('tr'));
+    head.forEach(function(h){add(tr,el('th',{},h))});
+    rows.forEach(function(r){var tr=add(t,el('tr'));r.forEach(function(c){var td=add(tr,el('td'));if(c&&c.nodeType)td.appendChild(c);else td.textContent=c==null?'':String(c)})});
+    return t}
+  function rel(tag){return tag?link('https://github.com/xerj-org/xerj/releases/tag/'+encodeURIComponent(tag),tag):''}
+  function build(b){if(!b)return '';var s=el('span');add(s,link(b.url,(b.date||'')+' '+(b.result||'')));if(b.tag){s.appendChild(document.createTextNode(' · '));add(s,rel(b.tag))}return s}
+  function contributor(r){
+    var c=r.contributor;
+    if(r.is_me){
+      var me=add(body,el('div',{'class':'thisisme'}));
+      add(me,el('h2',{},'This is you'));
+      var live=0,review=0;c.work.forEach(function(w){(w.corpora||[]).forEach(function(x){if(x.status==='live')live++;else review++})});
+      add(me,el('p',{},'You are signed in as @'+c.login+'. '+c.work.length+' of your commits are selected; '+live+' corpus entr'+(live===1?'y is':'ies are')+' live and '+review+' '+(review===1?'is':'are')+' still in licence review. Each card below shows where your work is and its last pack build.'));
+      var a=add(me,el('p',{}));
+      add(a,link('https://github.com/xerj-org/xerj/issues/new?title='+encodeURIComponent('Corpus Hub: change or remove my work (@'+c.login+')'),'Ask for a change or removal'));
+      a.appendChild(document.createTextNode(' · '));add(a,link('/me.html','Your hub stars'));
+    }
+    add(body,el('h2',{},'Every selected commit'));
+    c.work.forEach(function(w){
+      var d=add(body,el('div',{'class':'contrib'}));
+      var h=add(d,el('h3'));add(h,link(w.repo_url,w.repo));
+      var cm=add(d,el('div',{'class':'commit'}));add(cm,link(w.commit_url,w.commit||'no commit'));
+      cm.appendChild(document.createTextNode(' '+(w.title||'')));
+      var rows=[['committed',(w.committed_at||'').replace('T',' ').replace('Z',' UTC')],['pinned at',w.pin],
+        ['size',[w.files?fmt(w.files)+' files':'',w.lines?fmt(w.lines)+' lines':''].filter(Boolean).join(' · ')],
+        ['languages',(w.langs||[]).join(', ')],['folders',(w.areas||[]).join(', ')],['topics',(w.topics||[]).join(', ')],
+        ['licence',[w.spdx,w.suggested_use,w.reviewed?'licence reviewed':'licence review pending'].filter(Boolean).join(' · ')],
+        ['agreed',w.agreed]].filter(function(x){return x[1]});
+      add(d,table(['',''],rows));
+      if(w.corpora&&w.corpora.length)add(d,table(['corpus','status','manifest','last pack build'],w.corpora.map(function(x){
+        return [x.page?link('/corpus/'+x.slug+'.html',x.slug):x.slug,x.status||'candidate',x.manifest||'',build(x.last_build)]})));
+    });
+    var also=Object.keys(c.also_pinned_in||{});
+    if(also.length)add(body,el('p',{'class':'note'},'Repositories of yours are also pinned in: '+also.join(', ')+'.'));
+  }
+  function corpus(r){
+    var c=r.corpus;
+    if(c.builds&&c.builds.length){
+      add(body,el('h2',{},'Pack builds'));
+      add(body,table(['date','run','pin','result','pack size','definitions','release / error'],c.builds.map(function(b){
+        return [b.date,link(b.url,b.run),b.pin8,b.result,mb(b.bytes),fmt(b.defs),b.tag?rel(b.tag):[b.stage,b.error].filter(Boolean).join(': ')]})));
+    }
+    if(c.pins&&c.pins.length){
+      add(body,el('h2',{},'Pin history'));
+      add(body,table(['pin','first build','last build','builds','published'],c.pins.map(function(p){return [p.pin8,p.first,p.last,p.builds,p.published?rel(p.published):'not yet']})));
+    }
+    if(r.catalogue){var e=r.catalogue;add(body,el('h2',{},'Signed pack in the catalogue'));
+      add(body,table(['',''],[['pack',link(e.pack_url,e.pack_url)],['size',mb(e.pack_bytes||e.bytes)],['sha256',e.pack_sha256],['signature',link(e.sig_url,e.sig_url)]].filter(function(x){return x[1]})))}
+    add(body,el('h2',{},'Signing'));
+    var sg=[['scheme',r.signing.scheme],['hub key (ed25519)',r.signing.hub_pubkey]];if(c.pack_pubkey)sg.push(['pack key',c.pack_pubkey]);
+    add(body,table(['',''],sg.filter(function(x){return x[1]})));
+    if(c.repos&&c.repos.length){add(body,el('h2',{},'Sources, full pins and review records'));
+      add(body,table(['source','pin','files','size','licence','review'],c.repos.map(function(x){var v=x.review||{};
+        return [link((x.url||'').replace(/\\.git$/,''),x.repo),x.sha,fmt(x.files),mb(x.bytes),v.spdx||x.licence||'',[v.use,v.by,v.at].filter(Boolean).join(' · ')]})))}
+    if(c.repos_summary){var s=c.repos_summary;add(body,el('p',{'class':'note'},s.count+' sources, '+fmt(s.files)+' files, '+mb(s.bytes)+'; '+s.reviewed+' with a recorded licence review ('+s.licences.join(', ')+').'))}
+    if(c.pack_stats){add(body,el('h2',{},'Pack measurements'));
+      add(body,table(['',''],Object.keys(c.pack_stats).filter(function(k){return typeof c.pack_stats[k]!=='object'}).map(function(k){return [k.replace(/_/g,' '),String(c.pack_stats[k])]})))}
+    if(!body.childNodes.length)add(body,el('p',{'class':'note'},'No pack has been built for this corpus yet.'));
+  }
+  (window.hubMe=window.hubMe||fetch('/api/me',{credentials:'same-origin'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})).then(function(me){
+    if(!me||!me.enabled)return;
+    sec.hidden=false;
+    if(!me.user)return;
+    hint.hidden=true;
+    fetch('/api/v1/'+(kind==='corpus'?'corpus':'contributors')+'/'+encodeURIComponent(id),{credentials:'same-origin'})
+      .then(function(r){return r.json()}).then(function(r){
+        if(!r||!r.ok){add(body,el('p',{'class':'note'},(r&&r.error)||'Details are not available right now.'));return}
+        add(body,el('p',{'class':'note'},'Shown because you are signed in. Registry state as of '+(r.generated||'the last deploy')+'.'));
+        if(kind==='corpus')corpus(r);else contributor(r);
+      }).catch(function(){add(body,el('p',{'class':'note'},'Details are not available right now.'))});
+  });
 })();
 </script>"""
 
