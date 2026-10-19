@@ -257,5 +257,16 @@ class AgentScorePanelTest(unittest.TestCase):
         self.assertIn('data-slug="tokio"', html)
 
 
+
+class NotFoundPageTest(unittest.TestCase):
+    # issue #1895: without a 404.html, Pages answers every unknown path with the
+    # homepage and a 200.
+    def test_404_page_is_generated_with_absolute_links(self):
+        html = gen.page("Not found: XERJ Corpus Hub", "This page does not exist", gen.NOT_FOUND_BODY, rel="/")
+        self.assertIn("Not found", html)
+        self.assertIn('href="/assets/style.css', html)
+        self.assertNotIn('href="assets/', html)
+        self.assertIn('"404.html"', pathlib.Path(gen.__file__).read_text())
+
 if __name__ == "__main__":
     unittest.main()

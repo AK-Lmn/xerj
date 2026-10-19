@@ -740,6 +740,11 @@ ME_JS = """<script>
 </script>"""
 
 
+NOT_FOUND_BODY = """<section class="hero"><h1>Not found</h1>
+<p>There is no page at this address. Corpus pages live at <code>/corpus/&lt;slug&gt;</code>;
+<a href="/index.html">the corpus list</a> and <a href="/llms.txt">llms.txt</a> name every live slug.</p></section>"""
+
+
 def page(title, desc, body, rel=""):
     return PAGE.format(title=esc(title), desc=esc(desc), body=body, rel=rel,
                        fonts=FONTS, stamp=STAMP, ver=STYLE_VER, navjs=NAVCTA_JS, authjs=AUTH_JS)
@@ -1141,6 +1146,12 @@ def main():
             page(f"{k}: {title} domain", what, category_body(k, cs, g7, graded, impact), rel="../"))
     (OUT / "about.html").write_text(page("About: XERJ Corpus Hub", "How corpora are gated, scored, tagged, and licenced", ABOUT, rel=""))
     (OUT / "me.html").write_text(page("Your hub: XERJ Corpus Hub", "Your hub stars, after you sign in", ME_BODY + ME_JS, rel=""))
+    # 404.html: Cloudflare Pages serves it, with status 404, for any path that
+    # has no file. Without it Pages falls back to index.html with a 200, so a
+    # mistyped corpus URL, a link checker or an agent probing /corpus/<slug>
+    # took the homepage for a live page (issue #1895). Absolute links (rel="/"):
+    # it is served at every depth.
+    (OUT / "404.html").write_text(page("Not found: XERJ Corpus Hub", "This page does not exist", NOT_FOUND_BODY, rel="/"))
     (OUT / "contribute.html").write_text(page("Contribute: XERJ Corpus Hub", "Share your knowledge: index a corpus and open a pull request", contribute_body(), rel=""))
     # llms.txt - agent-facing index of the registry, generated like everything
     # else. Short first screen (study rule 7), no obligation language, every
