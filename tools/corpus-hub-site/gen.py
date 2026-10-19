@@ -287,6 +287,10 @@ SETUP_STEPS = (
     '   Success: the health call returns JSON containing "status":"green".\n'
     "   To stop a node you started: kill $(cat ~/xerj-node.pid). Never pkill or killall xerj -\n"
     "   other XERJ nodes may be running on this machine.\n"
+    "   If the log says a port is already in use (8080 is often taken), start it with\n"
+    "   --port 9400 instead (ES-compat API on 9400, native REST 9401, gRPC 9402), check\n"
+    "   curl -s localhost:9400/_cluster/health, and pass --url http://127.0.0.1:9400 to every\n"
+    "   later xerj command. --url always takes the ES-compat port, never the native REST one.\n"
 )
 
 
@@ -1198,6 +1202,13 @@ def main():
         '   Success: the health call returns JSON containing "status":"green".',
         "   To stop a node you started: `kill $(cat ~/xerj-node.pid)`. Never `pkill xerj` or",
         "   `killall xerj`: other XERJ nodes may be running on the machine and you would stop them too.",
+        "",
+        "   Busy port: if `~/xerj-node.log` says a port is already in use (8080 is a common",
+        "   clash), start the node with `--port 9400` instead: ES-compat API on 9400, native",
+        "   REST on 9401, gRPC on 9402. Check `curl -s localhost:9400/_cluster/health`, then add",
+        "   `--url http://127.0.0.1:9400` to every later `xerj` command. `--url` always takes the",
+        "   ES-compat port; the native REST port answers `PUT /xc-... 404`. (`--auto-port` also",
+        "   works, but then read the ports it bound from the log banner.)",
         "",
         "3. Download the pinned manifest and add the corpus. `--from` takes a local file:",
         "",

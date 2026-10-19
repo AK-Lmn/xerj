@@ -277,6 +277,12 @@ class NotFoundPageTest(unittest.TestCase):
         self.assertIn('href="/assets/style.css', html)
         self.assertNotIn('href="assets/', html)
         self.assertIn('"404.html"', pathlib.Path(gen.__file__).read_text())
+class BusyPortStepTest(unittest.TestCase):
+    # issue #1891: step 2 must cover the busy-port case and say which port --url takes.
+    def test_setup_steps_name_the_port_flag_and_the_url_port(self):
+        self.assertIn("--port 9400", gen.SETUP_STEPS)
+        self.assertIn("--url http://127.0.0.1:9400", gen.SETUP_STEPS)
+        self.assertIn("ES-compat", gen.SETUP_STEPS)
 
 if __name__ == "__main__":
     unittest.main()
