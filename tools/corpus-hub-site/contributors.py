@@ -56,6 +56,12 @@ letter-spacing:var(--track-ui);text-decoration:none;color:var(--z-ink);border:1p
 .wall span{font-family:var(--font-mono);font-size:var(--fs-11);color:var(--z-mute)}
 .whead h1{font-family:var(--font-display);font-weight:900;font-size:var(--fs-96);line-height:.95;margin:0}
 .whead p{max-width:760px;color:var(--z-mute)}
+.hubstar[hidden]{display:none}
+.hubstar button{margin-top:var(--sp-2);font-family:var(--font-data);font-size:var(--fs-11);font-weight:700;text-transform:uppercase;
+letter-spacing:var(--track-ui);border:1px solid var(--z-accent);color:var(--z-accent);background:none;padding:.35em .8em;cursor:pointer}
+.hubstar button[disabled]{opacity:.6;cursor:default}
+.hubstar.inline{display:inline-flex;gap:var(--sp-3);align-items:center;border:1px solid var(--z-line);background:#fff;padding:var(--sp-2) var(--sp-4);margin:var(--sp-3) 0}
+.hubstar.inline b{font-family:var(--font-data)}.hubstar.inline button{margin:0}
 @media (max-width:820px){.prof{grid-template-columns:1fr}.prof .av{width:140px;height:140px}.kpis{grid-template-columns:repeat(2,1fr)}.whead h1{font-size:var(--fs-56)}}
 """
 
@@ -243,7 +249,8 @@ def person_body(pp, esc, live_slugs, pages=()):
             + kpi(v["commits"], s_(v["commits"], "selected commit"))
             + (kpi(_n(v["files"]), s_(v["files"], "file")) if v["files"] else "")
             + (kpi(_n(v["lines"]), s_(v["lines"], "line")) if v["lines"] else "")
-            + (kpi("★ " + _n(v["gh_stars"]), "GitHub stars on " + s_(v["repos"], "repo")) if v["gh_stars"] else ""))
+            + (kpi("★ " + _n(v["gh_stars"]), "GitHub stars on " + s_(v["repos"], "repo")) if v["gh_stars"] else "")
+            + star_widget("contributor", login, esc))
     return f"""<main class="cwrap">
 <section class="prof"><img class="av" src="https://github.com/{esc(login)}.png?size=480" alt="{esc(name)}">
 <div><h1>{esc(name)}</h1><div class="login"><a href="https://github.com/{esc(login)}">@{esc(login)}</a></div>
@@ -262,22 +269,67 @@ When an agent meets the same problem, it gets this implementation back as a work
 <pre id="badge-{esc(login)}">{esc(md)}</pre></div>
 <p style="color:var(--z-mute);font-size:var(--fs-13)">Included with the author's permission (email, {esc(v["since"][:10])}), under each repository's own licence, with attribution.
 Want it removed? Reply to the email or open an issue on <a href="https://github.com/xerj-org/xerj">xerj-org/xerj</a>.</p>
-</main>{COPY_BADGE_JS}"""
+</main>{COPY_BADGE_JS}{STARS_JS}"""
+
+
+# Hub stars: counts and the Star button come from /api/hub-stars
+# (functions/api/hub-stars.js). The control ships hidden and is shown only when
+# the endpoint answers enabled:true, so a site without the R2 binding shows
+# no star figure at all rather than a fake zero.
+STARS_JS = """<script>
+(function(){
+  var API='/api/hub-stars';
+  function fmt(n){return Number(n).toLocaleString('en-US')}
+  document.querySelectorAll('.hubstar[data-kind]').forEach(function(el){
+    var kind=el.dataset.kind,id=el.dataset.id,num=el.querySelector('[data-n]'),btn=el.querySelector('button');
+    function show(r){num.textContent=fmt(r.count||0);if(r.starred){btn.disabled=true;btn.textContent='Starred'}el.hidden=false}
+    fetch(API+'?kind='+kind+'&id='+encodeURIComponent(id)).then(function(r){return r.json()}).then(function(r){
+      if(!r||!r.ok||!r.enabled)return; show(r);
+      btn.addEventListener('click',function(){btn.disabled=true;
+        fetch(API,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({kind:kind,id:id})})
+          .then(function(r){return r.json()}).then(function(r){if(r&&r.ok)show(r);else{btn.disabled=false;btn.title=(r&&r.error)||''}})
+          .catch(function(){btn.disabled=false})});
+    }).catch(function(){});
+  });
+  var wall=document.querySelector('.wall[data-stars]');
+  if(wall)fetch(API+'?kind='+wall.dataset.stars).then(function(r){return r.json()}).then(function(r){
+    if(!r||!r.ok||!r.enabled)return;
+    wall.querySelectorAll('[data-id]').forEach(function(a){var n=r.counts[a.dataset.id]||0,s=a.querySelector('.hs');
+      s.textContent=' · hub ★ '+fmt(n);s.hidden=false});
+  }).catch(function(){});
+})();
+</script>"""
+
+
+def star_widget(kind, sid, esc, inline=False):
+    """Hidden until /api/hub-stars says it is enabled; see STARS_JS."""
+    sid = esc(sid.lower())
+    if inline:
+        return (f'<div class="hubstar inline" data-kind="{kind}" data-id="{sid}" hidden>'
+                f'<b>hub ★ <span data-n>0</span></b><button type="button">Star this {kind}</button></div>')
+    return (f'<div class="kpi hubstar" data-kind="{kind}" data-id="{sid}" hidden><b>★ <span data-n>0</span></b>'
+            f'<span>hub stars</span><br><button type="button">Star</button></div>')
+
+
+def stars_targets(people, registry):
+    """The ids /api/hub-stars accepts: only pages this deploy actually has."""
+    return {"contributor": sorted(l.lower() for l in people),
+            "corpus": sorted(c["slug"].lower() for c in registry or [])}
 
 
 def wall_body(people, esc, live_slugs=()):
     vols = {l: volume(pp, live_slugs) for l, pp in people.items()}
     order = sorted(people, key=lambda l: (-vols[l]["gh_stars"], l.lower()))
-    tiles = "".join(f'<a href="{esc(l)}.html"><img src="https://github.com/{esc(l)}.png?size=88" alt="" loading="lazy">'
+    tiles = "".join(f'<a href="{esc(l)}.html" data-id="{esc(l.lower())}"><img src="https://github.com/{esc(l)}.png?size=88" alt="" loading="lazy">'
                     f'<div><b>{esc(people[l]["name"] or l)}</b><span>@{esc(l)} · {vols[l]["corpora"]} corp{"us" if vols[l]["corpora"] == 1 else "ora"}'
-                    f'{" · " + _n(vols[l]["lines"]) + " lines" if vols[l]["lines"] else ""} · GitHub ★ {_n(vols[l]["gh_stars"])}</span></div></a>'
+                    f'{" · " + _n(vols[l]["lines"]) + " lines" if vols[l]["lines"] else ""} · GitHub ★ {_n(vols[l]["gh_stars"])}<span class="hs" hidden></span></span></div></a>'
                     for l in order)
     repos = len({w["repo_url"].lower() for pp in people.values() for w in pp["work"].values()})
     corpora = len({c for pp in people.values() for c in pp["corpora"]})
     return f"""<main class="cwrap"><section class="whead"><h1>The people behind the hub</h1>
 <p>{len(people):,} developers agreed to let AI agents learn from their work: {repos:,} repositories across {corpora:,} corpora, each included with the author's permission,
-under its own licence, with attribution. Sorted by GitHub stars on their repositories. Every source is still in licence review; none is live yet unless its card says so.</p>
-<a class="cta" href="../contribute.html">Add yours</a></section><div class="wall">{tiles}</div></main>"""
+under its own licence, with attribution. Sorted by GitHub stars on their repositories; hub stars are the ones visitors give here. Every source is still in licence review; none is live yet unless its card says so.</p>
+<a class="cta" href="../contribute.html">Add yours</a></section><div class="wall" data-stars="contributor">{tiles}</div></main>{STARS_JS}"""
 
 
 def og(html, title, desc, url, image):
@@ -303,6 +355,7 @@ def generate(out, hub_dir, page, esc, live_slugs, registry=None):
         (d / f"{login}.html").write_text(og(html, esc(title), esc(desc), f"{SITE}/contributors/{login}.html", f"https://github.com/{login}.png?size=400"))
         (d / login).mkdir(exist_ok=True)
         (d / login / "badge.svg").write_text(badge_svg())
+    (d / "stars-targets.json").write_text(json.dumps(stars_targets(people, registry), separators=(",", ":")))
     html = page("Contributors: XERJ Corpus Hub", "The developers whose work AI agents retrieve from the XERJ Corpus Hub", wall_body(people, esc, live_slugs), rel="../")
     (d / "index.html").write_text(og(html, "The people behind the XERJ Corpus Hub", "Developers who agreed to let AI agents learn from their work",
                                      f"{SITE}/contributors/", "https://github.com/xerj-org.png"))

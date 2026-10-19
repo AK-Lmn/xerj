@@ -901,6 +901,7 @@ def detail_body(c, g7, graded, impact, prov):
     return f'''<main>
 <p><a class="backlink" href="../index.html">&larr; all corpora</a></p>
 <h1 class="slug">{esc(c['slug'])} <span class="dot {stcls}"></span></h1>
+{contributors.star_widget("corpus", c["slug"], esc, inline=True)}
 <p class="note">{esc(c['kind'])} · status <b>{st}</b> · domain <b>{esc(c['cat'])}</b> ({esc(cat_desc[0])}) · lane {esc(c['lane'])} · refresh {esc(c['refresh'])} · tags <b>{esc(tags_txt)}</b></p>
 <section class="detail"><h2>What an agent uses it for</h2><p>{esc(c['usecase'] or 'n/a')}</p></section>
 {useit}
@@ -912,7 +913,7 @@ def detail_body(c, g7, graded, impact, prov):
 The review block records a human opening each licence file at the pin. Detector output is a hint, never the verdict.</p></section>
 {g7sec}{impsec}
 </main>
-{COPY_JS}'''
+{COPY_JS}{contributors.STARS_JS}'''
 
 
 def category_body(k, cs, g7, graded, impact):
