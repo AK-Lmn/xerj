@@ -166,7 +166,7 @@ const STOP = new Set(('a an and are as at be been but by can do does for from ha
   + 'me my no not of on or our should so that the their them then there these this those to use used using was '
   + 'we what when where which who why will with without you your about any all also between both each get got '
   + 'more most other over same some such than too very via vs just like does did make makes way ways there\'s '
-  + 'what\'s how\'s it\'s don\'t can\'t isn\'t versus etc per one two').split(' '));
+  + 'what\'s how\'s it\'s don\'t can\'t isn\'t versus etc per one two before after since until onto').split(' '));
 
 /** Generalise words seen in fewer than k templates, then count and keep templates seen >= k times. */
 export function kTemplates(counts, k = K) {
