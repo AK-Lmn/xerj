@@ -18,6 +18,7 @@ registry change.
 """
 import datetime as dt
 import hashlib
+import agent_score
 import contributors
 import os
 import private_data
@@ -254,7 +255,7 @@ def impact_badge(c, impact):
 def card(c, g7, graded, impact):
     files, nbytes, licences = corpus_stats(c)
     st, stcls = STATUSES.get(c["status"], (c["status"], "mute"))
-    return f'''<a class="card" data-cat="{esc(c['cat'])}" data-region="{esc(region(c))}" href="corpus/{esc(c['slug'])}.html">
+    return f'''<a class="card" data-cat="{esc(c['cat'])}" data-region="{esc(region(c))}" data-slug="{esc(c['slug'].lower())}" href="corpus/{esc(c['slug'])}.html">
   <div class="chead"><span class="cname">{esc(c['slug'])}</span><span class="dot {stcls}"></span></div>
   <p class="cuse">{esc(plain(c['usecase'])[:180])}{'...' if len(c['usecase']) > 180 else ''}</p>
   {tag_line(c)}
@@ -651,6 +652,7 @@ NAVCTA_JS = """<script>
 # changed stylesheet always busts the browser cache (assets carry a long max-age).
 STYLE += contributors.STYLE
 STYLE += usage.STYLE
+STYLE += agent_score.STYLE
 STYLE_VER = hashlib.sha1(STYLE.encode("utf-8")).hexdigest()[:8]
 
 
@@ -1018,9 +1020,9 @@ def detail_body(c, g7, graded, impact, prov, contrib=""):
 {esc('Redistribution permitted with attribution per the licence review' if any(r.get('review',{}).get('use')=='adapt-with-attribution' for r in c['repos']) else 'See per-source review blocks')}.
 The review block records a human opening each licence file at the pin. Detector output is a hint, never the verdict.</p></section>
 {contributors.more_block("corpus", c["slug"], esc)}
-{g7sec}{impsec}{usage.traffic_section(c["slug"], esc)}{usage.corpus_section(c["slug"], esc)}{contrib}
+{g7sec}{impsec}{agent_score.section(c['slug'], esc)}{usage.traffic_section(c["slug"], esc)}{usage.corpus_section(c["slug"], esc)}{contrib}
 </main>
-{COPY_JS}{contributors.STARS_JS}{contributors.MORE_JS}{usage.USAGE_JS}'''
+{COPY_JS}{contributors.STARS_JS}{contributors.MORE_JS}{usage.USAGE_JS}{agent_score.PANEL_JS}'''
 
 
 def category_body(k, cs, g7, graded, impact):
@@ -1032,8 +1034,9 @@ def category_body(k, cs, g7, graded, impact):
 <div class="kicker"><span class="accent">{esc(k)}</span><span class="dash">·</span><span>DOMAIN</span></div>
 <h1 class="hero" style="font-size:clamp(56px,9vw,var(--fs-160))">{esc(k)}</h1>
 <p class="lead">{esc(title)}. Agent asks: {esc(what)}. {n_live} live of {len(cs)} entries.</p>
+{agent_score.SORT_BAR}
 <div class="grid">{cards}</div>
-</main>'''
+</main>{agent_score.CARDS_JS}'''
 
 
 ABOUT = '''<main>
