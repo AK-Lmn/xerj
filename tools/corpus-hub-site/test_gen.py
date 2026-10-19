@@ -136,6 +136,16 @@ class ContributorVolumeTest(unittest.TestCase):
             people = contributors.load(self._hub(d))
         self.assertFalse(any(w["reviewed"] for p in people.values() for w in p["work"].values()))
 
+    def test_card_says_a_corpus_in_review_is_not_installable(self):
+        # issue #1890: the page named a slug whose manifest 404s, with no warning.
+        import contributors
+        with tempfile.TemporaryDirectory() as d:
+            people = contributors.load(self._hub(d))
+        html = contributors.person_body(people["Ann"], gen.esc, set())
+        self.assertIn("Not installable yet", html)
+        live = contributors.person_body(people["Ann"], gen.esc, {"ann--one", "bob--two", "themed"})
+        self.assertNotIn("Not installable yet", live)
+
 
 class SignInNavTest(unittest.TestCase):
     def test_sign_in_box_ships_hidden_and_asks_api_me(self):

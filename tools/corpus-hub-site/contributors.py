@@ -236,6 +236,12 @@ def person_body(pp, esc, live_slugs, pages=()):
         live = [c for c in w["corpora"] if c in live_slugs]
         status = ('<span class="chip ok">live in the hub</span>' if live
                   else '<span class="chip warn">selected · in licence review</span>')
+        # issue #1890: a corpus still in review has no manifest in the registry, so
+        # the documented install path (llms.txt step 3) 404s. Say so on the card.
+        pending = ("" if live else
+                   '<p class="note pending">Not installable yet: this corpus is not in the hub registry until its '
+                   'licence review passes, so <code>xerj corpus add</code> and <code>xerj ask</code> cannot fetch it. '
+                   'It becomes installable when this card says live in the hub.</p>')
         commit = (f'<div class="commit"><a href="{esc(w["commit_url"])}">{esc(w["commit"][:10])}</a> {esc(w["title"])}</div>'
                   if w["commit"] else "")
         size = " · ".join(x for x in [f'{w["files"]} files' if w.get("files") else "", f'{_n(w.get("lines"))} lines' if w.get("lines") else "",
@@ -248,7 +254,7 @@ def person_body(pp, esc, live_slugs, pages=()):
 <h3><a href="{esc(w["repo_url"])}">{esc(w["repo"])}</a></h3>{commit}
 <div class="commit">{esc(size)}{" · " + esc(", ".join(w["areas"])[:120]) if w["areas"] else ""}</div>
 <div class="chips">{status}{corp}{f'<span class="chip">{esc(w["shelf"])}</span>' if w["shelf"] else ""}<span class="chip">{esc(w["spdx"])}</span>{chips}
-<span class="chip">agreed {esc(w["agreed"][:10])}</span></div></div>""")
+<span class="chip">agreed {esc(w["agreed"][:10])}</span></div>{pending}</div>""")
     other = sorted(c for c in pp["corpora"] if not any(c in w["corpora"] for w in work))
     also = ""
     if other:
