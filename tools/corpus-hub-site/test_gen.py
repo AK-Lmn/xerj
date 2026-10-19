@@ -123,6 +123,12 @@ class ContributorVolumeTest(unittest.TestCase):
         self.assertEqual(v["gh_stars"], 15)
         self.assertEqual(v["since"], "2026-10-05")
         self.assertEqual(contributors.volume(people["cat"])["commits"], 1)
+        idx = contributors.by_corpus(people)
+        self.assertEqual(idx["themed"], ["Ann", "cat"])
+        self.assertEqual(idx["live-one"], ["Ann"])
+        html = contributors.corpus_section(idx["themed"], gen.esc, people)
+        self.assertIn('href="../contributors/Ann.html"', html)
+        self.assertEqual(contributors.corpus_section([], gen.esc, people), "")
 
     def test_no_licence_is_marked_reviewed(self):
         import contributors
