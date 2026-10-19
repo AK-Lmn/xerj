@@ -126,6 +126,14 @@ class HubV2CopyTest(unittest.TestCase):
         self.assertIn('xerj ask "<word>" --corpus lz4', p)
         self.assertNoV1Flow(p, "the per-corpus copy prompt")
 
+    def test_corpus_prompt_fetches_with_hub_pull_first(self):
+        # section 12.2: the page's fetch step is the one-line hub pull, before
+        # the first question, and it says what a failed verification looks like
+        p = gen.install_prompt(LANE_A)
+        self.assertIn("2. Fetch the pack once: xerj hub pull lz4\n", p)
+        self.assertLess(p.index("xerj hub pull lz4"), p.index('3. Ask: xerj "<your question>" --corpus lz4'))
+        self.assertIn("Exit 3", p)
+
     def test_corpus_prompt_names_success_and_the_node_rule(self):
         p = gen.install_prompt(LANE_A)
         # step 1 finds an older binary before step 2 fails on it
@@ -167,6 +175,10 @@ class HubV2CopyTest(unittest.TestCase):
 
     def test_use_it_block_is_the_one_line_plus_def(self):
         body = gen.detail_body(LANE_A, {}, {}, {}, {})
+        # section 12.2: the fetch is the one-line hub pull, listed first
+        self.assertIn("<code>xerj hub pull lz4</code><br>", body)
+        self.assertLess(body.index("<code>xerj hub pull lz4</code>"),
+                        body.index('<code>xerj "your question" --corpus lz4</code>'))
         self.assertIn('<code>xerj "your question" --corpus lz4</code>', body)
         self.assertIn("<code>xerj ask --def SYMBOL --corpus lz4</code>", body)
         self.assertIn("<code>xerj_hub_ask</code>", body)
@@ -181,6 +193,7 @@ class HubV2CopyTest(unittest.TestCase):
             body = gen.detail_body(c, {}, {}, {}, {})
             self.assertIn("no hub pack", body)
             self.assertNotIn("--corpus lz4", body)
+            self.assertNotIn("hub pull lz4", body)
             self.assertNotIn('<button class="copy"', body)
 
     def test_withdrawn_entry_still_points_at_its_replacement(self):

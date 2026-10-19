@@ -327,10 +327,13 @@ def install_prompt(c):
         + (f" What it is for: {use}" if use else "") + "\n"
         "Run these in a shell, in order, and check each result before the next:\n"
         + CLI_STEP +
-        f'2. Ask: xerj "<your question>" --corpus {slug}\n'
+        f"2. Fetch the pack once: xerj hub pull {slug}\n"
+        f"   Success: exit 0 and a line naming {slug} (or {slug}: already present). "
+        "Exit 3 means the pack failed its SHA-256 or signature check: stop, do not use it.\n"
+        f'3. Ask: xerj "<your question>" --corpus {slug}\n'
         f'   A question of one word needs ask: xerj ask "<word>" --corpus {slug}\n'
         + answer_lines(slug) +
-        f"3. For an exact value, signature or default: xerj ask --def <SYMBOL> --corpus {slug}\n"
+        f"4. For an exact value, signature or default: xerj ask --def <SYMBOL> --corpus {slug}\n"
         "   Success: the declaration, then a value: line for a constant or macro. No passages.\n"
         "Answer from what it printed: name the corpus, the pin date and the licence, and cite file:line. "
         "If it prints no match, say the corpus does not cover it rather than answering from memory.\n"
@@ -917,10 +920,13 @@ def detail_body(c, g7, graded, impact, prov):
         copybtn = (f' <button class="copy" data-copy="{esc(install_prompt(c))}" '
                    f'title="Copy a prompt that asks this corpus with one line">COPY PROMPT</button>')
         useit = (f'<div class="kbox"><b>Use it</b>{copybtn}<br>'
+                 f'<code>xerj hub pull {s}</code><br>'
                  f'<code>xerj "your question" --corpus {s}</code><br>'
                  f'<code>xerj ask --def SYMBOL --corpus {s}</code>'
-                 f'<p class="note">One line, no clone and no index: XERJ fetches this corpus&rsquo;s '
-                 f'signed, pre-indexed pack the first time, then answers. The answer names the '
+                 f'<p class="note">One line, no clone and no index: <code>xerj hub pull {s}</code> '
+                 f'fetches this corpus&rsquo;s signed, pre-indexed pack and checks its SHA-256 and '
+                 f'signature before restoring it. A question fetches it too the first time, unless '
+                 f'the pack is over the automatic size cap. The answer names the '
                  f'corpus, its pin date and its licence. Use <code>--def</code> for an exact value, '
                  f'signature or default. Needs the <code>xerj</code> CLI; the copy prompt checks it, '
                  f'says what success looks like, and shows how to stop only the node you started. '
