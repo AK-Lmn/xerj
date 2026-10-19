@@ -21,6 +21,7 @@ import hashlib
 import contributors
 import os
 import private_data
+import usage
 import html
 import json
 import pathlib
@@ -649,6 +650,7 @@ NAVCTA_JS = """<script>
 # Content hash of the stylesheet: appended as ?v= on every page's CSS link so a
 # changed stylesheet always busts the browser cache (assets carry a long max-age).
 STYLE += contributors.STYLE
+STYLE += usage.STYLE
 STYLE_VER = hashlib.sha1(STYLE.encode("utf-8")).hexdigest()[:8]
 
 
@@ -932,9 +934,10 @@ that loads one works like a domain expert.</p>
 </div>
 <div class="treemap" id="grid">{treemap}</div>
 </section>
+{usage.home_section()}
 </main>
 {FILTER_JS}
-{COPY_JS}'''
+{COPY_JS}{usage.USAGE_JS}'''
     return page("XERJ Corpus Hub: reference memory for AI agents",
                 "Pinned, licence-checked, measured corpora an agent downloads per task and searches instead of guessing",
                 body)
@@ -1015,9 +1018,9 @@ def detail_body(c, g7, graded, impact, prov, contrib=""):
 {esc('Redistribution permitted with attribution per the licence review' if any(r.get('review',{}).get('use')=='adapt-with-attribution' for r in c['repos']) else 'See per-source review blocks')}.
 The review block records a human opening each licence file at the pin. Detector output is a hint, never the verdict.</p></section>
 {contributors.more_block("corpus", c["slug"], esc)}
-{g7sec}{impsec}{contrib}
+{g7sec}{impsec}{usage.traffic_section(c["slug"], esc)}{usage.corpus_section(c["slug"], esc)}{contrib}
 </main>
-{COPY_JS}{contributors.STARS_JS}{contributors.MORE_JS}'''
+{COPY_JS}{contributors.STARS_JS}{contributors.MORE_JS}{usage.USAGE_JS}'''
 
 
 def category_body(k, cs, g7, graded, impact):
@@ -1066,6 +1069,7 @@ works), OGL v3.0 (UK), and permissive licences ship as <code>adapt-with-attribut
 GPL, AGPL, SSPL, and other restrictive sources are <code>approach-only</code>: readable
 as design evidence, never copied. Closed families (ICC I-codes, Eurocodes, NEC, ASTM,
 ISO, DIN) are documented as closed and excluded.</p></section>
+''' + usage.PRIVACY + '''
 <section class="detail"><h2>Contribute</h2>
 <p>The registry is a git branch: <a href="https://github.com/xerj-org/xerj/tree/corpus-hub">corpus-hub</a>.
 Read <a href="https://github.com/xerj-org/xerj/blob/corpus-hub/tools/xerj-code/hub/CONTRIBUTING.md">CONTRIBUTING.md</a>

@@ -154,6 +154,32 @@ class SignInNavTest(unittest.TestCase):
         self.assertNotIn("innerHTML", gen.ME_JS)
 
 
+class UsageSectionTest(unittest.TestCase):
+    """The usage block carries no number of its own: every figure comes from
+    /api/hub-usage at page load, and the empty state is stated, not a zero."""
+
+    def test_corpus_section_has_no_baked_in_numbers(self):
+        import re
+        import usage
+        html = usage.corpus_section('lz4"><x', gen.esc)
+        self.assertIn('data-usage="lz4&quot;&gt;&lt;x"', html)
+        for m in re.finditer(r'<b data-u="\w+">([^<]*)</b>', html):
+            self.assertEqual(m.group(1), "&ndash;")
+        self.assertIn("No usage recorded yet", usage.USAGE_JS)
+        t = usage.traffic_section("lz4", gen.esc)
+        self.assertIn('data-traffic="lz4"', t)
+        for m in re.finditer(r'<b data-t="\w+">([^<]*)</b>', t):
+            self.assertEqual(m.group(1), "&ndash;")
+        self.assertIn("No traffic recorded yet", usage.USAGE_JS)
+        self.assertNotIn("innerHTML", usage.USAGE_JS)
+
+    def test_privacy_note_states_what_is_and_is_not_stored(self):
+        import usage
+        for phrase in ("raw query", "IP address", "3 times", "X-Xerj-Disable-Feedback", "changes every\nday", "host name"):
+            self.assertIn(phrase, usage.PRIVACY)
+        self.assertIn('id="privacy"', gen.ABOUT)
+
+
 class PrivateDataTest(unittest.TestCase):
     """The signed-in details (private_data.py) carry no consent data and never land in out/."""
 
