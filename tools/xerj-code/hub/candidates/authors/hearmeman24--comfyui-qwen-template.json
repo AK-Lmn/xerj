@@ -9,7 +9,7 @@
    "repo": "comfyui-qwen-template",
    "url": "https://github.com/Hearmeman24/comfyui-qwen-template",
    "sha": "e0959af2042ac78d677f15af2237ac1b912df17b",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

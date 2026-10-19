@@ -9,7 +9,7 @@
    "repo": "proc-compose",
    "url": "https://github.com/anivaryam/proc-compose",
    "sha": "a6eba41dd068c6da09e76eca7f9586a45d422f0f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

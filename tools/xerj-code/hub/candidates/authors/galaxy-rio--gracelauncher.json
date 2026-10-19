@@ -9,7 +9,7 @@
    "repo": "GraceLauncher",
    "url": "https://github.com/Galaxy-rio/GraceLauncher",
    "sha": "0b843a02af5aebc9914a97153244007568b68e42",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

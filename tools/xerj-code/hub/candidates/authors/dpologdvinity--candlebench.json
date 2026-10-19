@@ -9,7 +9,7 @@
    "repo": "candlebench",
    "url": "https://github.com/dpologdvinity/candlebench",
    "sha": "9ab349d3483525c3d6e872e7869ab5411100e027",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

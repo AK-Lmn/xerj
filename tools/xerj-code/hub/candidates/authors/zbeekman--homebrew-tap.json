@@ -9,7 +9,7 @@
    "repo": "homebrew-tap",
    "url": "https://github.com/zbeekman/homebrew-tap",
    "sha": "36e98d7c5c86275a54862b3f86e4c44519ae78ce",
-   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "BSD-3-Clause",
     "use": "UNREVIEWED",

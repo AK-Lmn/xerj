@@ -9,7 +9,7 @@
    "repo": "epubveri",
    "url": "https://github.com/veripublica/epubveri",
    "sha": "4055497cda178b3308c95c82ab0be79ab939d501",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "astro-recommender",
    "url": "https://github.com/dkorunic/astro-recommender",
    "sha": "0054f0bd14920243c9c5ecdfb77537d17196d705",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

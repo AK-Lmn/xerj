@@ -9,7 +9,7 @@
    "repo": "CQUT-Helper",
    "url": "https://github.com/lhgr/CQUT-Helper",
    "sha": "eb12edb04949d88ada38a1f0dae1b842318f7a57",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "mycroft",
    "url": "https://github.com/buriedsignals/mycroft",
    "sha": "5b0bc4bd049ca0dabb74b090107fac953db66e08",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

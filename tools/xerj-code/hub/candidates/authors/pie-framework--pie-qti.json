@@ -9,7 +9,7 @@
    "repo": "pie-qti",
    "url": "https://github.com/pie-framework/pie-qti",
    "sha": "8fd28e368f07c8326864a73b2e3d59eae4812ef7",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "narf",
    "url": "https://github.com/hodgesds/narf",
    "sha": "a09574f45632f6dec70bfb33a78138d211f1e30d",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

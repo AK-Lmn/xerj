@@ -9,7 +9,7 @@
    "repo": "business-intelligent-rag-agent",
    "url": "https://github.com/tejas-parjane/business-intelligent-rag-agent",
    "sha": "24dd48ec4623b3e6b1db8cc138ef15dc146f590f",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

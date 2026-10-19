@@ -9,7 +9,7 @@
    "repo": "ai-code-interface.el",
    "url": "https://github.com/tninja/ai-code-interface.el",
    "sha": "0e29ab6bda57e3b56f031ebc94130b99d20a4373",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

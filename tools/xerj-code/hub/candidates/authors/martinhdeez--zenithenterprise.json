@@ -9,7 +9,7 @@
    "repo": "zenithEnterprise",
    "url": "https://github.com/Martinhdeez/zenithEnterprise",
    "sha": "a75ad7e3a4e7573200ec44d94bd1becd96bbc0de",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

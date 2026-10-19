@@ -9,7 +9,7 @@
    "repo": "freqfs",
    "url": "https://github.com/TinyChain-Inc/freqfs",
    "sha": "0a9384b6590021e8f4b603dc1661ac0e77d2e762",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

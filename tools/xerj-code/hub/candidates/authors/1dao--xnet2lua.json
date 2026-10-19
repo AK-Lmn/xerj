@@ -9,7 +9,7 @@
    "repo": "xnet2lua",
    "url": "https://github.com/1dao/xnet2lua",
    "sha": "2d8803f860e88ec337cb85922a713b50bc55ee59",
-   "licence": "hint only: BSD-2-Clause (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: BSD-2-Clause (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "BSD-2-Clause",
     "use": "UNREVIEWED",

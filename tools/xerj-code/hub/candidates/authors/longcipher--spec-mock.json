@@ -9,7 +9,7 @@
    "repo": "spec-mock",
    "url": "https://github.com/longcipher/spec-mock",
    "sha": "99445fa3166f8076a122e4acd98173ecc1e93a47",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "http-kernel",
    "url": "https://github.com/symfony/http-kernel",
    "sha": "8ebc27b84eb38859c80b8cc2ea2858bd3df2cff1",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

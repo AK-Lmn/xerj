@@ -9,7 +9,7 @@
    "repo": "sdrtop",
    "url": "https://github.com/musithang/sdrtop",
    "sha": "e820201fe5ba9740a29bc7f7b75450f12827626e",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

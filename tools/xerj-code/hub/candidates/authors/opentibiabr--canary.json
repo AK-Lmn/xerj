@@ -9,7 +9,7 @@
    "repo": "canary",
    "url": "https://github.com/opentibiabr/canary",
    "sha": "d245c95a3aaeb2e9be4448d8e91169e34c6d7152",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

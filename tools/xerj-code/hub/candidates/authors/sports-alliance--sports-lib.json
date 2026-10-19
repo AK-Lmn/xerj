@@ -9,7 +9,7 @@
    "repo": "sports-lib",
    "url": "https://github.com/sports-alliance/sports-lib",
    "sha": "0384485b0974d86122dbc7279d237281be02c318",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

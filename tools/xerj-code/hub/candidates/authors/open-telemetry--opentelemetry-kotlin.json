@@ -9,7 +9,7 @@
    "repo": "opentelemetry-kotlin",
    "url": "https://github.com/open-telemetry/opentelemetry-kotlin",
    "sha": "5f6558a986aacdf980f4bb1f6a675bea00eef455",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

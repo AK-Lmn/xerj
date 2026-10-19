@@ -9,7 +9,7 @@
    "repo": "perf-cpp",
    "url": "https://github.com/jmuehlig/perf-cpp",
    "sha": "e276d171a703c317d45ae26de870a500022142c9",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "keel",
    "url": "https://github.com/berkayturanci/keel",
    "sha": "1c3a05d9b0d39ebfeec78f6c5d5ebf1d8a249723",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

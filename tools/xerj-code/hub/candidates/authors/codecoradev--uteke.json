@@ -9,7 +9,7 @@
    "repo": "uteke",
    "url": "https://github.com/codecoradev/uteke",
    "sha": "7af227c1fdd07c66ec5b69d9d4e8479f664bf30d",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

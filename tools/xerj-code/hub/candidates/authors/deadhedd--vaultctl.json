@@ -9,7 +9,7 @@
    "repo": "vaultctl",
    "url": "https://github.com/deadhedd/vaultctl",
    "sha": "3fc372b281c6b5e9ac403fdd39c98f45f12bbc94",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

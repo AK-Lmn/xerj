@@ -9,7 +9,7 @@
    "repo": "oasr",
    "url": "https://github.com/chiendb97/oasr",
    "sha": "5b26864d7a9712674120de374cceeccdfea5a5a7",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "diagrams-mcp-server",
    "url": "https://github.com/mohammad-emad-dev/diagrams-mcp-server",
    "sha": "05b427fc62928114a1838dd376a88e16e0106aae",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

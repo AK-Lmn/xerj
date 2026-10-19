@@ -9,7 +9,7 @@
    "repo": "tesseract",
    "url": "https://github.com/tanvir-techbro/tesseract",
    "sha": "b768fd5449edeee0dce4015e4c88296630440963",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

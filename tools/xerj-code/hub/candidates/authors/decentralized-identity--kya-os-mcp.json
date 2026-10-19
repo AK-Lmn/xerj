@@ -9,7 +9,7 @@
    "repo": "kya-os-mcp",
    "url": "https://github.com/decentralized-identity/kya-os-mcp",
    "sha": "6c61b9f78de3ad6df7dac057116e4cb905047506",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

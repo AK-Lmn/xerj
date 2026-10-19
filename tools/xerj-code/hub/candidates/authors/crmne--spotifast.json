@@ -9,7 +9,7 @@
    "repo": "spotifast",
    "url": "https://github.com/crmne/spotifast",
    "sha": "6ddcceb7eaa8dd49636a8a5fc763cc53a08a7294",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

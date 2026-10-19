@@ -9,7 +9,7 @@
    "repo": "claude-referee",
    "url": "https://github.com/ismaildasci/claude-referee",
    "sha": "3bdce9f300503abe9115e444bc0805eae5538a67",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

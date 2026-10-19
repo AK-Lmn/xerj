@@ -9,7 +9,7 @@
    "repo": "dateparser-kotlin",
    "url": "https://github.com/Alox1d/dateparser-kotlin",
    "sha": "d84e824b05b9cb95b5a8f1f1c79df0a724f7d0da",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

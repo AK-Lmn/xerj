@@ -9,7 +9,7 @@
    "repo": "json-rpc-bundle",
    "url": "https://github.com/UFO-Tech/json-rpc-bundle",
    "sha": "9c720192b21c0fb40feb6e12eb9736f9d5c9274e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

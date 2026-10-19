@@ -9,7 +9,7 @@
    "repo": "bgp-cloud-connector",
    "url": "https://github.com/openshift/bgp-cloud-connector",
    "sha": "b123e5b87161a0dc72875d3c63830a29f69000f4",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

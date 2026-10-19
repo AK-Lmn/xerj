@@ -9,7 +9,7 @@
    "repo": "gbif_gap_finder",
    "url": "https://github.com/GBIF-Sweden/gbif_gap_finder",
    "sha": "b2550555155f11653a1e3a83fc129028b1101ed7",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

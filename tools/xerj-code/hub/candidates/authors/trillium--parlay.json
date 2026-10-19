@@ -9,7 +9,7 @@
    "repo": "parlay",
    "url": "https://github.com/trillium/parlay",
    "sha": "6f960e40b4cf9ac10077b819fe0cca6d4928a798",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

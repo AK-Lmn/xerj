@@ -9,7 +9,7 @@
    "repo": "agent-chat",
    "url": "https://github.com/mandoof1/agent-chat",
    "sha": "d385bd2c3493998fc35d3700234aa67f44379f59",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

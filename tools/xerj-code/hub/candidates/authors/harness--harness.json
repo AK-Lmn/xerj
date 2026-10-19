@@ -9,7 +9,7 @@
    "repo": "harness",
    "url": "https://github.com/harness/harness",
    "sha": "f854b3a25729e5e881380470bd3d71cda60426bf",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

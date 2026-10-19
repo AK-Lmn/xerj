@@ -9,7 +9,7 @@
    "repo": "voxbento",
    "url": "https://github.com/fossasia/voxbento",
    "sha": "e518eda6a2a2205a447114c1453f705086c75aa8",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

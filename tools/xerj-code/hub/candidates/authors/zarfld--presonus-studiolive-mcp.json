@@ -9,7 +9,7 @@
    "repo": "presonus-studiolive-mcp",
    "url": "https://github.com/zarfld/presonus-studiolive-mcp",
    "sha": "ce1c735b8b326826d1c2a7c7c836eabe73f92eab",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "mcp-eval-gate",
    "url": "https://github.com/Umer-2612/mcp-eval-gate",
    "sha": "3361048c63bbd3a725f0b5ee0e4fa30a9306e5c0",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

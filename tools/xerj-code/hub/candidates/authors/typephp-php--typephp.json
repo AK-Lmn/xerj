@@ -9,7 +9,7 @@
    "repo": "typephp",
    "url": "https://github.com/typephp-php/typephp",
    "sha": "ff564652485bea97b9e37d6a08039df15de5df75",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

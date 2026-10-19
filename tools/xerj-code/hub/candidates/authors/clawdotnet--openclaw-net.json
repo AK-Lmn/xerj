@@ -9,7 +9,7 @@
    "repo": "openclaw.net",
    "url": "https://github.com/clawdotnet/openclaw.net",
    "sha": "24d69bbf136078d0091babd8db0eb387a9f46e8f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "rapid-catchment-generator",
    "url": "https://github.com/BuczynskiRafal/rapid-catchment-generator",
    "sha": "f18a23b5d36df2ea55357881183ae2561525c3c7",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

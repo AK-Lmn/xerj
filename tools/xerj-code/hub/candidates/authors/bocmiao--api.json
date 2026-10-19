@@ -9,7 +9,7 @@
    "repo": "api",
    "url": "https://github.com/bocmiao/api",
    "sha": "6be54eed77381d1f269ee2f8f95318ba04cb24f3",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

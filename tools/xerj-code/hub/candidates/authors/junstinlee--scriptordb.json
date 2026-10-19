@@ -9,7 +9,7 @@
    "repo": "ScriptorDB",
    "url": "https://github.com/JunstinLee/ScriptorDB",
    "sha": "a3e7adc9250cd245e0a0ea10354390f4767bb834",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "nix-config",
    "url": "https://github.com/jakob1379/nix-config",
    "sha": "693a693c4921053db48a5d362c267c380f93c09e",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

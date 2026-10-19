@@ -9,7 +9,7 @@
    "repo": "liferay-dummy-factory",
    "url": "https://github.com/yasuflatland-lf/liferay-dummy-factory",
    "sha": "0db1e378009511ee35130ed7197b3d1e7fa16f01",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

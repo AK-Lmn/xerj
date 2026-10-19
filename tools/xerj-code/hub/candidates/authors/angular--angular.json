@@ -9,7 +9,7 @@
    "repo": "angular",
    "url": "https://github.com/angular/angular",
    "sha": "d60ee5e27be123aeda17f97cfebbf0f98fcfa24c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

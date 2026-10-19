@@ -9,7 +9,7 @@
    "repo": "omarchy-futbar-plugin",
    "url": "https://github.com/AlwaysRead/omarchy-futbar-plugin",
    "sha": "5c6b35811c4fc3f729db8ed062c4fd2308ae7549",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "erd-designer",
    "url": "https://github.com/kajitiluna/erd-designer",
    "sha": "edc43dcc1fbcef32e7e81611cc4f2a1f1bfc3c21",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "kubectl-hpa-status",
    "url": "https://github.com/mattsu2020/kubectl-hpa-status",
    "sha": "9520f5787e17919c5cd84e93436f7bd96eef2a9d",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

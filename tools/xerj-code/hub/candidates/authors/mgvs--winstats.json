@@ -9,7 +9,7 @@
    "repo": "winstats",
    "url": "https://github.com/mgvs/winstats",
    "sha": "391ca819fbf90e0553884633531f099fca8656b1",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

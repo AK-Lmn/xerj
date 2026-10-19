@@ -9,7 +9,7 @@
    "repo": "ce-record-chain",
    "url": "https://github.com/vadimtrifonov/ce-record-chain",
    "sha": "6d1133956e576b3bc05e43a3c71773c8e5637277",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

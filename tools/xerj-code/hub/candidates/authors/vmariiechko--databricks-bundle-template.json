@@ -9,7 +9,7 @@
    "repo": "databricks-bundle-template",
    "url": "https://github.com/vmariiechko/databricks-bundle-template",
    "sha": "ceb85e37a8e6c33a1ed224e611eb5387ba9bb7a2",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

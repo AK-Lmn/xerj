@@ -9,7 +9,7 @@
    "repo": "dbt-studio",
    "url": "https://github.com/rosettadb/dbt-studio",
    "sha": "fefdb50daa1d7c452641163677b7c097d250396d",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

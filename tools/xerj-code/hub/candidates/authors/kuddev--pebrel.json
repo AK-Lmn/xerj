@@ -9,7 +9,7 @@
    "repo": "pebrel",
    "url": "https://github.com/Kuddev/pebrel",
    "sha": "33479963e285b25cc9d27ae418d2bb72c53ccc76",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

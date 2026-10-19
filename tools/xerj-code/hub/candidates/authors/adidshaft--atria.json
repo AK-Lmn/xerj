@@ -9,7 +9,7 @@
    "repo": "atria",
    "url": "https://github.com/adidshaft/atria",
    "sha": "892b69ced0d881fe5c0755b035b6279cf16f505f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

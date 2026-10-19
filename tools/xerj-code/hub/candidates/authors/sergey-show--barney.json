@@ -9,7 +9,7 @@
    "repo": "barney",
    "url": "https://github.com/sergey-show/barney",
    "sha": "f9b155f46adaf2e5004889a1fc3b840a1d1aebe4",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

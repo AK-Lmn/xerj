@@ -9,7 +9,7 @@
    "repo": "mlx-serve",
    "url": "https://github.com/raspoli/mlx-serve",
    "sha": "cebdfc5dc24e614a63f36daf835d1805dc8986dd",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

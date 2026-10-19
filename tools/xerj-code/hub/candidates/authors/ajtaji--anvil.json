@@ -9,7 +9,7 @@
    "repo": "Anvil",
    "url": "https://github.com/ajtaji/Anvil",
    "sha": "6540e4358169b333741ec0c8eba06796e7529cd1",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

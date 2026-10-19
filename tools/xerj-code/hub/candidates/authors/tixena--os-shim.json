@@ -9,7 +9,7 @@
    "repo": "os-shim",
    "url": "https://github.com/tixena/os-shim",
    "sha": "988145af559c8bb4f210e09c71b4841bc720e6bd",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

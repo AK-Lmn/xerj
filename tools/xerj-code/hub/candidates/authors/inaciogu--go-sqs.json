@@ -9,7 +9,7 @@
    "repo": "go-sqs",
    "url": "https://github.com/inaciogu/go-sqs",
    "sha": "de5220ea86d38c3362909eeba9b2bb1006a68788",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

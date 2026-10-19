@@ -9,7 +9,7 @@
    "repo": "spectrum",
    "url": "https://github.com/v1nns/spectrum",
    "sha": "48a1d86a5d3d242d561fc52b9903e604720a9df6",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

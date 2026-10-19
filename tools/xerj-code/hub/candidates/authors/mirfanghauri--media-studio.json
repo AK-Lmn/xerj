@@ -9,7 +9,7 @@
    "repo": "media-studio",
    "url": "https://github.com/mirfanghauri/media-studio",
    "sha": "c28de955e3a8e15ace1ed4f2964aff1a34f58b0c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

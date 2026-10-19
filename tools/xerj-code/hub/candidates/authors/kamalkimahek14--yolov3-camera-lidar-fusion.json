@@ -9,7 +9,7 @@
    "repo": "yolov3-camera-lidar-fusion",
    "url": "https://github.com/kamalkimahek14/yolov3-camera-lidar-fusion",
    "sha": "c119ac2dae4be1b6f40440c059907a8697ebb0df",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

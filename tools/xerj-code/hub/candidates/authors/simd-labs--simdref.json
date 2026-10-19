@@ -9,7 +9,7 @@
    "repo": "simdref",
    "url": "https://github.com/simd-labs/simdref",
    "sha": "3be906fdcc36337af883bc7a73e358fc0cf11473",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

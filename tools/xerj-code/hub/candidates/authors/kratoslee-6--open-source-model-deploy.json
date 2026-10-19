@@ -9,7 +9,7 @@
    "repo": "open-source-model-deploy",
    "url": "https://github.com/KratosLee-6/open-source-model-deploy",
    "sha": "05f5a1b42d4ba4fa3a7e973dcc3b4b14cb13418a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

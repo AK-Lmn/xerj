@@ -9,7 +9,7 @@
    "repo": "lyapunov-certified-imitation-learning",
    "url": "https://github.com/ArgoJ/lyapunov-certified-imitation-learning",
    "sha": "b908f68ad24ef4a922a499756d3165cccb16f6f8",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

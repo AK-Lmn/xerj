@@ -9,7 +9,7 @@
    "repo": "laravel-vue",
    "url": "https://github.com/MetaGrenade/laravel-vue",
    "sha": "19b8e3934a5a82a12e771c7198ce519d4f948fbc",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

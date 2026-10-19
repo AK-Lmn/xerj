@@ -9,7 +9,7 @@
    "repo": "dansday-discord-bot",
    "url": "https://github.com/dansday-com/dansday-discord-bot",
    "sha": "bc05932a10e3bdb25095ded776abc9013710d44e",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "codex-orchestrator",
    "url": "https://github.com/christianreiss/codex-orchestrator",
    "sha": "343f39c158537008fa351a38a9a90b474d951d3f",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

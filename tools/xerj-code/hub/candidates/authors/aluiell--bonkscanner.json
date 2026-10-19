@@ -9,7 +9,7 @@
    "repo": "BonkScanner",
    "url": "https://github.com/ALuiell/BonkScanner",
    "sha": "ac23a6c303131f98e0b656e9385be2e494d903e8",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

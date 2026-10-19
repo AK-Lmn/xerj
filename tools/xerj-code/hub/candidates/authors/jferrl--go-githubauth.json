@@ -9,7 +9,7 @@
    "repo": "go-githubauth",
    "url": "https://github.com/jferrl/go-githubauth",
    "sha": "bf40e4ff2b0cea99e9287913c217b7ba4704d587",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

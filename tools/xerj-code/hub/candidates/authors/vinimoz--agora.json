@@ -9,7 +9,7 @@
    "repo": "agora",
    "url": "https://github.com/vinimoz/agora",
    "sha": "41045ee210ddeaf0777476c99d7abc9bcfaf40b5",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

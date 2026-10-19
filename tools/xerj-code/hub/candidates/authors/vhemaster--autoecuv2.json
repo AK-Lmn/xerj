@@ -9,7 +9,7 @@
    "repo": "AutoECUv2",
    "url": "https://github.com/VHEMaster/AutoECUv2",
    "sha": "e4e0736f81216f9f6ab09ac14801906d7c394afc",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

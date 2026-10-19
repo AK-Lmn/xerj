@@ -9,7 +9,7 @@
    "repo": "ethora-mcp-server",
    "url": "https://github.com/dappros/ethora-mcp-server",
    "sha": "e3453a57e11eb58c8e229a2d929d088019df9489",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "ha-automation-analyzer",
    "url": "https://github.com/MacSiem/ha-automation-analyzer",
    "sha": "e7b5ecd9822cc36ac001622600c29906134d47a8",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

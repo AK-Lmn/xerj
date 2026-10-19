@@ -9,7 +9,7 @@
    "repo": "mod-oud",
    "url": "https://github.com/Oud-Idk/mod-oud",
    "sha": "568051d1eb4b0a0493c03e9008b66bff473b2807",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

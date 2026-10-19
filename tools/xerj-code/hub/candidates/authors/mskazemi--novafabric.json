@@ -9,7 +9,7 @@
    "repo": "novafabric",
    "url": "https://github.com/MSKazemi/novafabric",
    "sha": "8e02a0ad7e64427a3ee24007e2a893dfe3116ab5",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

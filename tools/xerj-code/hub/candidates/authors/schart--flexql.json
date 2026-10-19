@@ -9,7 +9,7 @@
    "repo": "FlexQL",
    "url": "https://github.com/schart/FlexQL",
    "sha": "a08491a6264a7c5807be93c5ed72dc9b78c15f62",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

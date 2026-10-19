@@ -9,7 +9,7 @@
    "repo": "konzertmeister-cli",
    "url": "https://github.com/nikbucher/konzertmeister-cli",
    "sha": "8cef64e041f5bcae8e22cb17b68b7e020eed872c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

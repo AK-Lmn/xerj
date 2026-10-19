@@ -9,7 +9,7 @@
    "repo": "mqvpn",
    "url": "https://github.com/mp0rta/mqvpn",
    "sha": "2b634b9d77ac46b8c21c601f4bad5f4ad9745748",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

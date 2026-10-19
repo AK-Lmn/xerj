@@ -9,7 +9,7 @@
    "repo": "tsshd",
    "url": "https://github.com/trzsz/tsshd",
    "sha": "2a2d435e754e3d05d3f27178f6bd934fe19ad22f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

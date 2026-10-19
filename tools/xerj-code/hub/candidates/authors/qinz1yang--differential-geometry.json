@@ -9,7 +9,7 @@
    "repo": "differential-geometry",
    "url": "https://github.com/qinz1yang/differential-geometry",
    "sha": "391b7e1c612b53df0ba29d4e7690f27d64fcc4b7",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

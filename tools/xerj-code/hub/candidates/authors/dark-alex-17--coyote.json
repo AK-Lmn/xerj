@@ -9,7 +9,7 @@
    "repo": "coyote",
    "url": "https://github.com/Dark-Alex-17/coyote",
    "sha": "6be0d382acbcf0fc39d39ed77ede542ccd4fd6da",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

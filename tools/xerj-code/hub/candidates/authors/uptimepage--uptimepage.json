@@ -9,7 +9,7 @@
    "repo": "uptimepage",
    "url": "https://github.com/uptimepage/uptimepage",
    "sha": "5dd744d05da4498dcb06bb92f361b5de6893564e",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "raisfast",
    "url": "https://github.com/RaisFast/raisfast",
    "sha": "def50f19765e14496cf894f4d954b98526a21a03",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "Heliox-OS",
    "url": "https://github.com/VyomKulshrestha/Heliox-OS",
    "sha": "64d242f12b05849291513bc62b9f40cc2fcbd7ce",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

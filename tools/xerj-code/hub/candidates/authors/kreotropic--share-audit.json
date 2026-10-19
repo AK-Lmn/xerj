@@ -9,7 +9,7 @@
    "repo": "share_audit",
    "url": "https://github.com/kreotropic/share_audit",
    "sha": "0d1ecbfe65dd933f574a20786cd90f34e00912ee",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

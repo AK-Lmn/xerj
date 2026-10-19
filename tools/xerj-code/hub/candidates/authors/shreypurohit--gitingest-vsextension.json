@@ -9,7 +9,7 @@
    "repo": "gitingest-vsextension",
    "url": "https://github.com/ShreyPurohit/gitingest-vsextension",
    "sha": "1de80732f18ce428db4945d7809b1ef1b3dd12ec",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

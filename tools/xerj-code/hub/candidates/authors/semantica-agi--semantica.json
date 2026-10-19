@@ -9,7 +9,7 @@
    "repo": "semantica",
    "url": "https://github.com/semantica-agi/semantica",
    "sha": "415dfc621f8d15458951c559dc4934017d7ea879",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

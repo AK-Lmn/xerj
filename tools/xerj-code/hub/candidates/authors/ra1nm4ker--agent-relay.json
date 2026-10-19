@@ -9,7 +9,7 @@
    "repo": "agent-relay",
    "url": "https://github.com/RA1NM4KER/agent-relay",
    "sha": "d8f66ea44edd39a86982bde7dbd067d2bdcccb33",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

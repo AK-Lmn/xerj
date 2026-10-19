@@ -9,7 +9,7 @@
    "repo": "iTestFlow-Agent",
    "url": "https://github.com/iTestFlow/iTestFlow-Agent",
    "sha": "bfb60b75e98bdf314b4d859d19e72fae644e33c1",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "open-jarvis",
    "url": "https://github.com/lbtlm/open-jarvis",
    "sha": "401f60776d7ec7b09d9ed01aa385b04447f796da",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

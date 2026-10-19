@@ -9,7 +9,7 @@
    "repo": "teapot",
    "url": "https://github.com/akku1139/teapot",
    "sha": "2e879531e1899924ae6526bb3abf90cc330eb8df",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

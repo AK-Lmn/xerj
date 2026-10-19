@@ -9,7 +9,7 @@
    "repo": "wazuh-indexer-plugins",
    "url": "https://github.com/wazuh/wazuh-indexer-plugins",
    "sha": "748430a5d062cf68490aa9f882b601ccd071e151",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

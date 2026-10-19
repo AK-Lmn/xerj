@@ -9,7 +9,7 @@
    "repo": "mittens",
    "url": "https://github.com/rei-kurzweil/mittens",
    "sha": "098c8c2c665933246d3da26616dd5ce2ef96d59f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

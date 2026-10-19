@@ -9,7 +9,7 @@
    "repo": "wmc.nvim",
    "url": "https://github.com/pakut2/wmc.nvim",
    "sha": "afb1c74045f9de69bcff9cce4c9fd250d81400ee",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

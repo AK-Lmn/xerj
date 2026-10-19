@@ -9,7 +9,7 @@
    "repo": "rayu-cli",
    "url": "https://github.com/Choeng-Rayu/rayu-cli",
    "sha": "f0ff9889c6a611cf2cc0ea8631a44caecb2653e9",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

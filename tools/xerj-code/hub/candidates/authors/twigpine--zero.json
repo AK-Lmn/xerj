@@ -9,7 +9,7 @@
    "repo": "zero",
    "url": "https://github.com/Twigpine/zero",
    "sha": "eebb384676fb567acc1f5a20dcbb17df8a03dc42",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

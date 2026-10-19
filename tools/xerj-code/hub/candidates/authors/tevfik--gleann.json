@@ -9,7 +9,7 @@
    "repo": "gleann",
    "url": "https://github.com/tevfik/gleann",
    "sha": "2242d7c5e17e3f0fa5f4b0aa4f14256821b84248",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

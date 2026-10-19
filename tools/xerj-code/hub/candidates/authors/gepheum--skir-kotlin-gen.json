@@ -9,7 +9,7 @@
    "repo": "skir-kotlin-gen",
    "url": "https://github.com/gepheum/skir-kotlin-gen",
    "sha": "e39464e1bb9bbca4fa0415348ac11610dd4e5219",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

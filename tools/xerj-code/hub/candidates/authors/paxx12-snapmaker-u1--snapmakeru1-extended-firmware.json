@@ -9,7 +9,7 @@
    "repo": "SnapmakerU1-Extended-Firmware",
    "url": "https://github.com/paxx12-snapmaker-u1/SnapmakerU1-Extended-Firmware",
    "sha": "1c075c48c004468018c30958245ad15a0fe2114c",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

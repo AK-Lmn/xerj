@@ -9,7 +9,7 @@
    "repo": "ifc-viewer-online",
    "url": "https://github.com/j03rul4nd/ifc-viewer-online",
    "sha": "671617071a69fd4d9f5b5b02ed446f7bd6edf984",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

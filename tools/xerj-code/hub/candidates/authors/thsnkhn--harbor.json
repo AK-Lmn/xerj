@@ -9,7 +9,7 @@
    "repo": "harbor",
    "url": "https://github.com/thsnkhn/harbor",
    "sha": "59ca88cb57f2dd7625fe3dce5b011164ec9ead78",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

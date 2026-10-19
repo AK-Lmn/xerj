@@ -9,7 +9,7 @@
    "repo": "youcongress",
    "url": "https://github.com/youcongress/youcongress",
    "sha": "dbb950b0d91831aa6681c5e1584c82bb9afe1c3b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

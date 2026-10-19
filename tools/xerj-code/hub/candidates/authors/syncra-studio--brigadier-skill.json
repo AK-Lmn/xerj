@@ -9,7 +9,7 @@
    "repo": "brigadier-skill",
    "url": "https://github.com/syncra-studio/brigadier-skill",
    "sha": "21675c3d90069d4b1be16903eaedabc476f64ed1",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

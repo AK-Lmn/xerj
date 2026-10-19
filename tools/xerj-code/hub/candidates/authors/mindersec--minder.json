@@ -9,7 +9,7 @@
    "repo": "minder",
    "url": "https://github.com/mindersec/minder",
    "sha": "f8ad8a8502c64a0c2c686e67292adc06cf780946",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

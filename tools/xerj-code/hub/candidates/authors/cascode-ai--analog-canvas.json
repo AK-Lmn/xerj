@@ -9,7 +9,7 @@
    "repo": "analog-canvas",
    "url": "https://github.com/cascode-ai/analog-canvas",
    "sha": "1886904c5eedf280835a3bde8fbe3dc029dc34e0",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

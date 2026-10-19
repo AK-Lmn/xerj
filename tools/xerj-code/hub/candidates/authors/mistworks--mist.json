@@ -9,7 +9,7 @@
    "repo": "Mist",
    "url": "https://github.com/MistWorks/Mist",
    "sha": "a085746840738a8ec1662fc0540bc84030755f86",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

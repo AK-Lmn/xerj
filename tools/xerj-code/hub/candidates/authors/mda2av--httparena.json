@@ -9,7 +9,7 @@
    "repo": "HttpArena",
    "url": "https://github.com/MDA2AV/HttpArena",
    "sha": "73a3a8ce0aa686462def2edd695c78520c6ea5cc",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

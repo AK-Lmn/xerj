@@ -9,7 +9,7 @@
    "repo": "yarp-devices",
    "url": "https://github.com/roboticslab-uc3m/yarp-devices",
    "sha": "9a9a938e4b0ec988738d5cddad3e694819f18186",
-   "licence": "hint only: LGPL-2.1 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: LGPL-2.1 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "LGPL-2.1",
     "use": "UNREVIEWED",

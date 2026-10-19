@@ -9,7 +9,7 @@
    "repo": "matcha",
    "url": "https://github.com/floatpane/matcha",
    "sha": "820afde09482ec49e5470d1e49a2ac0f76605fec",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

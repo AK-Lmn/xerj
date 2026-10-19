@@ -9,7 +9,7 @@
    "repo": "open-devops-agent",
    "url": "https://github.com/open-devops-agent/open-devops-agent",
    "sha": "1095ac7c490929eeaa5565626231dedab04bce71",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "nuclei",
    "url": "https://github.com/projectdiscovery/nuclei",
    "sha": "a5715288aa7e405dcff8ab458de541f8d99ceac0",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

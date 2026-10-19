@@ -9,7 +9,7 @@
    "repo": "Scapedle",
    "url": "https://github.com/asbedb/Scapedle",
    "sha": "b6a90d66832f1952ca86918d82f3993d528ff4e5",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

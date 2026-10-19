@@ -9,7 +9,7 @@
    "repo": "elasticemail-examples",
    "url": "https://github.com/ElasticEmail/elasticemail-examples",
    "sha": "8386830504baa841066f8d8e5a66d1b44f63b67c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

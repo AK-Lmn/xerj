@@ -9,7 +9,7 @@
    "repo": "567-agent",
    "url": "https://github.com/Chinachani/567-agent",
    "sha": "4f692c7447612629d661c9a16f49dea5aafa5d31",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

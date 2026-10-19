@@ -9,7 +9,7 @@
    "repo": "kust",
    "url": "https://github.com/Shapak-Apps/kust",
    "sha": "ee6d17984553c434bbc5e2d22e084ffd28f7da54",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

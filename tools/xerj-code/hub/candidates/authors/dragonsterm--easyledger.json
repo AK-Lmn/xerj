@@ -9,7 +9,7 @@
    "repo": "EasyLedger",
    "url": "https://github.com/dragonsterm/EasyLedger",
    "sha": "ab6dbfef0c77214b1910c079b161df2fe71d6614",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

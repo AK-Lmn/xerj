@@ -9,7 +9,7 @@
    "repo": "rustdesk",
    "url": "https://github.com/rustdesk/rustdesk",
    "sha": "3f4bfe535ee020df9470ba8fcdde86cb7f4cf18b",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

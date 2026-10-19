@@ -9,7 +9,7 @@
    "repo": "PreceptorOS",
    "url": "https://github.com/piskyRpapalo/PreceptorOS",
    "sha": "cf6fcf13e5dbf662bcdc82e3573c0f3afb85a3ab",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

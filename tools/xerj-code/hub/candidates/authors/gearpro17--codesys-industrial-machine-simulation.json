@@ -9,7 +9,7 @@
    "repo": "codesys-industrial-machine-simulation",
    "url": "https://github.com/Gearpro17/codesys-industrial-machine-simulation",
    "sha": "1e6f8c6a3ef80ada1f0179496487ed8958fcdd81",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

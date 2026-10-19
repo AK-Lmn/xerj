@@ -9,7 +9,7 @@
    "repo": "webvtt-py",
    "url": "https://github.com/glut23/webvtt-py",
    "sha": "d77ab843ac43e04c7f7ca9d9d0385a32ff679919",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

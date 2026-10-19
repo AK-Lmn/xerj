@@ -9,7 +9,7 @@
    "repo": "agentlane",
    "url": "https://github.com/yasik/agentlane",
    "sha": "eadfedb8fe8237f7c536613c1b3e4c38b6268dd4",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

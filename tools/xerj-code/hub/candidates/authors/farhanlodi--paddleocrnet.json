@@ -9,7 +9,7 @@
    "repo": "PaddleOcrNet",
    "url": "https://github.com/FarhanLodi/PaddleOcrNet",
    "sha": "a976fb94ceada80b9ca0584472ef67dd3d9f981f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

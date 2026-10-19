@@ -9,7 +9,7 @@
    "repo": "redmine-mcp-server",
    "url": "https://github.com/jztan/redmine-mcp-server",
    "sha": "bb494a800a04acda2c804ef1e9897a0a5112020f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

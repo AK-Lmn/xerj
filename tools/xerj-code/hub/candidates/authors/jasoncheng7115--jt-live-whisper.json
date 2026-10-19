@@ -9,7 +9,7 @@
    "repo": "jt-live-whisper",
    "url": "https://github.com/jasoncheng7115/jt-live-whisper",
    "sha": "9194e3d68af1c75f2a0c173ddb75908da0dd2141",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "android-emu-agent",
    "url": "https://github.com/alehkot/android-emu-agent",
    "sha": "ae5e77155b8e90a786329e4ec9a7916f755b949a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

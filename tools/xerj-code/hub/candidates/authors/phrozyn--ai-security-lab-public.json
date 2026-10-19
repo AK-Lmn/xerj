@@ -9,7 +9,7 @@
    "repo": "ai-security-lab-public",
    "url": "https://github.com/Phrozyn/ai-security-lab-public",
    "sha": "29688564074d8932b3169e8e9da4ab5eeaaa2244",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

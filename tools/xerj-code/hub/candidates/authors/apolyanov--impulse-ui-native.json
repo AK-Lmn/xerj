@@ -9,7 +9,7 @@
    "repo": "impulse-ui-native",
    "url": "https://github.com/apolyanov/impulse-ui-native",
    "sha": "91eba293147c354ad7d999daba1cca6f4f223eee",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

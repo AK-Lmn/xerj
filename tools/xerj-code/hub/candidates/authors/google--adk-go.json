@@ -9,7 +9,7 @@
    "repo": "adk-go",
    "url": "https://github.com/google/adk-go",
    "sha": "6ed5dd08a3e9630861ba8a6663481e698f25e270",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "pooled",
    "url": "https://github.com/Nehanth/pooled",
    "sha": "2b39a861cbaf12c43eba7cf10914b3297ed6447d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "nova-browser",
    "url": "https://github.com/unitybtw/nova-browser",
    "sha": "96be2799166e47713bd7eb560b773b7d5a85c45d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

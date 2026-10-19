@@ -9,7 +9,7 @@
    "repo": "sdk-astro",
    "url": "https://github.com/7mLabs/sdk-astro",
    "sha": "a17850e01507485312e5cb584ed1eb82a786fcbc",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

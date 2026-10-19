@@ -9,7 +9,7 @@
    "repo": "morphness",
    "url": "https://github.com/Antarsoft/morphness",
    "sha": "514403d31d6c7aa678ea1470e9080bd15ac5b9b7",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

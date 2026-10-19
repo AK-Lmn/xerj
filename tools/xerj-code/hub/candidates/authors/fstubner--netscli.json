@@ -9,7 +9,7 @@
    "repo": "netscli",
    "url": "https://github.com/fstubner/netscli",
    "sha": "604b05e745908547dafb02b8918a12205b67f467",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

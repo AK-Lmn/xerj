@@ -9,7 +9,7 @@
    "repo": "pylopdf",
    "url": "https://github.com/yhay81/pylopdf",
    "sha": "b22cf63f2efb1c392176dad2b0cf0cda8e6fafa2",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

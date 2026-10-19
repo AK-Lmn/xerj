@@ -9,7 +9,7 @@
    "repo": "skeletonkey",
    "url": "https://github.com/akeeba/skeletonkey",
    "sha": "874e27a7112e957888ce6d06a6f764395ad354d6",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

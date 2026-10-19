@@ -9,7 +9,7 @@
    "repo": "opentab",
    "url": "https://github.com/hamidi-dev/opentab",
    "sha": "52eca89e10c2456fa8195d0efd52d1119de2fbbe",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

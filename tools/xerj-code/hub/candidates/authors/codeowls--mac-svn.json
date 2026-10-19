@@ -9,7 +9,7 @@
    "repo": "mac-svn",
    "url": "https://github.com/codeowls/mac-svn",
    "sha": "f88e21b5e8b4b46b584bf63af3a152b04338d794",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

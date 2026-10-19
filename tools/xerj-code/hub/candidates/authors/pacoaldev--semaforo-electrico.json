@@ -9,7 +9,7 @@
    "repo": "semaforo_electrico",
    "url": "https://github.com/Pacoaldev/semaforo_electrico",
    "sha": "92d5bded880c28a5c67e23509d90493ab35b603c",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

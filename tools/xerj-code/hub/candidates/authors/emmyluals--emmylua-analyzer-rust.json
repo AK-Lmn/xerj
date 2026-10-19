@@ -9,7 +9,7 @@
    "repo": "emmylua-analyzer-rust",
    "url": "https://github.com/EmmyLuaLs/emmylua-analyzer-rust",
    "sha": "8242da72948afa09c3e8b59a0802b29c6d0e1190",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

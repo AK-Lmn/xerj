@@ -9,7 +9,7 @@
    "repo": "koreader",
    "url": "https://github.com/koreader/koreader",
    "sha": "caf5e93f5a632e8d8c03af6452fa64a399a936da",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

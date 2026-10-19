@@ -9,7 +9,7 @@
    "repo": "logwisp",
    "url": "https://github.com/lixenwraith/logwisp",
    "sha": "2c898288c53e72220ae9b8823990c56eb4087517",
-   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "BSD-3-Clause",
     "use": "UNREVIEWED",

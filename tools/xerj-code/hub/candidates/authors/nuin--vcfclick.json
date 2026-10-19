@@ -9,7 +9,7 @@
    "repo": "vcfclick",
    "url": "https://github.com/nuin/vcfclick",
    "sha": "df047152fe98f68c554d512fb7695fe1b45b6d96",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

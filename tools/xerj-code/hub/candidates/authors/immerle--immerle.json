@@ -9,7 +9,7 @@
    "repo": "immerle",
    "url": "https://github.com/immerle/immerle",
    "sha": "94ce5a1a0b2771c5ab2d6da16309af7d460c53ca",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

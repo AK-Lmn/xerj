@@ -9,7 +9,7 @@
    "repo": "pocketgull",
    "url": "https://github.com/pocketgull-app/pocketgull",
    "sha": "5b8c74c4fe1250a58e1a81bf6d6cda2048f6c93d",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

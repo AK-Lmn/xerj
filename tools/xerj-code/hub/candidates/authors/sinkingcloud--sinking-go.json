@@ -9,7 +9,7 @@
    "repo": "sinking-go",
    "url": "https://github.com/SinKingCloud/sinking-go",
    "sha": "7dff6e811b59b26e8683b31a64f89c3c7dbac179",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

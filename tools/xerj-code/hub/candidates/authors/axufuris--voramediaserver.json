@@ -9,7 +9,7 @@
    "repo": "VoraMediaServer",
    "url": "https://github.com/axufuris/VoraMediaServer",
    "sha": "114fed2784ef837c7d5bb07b3fae9cd32e10d0f4",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

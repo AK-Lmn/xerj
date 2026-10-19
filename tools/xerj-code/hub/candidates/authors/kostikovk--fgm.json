@@ -9,7 +9,7 @@
    "repo": "fgm",
    "url": "https://github.com/kostikovk/fgm",
    "sha": "b616889286b41d0e9cb018cc078e3caf71f85240",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

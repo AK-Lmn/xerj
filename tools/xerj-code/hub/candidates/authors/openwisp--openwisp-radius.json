@@ -9,7 +9,7 @@
    "repo": "openwisp-radius",
    "url": "https://github.com/openwisp/openwisp-radius",
    "sha": "895de434a637813b59e162745ce1c33bb80da219",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

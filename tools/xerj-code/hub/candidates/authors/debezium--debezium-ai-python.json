@@ -9,7 +9,7 @@
    "repo": "debezium-ai-python",
    "url": "https://github.com/debezium/debezium-ai-python",
    "sha": "dc082dc31d1cb87ab4d1d523158e164554aa0b52",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

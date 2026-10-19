@@ -9,7 +9,7 @@
    "repo": "blitz-proxy",
    "url": "https://github.com/jenil0528/blitz-proxy",
    "sha": "b2318c5610c15bfa06ff9cabf0db35af0e13d181",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

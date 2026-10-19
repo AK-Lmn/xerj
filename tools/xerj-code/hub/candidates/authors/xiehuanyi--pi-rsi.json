@@ -9,7 +9,7 @@
    "repo": "pi-rsi",
    "url": "https://github.com/xiehuanyi/pi-rsi",
    "sha": "158bef0c01a7f383e87da446b0e8b4a9d0eaa29e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

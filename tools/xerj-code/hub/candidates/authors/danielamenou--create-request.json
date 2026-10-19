@@ -9,7 +9,7 @@
    "repo": "create-request",
    "url": "https://github.com/DanielAmenou/create-request",
    "sha": "6f0b3bad5560b2bb00ba555b75f4a48c06c48b43",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

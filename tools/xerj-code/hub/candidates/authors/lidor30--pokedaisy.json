@@ -9,7 +9,7 @@
    "repo": "pokedaisy",
    "url": "https://github.com/lidor30/pokedaisy",
    "sha": "de63ad0c317bbe1de6fa4c33b397a800fe9096d7",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

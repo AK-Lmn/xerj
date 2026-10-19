@@ -9,7 +9,7 @@
    "repo": "proofcli",
    "url": "https://github.com/bk1202/proofcli",
    "sha": "de25785595eef40ca9fd2762d0232f39cd4c6579",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

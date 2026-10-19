@@ -9,7 +9,7 @@
    "repo": "switcher-core",
    "url": "https://github.com/meklis/switcher-core",
    "sha": "9b3063250c3888854303e84b5c4546c8862ede68",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

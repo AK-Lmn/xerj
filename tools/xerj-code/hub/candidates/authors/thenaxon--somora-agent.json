@@ -9,7 +9,7 @@
    "repo": "somora_agent",
    "url": "https://github.com/thenaxon/somora_agent",
    "sha": "0c4144aa498811b145aa9e8d649e61f88d688032",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

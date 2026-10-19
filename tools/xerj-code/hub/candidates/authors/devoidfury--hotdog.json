@@ -9,7 +9,7 @@
    "repo": "hotdog",
    "url": "https://github.com/devoidfury/hotdog",
    "sha": "9125d0da2fa6fe2a6be5f3b34a38c7cd96a65487",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

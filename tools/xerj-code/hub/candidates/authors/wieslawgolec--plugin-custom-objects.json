@@ -9,7 +9,7 @@
    "repo": "plugin-custom-objects",
    "url": "https://github.com/wieslawgolec/plugin-custom-objects",
    "sha": "7599a46bc16a43bf67ade783908268308644b982",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

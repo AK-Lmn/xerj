@@ -9,7 +9,7 @@
    "repo": "DeskSaw-VLLM-EN",
    "url": "https://github.com/AlexFurkay/DeskSaw-VLLM-EN",
    "sha": "0d8284c90f5e05309876bbad2f210e8daf709a5f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

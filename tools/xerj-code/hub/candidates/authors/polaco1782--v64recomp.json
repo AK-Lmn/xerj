@@ -9,7 +9,7 @@
    "repo": "v64recomp",
    "url": "https://github.com/polaco1782/v64recomp",
    "sha": "8d2fa3f431e71da1e32145992271980170323ddf",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

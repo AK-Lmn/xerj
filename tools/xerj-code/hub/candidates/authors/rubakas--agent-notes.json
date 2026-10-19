@@ -9,7 +9,7 @@
    "repo": "agent-notes",
    "url": "https://github.com/rubakas/agent-notes",
    "sha": "f990b3a1b08eb48fb3bc22e9ae84cc4426123c6a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

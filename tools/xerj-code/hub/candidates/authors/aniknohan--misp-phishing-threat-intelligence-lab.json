@@ -9,7 +9,7 @@
    "repo": "misp-phishing-threat-intelligence-lab",
    "url": "https://github.com/aniknohan/misp-phishing-threat-intelligence-lab",
    "sha": "89c9373c262d2e60502d7ab351a69bcd44effd80",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

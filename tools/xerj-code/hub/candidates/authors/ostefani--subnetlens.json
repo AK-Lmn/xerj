@@ -9,7 +9,7 @@
    "repo": "subnetlens",
    "url": "https://github.com/ostefani/subnetlens",
    "sha": "188ff4f5df8b8ec76e9700a3b59fc6d5a6cf9308",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

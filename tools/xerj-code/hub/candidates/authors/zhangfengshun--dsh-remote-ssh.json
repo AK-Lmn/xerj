@@ -9,7 +9,7 @@
    "repo": "dsh-remote-ssh",
    "url": "https://github.com/ZhangFengshun/dsh-remote-ssh",
    "sha": "210a73263435be75fde497c2fb8e27344cbf11af",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

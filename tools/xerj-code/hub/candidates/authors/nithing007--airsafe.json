@@ -9,7 +9,7 @@
    "repo": "AirSafe",
    "url": "https://github.com/nithing007/AirSafe",
    "sha": "17652b388654dcf4d97ea8c76d7b544f9ad47d60",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

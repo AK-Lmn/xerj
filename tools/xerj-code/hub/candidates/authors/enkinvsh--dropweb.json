@@ -9,7 +9,7 @@
    "repo": "dropweb",
    "url": "https://github.com/enkinvsh/dropweb",
    "sha": "a6bb22a0448c90cfba062126c0edcb4672b3299f",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "toytools",
    "url": "https://github.com/AtharvaMahamuni/toytools",
    "sha": "6942a9849c503dc29e6f36d38bd6dd6894a9c1f0",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

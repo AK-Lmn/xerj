@@ -9,7 +9,7 @@
    "repo": "agensgraph-python",
    "url": "https://github.com/skaiworldwide-oss/agensgraph-python",
    "sha": "f497a2b085ce79ee9f8b5d7cf2c74d5de8a887cf",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

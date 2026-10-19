@@ -9,7 +9,7 @@
    "repo": "MetalSharp",
    "url": "https://github.com/metalsharp/MetalSharp",
    "sha": "7b11d0ed4e53305fb5581e2f5ef948dc7758d949",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

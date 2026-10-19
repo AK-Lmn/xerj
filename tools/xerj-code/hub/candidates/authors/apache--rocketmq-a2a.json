@@ -9,7 +9,7 @@
    "repo": "rocketmq-a2a",
    "url": "https://github.com/apache/rocketmq-a2a",
    "sha": "570d51d967244d813d3741c750390d6a03546456",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

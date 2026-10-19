@@ -9,7 +9,7 @@
    "repo": "conch-agent",
    "url": "https://github.com/georgevibing/conch-agent",
    "sha": "adfa553606813e8ef766c6e46268ded1567f84e0",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

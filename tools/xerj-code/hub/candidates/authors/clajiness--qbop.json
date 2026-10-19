@@ -9,7 +9,7 @@
    "repo": "qbop",
    "url": "https://github.com/clajiness/qbop",
    "sha": "560171a4871da38978f5ef6a14fda1e62ebaaedb",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

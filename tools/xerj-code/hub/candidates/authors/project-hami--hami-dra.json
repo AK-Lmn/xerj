@@ -9,7 +9,7 @@
    "repo": "HAMi-DRA",
    "url": "https://github.com/Project-HAMi/HAMi-DRA",
    "sha": "ac2c0d8b4d784bca0e3d83dc2a94d84dc817aa77",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

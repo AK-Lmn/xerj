@@ -9,7 +9,7 @@
    "repo": "docker-static-httpserver",
    "url": "https://github.com/byjg/docker-static-httpserver",
    "sha": "b6867553739772085d8460db9f52e2fbbffc6a45",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

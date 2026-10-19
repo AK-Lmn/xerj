@@ -9,7 +9,7 @@
    "repo": "satin",
    "url": "https://github.com/soyukke/satin",
    "sha": "6fa86d2f454cae0a7db063103de6423cd5213422",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "HuntProxy",
    "url": "https://github.com/BehiSecc/HuntProxy",
    "sha": "19aa07329723b221e1893fa99f8ea024d44c16f3",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

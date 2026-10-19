@@ -9,7 +9,7 @@
    "repo": "LanGuard",
    "url": "https://github.com/hillaliy/LanGuard",
    "sha": "8a53ca002118464aecd28b7cd46910656713f163",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

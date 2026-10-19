@@ -9,7 +9,7 @@
    "repo": "audiorouter",
    "url": "https://github.com/MrDesjardins/audiorouter",
    "sha": "28b989f5d8d16f20e0d1996a335c01bd7203c342",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

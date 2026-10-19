@@ -9,7 +9,7 @@
    "repo": "GlobalProtect-openconnect",
    "url": "https://github.com/yuezk/GlobalProtect-openconnect",
    "sha": "ff1ea259d9e79bd470d3d7a63a24b8b89e8ce1d8",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

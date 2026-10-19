@@ -9,7 +9,7 @@
    "repo": "bmclib",
    "url": "https://github.com/bmc-toolbox/bmclib",
    "sha": "2e99cf75e04cd388eb070945559186a8effa2f9a",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "OTA-Pulse",
    "url": "https://github.com/RemuruSama/OTA-Pulse",
    "sha": "b95c1e42786746e396fcc6b8405a220d586a78e1",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

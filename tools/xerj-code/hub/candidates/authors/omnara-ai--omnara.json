@@ -9,7 +9,7 @@
    "repo": "omnara",
    "url": "https://github.com/omnara-ai/omnara",
    "sha": "404fb862c7a7805dc881451f10fa722e2865595e",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "h2hdb",
    "url": "https://github.com/Kuan-Lun/h2hdb",
    "sha": "5b4b71b7b41493334b9361aaed28d741b2c94a99",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "watchman",
    "url": "https://github.com/moov-io/watchman",
    "sha": "21aa37427a7b6501c2f6e3a51d00a1d419aa3924",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

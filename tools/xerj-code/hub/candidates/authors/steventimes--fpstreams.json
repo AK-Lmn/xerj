@@ -9,7 +9,7 @@
    "repo": "fpstreams",
    "url": "https://github.com/steventimes/fpstreams",
    "sha": "d5d189faf202d6ee8e526c745794db1785c66df6",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

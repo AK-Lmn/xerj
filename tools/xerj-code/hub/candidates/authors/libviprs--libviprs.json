@@ -9,7 +9,7 @@
    "repo": "libviprs",
    "url": "https://github.com/libviprs/libviprs",
    "sha": "6ec9570039a3af48afc44359dab367dc66394f60",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

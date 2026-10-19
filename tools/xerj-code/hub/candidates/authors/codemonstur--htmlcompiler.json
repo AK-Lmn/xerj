@@ -9,7 +9,7 @@
    "repo": "htmlcompiler",
    "url": "https://github.com/codemonstur/htmlcompiler",
    "sha": "42cac65e2f67b09abf5afab9c494ec19263a8e07",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

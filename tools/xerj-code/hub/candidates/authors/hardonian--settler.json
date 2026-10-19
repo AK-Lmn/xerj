@@ -9,7 +9,7 @@
    "repo": "Settler",
    "url": "https://github.com/Hardonian/Settler",
    "sha": "0c5fef0947f4c2eda744eb3b236e35ddda67416f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

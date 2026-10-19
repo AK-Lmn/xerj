@@ -9,7 +9,7 @@
    "repo": "TaxBrokerReport",
    "url": "https://github.com/TheCodeFighter/TaxBrokerReport",
    "sha": "0550ef38b52d37cb62cf5fe719450e599df5f90a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

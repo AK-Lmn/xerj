@@ -9,7 +9,7 @@
    "repo": "sound-generation-via-vae",
    "url": "https://github.com/wajihullahbaig/sound-generation-via-vae",
    "sha": "daf651617fe92e75186737e4c1754c4bf65ab465",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "recomp-ui",
    "url": "https://github.com/RetroPortingToolKit/recomp-ui",
    "sha": "55af2f918831365b5b25c14cdc75876ca64f0343",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

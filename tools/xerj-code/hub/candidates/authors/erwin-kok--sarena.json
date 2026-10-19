@@ -9,7 +9,7 @@
    "repo": "sarena",
    "url": "https://github.com/erwin-kok/sarena",
    "sha": "25348ca96f3654a6b8983146398f1b69f3a142ad",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

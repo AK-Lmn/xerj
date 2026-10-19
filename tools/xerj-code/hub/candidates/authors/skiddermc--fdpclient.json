@@ -9,7 +9,7 @@
    "repo": "FDPClient",
    "url": "https://github.com/SkidderMC/FDPClient",
    "sha": "ba1492ac7c0da34d3fde3c62316a1043725d4b24",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

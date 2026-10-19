@@ -9,7 +9,7 @@
    "repo": "magpie",
    "url": "https://github.com/apache/magpie",
    "sha": "4a2e534c373ffd5080ae756c89cc4dd431e5096c",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

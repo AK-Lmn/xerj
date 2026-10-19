@@ -9,7 +9,7 @@
    "repo": "Kryptic.K8s.Operator",
    "url": "https://github.com/dev-kryptic/Kryptic.K8s.Operator",
    "sha": "cf461cf65459ebba538b040583b9c67174c2e75f",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

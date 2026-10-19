@@ -9,7 +9,7 @@
    "repo": "mallard-app",
    "url": "https://github.com/Git4Agent/mallard-app",
    "sha": "702c9cb01b5c7d5e15eb7c204a4486618ebac9c2",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

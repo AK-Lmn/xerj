@@ -9,7 +9,7 @@
    "repo": "snake",
    "url": "https://github.com/SL-Pirate/snake",
    "sha": "98f791ac98a712aaad21ef3bded23febdd782f16",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "nemi",
    "url": "https://github.com/subhansh-dev/nemi",
    "sha": "086e99d548bb8346ae9f1231afeab2d355e2deb6",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

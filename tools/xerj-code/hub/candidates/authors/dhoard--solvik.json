@@ -9,7 +9,7 @@
    "repo": "solvik",
    "url": "https://github.com/dhoard/solvik",
    "sha": "fe8d4a0960d365ffb9408ea34b263426903b978f",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

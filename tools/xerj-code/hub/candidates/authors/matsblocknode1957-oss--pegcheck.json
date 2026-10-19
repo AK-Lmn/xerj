@@ -9,7 +9,7 @@
    "repo": "pegcheck",
    "url": "https://github.com/matsblocknode1957-oss/pegcheck",
    "sha": "95200e99fb83cb72c42c259df22296b6e4bc442d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

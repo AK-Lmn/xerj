@@ -3,13 +3,13 @@
  "cloned_at": null,
  "status": "draft",
  "shelf": "AI",
- "domain": "an agent working on Python queries this for how AIpRoBuilder/FlowX implements it: Workflow compiler and evolution loop for AI agents (selected work: packages/core, packages/mcp)",
+ "domain": "an agent working on a2a, agent-workflows, ai-agents queries this for how AIpRoBuilder/FlowX implements it: MCP server and Python SDK that generates, runs and refines AI agent workflows from natural language (Generative Workflow, A2A, FastAPI) (selected work: packages/core, packages/mcp)",
  "repos": [
   {
    "repo": "FlowX",
    "url": "https://github.com/AIpRoBuilder/FlowX",
    "sha": "1445649f4e9e305f6bfb2c46d59e924e8e7fce00",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

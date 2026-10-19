@@ -9,7 +9,7 @@
    "repo": "klyx",
    "url": "https://github.com/klyx-dev/klyx",
    "sha": "42de6a21c0616d983a761b6ee3e2b00d8fed0f4c",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

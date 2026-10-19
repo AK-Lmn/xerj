@@ -9,7 +9,7 @@
    "repo": "code-review-tool",
    "url": "https://github.com/MrSerWin/code-review-tool",
    "sha": "5b1b2af36ec23f9ab73df9385a9192fa3fb48bc5",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

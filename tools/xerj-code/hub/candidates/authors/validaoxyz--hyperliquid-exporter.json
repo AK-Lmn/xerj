@@ -9,7 +9,7 @@
    "repo": "hyperliquid-exporter",
    "url": "https://github.com/validaoxyz/hyperliquid-exporter",
    "sha": "8e69ba37c88d46a9421e10665b273a1c1561c483",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

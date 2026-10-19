@@ -9,7 +9,7 @@
    "repo": "surogates",
    "url": "https://github.com/invergent-ai/surogates",
    "sha": "b4f1b9dd63e3d2ee5ff69ba188dbd0d7df5ac856",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

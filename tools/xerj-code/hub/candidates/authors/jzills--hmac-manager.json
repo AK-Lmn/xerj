@@ -9,7 +9,7 @@
    "repo": "hmac-manager",
    "url": "https://github.com/jzills/hmac-manager",
    "sha": "e981b5b3393c988b2402fb5bfb3250e2921c52d2",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

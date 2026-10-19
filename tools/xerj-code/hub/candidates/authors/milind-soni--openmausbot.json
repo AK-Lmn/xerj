@@ -9,7 +9,7 @@
    "repo": "OpenMausBot",
    "url": "https://github.com/milind-soni/OpenMausBot",
    "sha": "c4f4ff22478a7afca6b02ffc4b46c823cc06435f",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

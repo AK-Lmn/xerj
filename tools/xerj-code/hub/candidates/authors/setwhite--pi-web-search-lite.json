@@ -9,7 +9,7 @@
    "repo": "pi-web-search-lite",
    "url": "https://github.com/setwhite/pi-web-search-lite",
    "sha": "8f3d6be9e029ea8e5e4828f909fbaec1d8f9f17e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

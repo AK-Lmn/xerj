@@ -9,7 +9,7 @@
    "repo": "AnyPS5",
    "url": "https://github.com/boykopovar/AnyPS5",
    "sha": "d694aac7b4005b2f7628b9f435aea4e7598ea6da",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

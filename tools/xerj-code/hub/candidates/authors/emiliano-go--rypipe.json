@@ -9,7 +9,7 @@
    "repo": "rypipe",
    "url": "https://github.com/emiliano-go/rypipe",
    "sha": "52a8f171f33f321885a692e68e3fb557fde11872",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

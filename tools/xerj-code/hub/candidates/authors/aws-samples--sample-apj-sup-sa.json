@@ -9,7 +9,7 @@
    "repo": "sample-apj-sup-sa",
    "url": "https://github.com/aws-samples/sample-apj-sup-sa",
    "sha": "675c94b752f433bbbf9142c56d7eab719464bbf7",
-   "licence": "hint only: MIT-0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT-0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT-0",
     "use": "UNREVIEWED",

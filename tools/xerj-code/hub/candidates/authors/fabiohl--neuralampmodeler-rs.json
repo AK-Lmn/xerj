@@ -9,7 +9,7 @@
    "repo": "NeuralAmpModeler-rs",
    "url": "https://github.com/fabiohl/NeuralAmpModeler-rs",
    "sha": "8f5a475a0426a6d5ba70d9262622ef3fa13e9b95",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

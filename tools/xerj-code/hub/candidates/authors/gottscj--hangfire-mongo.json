@@ -9,7 +9,7 @@
    "repo": "Hangfire.Mongo",
    "url": "https://github.com/gottscj/Hangfire.Mongo",
    "sha": "0963e31ef624e71f86abc7731efa3a0d63340070",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

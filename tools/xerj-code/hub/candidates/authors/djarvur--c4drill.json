@@ -9,7 +9,7 @@
    "repo": "c4drill",
    "url": "https://github.com/Djarvur/c4drill",
    "sha": "605a8922872e36e00f8e09a56765226b94b19999",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

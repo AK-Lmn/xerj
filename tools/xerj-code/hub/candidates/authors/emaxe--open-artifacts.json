@@ -9,7 +9,7 @@
    "repo": "open-artifacts",
    "url": "https://github.com/emaxe/open-artifacts",
    "sha": "d1142e2b74d98155fd4afb6ed84ac974b4d56f90",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

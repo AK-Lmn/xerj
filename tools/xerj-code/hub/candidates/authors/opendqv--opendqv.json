@@ -9,7 +9,7 @@
    "repo": "OpenDQV",
    "url": "https://github.com/OpenDQV/OpenDQV",
    "sha": "6455bf98c1977ae17412136ccb8af21162cd4469",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

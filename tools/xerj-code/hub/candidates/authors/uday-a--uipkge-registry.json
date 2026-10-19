@@ -9,7 +9,7 @@
    "repo": "uipkge-registry",
    "url": "https://github.com/uday-a/uipkge-registry",
    "sha": "0c00a66d3d50651d73d6a2d7e7f4b5102fad2b0a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

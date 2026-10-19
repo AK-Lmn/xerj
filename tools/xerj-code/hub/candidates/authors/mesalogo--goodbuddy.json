@@ -9,7 +9,7 @@
    "repo": "goodbuddy",
    "url": "https://github.com/mesalogo/goodbuddy",
    "sha": "c6a8455f8876db47e2dfd768b2d721a422d761bd",
-   "licence": "hint only: 0BSD (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: 0BSD (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "0BSD",
     "use": "UNREVIEWED",

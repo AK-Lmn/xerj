@@ -9,7 +9,7 @@
    "repo": "XSSentinel",
    "url": "https://github.com/rafashaalfiandi/XSSentinel",
    "sha": "98710b305b6cb814ff1bff73e970b1572314658b",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

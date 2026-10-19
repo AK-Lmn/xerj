@@ -9,7 +9,7 @@
    "repo": "sdk",
    "url": "https://github.com/TuwaIO/sdk",
    "sha": "0426cb4f1661941d11d4c4abaf01a41f2d8537f5",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

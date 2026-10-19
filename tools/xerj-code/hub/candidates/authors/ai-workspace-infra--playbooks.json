@@ -9,7 +9,7 @@
    "repo": "playbooks",
    "url": "https://github.com/ai-workspace-infra/playbooks",
    "sha": "49ce01ed8b9e7007c8a6b5c6ef6f6a3b2867d508",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

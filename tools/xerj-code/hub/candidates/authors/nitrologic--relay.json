@@ -9,7 +9,7 @@
    "repo": "relay",
    "url": "https://github.com/nitrologic/relay",
    "sha": "8c9bf94021565dfd11c20fc6c864c2ce92a4e9fd",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

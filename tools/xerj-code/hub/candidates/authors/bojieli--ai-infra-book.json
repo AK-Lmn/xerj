@@ -9,7 +9,7 @@
    "repo": "ai-infra-book",
    "url": "https://github.com/bojieli/ai-infra-book",
    "sha": "51337f5c24146616e3939bd70e89b33f015b170f",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

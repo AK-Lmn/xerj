@@ -9,7 +9,7 @@
    "repo": "mpesa-sdk",
    "url": "https://github.com/sartim/mpesa-sdk",
    "sha": "8f25c2508456aff5dcfd7b1547c776f0b1dce04f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

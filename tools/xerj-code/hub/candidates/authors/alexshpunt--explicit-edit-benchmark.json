@@ -9,7 +9,7 @@
    "repo": "explicit-edit-benchmark",
    "url": "https://github.com/alexshpunt/explicit-edit-benchmark",
    "sha": "aa41466d325d9f2fee4e3a2a41b62071b23e00d5",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

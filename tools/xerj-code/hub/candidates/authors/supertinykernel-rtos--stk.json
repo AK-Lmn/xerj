@@ -9,7 +9,7 @@
    "repo": "stk",
    "url": "https://github.com/SuperTinyKernel-RTOS/stk",
    "sha": "1ebc8ac1ba6e56f7d20850491f337827634f5617",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

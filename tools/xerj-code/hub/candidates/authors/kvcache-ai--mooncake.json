@@ -9,7 +9,7 @@
    "repo": "Mooncake",
    "url": "https://github.com/kvcache-ai/Mooncake",
    "sha": "dbd46e6cc7d6fb596b98a00b1972c7f569f970d7",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

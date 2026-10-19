@@ -9,7 +9,7 @@
    "repo": "SecureFlow",
    "url": "https://github.com/GauravKarakoti/SecureFlow",
    "sha": "d0c0773894bc78b589bacaf36839ab655c793826",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

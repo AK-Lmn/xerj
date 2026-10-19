@@ -9,7 +9,7 @@
    "repo": "cst-pilot",
    "url": "https://github.com/SCAU-Computer-Serving-Team/cst-pilot",
    "sha": "0230afb52af6828365be9b61b71ead94305442fa",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

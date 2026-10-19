@@ -9,7 +9,7 @@
    "repo": "telvax",
    "url": "https://github.com/telvax/telvax",
    "sha": "d5918b3773a29b150f9442c237b20b524e4ab9ca",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "cortendesk",
    "url": "https://github.com/marcpope/cortendesk",
    "sha": "79a307979506c7482c122e6561ea01d0f1b05f42",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

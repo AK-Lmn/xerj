@@ -9,7 +9,7 @@
    "repo": "codexview",
    "url": "https://github.com/codexview/codexview",
    "sha": "892fb9cb4dac79f47861c2522d7a25510c145b97",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

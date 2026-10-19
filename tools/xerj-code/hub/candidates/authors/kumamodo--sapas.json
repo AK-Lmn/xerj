@@ -9,7 +9,7 @@
    "repo": "sapas",
    "url": "https://github.com/kumamodo/sapas",
    "sha": "362b7190ea93226c17180e5114c4a03bbcf3cc20",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

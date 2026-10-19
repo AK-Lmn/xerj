@@ -9,7 +9,7 @@
    "repo": "cuecard",
    "url": "https://github.com/thisisnsh/cuecard",
    "sha": "a1182f224adf613ac644362de989dbf93afd72a8",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

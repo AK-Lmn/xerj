@@ -9,7 +9,7 @@
    "repo": "buninu-linux",
    "url": "https://github.com/jjtseng93/buninu-linux",
    "sha": "c3d6cae175467d6c908d4824bbe217b842bd952d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

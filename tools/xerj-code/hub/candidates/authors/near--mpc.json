@@ -9,7 +9,7 @@
    "repo": "mpc",
    "url": "https://github.com/near/mpc",
    "sha": "6957026fa30a3d5f02f4509a7e07d65d1e670274",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

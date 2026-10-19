@@ -9,7 +9,7 @@
    "repo": "OpenPlagiarismChecker",
    "url": "https://github.com/Raflyf/OpenPlagiarismChecker",
    "sha": "aa926772f02f8f32645bbde890dd7f18d101cf36",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "openflow",
    "url": "https://github.com/surlymochan/openflow",
    "sha": "1d77a690e6d0c57472a2fc1e0d6266ae5c3c5a61",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

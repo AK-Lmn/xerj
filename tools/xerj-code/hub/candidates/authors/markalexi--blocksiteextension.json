@@ -9,7 +9,7 @@
    "repo": "blockSiteExtension",
    "url": "https://github.com/MarkAlexI/blockSiteExtension",
    "sha": "24e0787cb25e866d07ee02a952018a0619824e33",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

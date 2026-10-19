@@ -9,7 +9,7 @@
    "repo": "fts-engine",
    "url": "https://github.com/dariasmyr/fts-engine",
    "sha": "5d5212ed0eeb56e3d34c27307fb5b33cdbe32a5f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

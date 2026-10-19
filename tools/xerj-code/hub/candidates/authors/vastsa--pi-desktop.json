@@ -9,7 +9,7 @@
    "repo": "PI-Desktop",
    "url": "https://github.com/vastsa/PI-Desktop",
    "sha": "5a74d3a8588ee939f9dd257a5d2b1447a8ea6852",
-   "licence": "hint only: LGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: LGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "LGPL-3.0",
     "use": "UNREVIEWED",

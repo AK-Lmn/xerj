@@ -9,7 +9,7 @@
    "repo": "agent-role-contracts",
    "url": "https://github.com/suirindo/agent-role-contracts",
    "sha": "d024230e26bea3c80f9e75494c16a77d1e98dfe4",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

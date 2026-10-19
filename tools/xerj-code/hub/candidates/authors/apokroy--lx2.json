@@ -9,7 +9,7 @@
    "repo": "LX2",
    "url": "https://github.com/apokroy/LX2",
    "sha": "f09e2c9bc384a7fa2f8de89de53cccd86479a2e9",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

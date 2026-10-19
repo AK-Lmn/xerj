@@ -9,7 +9,7 @@
    "repo": "civgraph",
    "url": "https://github.com/ScottMoore0/civgraph",
    "sha": "99ae3d769b6c6bcf8244ac1ca41f6bf51aa19bcf",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

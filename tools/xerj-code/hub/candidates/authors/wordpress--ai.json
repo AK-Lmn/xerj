@@ -9,7 +9,7 @@
    "repo": "ai",
    "url": "https://github.com/WordPress/ai",
    "sha": "75027a39f07495ceb97837bf02c0cdf491c61e79",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

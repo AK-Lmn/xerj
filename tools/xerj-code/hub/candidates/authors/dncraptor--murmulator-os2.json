@@ -9,7 +9,7 @@
    "repo": "murmulator-os2",
    "url": "https://github.com/DnCraptor/murmulator-os2",
    "sha": "f1db4a76b91102494f5b6ff864909d4534666c35",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

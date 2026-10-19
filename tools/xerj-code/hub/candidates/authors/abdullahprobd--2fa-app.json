@@ -9,7 +9,7 @@
    "repo": "2fa-app",
    "url": "https://github.com/AbdullahProBD/2fa-app",
    "sha": "47bdd4d5cb965690ac89714461c4f83f347479be",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

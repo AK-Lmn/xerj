@@ -9,7 +9,7 @@
    "repo": "cryptography-research-skills",
    "url": "https://github.com/ziyang-theory/cryptography-research-skills",
    "sha": "30a9c2d1efeb158e2a503252dce09d09373248eb",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "memory-api",
    "url": "https://github.com/memengine/memory-api",
    "sha": "480525b6fc5c3f237ce991eae1455b3de1b2dfdb",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "openagentforum",
    "url": "https://github.com/swarmrelay/openagentforum",
    "sha": "939796a51a0f4bf31c3d36f726752ebd7bcbf455",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

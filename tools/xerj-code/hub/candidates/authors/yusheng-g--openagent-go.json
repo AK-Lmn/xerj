@@ -9,7 +9,7 @@
    "repo": "openagent-go",
    "url": "https://github.com/yusheng-g/openagent-go",
    "sha": "b4c01b7abe13762cffc766aa3603ab7320ab5cfa",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

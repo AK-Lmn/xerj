@@ -9,7 +9,7 @@
    "repo": "privateer-agent",
    "url": "https://github.com/privateer-agent/privateer-agent",
    "sha": "040a95675f70dc2d2e66373c699d3ad990b3e2e1",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

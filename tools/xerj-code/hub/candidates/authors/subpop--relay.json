@@ -9,7 +9,7 @@
    "repo": "Relay",
    "url": "https://github.com/subpop/Relay",
    "sha": "74edea5b5ae516e84ab8e535077bf5c7b1d06048",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

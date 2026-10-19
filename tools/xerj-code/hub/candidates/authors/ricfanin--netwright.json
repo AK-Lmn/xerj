@@ -9,7 +9,7 @@
    "repo": "netwright",
    "url": "https://github.com/ricfanin/netwright",
    "sha": "f31f6118f1eb775af48117fbc20ef1ea0bce6d19",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

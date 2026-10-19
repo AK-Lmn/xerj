@@ -9,7 +9,7 @@
    "repo": "my-first-agent",
    "url": "https://github.com/Eternal-Qaing/my-first-agent",
    "sha": "69c7ca63b07cca732874628c5f9a0c602dfceca4",
-   "licence": "hint only: MulanPSL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MulanPSL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MulanPSL-2.0",
     "use": "UNREVIEWED",

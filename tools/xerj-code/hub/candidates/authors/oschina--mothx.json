@@ -9,7 +9,7 @@
    "repo": "mothx",
    "url": "https://github.com/oschina/mothx",
    "sha": "05a3686f0cfc6c7632d92b926708f5cf2311446a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "vix3l-zcode-tools",
    "url": "https://github.com/ViX3L/vix3l-zcode-tools",
    "sha": "f7233ed915ef70223cbc6935bd7874cede8b0cdb",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

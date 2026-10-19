@@ -9,7 +9,7 @@
    "repo": "packages.elixpo",
    "url": "https://github.com/elixpo/packages.elixpo",
    "sha": "2c28ccbf231a2234be2cefa65250a163b7d689f3",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "keira",
    "url": "https://github.com/mrvlous/keira",
    "sha": "4cdd6ef7749c1ea5064b542de218822463cf3d62",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

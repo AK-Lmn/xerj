@@ -9,7 +9,7 @@
    "repo": "PhoneBook",
    "url": "https://github.com/KirillGrachev/PhoneBook",
    "sha": "840e533d3d3f0309e8452b841b15ea6f6e6b99a3",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

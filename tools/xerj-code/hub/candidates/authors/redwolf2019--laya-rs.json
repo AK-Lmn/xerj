@@ -9,7 +9,7 @@
    "repo": "laya-rs",
    "url": "https://github.com/redwolf2019/laya-rs",
    "sha": "669b87ac89993e2b96204f2bf9989d1a0fa660d0",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

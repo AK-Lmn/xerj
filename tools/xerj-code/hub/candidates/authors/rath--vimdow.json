@@ -9,7 +9,7 @@
    "repo": "Vimdow",
    "url": "https://github.com/rath/Vimdow",
    "sha": "37c05dc77136ed01925ab99e5c816388720eaab2",
-   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "BSD-3-Clause",
     "use": "UNREVIEWED",

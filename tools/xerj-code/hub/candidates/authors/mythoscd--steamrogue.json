@@ -9,7 +9,7 @@
    "repo": "SteaMRogue",
    "url": "https://github.com/mythoscd/SteaMRogue",
    "sha": "958615d69db8b167b204da28cf25875294e91ce2",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

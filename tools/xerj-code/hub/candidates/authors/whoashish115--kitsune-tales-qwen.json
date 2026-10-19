@@ -9,7 +9,7 @@
    "repo": "kitsune-tales-qwen",
    "url": "https://github.com/whoashish115/kitsune-tales-qwen",
    "sha": "1eb8ee9436fab44fc83a89604b12c513773e1c78",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

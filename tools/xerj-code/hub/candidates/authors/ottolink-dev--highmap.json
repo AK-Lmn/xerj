@@ -9,7 +9,7 @@
    "repo": "HighMap",
    "url": "https://github.com/ottolink-dev/HighMap",
    "sha": "90bb8041b17fd7c0bd1631597fda78cb492368f4",
-   "licence": "hint only: LGPL-2.1 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: LGPL-2.1 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "LGPL-2.1",
     "use": "UNREVIEWED",

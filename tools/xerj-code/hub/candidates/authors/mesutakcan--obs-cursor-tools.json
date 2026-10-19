@@ -9,7 +9,7 @@
    "repo": "OBS-Cursor-Tools",
    "url": "https://github.com/mesutakcan/OBS-Cursor-Tools",
    "sha": "387e91132c4c1815644ca2b3dc27082e7c9f05fc",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

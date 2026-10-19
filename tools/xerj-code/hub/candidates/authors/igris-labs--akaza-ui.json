@@ -9,7 +9,7 @@
    "repo": "akaza-ui",
    "url": "https://github.com/igris-labs/akaza-ui",
    "sha": "25158b27da6d9700c7925bf0a4884c3aa4ab32d4",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

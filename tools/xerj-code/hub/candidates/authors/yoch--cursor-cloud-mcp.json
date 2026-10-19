@@ -9,7 +9,7 @@
    "repo": "cursor-cloud-mcp",
    "url": "https://github.com/yoch/cursor-cloud-mcp",
    "sha": "7991f4e09256c43537e6bdba6ff0f1765779552a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "bernstein",
    "url": "https://github.com/sipyourdrink-ltd/bernstein",
    "sha": "2fc3fe1e17ff86faeb95e4607c68bc7fc6942a3c",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

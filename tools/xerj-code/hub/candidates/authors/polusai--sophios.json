@@ -9,7 +9,7 @@
    "repo": "sophios",
    "url": "https://github.com/PolusAI/sophios",
    "sha": "8618f966b0e469a7aa9683155acc29dae36f1d34",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

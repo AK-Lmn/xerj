@@ -9,7 +9,7 @@
    "repo": "typesafe-sdk-java",
    "url": "https://github.com/Premo-Cloud/typesafe-sdk-java",
    "sha": "13e9909b4bfed16ede61f1fe6fe15a1f4b79e4b8",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

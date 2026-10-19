@@ -9,7 +9,7 @@
    "repo": "dsh-capsule",
    "url": "https://github.com/whDonline/dsh-capsule",
    "sha": "46384ad29c41f7687f3b3f8cc7f6319c599a293e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

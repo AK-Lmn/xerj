@@ -9,7 +9,7 @@
    "repo": "Distributed-Virtual-File-System",
    "url": "https://github.com/DVFS-IIT-Gandhinagar/Distributed-Virtual-File-System",
    "sha": "19d17bcacc543160fcdeec0458985095aaf1d7ba",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

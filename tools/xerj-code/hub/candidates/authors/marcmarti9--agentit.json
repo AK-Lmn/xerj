@@ -9,7 +9,7 @@
    "repo": "agentit",
    "url": "https://github.com/marcmarti9/agentit",
    "sha": "a98942f9b98ba4a5fc3b125708e0f91a2957466c",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

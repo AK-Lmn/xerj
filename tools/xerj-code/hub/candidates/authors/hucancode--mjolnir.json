@@ -9,7 +9,7 @@
    "repo": "mjolnir",
    "url": "https://github.com/hucancode/mjolnir",
    "sha": "664f41e0e9f3e77510b487beb11e54adf5fab9e0",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

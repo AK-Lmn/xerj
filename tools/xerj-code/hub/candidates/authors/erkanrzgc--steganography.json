@@ -9,7 +9,7 @@
    "repo": "steganography",
    "url": "https://github.com/erkanrzgc/steganography",
    "sha": "fd2b0a4e6f3a94762f61d542fb2a00dee37bfb0a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

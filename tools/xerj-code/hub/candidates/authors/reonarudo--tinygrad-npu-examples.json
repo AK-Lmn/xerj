@@ -9,7 +9,7 @@
    "repo": "tinygrad-npu-examples",
    "url": "https://github.com/Reonarudo/tinygrad-npu-examples",
    "sha": "734b0aa1396993329a0fd1057cf4cae4bb9b1b1b",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

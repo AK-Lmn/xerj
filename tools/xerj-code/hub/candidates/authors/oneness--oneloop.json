@@ -9,7 +9,7 @@
    "repo": "OneLoop",
    "url": "https://github.com/oneness/OneLoop",
    "sha": "27e6533c088095af74fd8ad2e0b96c7b543da134",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

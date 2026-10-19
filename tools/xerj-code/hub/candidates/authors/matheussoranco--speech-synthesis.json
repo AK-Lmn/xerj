@@ -9,7 +9,7 @@
    "repo": "Speech_synthesis",
    "url": "https://github.com/Matheussoranco/Speech_synthesis",
    "sha": "fd79f27f004a97153ac2892e7752c0d11e8ad6a2",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

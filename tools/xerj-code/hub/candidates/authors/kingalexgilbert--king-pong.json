@@ -9,7 +9,7 @@
    "repo": "king-pong",
    "url": "https://github.com/KingAlexGilbert/king-pong",
    "sha": "7ab185bb3e8f91a4aba227541866e7f6ddecf70c",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

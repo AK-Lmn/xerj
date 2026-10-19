@@ -9,7 +9,7 @@
    "repo": "mRemoteNXT",
    "url": "https://github.com/cremenescu/mRemoteNXT",
    "sha": "60913b8fafbb410d782076bf69b7c9dbb3c34d4f",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

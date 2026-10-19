@@ -9,7 +9,7 @@
    "repo": "nestrs",
    "url": "https://github.com/Joshyahweh/nestrs",
    "sha": "5930f0b22a91f3d7b4b4f95215d5569df141490c",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

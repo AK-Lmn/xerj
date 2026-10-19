@@ -9,7 +9,7 @@
    "repo": "pi-worktree",
    "url": "https://github.com/dingdinglz/pi-worktree",
    "sha": "f7d84611f6e58274c60500749d2ce885a4757418",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

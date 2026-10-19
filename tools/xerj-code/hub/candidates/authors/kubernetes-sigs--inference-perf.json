@@ -9,7 +9,7 @@
    "repo": "inference-perf",
    "url": "https://github.com/kubernetes-sigs/inference-perf",
    "sha": "45af1d3c5f57de7cf43866539fd9d4d7a3591ad9",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

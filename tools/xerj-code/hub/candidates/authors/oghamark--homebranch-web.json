@@ -9,7 +9,7 @@
    "repo": "homebranch-web",
    "url": "https://github.com/Oghamark/homebranch-web",
    "sha": "c829036ff4886035f1d15e6759486b71bd424a04",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

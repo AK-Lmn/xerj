@@ -9,7 +9,7 @@
    "repo": "ROCmFPX",
    "url": "https://github.com/ROCmFPX/ROCmFPX",
    "sha": "0da2ff58d1449fa33314c7a72e7ac8c6ec2bb458",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

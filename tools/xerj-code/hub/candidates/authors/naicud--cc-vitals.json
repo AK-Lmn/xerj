@@ -9,7 +9,7 @@
    "repo": "cc-vitals",
    "url": "https://github.com/naicud/cc-vitals",
    "sha": "b0f0aa1cd641d4436579e0e53050af230d74a25d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

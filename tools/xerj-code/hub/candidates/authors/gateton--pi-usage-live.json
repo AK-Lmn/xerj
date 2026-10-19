@@ -9,7 +9,7 @@
    "repo": "pi-usage-live",
    "url": "https://github.com/Gateton/pi-usage-live",
    "sha": "7e06e4e8f1ec09cd93482eafd7883779ebe59ecd",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

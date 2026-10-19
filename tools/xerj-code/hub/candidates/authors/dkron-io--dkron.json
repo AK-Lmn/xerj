@@ -9,7 +9,7 @@
    "repo": "dkron",
    "url": "https://github.com/dkron-io/dkron",
    "sha": "faf3cb3bad66b76e70dd2a1a4295f0ca64dfc6a5",
-   "licence": "hint only: LGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: LGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "LGPL-3.0",
     "use": "UNREVIEWED",

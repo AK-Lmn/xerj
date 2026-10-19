@@ -9,7 +9,7 @@
    "repo": "myc",
    "url": "https://github.com/aistastudio/myc",
    "sha": "c27523fdabacc406e434f9f7a08c1241ae180b0d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

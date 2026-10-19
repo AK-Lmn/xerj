@@ -9,7 +9,7 @@
    "repo": "uji",
    "url": "https://github.com/uji-labs/uji",
    "sha": "1e2b00dd592fa68a0c0b5d4a430e52002eadae8c",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

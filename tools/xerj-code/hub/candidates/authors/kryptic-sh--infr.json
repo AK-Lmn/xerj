@@ -9,7 +9,7 @@
    "repo": "infr",
    "url": "https://github.com/kryptic-sh/infr",
    "sha": "7c79a954172e9f5953767eaf129a7dad3bdc84d4",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

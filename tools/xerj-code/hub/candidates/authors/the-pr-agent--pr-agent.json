@@ -9,7 +9,7 @@
    "repo": "pr-agent",
    "url": "https://github.com/The-PR-Agent/pr-agent",
    "sha": "9cc928cd4729c5dde6b7aaea3aa5d445de2d9f28",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

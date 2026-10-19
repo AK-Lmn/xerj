@@ -9,7 +9,7 @@
    "repo": "changelog-bot",
    "url": "https://github.com/nyaomaru/changelog-bot",
    "sha": "a867301bc413a09e781d7ed055086c365ac56c2b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

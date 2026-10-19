@@ -9,7 +9,7 @@
    "repo": "opencollab",
    "url": "https://github.com/facyndev/opencollab",
    "sha": "7f64c06dd75fe0d30b1eb831f462680115f11747",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

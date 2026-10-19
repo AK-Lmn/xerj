@@ -9,7 +9,7 @@
    "repo": "cly",
    "url": "https://github.com/BlueRaddish/cly",
    "sha": "6c229f5d877b1410c26766ddde50958104ef657d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

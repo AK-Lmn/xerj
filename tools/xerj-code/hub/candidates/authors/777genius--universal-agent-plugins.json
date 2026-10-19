@@ -3,13 +3,13 @@
  "cloned_at": null,
  "status": "draft",
  "shelf": "AI",
- "domain": "an agent working on ai-agents, claude-code, codex queries this for how 777genius/universal-agent-plugins implements it: Multi-agent CLI to install, update, repair, and remove Agent Plugins 1.0 across Codex/ChatGPT, Claude Code, Cursor, Gemini CLI, Copilot, Ope (selected work: install, cli, repotests)",
+ "domain": "an agent working on ai-agents, claude-code, codex queries this for how 777genius/universal-agent-plugins implements it: Multi-agent CLI to install, update, repair, and remove Agent Plugins 1.0 across Codex/ChatGPT, Claude, Cursor, Gemini, Copilot, Qoder, OpenC (selected work: install, cli, repotests)",
  "repos": [
   {
    "repo": "universal-agent-plugins",
    "url": "https://github.com/777genius/universal-agent-plugins",
    "sha": "6727958be3fe6d6daa3042ccf86d4149263cd5fb",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "darce-cli",
    "url": "https://github.com/AmerSarhan/darce-cli",
    "sha": "55ffb203e68040c988a56d3da075319a9be355e8",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

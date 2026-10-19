@@ -9,7 +9,7 @@
    "repo": "tpm-rs",
    "url": "https://github.com/tpm-rs/tpm-rs",
    "sha": "17b0bf19c677471e4cfb707bb7ac2f1f909d7db8",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

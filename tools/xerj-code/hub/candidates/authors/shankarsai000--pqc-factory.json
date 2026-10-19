@@ -9,7 +9,7 @@
    "repo": "pqc-factory",
    "url": "https://github.com/shankarsai000/pqc-factory",
    "sha": "2fddf5a34ed06793fedae6548a7fbe83282f718d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

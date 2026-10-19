@@ -9,7 +9,7 @@
    "repo": "hyperliquid-go",
    "url": "https://github.com/koative/hyperliquid-go",
    "sha": "90a5c1f43774af37eb6638785f8be4958d01ba3c",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "pixl",
    "url": "https://github.com/hackclub/pixl",
    "sha": "8aef3e7bcee2d232e96104ff037616650e118304",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

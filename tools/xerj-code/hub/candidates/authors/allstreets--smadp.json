@@ -9,7 +9,7 @@
    "repo": "SMADP",
    "url": "https://github.com/AllStreets/SMADP",
    "sha": "91ae29efc39fb55cd1dc122f32637ac3b14ab496",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

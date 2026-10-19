@@ -9,7 +9,7 @@
    "repo": "Romi-nav-robot",
    "url": "https://github.com/Zero-State-Logic/Romi-nav-robot",
    "sha": "b7db56aa03de11ce41453f07b499d342ec54ebda",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "token-ledger",
    "url": "https://github.com/nanami-0713/token-ledger",
    "sha": "46108bb91d416e053f2376ca0e2e79ea2fc21cb4",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

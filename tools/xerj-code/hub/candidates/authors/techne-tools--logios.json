@@ -9,7 +9,7 @@
    "repo": "logios",
    "url": "https://github.com/techne-tools/logios",
    "sha": "95f5ed5a430e868d7e0d8808eb87229704b75d2c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "upcloud-cli",
    "url": "https://github.com/UpCloudLtd/upcloud-cli",
    "sha": "7b735738e07efb189a01dda1ee1c3ea326fdbdf8",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

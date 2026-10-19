@@ -9,7 +9,7 @@
    "repo": "nebulex",
    "url": "https://github.com/elixir-nebulex/nebulex",
    "sha": "306221384c64236f2f341be7511de922b4a20e8b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "mux-media",
    "url": "https://github.com/nujievik/mux-media",
    "sha": "b8298054a0bcd604489db7085f966fc883dad409",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

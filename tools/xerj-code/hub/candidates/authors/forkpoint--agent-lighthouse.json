@@ -9,7 +9,7 @@
    "repo": "agent-lighthouse",
    "url": "https://github.com/ForkPoint/agent-lighthouse",
    "sha": "c43c7ec1f157e515644bd48c96ce409e43099bbd",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "idfkit",
    "url": "https://github.com/idfkit/idfkit",
    "sha": "38276cfc0618fa76da3c975b1fb28f4b1f2f3f1f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

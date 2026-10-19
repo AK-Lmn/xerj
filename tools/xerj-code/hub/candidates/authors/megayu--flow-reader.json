@@ -9,7 +9,7 @@
    "repo": "flow-reader",
    "url": "https://github.com/megayu/flow-reader",
    "sha": "454361a2ac8a8991bfc2dc1eff7378aceafb22a6",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

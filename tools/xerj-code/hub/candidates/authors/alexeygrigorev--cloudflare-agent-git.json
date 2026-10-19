@@ -9,7 +9,7 @@
    "repo": "cloudflare-agent-git",
    "url": "https://github.com/alexeygrigorev/cloudflare-agent-git",
    "sha": "30e47986336cdff20917d8ac42eb34dba2066fb3",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

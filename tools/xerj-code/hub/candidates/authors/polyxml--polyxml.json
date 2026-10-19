@@ -9,7 +9,7 @@
    "repo": "PolyXML",
    "url": "https://github.com/polyxml/PolyXML",
    "sha": "6d3092f860bf21a05a5dcb8d5ca1dab849f24e9a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

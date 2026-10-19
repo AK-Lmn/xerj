@@ -9,7 +9,7 @@
    "repo": "agent-surface",
    "url": "https://github.com/Lyther/agent-surface",
    "sha": "aab50205ca292296f99527ee56aa1e7b551c4667",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

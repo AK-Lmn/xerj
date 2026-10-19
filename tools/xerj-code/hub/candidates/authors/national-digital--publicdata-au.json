@@ -9,7 +9,7 @@
    "repo": "publicdata.au",
    "url": "https://github.com/National-Digital/publicdata.au",
    "sha": "2717f3408454323aae9df190c3d72d3fd5481888",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

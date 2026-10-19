@@ -9,7 +9,7 @@
    "repo": "PDE-JEPA",
    "url": "https://github.com/Tanpig-X/PDE-JEPA",
    "sha": "b9d2565f539bebce70176e657beb05daca0db507",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

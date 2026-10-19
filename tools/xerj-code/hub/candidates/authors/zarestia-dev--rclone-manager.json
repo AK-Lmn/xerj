@@ -9,7 +9,7 @@
    "repo": "rclone-manager",
    "url": "https://github.com/Zarestia-Dev/rclone-manager",
    "sha": "39e91f4f7585361af9403c445a0ec5fb7dc986fc",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

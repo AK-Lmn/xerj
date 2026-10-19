@@ -9,7 +9,7 @@
    "repo": "aevra",
    "url": "https://github.com/the-long-ride/aevra",
    "sha": "0d3c10c65c9d402402e1af322b66f7437ce02adb",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

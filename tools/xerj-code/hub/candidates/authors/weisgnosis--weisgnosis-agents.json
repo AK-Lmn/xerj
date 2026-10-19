@@ -9,7 +9,7 @@
    "repo": "weisgnosis-agents",
    "url": "https://github.com/weisgnosis/weisgnosis-agents",
    "sha": "e0381490a38ec3952df6d46a84e36d19af256025",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

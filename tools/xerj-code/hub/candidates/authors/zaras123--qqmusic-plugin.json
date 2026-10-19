@@ -9,7 +9,7 @@
    "repo": "qqmusic-plugin",
    "url": "https://github.com/zaras123/qqmusic-plugin",
    "sha": "60c20dee98641a57bf4b7b0663f49baab59cac98",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

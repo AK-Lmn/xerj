@@ -9,7 +9,7 @@
    "repo": "shellclaw",
    "url": "https://github.com/asap-protocol/shellclaw",
    "sha": "e09b2e94ae856f1879a587d6aed509d1f32342cd",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

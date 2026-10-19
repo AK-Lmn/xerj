@@ -9,7 +9,7 @@
    "repo": "repsy",
    "url": "https://github.com/repsyio/repsy",
    "sha": "2c13f8d91a6027b5dd9e67ac83bae916c65e45b1",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

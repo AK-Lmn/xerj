@@ -9,7 +9,7 @@
    "repo": "packages",
    "url": "https://github.com/openwrt/packages",
    "sha": "36e35ddf4daa9679d3e94ba21b5397ba37d4559c",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

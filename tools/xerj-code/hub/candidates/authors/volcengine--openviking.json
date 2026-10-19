@@ -9,7 +9,7 @@
    "repo": "OpenViking",
    "url": "https://github.com/volcengine/OpenViking",
    "sha": "2ef422561cecf80ba7654cb865fa0dddd52209d7",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

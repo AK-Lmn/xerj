@@ -9,7 +9,7 @@
    "repo": "mri-data-regimes-comparison",
    "url": "https://github.com/pedrolrm/mri-data-regimes-comparison",
    "sha": "b2c45695626e656577f9034c9258f3918ea17fd6",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "tirage",
    "url": "https://github.com/espadat-studio/tirage",
    "sha": "9bf8dee85f247e12995fd0f5598a2a785379b2d3",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "maxtext",
    "url": "https://github.com/AI-Hypercomputer/maxtext",
    "sha": "bffdb073a9ee8c74fd4cf1c72168672893a10124",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

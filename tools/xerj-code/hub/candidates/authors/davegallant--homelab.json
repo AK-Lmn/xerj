@@ -9,7 +9,7 @@
    "repo": "homelab",
    "url": "https://github.com/davegallant/homelab",
    "sha": "76896842dcb154eae582d5118dee80498f8efc67",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "anchor",
    "url": "https://github.com/Novia-RDI-Seafaring/anchor",
    "sha": "127fbbe3e8d908671d523b965298d30c5fd31213",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

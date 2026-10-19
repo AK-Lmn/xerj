@@ -9,7 +9,7 @@
    "repo": "agentfuse",
    "url": "https://github.com/ns-0437/agentfuse",
    "sha": "75a8053814e8d3bbfd4b63c7286d4048dd4cd657",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

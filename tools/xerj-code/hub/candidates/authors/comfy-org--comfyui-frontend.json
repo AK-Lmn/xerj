@@ -9,7 +9,7 @@
    "repo": "ComfyUI_frontend",
    "url": "https://github.com/Comfy-Org/ComfyUI_frontend",
    "sha": "e1f1d0ee902a9ba6c23344244acd4c5df28ef4a4",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

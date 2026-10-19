@@ -9,7 +9,7 @@
    "repo": "odai",
    "url": "https://github.com/orziz/odai",
    "sha": "ffe6b3409300bfe646477eecbc9146828207ca9e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

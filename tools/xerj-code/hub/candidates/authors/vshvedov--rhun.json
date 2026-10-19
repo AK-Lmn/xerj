@@ -9,7 +9,7 @@
    "repo": "rhun",
    "url": "https://github.com/vshvedov/rhun",
    "sha": "bbd553fd22b5c3d88678d099af66d8042f0ec903",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

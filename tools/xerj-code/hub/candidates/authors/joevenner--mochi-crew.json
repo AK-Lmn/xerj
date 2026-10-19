@@ -9,7 +9,7 @@
    "repo": "mochi-crew",
    "url": "https://github.com/joeVenner/mochi-crew",
    "sha": "606a4c8e89676a160c982a5a228debfd0bdefb92",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

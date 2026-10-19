@@ -3,13 +3,13 @@
  "cloned_at": null,
  "status": "draft",
  "shelf": "API",
- "domain": "an agent working on Rust queries this for how susbakun/chess_game implements it: A chess game written in rust and bevy (selected work: shared, client, server)",
+ "domain": "an agent working on chess, chess-engine, rust queries this for how susbakun/chess_game implements it: A chess game written in rust and bevy (selected work: shared, client, server)",
  "repos": [
   {
    "repo": "chess_game",
    "url": "https://github.com/susbakun/chess_game",
    "sha": "3aa2c5a6338668f5625282a6f2bdaeb30af7d041",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

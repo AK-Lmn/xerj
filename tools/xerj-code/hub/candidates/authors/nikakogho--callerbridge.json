@@ -9,7 +9,7 @@
    "repo": "CallerBridge",
    "url": "https://github.com/nikakogho/CallerBridge",
    "sha": "e60b54d183a6876e7eb382c7a84a52df363b64ec",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "Faststrap",
    "url": "https://github.com/Faststrap-org/Faststrap",
    "sha": "adb985ff29d0986eedda72c4069b1fa390acba2d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

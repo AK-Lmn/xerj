@@ -9,7 +9,7 @@
    "repo": "keyflow-cli",
    "url": "https://github.com/KeyFlow-me/keyflow-cli",
    "sha": "ffe8daff2b22a5f0c3052e49c32d13012eb8b311",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "waveform",
    "url": "https://github.com/qvantor/waveform",
    "sha": "80c7504521f1f448b6ae5dbd589fc451c11dd4aa",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "kronos",
    "url": "https://github.com/kronos-openstack/kronos",
    "sha": "23e8e5c45f16af48ded7ad7d111cb2a785f76218",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

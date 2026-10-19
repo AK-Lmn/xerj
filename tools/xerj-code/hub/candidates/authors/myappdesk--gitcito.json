@@ -9,7 +9,7 @@
    "repo": "gitcito",
    "url": "https://github.com/MyAppDesk/gitcito",
    "sha": "ae29dc7b3bc84e825af02f6e299b0b10688d5edb",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

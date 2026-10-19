@@ -9,7 +9,7 @@
    "repo": "tidal-mcp",
    "url": "https://github.com/sickn33/tidal-mcp",
    "sha": "245bf3dd50dba29c6b6627e4371eee1d7ec3d29a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

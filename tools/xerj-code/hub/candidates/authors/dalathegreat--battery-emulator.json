@@ -9,7 +9,7 @@
    "repo": "Battery-Emulator",
    "url": "https://github.com/dalathegreat/Battery-Emulator",
    "sha": "003b6e8d2421ac2387a3c83e6f50bf8fe7d3d170",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

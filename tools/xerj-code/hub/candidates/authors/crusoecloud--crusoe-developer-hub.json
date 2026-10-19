@@ -9,7 +9,7 @@
    "repo": "crusoe-developer-hub",
    "url": "https://github.com/crusoecloud/crusoe-developer-hub",
    "sha": "9bf31c5713734e481f3f7fab6683f359f714edb1",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

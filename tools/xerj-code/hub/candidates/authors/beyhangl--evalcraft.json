@@ -9,7 +9,7 @@
    "repo": "evalcraft",
    "url": "https://github.com/beyhangl/evalcraft",
    "sha": "0015420aee65b6780ae735f2afed58da88ad181e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

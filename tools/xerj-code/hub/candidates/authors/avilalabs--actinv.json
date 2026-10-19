@@ -9,7 +9,7 @@
    "repo": "ACTINV",
    "url": "https://github.com/AvilaLabs/ACTINV",
    "sha": "1b91e5f5c9078dde3950bac8f0fe4e3258e332af",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

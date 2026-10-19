@@ -9,7 +9,7 @@
    "repo": "seq",
    "url": "https://github.com/nimaltd/seq",
    "sha": "3b12f4dd331fc5bdfb9cc3435d76bf95c498d2eb",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

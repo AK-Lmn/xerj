@@ -9,7 +9,7 @@
    "repo": "ordewell",
    "url": "https://github.com/ordewell/ordewell",
    "sha": "a408af38e23d258328ad2f06e8e2fe461dab168b",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

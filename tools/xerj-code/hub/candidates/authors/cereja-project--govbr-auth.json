@@ -9,7 +9,7 @@
    "repo": "govbr_auth",
    "url": "https://github.com/cereja-project/govbr_auth",
    "sha": "1995f8ffa0b93aa3461207575fc686478d074c3c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

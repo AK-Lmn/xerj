@@ -9,7 +9,7 @@
    "repo": "triple_store",
    "url": "https://github.com/pcharbon70/triple_store",
    "sha": "22e6c3136acc9f04e33f899903c695e184e4706b",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

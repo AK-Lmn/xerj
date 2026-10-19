@@ -9,7 +9,7 @@
    "repo": "rustycore",
    "url": "https://github.com/alseif0x/rustycore",
    "sha": "6c74fbe0ebd60f6368c450e1f8c80779a8896ece",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

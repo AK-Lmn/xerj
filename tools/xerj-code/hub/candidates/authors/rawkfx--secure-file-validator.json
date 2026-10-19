@@ -9,7 +9,7 @@
    "repo": "secure-file-validator",
    "url": "https://github.com/RawkFX/secure-file-validator",
    "sha": "ecd9bcedf71421c8662b9365441c470f007150fd",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

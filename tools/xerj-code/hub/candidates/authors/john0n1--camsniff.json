@@ -9,7 +9,7 @@
    "repo": "CamSniff",
    "url": "https://github.com/John0n1/CamSniff",
    "sha": "6bbeae7d9e24e0a4a32dd0cf5424d97da1024703",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

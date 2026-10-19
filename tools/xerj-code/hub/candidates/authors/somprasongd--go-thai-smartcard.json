@@ -9,7 +9,7 @@
    "repo": "go-thai-smartcard",
    "url": "https://github.com/somprasongd/go-thai-smartcard",
    "sha": "d18d70ffea8ee8d2c59e5c852ff17f5411fc0a28",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "ansible",
    "url": "https://github.com/Kollekcioner47/ansible",
    "sha": "2f9ae37479b909c0babd32e0a0b704bec5d9163f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

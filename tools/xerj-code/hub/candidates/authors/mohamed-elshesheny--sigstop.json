@@ -9,7 +9,7 @@
    "repo": "sigstop",
    "url": "https://github.com/Mohamed-Elshesheny/sigstop",
    "sha": "530cc963901a7d1498485f9f5517f23c3433cc3f",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

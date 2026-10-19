@@ -9,7 +9,7 @@
    "repo": "lu-query",
    "url": "https://github.com/zademy/lu-query",
    "sha": "386bbfc788eedb3c45a137c8229c3586b53e3306",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

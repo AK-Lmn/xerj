@@ -9,7 +9,7 @@
    "repo": "qingjian",
    "url": "https://github.com/qingjian-team/qingjian",
    "sha": "cc08b48c3caaf9fe0e64c35056cfecc5d8aa44dc",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

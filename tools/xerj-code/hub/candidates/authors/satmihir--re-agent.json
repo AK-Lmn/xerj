@@ -9,7 +9,7 @@
    "repo": "re-agent",
    "url": "https://github.com/satmihir/re-agent",
    "sha": "dbfeed0ec4d1c3f21069254f4396e315124cc87b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

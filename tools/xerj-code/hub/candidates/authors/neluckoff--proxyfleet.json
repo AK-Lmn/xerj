@@ -9,7 +9,7 @@
    "repo": "proxyfleet",
    "url": "https://github.com/neluckoff/proxyfleet",
    "sha": "40a2b3f3513b47dad22d55d964c344612be0eafa",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

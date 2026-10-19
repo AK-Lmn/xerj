@@ -9,7 +9,7 @@
    "repo": "PortGuard",
    "url": "https://github.com/okutaybozkurt/PortGuard",
    "sha": "8a39cd1cd7bde1e5b1496eedf455bdc6904cb46a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

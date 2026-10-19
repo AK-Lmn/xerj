@@ -9,7 +9,7 @@
    "repo": "technical-backup",
    "url": "https://github.com/zdu-strong/technical-backup",
    "sha": "17223d37c7a6354c21b99e66b288f0c29ebb0c0a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

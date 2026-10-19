@@ -9,7 +9,7 @@
    "repo": "eshkol",
    "url": "https://github.com/tsotchke/eshkol",
    "sha": "43242488af5845a9b851bb23a0c13f51e586acbb",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

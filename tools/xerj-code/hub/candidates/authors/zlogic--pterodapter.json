@@ -9,7 +9,7 @@
    "repo": "pterodapter",
    "url": "https://github.com/zlogic/pterodapter",
    "sha": "057724a00b0a5bfaa02fe4d6e6f6f1fa804ab3fc",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

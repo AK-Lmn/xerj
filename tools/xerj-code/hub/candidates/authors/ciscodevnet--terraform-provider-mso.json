@@ -9,7 +9,7 @@
    "repo": "terraform-provider-mso",
    "url": "https://github.com/CiscoDevNet/terraform-provider-mso",
    "sha": "b6b527a61c4e195944b839fea6269ec322994ce6",
-   "licence": "hint only: MPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MPL-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "PluginV2",
    "url": "https://github.com/ServerOpenMC/PluginV2",
    "sha": "28b7ed5728f6e291bd77a9b1058997b8b0bdfa9d",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

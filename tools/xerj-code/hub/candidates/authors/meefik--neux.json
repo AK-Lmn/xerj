@@ -9,7 +9,7 @@
    "repo": "neux",
    "url": "https://github.com/meefik/neux",
    "sha": "b70e73c7055bf85c2ee3c78064f33ea4198922f0",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

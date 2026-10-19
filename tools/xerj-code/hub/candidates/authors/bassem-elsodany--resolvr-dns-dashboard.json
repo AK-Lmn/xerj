@@ -9,7 +9,7 @@
    "repo": "resolvr-dns-dashboard",
    "url": "https://github.com/bassem-elsodany/resolvr-dns-dashboard",
    "sha": "97bcca232c0dfb464c26978689746bac3582a145",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "OpenCreator",
    "url": "https://github.com/krillinai/OpenCreator",
    "sha": "404a623d8dd9e2d8133b8d7f6c17e4fc0c4fea80",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

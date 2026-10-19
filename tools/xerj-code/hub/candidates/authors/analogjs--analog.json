@@ -9,7 +9,7 @@
    "repo": "analog",
    "url": "https://github.com/analogjs/analog",
    "sha": "4f3fd7659293451e91b237e4d2bbe62f2fbb3b0f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

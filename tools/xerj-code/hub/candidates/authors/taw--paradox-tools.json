@@ -9,7 +9,7 @@
    "repo": "paradox-tools",
    "url": "https://github.com/taw/paradox-tools",
    "sha": "c2ca5a5364c001c7a7dad54438456b2c26cc8bb4",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

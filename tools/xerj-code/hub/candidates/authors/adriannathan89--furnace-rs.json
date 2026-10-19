@@ -9,7 +9,7 @@
    "repo": "furnace-rs",
    "url": "https://github.com/Adriannathan89/furnace-rs",
    "sha": "78dd50c298e39d8898c82e4b1d69e8dad4465796",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

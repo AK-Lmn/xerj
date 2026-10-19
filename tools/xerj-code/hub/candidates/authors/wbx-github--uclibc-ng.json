@@ -9,7 +9,7 @@
    "repo": "uclibc-ng",
    "url": "https://github.com/wbx-github/uclibc-ng",
    "sha": "c9f21e9a04f364f02802d8b4d434cac03a2ac723",
-   "licence": "hint only: LGPL-2.1 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: LGPL-2.1 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "LGPL-2.1",
     "use": "UNREVIEWED",

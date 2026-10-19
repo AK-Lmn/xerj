@@ -9,7 +9,7 @@
    "repo": "C-web-framework-core",
    "url": "https://github.com/fraxer/C-web-framework-core",
    "sha": "20f3559c0bfae13eccc8af94145695cec72a27db",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

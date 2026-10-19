@@ -3,13 +3,13 @@
  "cloned_at": null,
  "status": "draft",
  "shelf": "API",
- "domain": "an agent working on SystemVerilog queries this for how tenstorrent/tt-oca-harness implements it: Tenstorrent reference design (harness) for the Open Chiplet Atlas (OCA) architecture (selected work: hw)",
+ "domain": "an agent working on Python queries this for how tenstorrent/tt-oca-harness implements it: Tenstorrent reference design (harness) for the Open Chiplet Atlas (OCA) architecture (selected work: hw)",
  "repos": [
   {
    "repo": "tt-oca-harness",
    "url": "https://github.com/tenstorrent/tt-oca-harness",
    "sha": "5080fff361cd47de74d337cb2fc73b73ab8828e7",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

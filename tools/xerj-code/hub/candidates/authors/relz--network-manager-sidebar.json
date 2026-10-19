@@ -9,7 +9,7 @@
    "repo": "network-manager-sidebar",
    "url": "https://github.com/Relz/network-manager-sidebar",
    "sha": "e28f8bfea79aa089272ffa617da8bf541b22609d",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

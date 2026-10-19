@@ -9,7 +9,7 @@
    "repo": "open-dungeon-master",
    "url": "https://github.com/Lebbitheplow/open-dungeon-master",
    "sha": "ae59e8a8fa7800fe562c0793468bdc28bfd5f4e6",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

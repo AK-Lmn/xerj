@@ -9,7 +9,7 @@
    "repo": "server-domme",
    "url": "https://github.com/keshon/server-domme",
    "sha": "88e3d897e6688c10ac3bd44f69f0267cf6a4d96a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

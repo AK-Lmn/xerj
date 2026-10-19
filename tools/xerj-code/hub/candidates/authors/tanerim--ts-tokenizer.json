@@ -9,7 +9,7 @@
    "repo": "ts_tokenizer",
    "url": "https://github.com/tanerim/ts_tokenizer",
    "sha": "4c9a1c10603d0a51f530d9438d235cde2e8ec75e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

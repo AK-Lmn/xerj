@@ -9,7 +9,7 @@
    "repo": "bb-plugin-usage",
    "url": "https://github.com/MayankBansal12/bb-plugin-usage",
    "sha": "2e30fb62bd4a618a13ae8fa24e7b08ffb76ea885",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

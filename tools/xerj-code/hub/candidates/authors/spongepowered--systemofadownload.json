@@ -9,7 +9,7 @@
    "repo": "SystemOfADownload",
    "url": "https://github.com/SpongePowered/SystemOfADownload",
    "sha": "31899603a5d9550d646b8e4d5d474614c3a3ece7",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

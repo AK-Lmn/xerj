@@ -9,7 +9,7 @@
    "repo": "platform-unified-accounts",
    "url": "https://github.com/cds-snc/platform-unified-accounts",
    "sha": "7c15f34375ff99dab2cb4ca41be98e4a7e284a45",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

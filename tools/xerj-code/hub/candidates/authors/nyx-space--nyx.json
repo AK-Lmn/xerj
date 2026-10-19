@@ -9,7 +9,7 @@
    "repo": "nyx",
    "url": "https://github.com/nyx-space/nyx",
    "sha": "b9bec57270d4c1830734c65ac0d41fa197fd089e",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

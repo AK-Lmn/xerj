@@ -9,7 +9,7 @@
    "repo": "msgpack",
    "url": "https://github.com/shamaton/msgpack",
    "sha": "351552e1b6c47bd44a7f483ce86eb03fb229557c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "slowth",
    "url": "https://github.com/skar404/slowth",
    "sha": "188ccd9c2547404acb090bf79bff6de1ee0e7f0d",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

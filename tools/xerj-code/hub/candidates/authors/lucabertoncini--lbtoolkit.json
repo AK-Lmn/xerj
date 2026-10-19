@@ -9,7 +9,7 @@
    "repo": "LBToolkit",
    "url": "https://github.com/LucaBertoncini/LBToolkit",
    "sha": "70aa81e5b72f85ea4d9e6c21fcebd54a13d5f7c2",
-   "licence": "hint only: MPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MPL-2.0",
     "use": "UNREVIEWED",

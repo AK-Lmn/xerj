@@ -9,7 +9,7 @@
    "repo": "callprobe",
    "url": "https://github.com/Eladhirsh/callprobe",
    "sha": "38e0b24d9689bca2a7396701c18ac9aa5512b385",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "spatial-task-graph",
    "url": "https://github.com/CccJhuan/spatial-task-graph",
    "sha": "0d02b1336cfd549dc8d43c9db2f0b9bdcb0399fd",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "RailKeeper",
    "url": "https://github.com/ichwars/RailKeeper",
    "sha": "71a576513e4b91aad0800a05ce39cd73e317127d",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

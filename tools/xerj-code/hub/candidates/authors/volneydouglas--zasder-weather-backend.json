@@ -9,7 +9,7 @@
    "repo": "zasder-weather-backend",
    "url": "https://github.com/volneydouglas/zasder-weather-backend",
    "sha": "dfe915bdcc462963eff9d2e3ed97c153e3abb7fc",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

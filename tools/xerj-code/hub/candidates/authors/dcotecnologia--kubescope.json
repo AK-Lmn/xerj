@@ -9,7 +9,7 @@
    "repo": "kubescope",
    "url": "https://github.com/dcotecnologia/kubescope",
    "sha": "8565d280f1ea890ae7fd276e77a5628e88337f26",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "slskr",
    "url": "https://github.com/snapetech/slskr",
    "sha": "2b17f8226cf8c1bca3ff5be4f75ee6913107deaa",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

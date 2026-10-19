@@ -9,7 +9,7 @@
    "repo": "motifjs-devtools",
    "url": "https://github.com/motifjs-community/motifjs-devtools",
    "sha": "a3a8a36282b99fbde8ff39895b4bb10a37d31b51",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

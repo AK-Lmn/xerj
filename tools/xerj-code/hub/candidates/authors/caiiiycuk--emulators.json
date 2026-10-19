@@ -9,7 +9,7 @@
    "repo": "emulators",
    "url": "https://github.com/caiiiycuk/emulators",
    "sha": "f1d0286fd9ee36fb54e9ffb36ab0276a33b60b64",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

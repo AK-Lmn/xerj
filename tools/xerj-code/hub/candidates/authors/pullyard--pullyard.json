@@ -9,7 +9,7 @@
    "repo": "shipyard",
    "url": "https://github.com/Vaache/shipyard",
    "sha": "aa9671a5a1d66f2c8535bf64855b2f08472914c9",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

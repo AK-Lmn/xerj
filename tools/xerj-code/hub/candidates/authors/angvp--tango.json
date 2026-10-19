@@ -9,7 +9,7 @@
    "repo": "tango",
    "url": "https://github.com/angvp/tango",
    "sha": "8100d82a921106bf4929798081d2acff16ca5fb7",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

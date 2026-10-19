@@ -9,7 +9,7 @@
    "repo": "LLGL",
    "url": "https://github.com/LukasBanana/LLGL",
    "sha": "aa6fb0a85e36e33431f85a6db3f0cbe96c0d9e58",
-   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "BSD-3-Clause",
     "use": "UNREVIEWED",

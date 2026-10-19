@@ -9,7 +9,7 @@
    "repo": "pyfirstaid",
    "url": "https://github.com/sai-sakalam/pyfirstaid",
    "sha": "dbffb30a616c4877c3138b41147de617d01956c1",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

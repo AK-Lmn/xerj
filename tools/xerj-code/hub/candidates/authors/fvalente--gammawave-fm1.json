@@ -9,7 +9,7 @@
    "repo": "GammaWave-FM1",
    "url": "https://github.com/fvalente/GammaWave-FM1",
    "sha": "3edb869d5c5c54f7fab34e787886b033a766e055",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

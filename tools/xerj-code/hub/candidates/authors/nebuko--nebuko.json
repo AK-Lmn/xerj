@@ -9,7 +9,7 @@
    "repo": "nebuko",
    "url": "https://github.com/nebuko/nebuko",
    "sha": "e25905c3ac89b58b62151ff79519db16cc552fea",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

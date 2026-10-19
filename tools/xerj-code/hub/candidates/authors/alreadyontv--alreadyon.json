@@ -9,7 +9,7 @@
    "repo": "AlreadyOn",
    "url": "https://github.com/AlreadyOnApp/AlreadyOn",
    "sha": "1ea8fdb2dbb2eff47df8ce3aad2ae3d77cf6cf7f",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

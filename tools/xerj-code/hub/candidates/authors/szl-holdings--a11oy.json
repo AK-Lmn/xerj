@@ -9,7 +9,7 @@
    "repo": "a11oy",
    "url": "https://github.com/szl-holdings/a11oy",
    "sha": "9abdc3d41ba5e2d2becc968d2e2880da062c2747",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

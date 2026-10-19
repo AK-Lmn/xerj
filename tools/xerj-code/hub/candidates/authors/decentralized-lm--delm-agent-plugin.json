@@ -9,7 +9,7 @@
    "repo": "delm-agent-plugin",
    "url": "https://github.com/Decentralized-LM/delm-agent-plugin",
    "sha": "bee5ff5595e1fb4c2d7c759e9dfa3117fe22cfe0",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

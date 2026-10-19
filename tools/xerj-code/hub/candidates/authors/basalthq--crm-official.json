@@ -9,7 +9,7 @@
    "repo": "crm-official",
    "url": "https://github.com/BasaltHQ/crm-official",
    "sha": "950a7bac7e58c539f1bea5c48b3b98ee272a0dbc",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

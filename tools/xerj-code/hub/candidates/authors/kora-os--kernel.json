@@ -9,7 +9,7 @@
    "repo": "kernel",
    "url": "https://github.com/kora-os/kernel",
    "sha": "f7f898ed2ad42b57caf764a09f768c7ae5bb6af2",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

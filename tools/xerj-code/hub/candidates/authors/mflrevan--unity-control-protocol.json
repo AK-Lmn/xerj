@@ -9,7 +9,7 @@
    "repo": "unity-control-protocol",
    "url": "https://github.com/mflRevan/unity-control-protocol",
    "sha": "d1b593f19d7071aac180dcecce42b1c5e5e04367",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "solrwayback",
    "url": "https://github.com/netarchivesuite/solrwayback",
    "sha": "c23687901e5931def2fdf571c837e0150d2891ec",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "CRY",
    "url": "https://github.com/JNechaevsky/CRY",
    "sha": "3d31749c9a24b7f461dab1eee06146b39795006b",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "feno",
    "url": "https://github.com/dennisme/feno",
    "sha": "c173d18370a5d82800e2fce7355b634a8686b15b",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

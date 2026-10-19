@@ -9,7 +9,7 @@
    "repo": "r2lambda",
    "url": "https://github.com/discindo/r2lambda",
    "sha": "a99bfc0b6b3b51e9fc63e3ff459001928ea5ee3b",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

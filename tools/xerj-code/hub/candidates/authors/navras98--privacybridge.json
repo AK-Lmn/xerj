@@ -9,7 +9,7 @@
    "repo": "PrivacyBridge",
    "url": "https://github.com/Navras98/PrivacyBridge",
    "sha": "95bd1cca742fbb3b5b1b80fe194959f83c76498f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

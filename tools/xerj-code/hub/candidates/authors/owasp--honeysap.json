@@ -9,7 +9,7 @@
    "repo": "HoneySAP",
    "url": "https://github.com/OWASP/HoneySAP",
    "sha": "66bdde60fa0807ceb1b3c50b85222fcd9b1a4ca0",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

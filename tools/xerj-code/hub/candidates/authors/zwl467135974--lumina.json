@@ -9,7 +9,7 @@
    "repo": "lumina",
    "url": "https://github.com/zwl467135974/lumina",
    "sha": "83bf6364e1f5e6f8237e3aab796741dcc8f05ca8",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

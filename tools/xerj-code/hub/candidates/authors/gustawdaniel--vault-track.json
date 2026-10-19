@@ -9,7 +9,7 @@
    "repo": "vault-track",
    "url": "https://github.com/gustawdaniel/vault-track",
    "sha": "ba55acacdc27474e6d793d7fbdf490a719e67446",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "unsloth",
    "url": "https://github.com/unslothai/unsloth",
    "sha": "6f4c16250df25a8ee67148bccccbd08adeb15c70",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

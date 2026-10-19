@@ -9,7 +9,7 @@
    "repo": "kudu",
    "url": "https://github.com/apache/kudu",
    "sha": "8cb97df913c7d1b22aed844b1bfb10739fefd11c",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

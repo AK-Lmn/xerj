@@ -9,7 +9,7 @@
    "repo": "cloelib",
    "url": "https://github.com/cloe-org/cloelib",
    "sha": "dbe35c999795c027ca72763e1d79f5ec6047956c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "iceberg-thermodynamic-model",
    "url": "https://github.com/VladBus/iceberg-thermodynamic-model",
    "sha": "d0e9448efa96748857c4b63c4bc74b1d54f8941c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "MeshCenter",
    "url": "https://github.com/FlintUA/MeshCenter",
    "sha": "af83e0ea9813672d302ada5fb5e197f27e51a8b9",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

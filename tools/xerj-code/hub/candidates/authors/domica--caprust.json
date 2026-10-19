@@ -9,7 +9,7 @@
    "repo": "CapRust",
    "url": "https://github.com/Domica/CapRust",
    "sha": "ea296576fa7a1a1abcbbb51d26b69de1239f6cec",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

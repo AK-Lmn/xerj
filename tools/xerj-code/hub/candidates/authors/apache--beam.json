@@ -9,7 +9,7 @@
    "repo": "beam",
    "url": "https://github.com/apache/beam",
    "sha": "debfa0e6088789388375c669f13f9e6143e7b07f",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

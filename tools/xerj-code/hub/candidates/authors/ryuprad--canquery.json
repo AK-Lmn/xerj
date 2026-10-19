@@ -9,7 +9,7 @@
    "repo": "canquery",
    "url": "https://github.com/RyuPrad/canquery",
    "sha": "280def23ab7f499214d3e9e66977aedc0feb897e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "fspec",
    "url": "https://github.com/sengac/fspec",
    "sha": "c5b38a97f4d8cc9ebf6f3f5c940ca319c62c5d7e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

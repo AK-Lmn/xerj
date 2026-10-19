@@ -9,7 +9,7 @@
    "repo": "llama.cpp",
    "url": "https://github.com/ggml-org/llama.cpp",
    "sha": "fda186661304735bb9027abd472c1403a9902081",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

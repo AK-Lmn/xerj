@@ -9,7 +9,7 @@
    "repo": "mycel",
    "url": "https://github.com/vuzlee/mycel",
    "sha": "2f0436a81aa9c062d2cc97b161ce11b5b1628094",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "quasar-ui-qcalendar",
    "url": "https://github.com/quasarframework/quasar-ui-qcalendar",
    "sha": "d3ad0a74a9c4a1b7558b7e3e57018a00b6344f9e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

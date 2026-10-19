@@ -9,7 +9,7 @@
    "repo": "lockbook",
    "url": "https://github.com/lockbook/lockbook",
    "sha": "2237f6c13d72577ab5df60d0034ff24f657b2974",
-   "licence": "hint only: Unlicense (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Unlicense (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Unlicense",
     "use": "UNREVIEWED",

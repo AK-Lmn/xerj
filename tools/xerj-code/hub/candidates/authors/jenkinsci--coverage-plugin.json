@@ -9,7 +9,7 @@
    "repo": "coverage-plugin",
    "url": "https://github.com/jenkinsci/coverage-plugin",
    "sha": "85342398afd604805166318b177e97967d04c943",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

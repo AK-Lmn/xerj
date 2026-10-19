@@ -9,7 +9,7 @@
    "repo": "xaidr",
    "url": "https://github.com/delphisecurity/xaidr",
    "sha": "0e7ac7792bd7f7f0625aaa972127fd4a916bdb09",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

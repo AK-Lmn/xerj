@@ -9,7 +9,7 @@
    "repo": "langgraph_system_generator",
    "url": "https://github.com/dhar174/langgraph_system_generator",
    "sha": "e3cdddc3a215ea07e823b53a4e260905b51b795e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

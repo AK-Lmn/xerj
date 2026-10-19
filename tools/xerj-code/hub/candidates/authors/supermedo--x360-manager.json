@@ -9,7 +9,7 @@
    "repo": "x360-manager",
    "url": "https://github.com/Supermedo/x360-manager",
    "sha": "f28fa73de97d479227142c007214250563c6de59",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

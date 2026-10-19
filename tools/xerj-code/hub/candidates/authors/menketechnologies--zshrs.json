@@ -9,7 +9,7 @@
    "repo": "zshrs",
    "url": "https://github.com/MenkeTechnologies/zshrs",
    "sha": "6ab47eb8eccc583591a14ec4372c879a2a197ca8",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

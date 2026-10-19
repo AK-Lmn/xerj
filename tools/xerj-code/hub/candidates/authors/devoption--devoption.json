@@ -9,7 +9,7 @@
    "repo": "devoption",
    "url": "https://github.com/devoption/devoption",
    "sha": "97d4cef2945e0a93fbcbd84527dade68b5c89d45",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

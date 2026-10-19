@@ -9,7 +9,7 @@
    "repo": "abvx-agent-skills",
    "url": "https://github.com/markoblogo/abvx-agent-skills",
    "sha": "fc504a3c961bd17d430787e0c7bb6371b381bfae",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

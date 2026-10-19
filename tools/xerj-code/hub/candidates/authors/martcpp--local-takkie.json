@@ -9,7 +9,7 @@
    "repo": "local-takkie",
    "url": "https://github.com/martcpp/local-takkie",
    "sha": "c6a6292d799762b62577249a0cbc5a660924088c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

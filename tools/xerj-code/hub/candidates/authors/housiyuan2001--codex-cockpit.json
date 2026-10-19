@@ -9,7 +9,7 @@
    "repo": "codex-cockpit",
    "url": "https://github.com/HouSiyuan2001/codex-cockpit",
    "sha": "d3da9733010ff6e32da40247e724ea671a922ec0",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "planvio",
    "url": "https://github.com/hatemsweileh/planvio",
    "sha": "9a91f103feffc3d5031f3cd2c0196385b908adbf",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

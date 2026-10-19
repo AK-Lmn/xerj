@@ -9,7 +9,7 @@
    "repo": "jupyter_daslang_kernel",
    "url": "https://github.com/spiiin/jupyter_daslang_kernel",
    "sha": "d1abacd91971dae417b5c315d3517f86eab4d3ad",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

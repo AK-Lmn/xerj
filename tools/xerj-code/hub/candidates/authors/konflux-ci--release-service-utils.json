@@ -9,7 +9,7 @@
    "repo": "release-service-utils",
    "url": "https://github.com/konflux-ci/release-service-utils",
    "sha": "801220bace6b39869dd4cc5e0df59114ec7821db",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

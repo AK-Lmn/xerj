@@ -9,7 +9,7 @@
    "repo": "herdr-gc",
    "url": "https://github.com/H3xept/herdr-gc",
    "sha": "0ad3d3b31e66bb9347b00d17ee099e7e3982b89d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

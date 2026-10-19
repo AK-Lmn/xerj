@@ -9,7 +9,7 @@
    "repo": "etheorem",
    "url": "https://github.com/etheorem/etheorem",
    "sha": "a7bd1718a241b622cefc6264c7fc61c8e3aaa5d6",
-   "licence": "hint only: LGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: LGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "LGPL-3.0",
     "use": "UNREVIEWED",

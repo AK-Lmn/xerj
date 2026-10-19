@@ -9,7 +9,7 @@
    "repo": "ldraw-nova-docker",
    "url": "https://github.com/anteloc/ldraw-nova-docker",
    "sha": "0bbd5862dab9f56825cf20cf690c5f8e340a1832",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

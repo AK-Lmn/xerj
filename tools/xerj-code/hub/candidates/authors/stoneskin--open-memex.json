@@ -9,7 +9,7 @@
    "repo": "open-memex",
    "url": "https://github.com/stoneskin/open-memex",
    "sha": "4d14432e2853435fe66b0b515e570c6db1cac8d9",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

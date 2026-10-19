@@ -9,7 +9,7 @@
    "repo": "Lumen-Vision-460M",
    "url": "https://github.com/yifan-2004/Lumen-Vision-460M",
    "sha": "40b4c3810f61345886b394fad361feb96df3b087",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "GlowberryClient",
    "url": "https://github.com/ChimeraAnt-DEV/GlowberryClient",
    "sha": "cde6d8700c5f0b2dd5d846556e8c84a669b39a01",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "jint",
    "url": "https://github.com/sedulustech/jint",
    "sha": "b56d64de626ff02fa476b896c4081b9c58184d67",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

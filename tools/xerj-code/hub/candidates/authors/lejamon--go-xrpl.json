@@ -9,7 +9,7 @@
    "repo": "go-xrpl",
    "url": "https://github.com/LeJamon/go-xrpl",
    "sha": "0e07260087db5058a4d63e47a0223a81164415b1",
-   "licence": "hint only: ISC (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: ISC (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "ISC",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "diskwise",
    "url": "https://github.com/DreamOfXM/diskwise",
    "sha": "1f147691e491429686a14481c8f894749716c62b",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

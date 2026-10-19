@@ -9,7 +9,7 @@
    "repo": "apkupdater",
    "url": "https://github.com/guberm/apkupdater",
    "sha": "9acf06335bd5a9dabbc8c55c7e7cce8eb352f56c",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

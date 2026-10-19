@@ -9,7 +9,7 @@
    "repo": "hivemind",
    "url": "https://github.com/maxcorrads/hivemind",
    "sha": "d24b541fc62068cbb999c9c48c2a22396ea67ba9",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

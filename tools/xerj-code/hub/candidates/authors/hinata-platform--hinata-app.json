@@ -9,7 +9,7 @@
    "repo": "hinata-app",
    "url": "https://github.com/hinata-platform/hinata-app",
    "sha": "6c3784d27c427382a35e651605e4a53e15da060c",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

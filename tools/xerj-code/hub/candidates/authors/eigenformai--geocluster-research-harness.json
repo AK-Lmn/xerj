@@ -9,7 +9,7 @@
    "repo": "geocluster-research-harness",
    "url": "https://github.com/EigenformAI/geocluster-research-harness",
    "sha": "3dd12e79781629b657315d94db84cbb7db63cefc",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

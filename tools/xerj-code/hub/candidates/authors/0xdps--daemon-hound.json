@@ -9,7 +9,7 @@
    "repo": "daemon-hound",
    "url": "https://github.com/0xdps/daemon-hound",
    "sha": "a97ce9da944f134d8b4e6f8da2d9adb6bd58a0ed",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

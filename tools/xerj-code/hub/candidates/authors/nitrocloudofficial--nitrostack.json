@@ -9,7 +9,7 @@
    "repo": "nitrostack",
    "url": "https://github.com/nitrocloudofficial/nitrostack",
    "sha": "b10b3333c1730d44ca55d2680d356a9a6529d52c",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

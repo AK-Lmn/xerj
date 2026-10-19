@@ -9,7 +9,7 @@
    "repo": "egeria-python",
    "url": "https://github.com/odpi/egeria-python",
    "sha": "ecb6e31f0f1b4ec8c6c7cb2d5d891c4b9d5b3e85",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

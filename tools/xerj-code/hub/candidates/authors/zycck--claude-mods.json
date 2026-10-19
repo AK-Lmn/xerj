@@ -9,7 +9,7 @@
    "repo": "claude-mods",
    "url": "https://github.com/zycck/claude-mods",
    "sha": "549ecee6d9625cb9e20cb3705c9a1ac370806eba",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

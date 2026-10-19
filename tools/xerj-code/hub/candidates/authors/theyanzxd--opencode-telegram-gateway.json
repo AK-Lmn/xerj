@@ -9,7 +9,7 @@
    "repo": "opencode-telegram-gateway",
    "url": "https://github.com/TheyanzXD/opencode-telegram-gateway",
    "sha": "a588fbe93a3431eb9572ba576288ff3ca738a860",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

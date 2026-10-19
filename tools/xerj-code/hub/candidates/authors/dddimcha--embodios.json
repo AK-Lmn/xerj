@@ -9,7 +9,7 @@
    "repo": "embodiOS",
    "url": "https://github.com/dddimcha/embodiOS",
    "sha": "9b01a09d2c5853c9a1f6475128b88fbc42294e43",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

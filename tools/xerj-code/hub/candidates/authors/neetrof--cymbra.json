@@ -9,7 +9,7 @@
    "repo": "cymbra",
    "url": "https://github.com/NEETROF/cymbra",
    "sha": "9eb63300180002151f5a2c7a946c9cb474c4aacf",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

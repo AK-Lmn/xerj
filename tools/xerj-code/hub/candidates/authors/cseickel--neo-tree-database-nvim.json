@@ -9,7 +9,7 @@
    "repo": "neo-tree-database.nvim",
    "url": "https://github.com/cseickel/neo-tree-database.nvim",
    "sha": "abacc26fe76249b5e5a4d3b804cfc9372b46b0e8",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

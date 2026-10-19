@@ -9,7 +9,7 @@
    "repo": "bank-statement-converter",
    "url": "https://github.com/Batatatab/bank-statement-converter",
    "sha": "ea1f78c8a969e1e9a1137f315059bc72b78f629b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

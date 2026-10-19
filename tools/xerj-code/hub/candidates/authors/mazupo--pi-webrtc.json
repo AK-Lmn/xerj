@@ -9,7 +9,7 @@
    "repo": "pi-webrtc",
    "url": "https://github.com/mazupo/pi-webrtc",
    "sha": "80fefe85cce0a5d9af30b785105a20eeffb4e888",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

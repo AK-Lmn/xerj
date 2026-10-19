@@ -9,7 +9,7 @@
    "repo": "trishul-snmp-suite",
    "url": "https://github.com/tosumitdhaka/trishul-snmp-suite",
    "sha": "b84d0db64b93cee7e540215a4499ad01675d32dc",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

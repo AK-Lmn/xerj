@@ -9,7 +9,7 @@
    "repo": "potatoClient",
    "url": "https://github.com/meihao550/potatoClient",
    "sha": "eab5e5ac98e1e3b1dccd96c5bff0e978dd743df1",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

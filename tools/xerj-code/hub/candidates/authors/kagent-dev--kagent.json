@@ -9,7 +9,7 @@
    "repo": "kagent",
    "url": "https://github.com/kagent-dev/kagent",
    "sha": "0a0c3bd6c87ae6aa354131314fed222974719de8",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

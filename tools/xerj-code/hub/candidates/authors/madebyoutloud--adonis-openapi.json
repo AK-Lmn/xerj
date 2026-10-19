@@ -9,7 +9,7 @@
    "repo": "adonis-openapi",
    "url": "https://github.com/madebyoutloud/adonis-openapi",
    "sha": "84820650e0a2de4c38036e0686d99a5779950d74",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

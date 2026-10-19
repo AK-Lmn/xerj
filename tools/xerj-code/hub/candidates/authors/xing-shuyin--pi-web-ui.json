@@ -9,7 +9,7 @@
    "repo": "pi-web-ui",
    "url": "https://github.com/xing-shuyin/pi-web-ui",
    "sha": "6a6fe9caaf835935938fa2c9d4b4056339de251a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

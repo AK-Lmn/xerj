@@ -9,7 +9,7 @@
    "repo": "actenon-scan",
    "url": "https://github.com/Actenon/actenon-scan",
    "sha": "b8a6a62308fb2d569b6530f6ecf250e6e4ef6e16",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

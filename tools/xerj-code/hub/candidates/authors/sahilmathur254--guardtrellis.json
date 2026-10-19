@@ -9,7 +9,7 @@
    "repo": "guardtrellis",
    "url": "https://github.com/sahilmathur254/guardtrellis",
    "sha": "d722ec2c044f5f84c8033c00b6f60bdd45515340",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "logcat-live-wallpaper",
    "url": "https://github.com/YasserNull/logcat-live-wallpaper",
    "sha": "2eb6a3e4f09ef65e060857bbe7a9d02b00e91248",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

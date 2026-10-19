@@ -9,7 +9,7 @@
    "repo": "web-jwks-validator",
    "url": "https://github.com/matzegebbe/web-jwks-validator",
    "sha": "b4d2863d79402b5c8fb170f225780d7d259e7174",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

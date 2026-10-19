@@ -9,7 +9,7 @@
    "repo": "kubeswift",
    "url": "https://github.com/kubeswift-io/kubeswift",
    "sha": "137a214db3a473416cd2e66d09f2576356fb3db4",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

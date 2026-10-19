@@ -9,7 +9,7 @@
    "repo": "Swarmojo",
    "url": "https://github.com/Buzburg/Swarmojo",
    "sha": "9b1b05362148c1e36d8e0bc34911e698d63dcbb9",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

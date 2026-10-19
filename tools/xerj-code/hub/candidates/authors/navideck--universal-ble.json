@@ -9,7 +9,7 @@
    "repo": "universal_ble",
    "url": "https://github.com/Navideck/universal_ble",
    "sha": "90cc765d04163bcbe2e93dae89b124fa9ca4745c",
-   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "BSD-3-Clause",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "ai-security-testing-agent",
    "url": "https://github.com/vikrant-project/ai-security-testing-agent",
    "sha": "e90b74f99db9aad3d8b2f72f639213a08114245e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

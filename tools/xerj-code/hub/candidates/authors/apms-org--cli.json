@@ -9,7 +9,7 @@
    "repo": "cli",
    "url": "https://github.com/apms-org/cli",
    "sha": "3dd97d0c1262b4ee857fb96c367a8d92b1e8d18e",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

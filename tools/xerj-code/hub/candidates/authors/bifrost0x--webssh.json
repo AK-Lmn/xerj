@@ -9,7 +9,7 @@
    "repo": "webssh",
    "url": "https://github.com/bifrost0x/webssh",
    "sha": "155b4e31b2d261ffc2cb15fb136d3db8eca18e39",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "metacontroller",
    "url": "https://github.com/metacontroller/metacontroller",
    "sha": "06bc71894fe54c54ae3016521a26100cedc35a5e",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

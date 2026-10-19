@@ -9,7 +9,7 @@
    "repo": "faststack",
    "url": "https://github.com/AlanRockefeller/faststack",
    "sha": "b438f072956c06a628c12ad34f4913359d1bfd04",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

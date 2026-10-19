@@ -9,7 +9,7 @@
    "repo": "checkstyle",
    "url": "https://github.com/checkstyle/checkstyle",
    "sha": "bfe45c6f95d88e012e9cffbdfeca3ad91fb3ef0c",
-   "licence": "hint only: LGPL-2.1 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: LGPL-2.1 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "LGPL-2.1",
     "use": "UNREVIEWED",

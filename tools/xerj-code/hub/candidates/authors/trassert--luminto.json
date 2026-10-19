@@ -9,7 +9,7 @@
    "repo": "Luminto",
    "url": "https://github.com/trassert/Luminto",
    "sha": "da08961ce4360ca2e3fc47d2e49a85fdc9e4518a",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

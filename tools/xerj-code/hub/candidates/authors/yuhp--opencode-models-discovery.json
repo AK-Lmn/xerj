@@ -9,7 +9,7 @@
    "repo": "opencode-models-discovery",
    "url": "https://github.com/yuhp/opencode-models-discovery",
    "sha": "43bb7e41514b1f51b0955e7b2e3a550dd118e7ba",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

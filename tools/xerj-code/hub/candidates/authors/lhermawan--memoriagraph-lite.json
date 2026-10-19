@@ -9,7 +9,7 @@
    "repo": "memoriagraph-lite",
    "url": "https://github.com/lhermawan/memoriagraph-lite",
    "sha": "6468b0c63d0416923c07b8130847d6508183b73c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

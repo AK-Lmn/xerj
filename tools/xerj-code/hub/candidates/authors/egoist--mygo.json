@@ -9,7 +9,7 @@
    "repo": "mygo",
    "url": "https://github.com/egoist/mygo",
    "sha": "ad408c0ae5ebeb5c14468620011e9eee04d4fbb9",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

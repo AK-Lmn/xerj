@@ -9,7 +9,7 @@
    "repo": "shrtnr",
    "url": "https://github.com/oddbit/shrtnr",
    "sha": "de01c628c8540952b07bd4423ace20e6df145de6",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

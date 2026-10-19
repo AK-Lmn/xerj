@@ -9,7 +9,7 @@
    "repo": "hindsight",
    "url": "https://github.com/malinoskj2/hindsight",
    "sha": "4198ef92e6010e877925238007f82a32768bab45",
-   "licence": "hint only: BSD-2-Clause (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: BSD-2-Clause (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "BSD-2-Clause",
     "use": "UNREVIEWED",

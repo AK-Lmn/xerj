@@ -9,7 +9,7 @@
    "repo": "aelira-core",
    "url": "https://github.com/Aelira-AI/aelira-core",
    "sha": "1c5664af07b72c7c607abfbfe074a501dc272cb0",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

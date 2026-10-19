@@ -9,7 +9,7 @@
    "repo": "openvpn3-gui",
    "url": "https://github.com/shuvo072/openvpn3-gui",
    "sha": "58008587221e7ec36ea4fb985354db27007344bc",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

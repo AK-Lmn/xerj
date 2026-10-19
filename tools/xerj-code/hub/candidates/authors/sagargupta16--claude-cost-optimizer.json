@@ -9,7 +9,7 @@
    "repo": "claude-cost-optimizer",
    "url": "https://github.com/Sagargupta16/claude-cost-optimizer",
    "sha": "5fad7b8866e4d69bf3891838b87eb745bc7f8f34",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

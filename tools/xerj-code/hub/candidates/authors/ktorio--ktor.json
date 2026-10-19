@@ -9,7 +9,7 @@
    "repo": "ktor",
    "url": "https://github.com/ktorio/ktor",
    "sha": "4717dd5fe8270a40fc97ba0b03bb63f722717786",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

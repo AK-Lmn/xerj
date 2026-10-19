@@ -9,7 +9,7 @@
    "repo": "Cifar-10",
    "url": "https://github.com/DanielSarmiento04/Cifar-10",
    "sha": "9a5afc21e58d7a256b3ceb191d68254f0b1d31b2",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

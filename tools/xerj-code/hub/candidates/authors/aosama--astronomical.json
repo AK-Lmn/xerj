@@ -9,7 +9,7 @@
    "repo": "astronomical",
    "url": "https://github.com/aosama/astronomical",
    "sha": "56626fe26ec6ac97492b21d6535970c2abb38387",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

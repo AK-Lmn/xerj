@@ -9,7 +9,7 @@
    "repo": "KeepmarkApp",
    "url": "https://github.com/Keepmark/KeepmarkApp",
    "sha": "46145877f2c01ec899447f0342e3dfd2c7ee8f40",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

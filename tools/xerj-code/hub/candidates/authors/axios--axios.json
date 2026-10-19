@@ -9,7 +9,7 @@
    "repo": "axios",
    "url": "https://github.com/axios/axios",
    "sha": "fe2fbf8c9322ad6d83ca820771e85e2cad0f23c6",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

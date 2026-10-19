@@ -9,7 +9,7 @@
    "repo": "open-manuscript-studio",
    "url": "https://github.com/open-manuscript-initiative/open-manuscript-studio",
    "sha": "369de7305becf512603fa3484254d5f26ad2f24c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

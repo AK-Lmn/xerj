@@ -9,7 +9,7 @@
    "repo": "security-suite",
    "url": "https://github.com/TheSecuredAnalyst/security-suite",
    "sha": "b0aa40ab1ca514a97fe953845517a6686fc3e317",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

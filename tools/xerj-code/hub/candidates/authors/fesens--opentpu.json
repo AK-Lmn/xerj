@@ -9,7 +9,7 @@
    "repo": "openTPU",
    "url": "https://github.com/FeSens/openTPU",
    "sha": "987ebe8de55e56be08cf2d5f976b7bc76ef8dea7",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

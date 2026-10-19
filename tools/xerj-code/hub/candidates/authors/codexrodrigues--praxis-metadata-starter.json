@@ -9,7 +9,7 @@
    "repo": "praxis-metadata-starter",
    "url": "https://github.com/codexrodrigues/praxis-metadata-starter",
    "sha": "be0f2c93dcd2ec90afd56ffe62cb8c9f17c5e096",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

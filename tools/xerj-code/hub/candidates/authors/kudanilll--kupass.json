@@ -9,7 +9,7 @@
    "repo": "kupass",
    "url": "https://github.com/kudanilll/kupass",
    "sha": "ed943797607d9f1e2185519f3453477193342c75",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

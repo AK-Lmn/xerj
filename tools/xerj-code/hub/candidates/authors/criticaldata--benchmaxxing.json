@@ -9,7 +9,7 @@
    "repo": "benchmaxxing",
    "url": "https://github.com/criticaldata/benchmaxxing",
    "sha": "9a71bbcb92b6263c6d17cead1acc914a5dc1b0dc",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

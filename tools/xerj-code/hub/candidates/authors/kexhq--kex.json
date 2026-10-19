@@ -9,7 +9,7 @@
    "repo": "kex",
    "url": "https://github.com/kexhq/kex",
    "sha": "101157b767f10df788515b3dca73fbef937bfabd",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

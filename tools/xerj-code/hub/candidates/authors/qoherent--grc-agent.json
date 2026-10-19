@@ -9,7 +9,7 @@
    "repo": "GRC-Agent",
    "url": "https://github.com/qoherent/GRC-Agent",
    "sha": "1ff88f4042fd38f04fc792b60e1ab7a0a317587e",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

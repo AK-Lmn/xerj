@@ -9,7 +9,7 @@
    "repo": "coco-annotator-ng",
    "url": "https://github.com/SixK/coco-annotator-ng",
    "sha": "82075d057fb9e8738175d2bb707de31bdb8d02e6",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

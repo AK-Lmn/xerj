@@ -9,7 +9,7 @@
    "repo": "open-ai",
    "url": "https://github.com/orhanerday/open-ai",
    "sha": "88097be0cd5fc219c6e2d7cbf29fe7fdf1ed2ac4",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

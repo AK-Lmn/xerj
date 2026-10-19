@@ -9,7 +9,7 @@
    "repo": "dbflux",
    "url": "https://github.com/0xErwin1/dbflux",
    "sha": "9b32b3d6c065e5107501c83fe23dae402d134eed",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

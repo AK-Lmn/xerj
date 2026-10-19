@@ -9,7 +9,7 @@
    "repo": "ha-tibber-pulse-mqtt",
    "url": "https://github.com/mrhedstrom/ha-tibber-pulse-mqtt",
    "sha": "37361b47e86997db1d2652e7cf48e765e8ad4f76",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

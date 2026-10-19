@@ -9,7 +9,7 @@
    "repo": "linux-wallpaperengine",
    "url": "https://github.com/wqLouis/linux-wallpaperengine",
    "sha": "77a90186bf362bec2e1debea0273293e922b310e",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

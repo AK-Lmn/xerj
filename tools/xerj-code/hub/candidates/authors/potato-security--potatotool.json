@@ -9,7 +9,7 @@
    "repo": "PotatoTool",
    "url": "https://github.com/potato-security/PotatoTool",
    "sha": "6f4fd93620923b41f051e84c58ef822d58e1d09f",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

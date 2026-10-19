@@ -9,7 +9,7 @@
    "repo": "ytgrab",
    "url": "https://github.com/Sanoy24/ytgrab",
    "sha": "6eeafb23f76a5b797750fa01e5f0d9484a68344c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

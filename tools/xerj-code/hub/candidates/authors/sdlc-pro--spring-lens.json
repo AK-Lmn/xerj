@@ -9,7 +9,7 @@
    "repo": "spring-lens",
    "url": "https://github.com/sdlc-pro/spring-lens",
    "sha": "b12dd6b60027433f6c10eb0c48cd9d28bc6f1754",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "herdr-cache-hit",
    "url": "https://github.com/e-kotov/herdr-cache-hit",
    "sha": "19f4ec980c1f7bc35278340be5ee86973718f36d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

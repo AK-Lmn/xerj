@@ -9,7 +9,7 @@
    "repo": "cryptoterm",
    "url": "https://github.com/fchyoga/cryptoterm",
    "sha": "03a8e413cc7cded273071c867523e95c132cefe3",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

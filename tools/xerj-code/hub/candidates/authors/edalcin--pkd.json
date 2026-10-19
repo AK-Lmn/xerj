@@ -9,7 +9,7 @@
    "repo": "pkd",
    "url": "https://github.com/edalcin/pkd",
    "sha": "92f7a01cb992e1eb21ae326a460b61010ad59726",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

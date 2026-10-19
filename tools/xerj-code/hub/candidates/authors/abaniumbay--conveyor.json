@@ -9,7 +9,7 @@
    "repo": "conveyor",
    "url": "https://github.com/Abaniumbay/conveyor",
    "sha": "47c01df8cbb93ac91e5d42cb74c1392f5460c020",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

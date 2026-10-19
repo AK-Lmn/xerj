@@ -9,7 +9,7 @@
    "repo": "jepa.cpp",
    "url": "https://github.com/aselimc/jepa.cpp",
    "sha": "e9a09ac419830646dcdb61eab6ee388e89ee6749",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

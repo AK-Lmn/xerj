@@ -9,7 +9,7 @@
    "repo": "BuildMind",
    "url": "https://github.com/eabemp1/BuildMind",
    "sha": "fa0a74e7b2549001fdea1bab5bcb6d52a3adc1e8",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

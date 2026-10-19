@@ -9,7 +9,7 @@
    "repo": "gitsocial",
    "url": "https://github.com/gitsocial-org/gitsocial",
    "sha": "d2fd2e6d84856ce1760539b188acca49cda6530d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "delvewright",
    "url": "https://github.com/stellarfeline/delvewright",
    "sha": "4ee5ad1cf5f8e8f330b30fb0ee04b5de4973f7b6",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

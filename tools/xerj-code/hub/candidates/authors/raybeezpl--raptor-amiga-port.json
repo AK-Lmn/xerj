@@ -9,7 +9,7 @@
    "repo": "raptor-amiga-port",
    "url": "https://github.com/RaybeezPL/raptor-amiga-port",
    "sha": "f3b62cc31f336abaf04cf49403077eb395fb1f3f",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

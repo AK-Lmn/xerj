@@ -9,7 +9,7 @@
    "repo": "cli_req_refiner",
    "url": "https://github.com/reigadegr/cli_req_refiner",
    "sha": "dfcb7af72b3edb7efcebd9a1e4301541dfc5b0a6",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

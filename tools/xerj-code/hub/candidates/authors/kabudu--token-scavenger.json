@@ -9,7 +9,7 @@
    "repo": "token-scavenger",
    "url": "https://github.com/kabudu/token-scavenger",
    "sha": "3c7b0fdfb461cd96b3cc50622a8e6d04c49883d4",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

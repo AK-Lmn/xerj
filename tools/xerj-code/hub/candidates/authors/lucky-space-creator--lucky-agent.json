@@ -9,7 +9,7 @@
    "repo": "lucky_agent",
    "url": "https://github.com/Lucky-space-creator/lucky_agent",
    "sha": "f851483a72bf58aca90238c2a25661d76fde4ac2",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

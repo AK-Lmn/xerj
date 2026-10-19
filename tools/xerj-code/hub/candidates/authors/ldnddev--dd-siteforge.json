@@ -9,7 +9,7 @@
    "repo": "dd_siteforge",
    "url": "https://github.com/ldnddev/dd_siteforge",
    "sha": "98d2ee3361dd40d4369f505d0eb9c99626123036",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

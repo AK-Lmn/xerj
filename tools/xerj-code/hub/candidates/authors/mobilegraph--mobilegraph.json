@@ -9,7 +9,7 @@
    "repo": "mobilegraph",
    "url": "https://github.com/MobileGraph/mobilegraph",
    "sha": "d31eec5a72a95e2cf98046c68015c2f315425f2b",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

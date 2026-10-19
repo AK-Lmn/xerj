@@ -9,7 +9,7 @@
    "repo": "hledger-lsp",
    "url": "https://github.com/juev/hledger-lsp",
    "sha": "35c0abc0d802050374357cd8c15010f5de7f8a72",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

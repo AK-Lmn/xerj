@@ -9,7 +9,7 @@
    "repo": "easyeda-viewer",
    "url": "https://github.com/easyeda/easyeda-viewer",
    "sha": "c8104e6cab8a36900b91f4c92f19d41593073134",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

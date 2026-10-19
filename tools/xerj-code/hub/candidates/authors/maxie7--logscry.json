@@ -9,7 +9,7 @@
    "repo": "logscry",
    "url": "https://github.com/maxie7/logscry",
    "sha": "3027afb5ccc686b2b7cbba0ea5ab4ac9d11de3e7",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

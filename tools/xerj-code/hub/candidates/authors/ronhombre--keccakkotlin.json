@@ -9,7 +9,7 @@
    "repo": "KeccakKotlin",
    "url": "https://github.com/ronhombre/KeccakKotlin",
    "sha": "4a45bf2d2b9f162d8adadf3be7154ec9b30f9e7f",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

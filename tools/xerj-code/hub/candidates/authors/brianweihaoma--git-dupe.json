@@ -9,7 +9,7 @@
    "repo": "git-dupe",
    "url": "https://github.com/BrianWeiHaoMa/git-dupe",
    "sha": "64a43acd2636815515c6a81d3e177ef613796a29",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

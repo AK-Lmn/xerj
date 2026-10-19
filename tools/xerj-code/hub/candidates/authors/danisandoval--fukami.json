@@ -9,7 +9,7 @@
    "repo": "fukami",
    "url": "https://github.com/danisandoval/fukami",
    "sha": "8c0f76333699e8cd2fc05e478038d7c5393dcbe7",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

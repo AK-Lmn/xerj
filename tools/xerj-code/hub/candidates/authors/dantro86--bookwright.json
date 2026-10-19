@@ -9,7 +9,7 @@
    "repo": "bookwright",
    "url": "https://github.com/dantro86/bookwright",
    "sha": "af0f540d2af1985fc421492a3e76474178cb15ee",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

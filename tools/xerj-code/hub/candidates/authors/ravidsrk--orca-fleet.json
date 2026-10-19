@@ -9,7 +9,7 @@
    "repo": "orca-fleet",
    "url": "https://github.com/ravidsrk/orca-fleet",
    "sha": "00a7219f908507bbee3adc751c044f43eac4dcf2",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

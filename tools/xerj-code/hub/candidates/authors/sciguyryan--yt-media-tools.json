@@ -9,7 +9,7 @@
    "repo": "yt-media-tools",
    "url": "https://github.com/sciguyryan/yt-media-tools",
    "sha": "5a724332e0585ab3da4d12b56a3295b777656384",
-   "licence": "hint only: LGPL-2.1 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: LGPL-2.1 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "LGPL-2.1",
     "use": "UNREVIEWED",

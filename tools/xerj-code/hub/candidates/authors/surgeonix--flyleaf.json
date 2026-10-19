@@ -9,7 +9,7 @@
    "repo": "Flyleaf",
    "url": "https://github.com/SuRGeoNix/Flyleaf",
    "sha": "38c33a0c6949225413b00a20e249524a6a740bf9",
-   "licence": "hint only: LGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: LGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "LGPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "chan",
    "url": "https://github.com/fiorix/chan",
    "sha": "cfad65f26d3dd31821d43702f77394181c96d60c",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

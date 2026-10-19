@@ -9,7 +9,7 @@
    "repo": "alfresco-node-vault",
    "url": "https://github.com/saidone75/alfresco-node-vault",
    "sha": "7491c4a962100b2b9c9e669a025548679e44819f",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

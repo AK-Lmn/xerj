@@ -9,7 +9,7 @@
    "repo": "llm-skills",
    "url": "https://github.com/piousp/llm-skills",
    "sha": "2d4652bc3f7f0c15ab4dfd535da0275605fa57d4",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

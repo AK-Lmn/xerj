@@ -9,7 +9,7 @@
    "repo": "basal-rs",
    "url": "https://github.com/itsoltech/basal-rs",
    "sha": "4f68eb216ec3570f4e44c8262af566a0b0173ef7",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

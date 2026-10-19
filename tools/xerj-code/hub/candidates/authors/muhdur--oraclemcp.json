@@ -9,7 +9,7 @@
    "repo": "oraclemcp",
    "url": "https://github.com/MuhDur/oraclemcp",
    "sha": "db066176398ff1f5230a007ed8ac6b92d05469e8",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

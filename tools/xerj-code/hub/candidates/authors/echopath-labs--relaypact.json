@@ -9,7 +9,7 @@
    "repo": "relaypact",
    "url": "https://github.com/echopath-labs/relaypact",
    "sha": "1398ebcf2782f71646983f1d0b1cdb199a66e941",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

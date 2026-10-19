@@ -9,7 +9,7 @@
    "repo": "gitisle",
    "url": "https://github.com/ppazosp/gitisle",
    "sha": "fb0d55d441b7e1c79dd983db2b04503611902c1b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

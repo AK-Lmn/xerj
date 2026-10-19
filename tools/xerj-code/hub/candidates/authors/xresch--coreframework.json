@@ -9,7 +9,7 @@
    "repo": "CoreFramework",
    "url": "https://github.com/xresch/CoreFramework",
    "sha": "e30c1e6cfc0155aa8348ab766f97df424cbe979e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

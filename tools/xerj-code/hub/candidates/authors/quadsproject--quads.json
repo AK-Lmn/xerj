@@ -9,7 +9,7 @@
    "repo": "quads",
    "url": "https://github.com/quadsproject/quads",
    "sha": "b29b6c7629b91dbd6caab375bed2b9c4cf5e6fce",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

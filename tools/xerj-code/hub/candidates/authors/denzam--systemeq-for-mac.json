@@ -9,7 +9,7 @@
    "repo": "SystemEQ-for-Mac",
    "url": "https://github.com/denzam/SystemEQ-for-Mac",
    "sha": "6f2b18ccea2822a8af9783785ee4b08968cf0735",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

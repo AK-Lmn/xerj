@@ -9,7 +9,7 @@
    "repo": "lettura",
    "url": "https://github.com/zhanglun/lettura",
    "sha": "45ae00ff41d0aa208dc9090df4f250af47b5948d",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

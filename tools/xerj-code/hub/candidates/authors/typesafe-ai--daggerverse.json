@@ -9,7 +9,7 @@
    "repo": "daggerverse",
    "url": "https://github.com/typesafe-ai/daggerverse",
    "sha": "f67568baddc6bce2d456a319ef5537f803de57ac",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

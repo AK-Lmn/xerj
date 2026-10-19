@@ -9,7 +9,7 @@
    "repo": "apcore-rust",
    "url": "https://github.com/aiperceivable/apcore-rust",
    "sha": "ad09488a9ef76a39f898f14fbc0a1a2f038c0f5e",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

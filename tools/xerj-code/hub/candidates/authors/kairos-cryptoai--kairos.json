@@ -9,7 +9,7 @@
    "repo": "kairos",
    "url": "https://github.com/Kairos-cryptoAI/kairos",
    "sha": "07f6d6d27e885aa8da231833cf6fdd97067a3ada",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

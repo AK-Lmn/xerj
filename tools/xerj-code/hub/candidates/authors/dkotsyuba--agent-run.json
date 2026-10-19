@@ -9,7 +9,7 @@
    "repo": "agent-run",
    "url": "https://github.com/DKotsyuba/agent-run",
    "sha": "b64c946510c5924b5f21f21b883b259ff1cebfda",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "arandu",
    "url": "https://github.com/arandu-io/arandu",
    "sha": "85cfa650b1b0d7ca623cd89cef41d5fb803b094c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

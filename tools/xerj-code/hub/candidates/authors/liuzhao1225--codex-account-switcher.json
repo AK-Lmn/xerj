@@ -9,7 +9,7 @@
    "repo": "codex-account-switcher",
    "url": "https://github.com/liuzhao1225/codex-account-switcher",
    "sha": "82f68ddfde932d63ea525da6ff0887d4cae9e584",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

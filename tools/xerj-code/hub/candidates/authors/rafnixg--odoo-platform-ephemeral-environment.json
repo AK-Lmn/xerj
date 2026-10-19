@@ -9,7 +9,7 @@
    "repo": "odoo-platform-ephemeral-environment",
    "url": "https://github.com/rafnixg/odoo-platform-ephemeral-environment",
    "sha": "4185cd044a21ba6079bc3bb65f95f0e0bf24eb87",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

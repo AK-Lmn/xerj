@@ -9,7 +9,7 @@
    "repo": "bloom-petal-tolly",
    "url": "https://github.com/TollyLabs/bloom-petal-tolly",
    "sha": "60bac1d9ed39dab3a2fc466ee400692529ee4618",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

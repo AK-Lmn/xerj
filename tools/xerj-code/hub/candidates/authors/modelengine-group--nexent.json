@@ -9,7 +9,7 @@
    "repo": "nexent",
    "url": "https://github.com/ModelEngine-Group/nexent",
    "sha": "628d3e72a97dd5e8773aea62fbe8bb98127ab917",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

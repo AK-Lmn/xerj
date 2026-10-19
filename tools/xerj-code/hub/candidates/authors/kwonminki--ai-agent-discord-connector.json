@@ -9,7 +9,7 @@
    "repo": "ai-agent-discord-connector",
    "url": "https://github.com/kwonminki/ai-agent-discord-connector",
    "sha": "17a14934cc0671d811f086b34b9923003a120af0",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "extensions-source",
    "url": "https://github.com/keiyoushi/extensions-source",
    "sha": "a06a2fc135827bef03cd7c32f771be8226177576",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

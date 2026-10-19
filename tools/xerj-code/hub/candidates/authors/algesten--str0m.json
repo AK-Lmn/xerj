@@ -9,7 +9,7 @@
    "repo": "str0m",
    "url": "https://github.com/algesten/str0m",
    "sha": "16e078f363418f0088b8bd72f4487dcb4c9c75ca",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

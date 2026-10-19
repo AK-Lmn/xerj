@@ -9,7 +9,7 @@
    "repo": "papercompany-runtime",
    "url": "https://github.com/insightflo/papercompany-runtime",
    "sha": "d28d520f57db0fe132660a921a0bd5c80f8d3a5b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

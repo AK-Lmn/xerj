@@ -9,7 +9,7 @@
    "repo": "wastnet",
    "url": "https://github.com/wycst02/wastnet",
    "sha": "b0eadac7b7d55ed83c247626aad31a78aeb13cfb",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

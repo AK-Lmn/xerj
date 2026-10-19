@@ -9,7 +9,7 @@
    "repo": "ccxt",
    "url": "https://github.com/ccxt/ccxt",
    "sha": "ab01bbb1780afa451e8bc017a54fa3f5317ea5b6",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

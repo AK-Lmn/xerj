@@ -9,7 +9,7 @@
    "repo": "ROSE",
    "url": "https://github.com/NarayanChetri/ROSE",
    "sha": "f7aaf394f612f1fe8b77bf9d2ad7ac8f74acf75c",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

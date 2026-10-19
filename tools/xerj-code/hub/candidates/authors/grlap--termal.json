@@ -9,7 +9,7 @@
    "repo": "TermAl",
    "url": "https://github.com/grlap/TermAl",
    "sha": "d6c0ca78f86d5e54f1097133ba9f5e7c4ac8ccc7",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

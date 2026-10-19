@@ -9,7 +9,7 @@
    "repo": "reproducible-science",
    "url": "https://github.com/elliottower/reproducible-science",
    "sha": "c0c325c6c1d5fbddeacd4cb71fd7bf53e3e166de",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

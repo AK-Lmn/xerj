@@ -9,7 +9,7 @@
    "repo": "traffic-simulation-rl",
    "url": "https://github.com/darscs007/traffic-simulation-rl",
    "sha": "d4d9673e294a6e6edd29a1b4321c9eb4bc37f98c",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

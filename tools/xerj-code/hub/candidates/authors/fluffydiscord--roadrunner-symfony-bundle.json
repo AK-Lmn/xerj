@@ -9,7 +9,7 @@
    "repo": "roadrunner-symfony-bundle",
    "url": "https://github.com/FluffyDiscord/roadrunner-symfony-bundle",
    "sha": "70619d88cc1571e2334a10a1fc8e2aa5be0e58f7",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

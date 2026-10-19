@@ -9,7 +9,7 @@
    "repo": "PixivDownloader",
    "url": "https://github.com/Sywyar/PixivDownloader",
    "sha": "c29108552a9c8cdb8750f8328174bad0d843b072",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

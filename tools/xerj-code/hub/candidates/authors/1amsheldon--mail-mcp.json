@@ -9,7 +9,7 @@
    "repo": "mail-mcp",
    "url": "https://github.com/1amSheldon/mail-mcp",
    "sha": "9444860f19f504ba32edb06ec4bdae95c65eb7b9",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

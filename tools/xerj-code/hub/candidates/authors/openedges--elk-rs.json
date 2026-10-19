@@ -9,7 +9,7 @@
    "repo": "elk-rs",
    "url": "https://github.com/openedges/elk-rs",
    "sha": "a1443fb59cc958b9d418fc79bfcbbb820561e267",
-   "licence": "hint only: EPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: EPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "EPL-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "HashPay",
    "url": "https://github.com/TGDash/HashPay",
    "sha": "f13188c34fa868e4ec837db9b8eade43f93e238a",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "huawei-health-customization",
    "url": "https://github.com/nairain233/huawei-health-customization",
    "sha": "3b63eb38143fc071916ba28e5445ecc42408c0e4",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

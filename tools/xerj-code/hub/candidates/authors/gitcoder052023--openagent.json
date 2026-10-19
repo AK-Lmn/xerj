@@ -9,7 +9,7 @@
    "repo": "OpenAgent",
    "url": "https://github.com/GitCoder052023/OpenAgent",
    "sha": "565cb0b4bb481c5e859b12e2e81b8ee0f80c1faf",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

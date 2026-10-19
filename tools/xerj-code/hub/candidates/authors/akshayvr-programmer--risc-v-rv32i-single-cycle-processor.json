@@ -3,13 +3,13 @@
  "cloned_at": null,
  "status": "draft",
  "shelf": "API",
- "domain": "an agent working on Verilog queries this for how akshayvr-programmer/RISC-V-RV32I-Single-Cycle-Processor implements it: akshayvr-programmer/RISC-V-RV32I-Single-Cycle-Processor (Verilog) (selected work: tb, rtl, programs)",
+ "domain": "an agent working on artix-7, branch-prediction, computer-architecture queries this for how akshayvr-programmer/RISC-V-RV32I-Single-Cycle-Processor implements it: 5-stage pipelined RV32I RISC-V core in Verilog with hazard handling, CSR traps, a dynamic branch predictor, and Artix-7 timing closure at 10 (selected work: tb, rtl, programs)",
  "repos": [
   {
    "repo": "RISC-V-RV32I-Single-Cycle-Processor",
    "url": "https://github.com/akshayvr-programmer/RISC-V-RV32I-Single-Cycle-Processor",
    "sha": "5db13547b3aef5b8cc5199a3ae1296fbf196f162",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

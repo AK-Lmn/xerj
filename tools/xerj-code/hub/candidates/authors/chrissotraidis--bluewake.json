@@ -9,7 +9,7 @@
    "repo": "bluewake",
    "url": "https://github.com/chrissotraidis/bluewake",
    "sha": "d9e175969656064875f041839c4c75eaaec60c12",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

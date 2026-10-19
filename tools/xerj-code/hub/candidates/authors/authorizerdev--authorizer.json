@@ -9,7 +9,7 @@
    "repo": "authorizer",
    "url": "https://github.com/authorizerdev/authorizer",
    "sha": "f8f5d37f4f064072d0bdc85320e5179bca90d147",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

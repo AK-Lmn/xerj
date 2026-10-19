@@ -9,7 +9,7 @@
    "repo": "Q-solver",
    "url": "https://github.com/Prathamsimgh/Q-solver",
    "sha": "3b3caf7725d5258d73c397f9e9fdc1d2142977d3",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

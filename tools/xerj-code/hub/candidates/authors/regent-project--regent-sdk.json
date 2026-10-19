@@ -9,7 +9,7 @@
    "repo": "regent-sdk",
    "url": "https://github.com/regent-project/regent-sdk",
    "sha": "e414af3e995e76015a9c6f816807752b36fb59ba",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

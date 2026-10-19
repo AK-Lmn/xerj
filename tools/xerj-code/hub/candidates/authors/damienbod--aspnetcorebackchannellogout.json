@@ -9,7 +9,7 @@
    "repo": "AspNetCoreBackChannelLogout",
    "url": "https://github.com/damienbod/AspNetCoreBackChannelLogout",
    "sha": "66a48878924b0c374b985f58d86d6d694c011587",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

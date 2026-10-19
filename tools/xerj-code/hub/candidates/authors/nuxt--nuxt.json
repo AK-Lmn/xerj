@@ -9,7 +9,7 @@
    "repo": "nuxt",
    "url": "https://github.com/nuxt/nuxt",
    "sha": "3f0943839407c4089bfdaba0c323bf24ff9047c3",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

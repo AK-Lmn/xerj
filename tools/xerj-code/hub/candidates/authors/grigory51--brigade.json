@@ -9,7 +9,7 @@
    "repo": "brigade",
    "url": "https://github.com/grigory51/brigade",
    "sha": "8fb80eb0a70ee26633016aed86071985e9ced725",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

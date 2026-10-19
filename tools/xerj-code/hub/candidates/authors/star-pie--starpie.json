@@ -9,7 +9,7 @@
    "repo": "StarPie",
    "url": "https://github.com/Star-Pie/StarPie",
    "sha": "676cc429a9e322cdb2607b2656fe7fed9313ec53",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "sift",
    "url": "https://github.com/sahilsaleem2907/sift",
    "sha": "6b48c2f08869e412f7c1dc4afc02644efeba246e",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

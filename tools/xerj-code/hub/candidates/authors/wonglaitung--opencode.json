@@ -9,7 +9,7 @@
    "repo": "opencode",
    "url": "https://github.com/wonglaitung/opencode",
    "sha": "8250f6ddd0f45474a9644f156a9523baeb6538c0",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

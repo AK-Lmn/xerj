@@ -9,7 +9,7 @@
    "repo": "LibreSudoku",
    "url": "https://github.com/kaajjo/LibreSudoku",
    "sha": "ee6d31ac08938636114f447524593dee04045a38",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "yon",
    "url": "https://github.com/yon-language/yon",
    "sha": "932fc5e70bc1e65bbbf26b10d23833894326a855",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

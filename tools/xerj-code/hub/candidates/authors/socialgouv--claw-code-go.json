@@ -9,7 +9,7 @@
    "repo": "claw-code-go",
    "url": "https://github.com/SocialGouv/claw-code-go",
    "sha": "28e2e6b1df7c5b1568ca76409993244eb03db01e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

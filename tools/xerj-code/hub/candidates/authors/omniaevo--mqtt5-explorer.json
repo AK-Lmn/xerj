@@ -9,7 +9,7 @@
    "repo": "mqtt5-explorer",
    "url": "https://github.com/Omniaevo/mqtt5-explorer",
    "sha": "5b343d7448cdd9a74a9fcf3401ff90f0b721ce82",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

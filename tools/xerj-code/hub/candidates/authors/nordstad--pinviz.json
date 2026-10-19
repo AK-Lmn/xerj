@@ -9,7 +9,7 @@
    "repo": "PinViz",
    "url": "https://github.com/nordstad/PinViz",
    "sha": "8f996053e2f8fcd68bffba40675ae0d67058ef7e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

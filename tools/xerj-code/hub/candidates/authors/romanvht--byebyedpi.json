@@ -9,7 +9,7 @@
    "repo": "ByeByeDPI",
    "url": "https://github.com/romanvht/ByeByeDPI",
    "sha": "8e3a3cba204389530b78793da0ef9a23258ddb1f",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "soroban-security-scanner",
    "url": "https://github.com/StellarFoundry/soroban-security-scanner",
    "sha": "d2954740c235102c92af9333916384b87e7deaf8",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "TENDRIL",
    "url": "https://github.com/Ozymandes/TENDRIL",
    "sha": "16980a7e6b473b06ad8ed91d43ff5fd15017c647",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

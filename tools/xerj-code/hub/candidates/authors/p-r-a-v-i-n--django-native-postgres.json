@@ -9,7 +9,7 @@
    "repo": "django-native-postgres",
    "url": "https://github.com/p-r-a-v-i-n/django-native-postgres",
    "sha": "ef164758885f608f279dcd67acaffc63be652ae7",
-   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "BSD-3-Clause",
     "use": "UNREVIEWED",

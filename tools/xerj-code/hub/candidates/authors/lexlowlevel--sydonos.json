@@ -9,7 +9,7 @@
    "repo": "SydonOS",
    "url": "https://github.com/LexLowLevel/SydonOS",
    "sha": "5f0f2b4ceafd0c43f9297b76e2dae41531bfe99d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

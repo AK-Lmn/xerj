@@ -9,7 +9,7 @@
    "repo": "llm-d-router",
    "url": "https://github.com/llm-d/llm-d-router",
    "sha": "6d1959a8e28a96a9899d3fc1ed4fac5f89e4fe58",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

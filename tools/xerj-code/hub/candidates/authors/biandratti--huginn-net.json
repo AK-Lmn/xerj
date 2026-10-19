@@ -9,7 +9,7 @@
    "repo": "huginn-net",
    "url": "https://github.com/biandratti/huginn-net",
    "sha": "aa8956ea0fd46f9d39e4bbbfb22817d55c860a2c",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

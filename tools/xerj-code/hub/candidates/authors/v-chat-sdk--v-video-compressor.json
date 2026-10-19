@@ -9,7 +9,7 @@
    "repo": "v_video_compressor",
    "url": "https://github.com/v-chat-sdk/v_video_compressor",
    "sha": "b8aff1fbc4996c21135e98bc4b87e8622562e877",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

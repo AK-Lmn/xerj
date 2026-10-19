@@ -9,7 +9,7 @@
    "repo": "geospark",
    "url": "https://github.com/Maz2580/geospark",
    "sha": "6859661b49c2c4f2742214ad35df2c27df118cfd",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

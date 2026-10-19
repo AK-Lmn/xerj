@@ -9,7 +9,7 @@
    "repo": "keel",
    "url": "https://github.com/alexnthnz/keel",
    "sha": "a169d5ff01450bd32053e97c05140648d7eac3c2",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

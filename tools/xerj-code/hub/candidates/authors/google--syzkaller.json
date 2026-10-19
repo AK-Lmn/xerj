@@ -9,7 +9,7 @@
    "repo": "syzkaller",
    "url": "https://github.com/google/syzkaller",
    "sha": "a6fcf337de9e64a9213671b009d4159235334641",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

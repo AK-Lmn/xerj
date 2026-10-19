@@ -9,7 +9,7 @@
    "repo": "iceberg-rust",
    "url": "https://github.com/apache/iceberg-rust",
    "sha": "e4bec84bcca5ba4f3e19583e95b1de7c1fab2559",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

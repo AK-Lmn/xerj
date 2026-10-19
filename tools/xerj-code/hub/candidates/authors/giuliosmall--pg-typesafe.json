@@ -9,7 +9,7 @@
    "repo": "pg_typesafe",
    "url": "https://github.com/giuliosmall/pg_typesafe",
    "sha": "ad76be41097f95540e9b59665d53f4b2d46d6803",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

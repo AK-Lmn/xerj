@@ -9,7 +9,7 @@
    "repo": "jitsi-meet",
    "url": "https://github.com/jitsi/jitsi-meet",
    "sha": "a17b19fab6dcf9ccc72e87c81bf60f143d06e2de",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

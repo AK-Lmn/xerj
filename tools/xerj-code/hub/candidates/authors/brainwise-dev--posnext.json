@@ -9,7 +9,7 @@
    "repo": "POSNext",
    "url": "https://github.com/BrainWise-DEV/POSNext",
    "sha": "575fe9b61b315c4d2f6a892ff5043462140f69da",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

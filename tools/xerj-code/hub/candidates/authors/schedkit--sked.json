@@ -9,7 +9,7 @@
    "repo": "sked",
    "url": "https://github.com/schedkit/sked",
    "sha": "fb4b5863d4f56045502623e187345a30be287274",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

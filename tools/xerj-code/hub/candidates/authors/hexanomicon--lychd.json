@@ -9,7 +9,7 @@
    "repo": "lychd",
    "url": "https://github.com/hexanomicon/lychd",
    "sha": "d389a12dc721708a38d404ab3de5bffb97a7ac2c",
-   "licence": "hint only: MPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MPL-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "action-hub",
    "url": "https://github.com/1solomonwakhungu/action-hub",
    "sha": "eb6c0e660734531e08a5cdfcf9d12df88967b2ec",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

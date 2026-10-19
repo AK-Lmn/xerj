@@ -9,7 +9,7 @@
    "repo": "rio",
    "url": "https://github.com/rio-labs/rio",
    "sha": "237bfee6136a0b41e97ff418d67570c77077249f",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

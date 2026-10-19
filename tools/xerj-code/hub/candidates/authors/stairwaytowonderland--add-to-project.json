@@ -9,7 +9,7 @@
    "repo": "add-to-project",
    "url": "https://github.com/stairwaytowonderland/add-to-project",
    "sha": "d8b51177f7294612fd16bb2a3eccb2d8ce6b210f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "magpie",
    "url": "https://github.com/yetone/magpie",
    "sha": "8031edc78b6242dc5c37559acaffe19ca9c7ae66",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

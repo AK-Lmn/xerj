@@ -9,7 +9,7 @@
    "repo": "django-logic",
    "url": "https://github.com/Borderless360/django-logic",
    "sha": "e518ebb0bf13e78269600eb5202e29e5be609bff",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

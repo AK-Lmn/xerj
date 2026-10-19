@@ -9,7 +9,7 @@
    "repo": "cli-control-account",
    "url": "https://github.com/Clowraider/cli-control-account",
    "sha": "27e1b6f318e5266593b0ef7df1aaa6ca4e36e658",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

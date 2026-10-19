@@ -9,7 +9,7 @@
    "repo": "edge",
    "url": "https://github.com/ashaffah/edge",
    "sha": "cd4e51062c2db804f6682f1757a4572af747e0d5",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

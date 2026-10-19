@@ -9,7 +9,7 @@
    "repo": "ochi",
    "url": "https://github.com/honeynet/ochi",
    "sha": "b5ff95878e4c7c173f05a6194114019ae45668ac",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

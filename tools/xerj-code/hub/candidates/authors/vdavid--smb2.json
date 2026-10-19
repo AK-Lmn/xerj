@@ -9,7 +9,7 @@
    "repo": "smb2",
    "url": "https://github.com/vdavid/smb2",
    "sha": "56b2fda89f041efef8eedf7c886b8a4d5666cb83",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

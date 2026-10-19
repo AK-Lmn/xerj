@@ -9,7 +9,7 @@
    "repo": "presence-rs",
    "url": "https://github.com/minikin/presence-rs",
    "sha": "6cf1c80b646a27dc3bd293fa7cddfcff5e6f4acd",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

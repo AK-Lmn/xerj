@@ -9,7 +9,7 @@
    "repo": "workflow-os",
    "url": "https://github.com/rcs2153/workflow-os",
    "sha": "4338847eccbb773a73c4e9f162f8512b64a009c5",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

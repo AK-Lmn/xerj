@@ -9,7 +9,7 @@
    "repo": "snapdom",
    "url": "https://github.com/zumerlab/snapdom",
    "sha": "bbde42f8dad31b523b64b2f6ca89adbb17b2245a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "kolo",
    "url": "https://github.com/komovaar/kolo",
    "sha": "ddd7c668ca7e14d3205fb43fb237a17933d98cb5",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

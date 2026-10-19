@@ -9,7 +9,7 @@
    "repo": "os",
    "url": "https://github.com/cusdeb-com/os",
    "sha": "b86019fc43fb56e5024da629d0d0f054a5262c8a",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

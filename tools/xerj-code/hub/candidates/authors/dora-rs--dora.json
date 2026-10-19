@@ -9,7 +9,7 @@
    "repo": "dora",
    "url": "https://github.com/dora-rs/dora",
    "sha": "71c2c39a1c0208230eef541aae563c901a5d685f",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

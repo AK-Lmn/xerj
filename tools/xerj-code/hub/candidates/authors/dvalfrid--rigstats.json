@@ -9,7 +9,7 @@
    "repo": "rigstats",
    "url": "https://github.com/dvalfrid/rigstats",
    "sha": "17f9236129a43e78a537428758354e5d1e651d67",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

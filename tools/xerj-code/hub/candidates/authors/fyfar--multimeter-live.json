@@ -9,7 +9,7 @@
    "repo": "multimeter-live",
    "url": "https://github.com/Fyfar/multimeter-live",
    "sha": "0869a0e345105bf6ddcb001aa6358de289f2342c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

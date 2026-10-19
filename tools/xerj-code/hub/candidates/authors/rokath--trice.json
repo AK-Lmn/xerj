@@ -9,7 +9,7 @@
    "repo": "trice",
    "url": "https://github.com/rokath/trice",
    "sha": "9df593f5db3248a4d49bcdf72bd33697063652b4",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

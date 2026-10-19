@@ -9,7 +9,7 @@
    "repo": "com.xiaomi-miio",
    "url": "https://github.com/shaarkys/com.xiaomi-miio",
    "sha": "dd829a771a83ef9868ff730c4256cc3ee5a5e9a4",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

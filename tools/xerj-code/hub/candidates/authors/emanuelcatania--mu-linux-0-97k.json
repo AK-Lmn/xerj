@@ -9,7 +9,7 @@
    "repo": "Mu-Linux-0.97k",
    "url": "https://github.com/EmanuelCatania/Mu-Linux-0.97k",
    "sha": "c26d6764061b89f539f7ddb765c78d946c951b80",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

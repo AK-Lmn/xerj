@@ -9,7 +9,7 @@
    "repo": "camel-spring-boot",
    "url": "https://github.com/apache/camel-spring-boot",
    "sha": "fc3a857d46baa42faba48c63e7a83d4cf1e2b540",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

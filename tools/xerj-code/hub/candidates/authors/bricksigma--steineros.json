@@ -9,7 +9,7 @@
    "repo": "SteinerOS",
    "url": "https://github.com/BrickSigma/SteinerOS",
    "sha": "30f393f036d22109a10163e556667c7671e81eb3",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "runtime",
    "url": "https://github.com/oro-computer/runtime",
    "sha": "242cc30d744e0b374ac951a23dadf41c8618a4e6",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

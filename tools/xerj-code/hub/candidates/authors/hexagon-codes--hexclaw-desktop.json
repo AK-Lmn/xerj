@@ -9,7 +9,7 @@
    "repo": "hexclaw-desktop",
    "url": "https://github.com/hexagon-codes/hexclaw-desktop",
    "sha": "e532dedea56ca1c1b27899d17a28410c63ee02bb",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

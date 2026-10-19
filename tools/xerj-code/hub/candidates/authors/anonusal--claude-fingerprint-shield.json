@@ -9,7 +9,7 @@
    "repo": "claude-fingerprint-shield",
    "url": "https://github.com/AnonUsAl/claude-fingerprint-shield",
    "sha": "4c089e1f6f0339e63e141123cbe763459e45f152",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

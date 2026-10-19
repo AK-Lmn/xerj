@@ -9,7 +9,7 @@
    "repo": "qwed-verification",
    "url": "https://github.com/QWED-AI/qwed-verification",
    "sha": "d382daf80cd182e649829992c89e5269f2488e43",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "crawlee-python",
    "url": "https://github.com/apify/crawlee-python",
    "sha": "a14f745880205f654bf4c30ad999173a07b830ea",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

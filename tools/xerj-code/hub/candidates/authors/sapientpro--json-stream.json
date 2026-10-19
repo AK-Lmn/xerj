@@ -9,7 +9,7 @@
    "repo": "json-stream",
    "url": "https://github.com/sapientpro/json-stream",
    "sha": "77d76e5954d7faeeb5ade4a3a9197e2acdd2f585",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

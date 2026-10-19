@@ -9,7 +9,7 @@
    "repo": "mcphub",
    "url": "https://github.com/samanhappy/mcphub",
    "sha": "c0f0965c8a2c3e45d8b69c4087d20f879f1e0ef5",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

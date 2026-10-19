@@ -9,7 +9,7 @@
    "repo": "winter-kernel",
    "url": "https://github.com/Flytachi/winter-kernel",
    "sha": "1192ef7f44a7f83d39cb71ec425e01b704791b26",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

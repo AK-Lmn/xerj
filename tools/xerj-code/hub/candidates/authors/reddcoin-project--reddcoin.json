@@ -9,7 +9,7 @@
    "repo": "reddcoin",
    "url": "https://github.com/reddcoin-project/reddcoin",
    "sha": "0ddfd1ccfce1962425bf13ef64242fd4c5e079c6",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

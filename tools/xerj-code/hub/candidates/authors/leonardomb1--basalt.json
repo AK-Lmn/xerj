@@ -9,7 +9,7 @@
    "repo": "basalt",
    "url": "https://github.com/leonardomb1/basalt",
    "sha": "6cff39255800a658b490b61c006b82f145e0e618",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

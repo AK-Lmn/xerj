@@ -9,7 +9,7 @@
    "repo": "immich-memories",
    "url": "https://github.com/sam-dumont/immich-memories",
    "sha": "e19fd1a178bfd95249beb26a8bbdc28fc44ff4a6",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

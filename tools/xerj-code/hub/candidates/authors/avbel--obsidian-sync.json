@@ -9,7 +9,7 @@
    "repo": "obsidian-sync",
    "url": "https://github.com/avbel/obsidian-sync",
    "sha": "4c3e002d20e8138d4de8f52b468ad58dd6823f0b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "cupid-nes",
    "url": "https://github.com/cupidthecat/cupid-nes",
    "sha": "0016d4c5a891c5d04095ede631c449191f70ee8a",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

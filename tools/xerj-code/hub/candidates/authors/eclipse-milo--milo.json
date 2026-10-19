@@ -9,7 +9,7 @@
    "repo": "milo",
    "url": "https://github.com/eclipse-milo/milo",
    "sha": "9622ea94ad11f61bfcf2a16db4aa73ff85f54b32",
-   "licence": "hint only: EPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: EPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "EPL-2.0",
     "use": "UNREVIEWED",

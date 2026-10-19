@@ -9,7 +9,7 @@
    "repo": "workflow",
    "url": "https://github.com/vercel/workflow",
    "sha": "02993a26cbabec8f00df1f8a3a758158d095008a",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "openrig",
    "url": "https://github.com/mvschwarz/openrig",
    "sha": "93f8d4abba097dd02d5c3803f7a312882a7f0b85",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

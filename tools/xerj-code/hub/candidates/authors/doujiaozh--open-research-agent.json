@@ -9,7 +9,7 @@
    "repo": "open-research-agent",
    "url": "https://github.com/doujiaozh/open-research-agent",
    "sha": "0067607ac4be720532adfa51e75d58904dd16951",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

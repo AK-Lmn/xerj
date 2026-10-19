@@ -9,7 +9,7 @@
    "repo": "hflow",
    "url": "https://github.com/Hebbian-Robotics/hflow",
    "sha": "f1d82539ef2068809b554f5c71ff4b53eec1eba9",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "hpx",
    "url": "https://github.com/TheHPXProject/hpx",
    "sha": "beb81a6d149218e270b2738bb263594549485165",
-   "licence": "hint only: BSL-1.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: BSL-1.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "BSL-1.0",
     "use": "UNREVIEWED",

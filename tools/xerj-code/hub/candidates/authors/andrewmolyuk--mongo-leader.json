@@ -9,7 +9,7 @@
    "repo": "mongo-leader",
    "url": "https://github.com/andrewmolyuk/mongo-leader",
    "sha": "582ee4b4656358cab6c934b15f1dfcc505b07001",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

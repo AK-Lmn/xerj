@@ -9,7 +9,7 @@
    "repo": "ui-builder",
    "url": "https://github.com/lagdo/ui-builder",
    "sha": "05593c466a284deb02caa176f908e3b895851175",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

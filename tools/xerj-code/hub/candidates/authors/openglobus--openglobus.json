@@ -9,7 +9,7 @@
    "repo": "openglobus",
    "url": "https://github.com/openglobus/openglobus",
    "sha": "c545856374f6ca48846ee42251d9c3d8921c53e9",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

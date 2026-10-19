@@ -9,7 +9,7 @@
    "repo": "pi-actors",
    "url": "https://github.com/jkeskikangas/pi-actors",
    "sha": "e2bbb320ef293f6d1410b050235f56cf4dfde27a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

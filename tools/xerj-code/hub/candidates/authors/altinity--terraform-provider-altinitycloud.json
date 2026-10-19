@@ -9,7 +9,7 @@
    "repo": "terraform-provider-altinitycloud",
    "url": "https://github.com/Altinity/terraform-provider-altinitycloud",
    "sha": "b9e31efd7df9c4eb50bf0c6588cdce685dbd38b5",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

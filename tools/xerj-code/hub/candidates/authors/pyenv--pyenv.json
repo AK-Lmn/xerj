@@ -9,7 +9,7 @@
    "repo": "pyenv",
    "url": "https://github.com/pyenv/pyenv",
    "sha": "7c877e06a099e5647d2151e59365f953d6c29a5d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

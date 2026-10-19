@@ -9,7 +9,7 @@
    "repo": "terraform-provider-nsxt",
    "url": "https://github.com/vmware/terraform-provider-nsxt",
    "sha": "fee71abcbfbfc9cb05e0092974ecfc4165ea4991",
-   "licence": "hint only: MPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MPL-2.0",
     "use": "UNREVIEWED",

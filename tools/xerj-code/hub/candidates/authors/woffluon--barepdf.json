@@ -9,7 +9,7 @@
    "repo": "BarePDF",
    "url": "https://github.com/Woffluon/BarePDF",
    "sha": "d6209cdc37d1f354aa34046cb42280ae5b7591f8",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

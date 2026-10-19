@@ -9,7 +9,7 @@
    "repo": "bitrun",
    "url": "https://github.com/IshekKhal/bitrun",
    "sha": "d467745524fba2c3d4a1ddd7ed825bd35f8f423b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

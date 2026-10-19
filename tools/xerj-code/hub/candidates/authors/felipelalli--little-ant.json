@@ -9,7 +9,7 @@
    "repo": "little-ant",
    "url": "https://github.com/felipelalli/little-ant",
    "sha": "b8150693dd9108e13dabcd678b9289330313756c",
-   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "BSD-3-Clause",
     "use": "UNREVIEWED",

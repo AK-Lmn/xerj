@@ -9,7 +9,7 @@
    "repo": "GLM_proxy",
    "url": "https://github.com/eequaled/GLM_proxy",
    "sha": "71bf1a2450918b17a8a14d80747e8ab8fca58421",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

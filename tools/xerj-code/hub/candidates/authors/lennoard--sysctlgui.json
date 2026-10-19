@@ -9,7 +9,7 @@
    "repo": "SysctlGUI",
    "url": "https://github.com/Lennoard/SysctlGUI",
    "sha": "3d360cc2daf33da8427c314356d91a9d755fa226",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

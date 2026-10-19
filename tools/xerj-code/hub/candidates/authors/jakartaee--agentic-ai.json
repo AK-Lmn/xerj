@@ -9,7 +9,7 @@
    "repo": "agentic-ai",
    "url": "https://github.com/jakartaee/agentic-ai",
    "sha": "b94c8787e983bae13162afde99a984b48818b88b",
-   "licence": "hint only: EPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: EPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "EPL-2.0",
     "use": "UNREVIEWED",

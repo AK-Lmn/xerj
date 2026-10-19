@@ -9,7 +9,7 @@
    "repo": "conkers-bfd-decomp",
    "url": "https://github.com/DevOldSchool/conkers-bfd-decomp",
    "sha": "038769b0a30b171a596e11bc4f344a0373443a35",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

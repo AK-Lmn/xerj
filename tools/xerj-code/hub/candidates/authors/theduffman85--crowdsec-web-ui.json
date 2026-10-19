@@ -9,7 +9,7 @@
    "repo": "crowdsec-web-ui",
    "url": "https://github.com/TheDuffman85/crowdsec-web-ui",
    "sha": "dc38787ab3c5ee5608a80c67dc913c603068ff70",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

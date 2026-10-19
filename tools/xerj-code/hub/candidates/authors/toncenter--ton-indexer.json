@@ -9,7 +9,7 @@
    "repo": "ton-indexer",
    "url": "https://github.com/toncenter/ton-indexer",
    "sha": "421c966168ed42cc8522e632cb79425934523a36",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

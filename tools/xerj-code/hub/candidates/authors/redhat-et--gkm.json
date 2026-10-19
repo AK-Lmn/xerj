@@ -9,7 +9,7 @@
    "repo": "GKM",
    "url": "https://github.com/redhat-et/GKM",
    "sha": "a22ba3b71f2d401c59ad3a9e50280866b3744bba",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

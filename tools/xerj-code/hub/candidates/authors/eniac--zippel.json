@@ -9,7 +9,7 @@
    "repo": "zippel",
    "url": "https://github.com/eniac/zippel",
    "sha": "371cf08731a63c788dccb94b861720d0e74922ad",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

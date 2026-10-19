@@ -9,7 +9,7 @@
    "repo": "router",
    "url": "https://github.com/vllm-project/router",
    "sha": "399c3975ce9f9b55657d83b2de9ae0771413ec97",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

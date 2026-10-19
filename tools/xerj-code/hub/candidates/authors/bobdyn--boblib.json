@@ -9,7 +9,7 @@
    "repo": "BobLib",
    "url": "https://github.com/BobDyn/BobLib",
    "sha": "543ffa656e520c6045b465421f22acf07de04afc",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

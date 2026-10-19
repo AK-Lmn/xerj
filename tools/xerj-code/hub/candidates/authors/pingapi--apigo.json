@@ -9,7 +9,7 @@
    "repo": "apigo",
    "url": "https://github.com/pingapi/apigo",
    "sha": "f40c28fea69338675f7db71e784915e255d9f3f6",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

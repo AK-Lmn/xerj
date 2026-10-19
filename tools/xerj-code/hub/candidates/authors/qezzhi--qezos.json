@@ -9,7 +9,7 @@
    "repo": "QezOS",
    "url": "https://github.com/QeZzhi/QezOS",
    "sha": "7aa68610315b94eb648399d5a361b6b6ed8f3fcc",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

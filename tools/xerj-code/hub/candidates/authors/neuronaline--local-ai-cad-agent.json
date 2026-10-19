@@ -9,7 +9,7 @@
    "repo": "local-ai-cad-agent",
    "url": "https://github.com/neuronaline/local-ai-cad-agent",
    "sha": "81782981b422d8812431efeb2e94f8a8200e2f73",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

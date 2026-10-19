@@ -9,7 +9,7 @@
    "repo": "testdino-mcp",
    "url": "https://github.com/testdino-hq/testdino-mcp",
    "sha": "6a524f9a0d73768e31d5424e16603cb73e35dd4a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

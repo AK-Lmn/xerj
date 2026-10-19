@@ -9,7 +9,7 @@
    "repo": "hedos",
    "url": "https://github.com/theiskaa/hedos",
    "sha": "47f88e6b5ed6928b6ad478b595247f6729114e2d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

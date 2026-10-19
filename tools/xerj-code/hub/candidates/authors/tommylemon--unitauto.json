@@ -9,7 +9,7 @@
    "repo": "UnitAuto",
    "url": "https://github.com/TommyLemon/UnitAuto",
    "sha": "e6e6140b41cb84725b0f8e0dba78c2d98807c17c",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

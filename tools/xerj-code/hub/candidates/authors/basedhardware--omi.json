@@ -9,7 +9,7 @@
    "repo": "omi",
    "url": "https://github.com/BasedHardware/omi",
    "sha": "47ca7a398ea77a2582ea77e0c2ffb89478fc5fba",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "gh-runners",
    "url": "https://github.com/MehdiMamas/gh-runners",
    "sha": "dbbc58fa3a71b57b5ace817b75d4a5fc428b2f51",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "snabbdom-timeline",
    "url": "https://github.com/mreinstein/snabbdom-timeline",
    "sha": "fc2e5a1568110a84e17c77293048be44caa71c43",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

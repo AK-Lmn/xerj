@@ -9,7 +9,7 @@
    "repo": "mistral.rs",
    "url": "https://github.com/pstreet/mistral.rs",
    "sha": "fa996df0719c5e0c3a15c0bf06e8413d1bede980",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

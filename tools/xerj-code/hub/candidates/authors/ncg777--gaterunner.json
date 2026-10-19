@@ -9,7 +9,7 @@
    "repo": "gaterunner",
    "url": "https://github.com/ncg777/gaterunner",
    "sha": "6aec98e207a8f93ae252c5d6e1774e3b2e9c0e3d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

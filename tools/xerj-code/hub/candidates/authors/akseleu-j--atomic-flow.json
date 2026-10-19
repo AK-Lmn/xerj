@@ -9,7 +9,7 @@
    "repo": "atomic-flow",
    "url": "https://github.com/Akseleu-J/atomic-flow",
    "sha": "656c8158d010ab9cfe4a541e65c9e8456e5e1d98",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

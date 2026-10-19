@@ -9,7 +9,7 @@
    "repo": "taixu",
    "url": "https://github.com/wkbin/taixu",
    "sha": "fc010a38d8de1dec12d1719cbd3ae1ad8254a461",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

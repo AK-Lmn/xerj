@@ -9,7 +9,7 @@
    "repo": "universal-trust-adapter",
    "url": "https://github.com/alicelabs-llc/universal-trust-adapter",
    "sha": "f7fe8e75e01e9787dc830028a019261c2daf46ef",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

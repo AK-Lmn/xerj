@@ -9,7 +9,7 @@
    "repo": "NX-Cast",
    "url": "https://github.com/Ode1l/NX-Cast",
    "sha": "d74d21779630e32cf8caaa0922d45e8b7765fb96",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

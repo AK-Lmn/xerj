@@ -9,7 +9,7 @@
    "repo": "ohlcv_chart",
    "url": "https://github.com/CtrlAltDevelop/ohlcv_chart",
    "sha": "a94ae68f256e4079945eef282702af6b8fd7013d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

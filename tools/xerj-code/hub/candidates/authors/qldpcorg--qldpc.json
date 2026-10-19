@@ -9,7 +9,7 @@
    "repo": "qLDPC",
    "url": "https://github.com/qLDPCOrg/qLDPC",
    "sha": "7ee50910ea2420d29372166ba053639ddb3b7843",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

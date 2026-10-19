@@ -9,7 +9,7 @@
    "repo": "miuchio",
    "url": "https://github.com/freytastic/miuchio",
    "sha": "3b6e23e0c046e150f0a6c7611cb4cb5c1325d562",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "tightship",
    "url": "https://github.com/ATNexusLab/tightship",
    "sha": "64a2b260a1dbc2ece39ccb0e178e76e64497e4ca",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

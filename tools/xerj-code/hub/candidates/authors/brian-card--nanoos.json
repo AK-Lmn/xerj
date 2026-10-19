@@ -9,7 +9,7 @@
    "repo": "NanoOs",
    "url": "https://github.com/brian-card/NanoOs",
    "sha": "8554b36db6707766c3511ff01d2afb8c5c71233c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

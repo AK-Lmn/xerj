@@ -9,7 +9,7 @@
    "repo": "mako_zero",
    "url": "https://github.com/rama-io/mako_zero",
    "sha": "9051079020d28c19c4f785cebd96bff848cb6bc3",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

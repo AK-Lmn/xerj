@@ -9,7 +9,7 @@
    "repo": "opencode-cache-compact",
    "url": "https://github.com/lennartschoch/opencode-cache-compact",
    "sha": "7b6ceddf1cd7df30572c0e584dffd6e7301931e0",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

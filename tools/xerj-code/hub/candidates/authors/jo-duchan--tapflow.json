@@ -9,7 +9,7 @@
    "repo": "tapflow",
    "url": "https://github.com/jo-duchan/tapflow",
    "sha": "4fc0e29c994277b8450f8cdb50fe5805cd1a263a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

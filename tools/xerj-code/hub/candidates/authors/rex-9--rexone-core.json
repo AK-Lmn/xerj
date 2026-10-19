@@ -9,7 +9,7 @@
    "repo": "rexone-core",
    "url": "https://github.com/rex-9/rexone-core",
    "sha": "1f0ebeb16129b801a41a06268af1ff6734e65261",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

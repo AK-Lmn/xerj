@@ -9,7 +9,7 @@
    "repo": "write-once",
    "url": "https://github.com/opinionated-ts/write-once",
    "sha": "0f12bdbe098b37ca6c6b0e9e6e23b975efbde0e7",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

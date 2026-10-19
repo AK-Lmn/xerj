@@ -9,7 +9,7 @@
    "repo": "cli",
    "url": "https://github.com/vixcpp/cli",
    "sha": "11630dd049aa1b0a86d6a91f9a320b63fcd8b2b7",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

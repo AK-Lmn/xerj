@@ -9,7 +9,7 @@
    "repo": "goaccess",
    "url": "https://github.com/allinurl/goaccess",
    "sha": "62a35cc23d2978fff3841e20af69e9089b598ec0",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "hugegraph",
    "url": "https://github.com/apache/hugegraph",
    "sha": "5162b1ac856ce8b72524d4886b8a382cef913077",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

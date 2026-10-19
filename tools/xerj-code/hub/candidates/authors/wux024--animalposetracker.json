@@ -9,7 +9,7 @@
    "repo": "AnimalPoseTracker",
    "url": "https://github.com/wux024/AnimalPoseTracker",
    "sha": "a93560f0d4083635f16acc6b18a15f4b5cd885ec",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

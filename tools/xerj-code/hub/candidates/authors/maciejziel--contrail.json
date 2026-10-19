@@ -9,7 +9,7 @@
    "repo": "live_flights_map",
    "url": "https://github.com/MaciejZiel/live_flights_map",
    "sha": "d7b3c2c28b17aea7ccfcee889681bdad55a158df",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

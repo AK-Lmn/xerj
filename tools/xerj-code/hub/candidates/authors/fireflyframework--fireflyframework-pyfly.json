@@ -9,7 +9,7 @@
    "repo": "fireflyframework-pyfly",
    "url": "https://github.com/fireflyframework/fireflyframework-pyfly",
    "sha": "f6d7a615eac62ea5cf554b978dda6d5c167bcee5",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

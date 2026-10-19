@@ -9,7 +9,7 @@
    "repo": "xfwl4",
    "url": "https://github.com/xfce-mirror/xfwl4",
    "sha": "c718dee25b8f577857e22710b514f2b23ca4fbfe",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

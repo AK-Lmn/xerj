@@ -9,7 +9,7 @@
    "repo": "cpu-reader",
    "url": "https://github.com/mnl-nox/cpu-reader",
    "sha": "3d9424ff4bbd0ca47d901f5c8119841b8845a8ca",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

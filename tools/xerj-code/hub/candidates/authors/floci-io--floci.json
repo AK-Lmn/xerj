@@ -9,7 +9,7 @@
    "repo": "floci",
    "url": "https://github.com/floci-io/floci",
    "sha": "02ad6aa768219675ff5a912011af6fd11c2ea400",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

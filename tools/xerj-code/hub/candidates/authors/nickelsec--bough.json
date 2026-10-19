@@ -9,7 +9,7 @@
    "repo": "bough",
    "url": "https://github.com/nickelsec/bough",
    "sha": "2f101adab6dad41473a35148d505923635947fc2",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

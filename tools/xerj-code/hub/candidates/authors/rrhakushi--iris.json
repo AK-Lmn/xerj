@@ -9,7 +9,7 @@
    "repo": "IRIS",
    "url": "https://github.com/rrHakushi/IRIS",
    "sha": "8e2540de2114cdfcb5b8995b95939b245cdf525a",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

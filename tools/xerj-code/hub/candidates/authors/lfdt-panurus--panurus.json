@@ -9,7 +9,7 @@
    "repo": "panurus",
    "url": "https://github.com/LFDT-Panurus/panurus",
    "sha": "23b63ff8a8361f52b81a68e6a357d47d187efffb",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

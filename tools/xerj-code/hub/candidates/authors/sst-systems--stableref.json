@@ -9,7 +9,7 @@
    "repo": "StableRef",
    "url": "https://github.com/SST-Systems/StableRef",
    "sha": "fe7fe8d4e54842c825781bd92bae1fa09816f78f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

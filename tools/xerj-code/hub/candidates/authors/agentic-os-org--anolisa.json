@@ -9,7 +9,7 @@
    "repo": "ANOLISA",
    "url": "https://github.com/agentic-os-org/ANOLISA",
    "sha": "c54e33c7b4bb30204a59cb07f73da6884862bff5",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

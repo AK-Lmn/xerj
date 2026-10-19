@@ -9,7 +9,7 @@
    "repo": "wp-rest-api-guard",
    "url": "https://github.com/alleyinteractive/wp-rest-api-guard",
    "sha": "90319be5a139d5bde46983843bcbe9bb4f14afec",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

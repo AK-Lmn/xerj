@@ -9,7 +9,7 @@
    "repo": "remote-llm-gateway",
    "url": "https://github.com/AlanForester/remote-llm-gateway",
    "sha": "32ff25239c80854d52964da35708696fa4cabc6a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

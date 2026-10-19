@@ -9,7 +9,7 @@
    "repo": "FusionEngine",
    "url": "https://github.com/DevPhusion/FusionEngine",
    "sha": "2737291609a2abf82d24c8333a1d9ce72d85fe1f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

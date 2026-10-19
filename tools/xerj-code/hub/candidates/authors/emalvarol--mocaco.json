@@ -9,7 +9,7 @@
    "repo": "mocaco",
    "url": "https://github.com/emalvarol/mocaco",
    "sha": "cc68ba9161b835a57b5039260a94cedf9fd24aa3",
-   "licence": "hint only: LGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: LGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "LGPL-3.0",
     "use": "UNREVIEWED",

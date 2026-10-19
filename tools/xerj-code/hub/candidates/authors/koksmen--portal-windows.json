@@ -9,7 +9,7 @@
    "repo": "Portal-Windows",
    "url": "https://github.com/KoksMen/Portal-Windows",
    "sha": "72fc1b723346e3c74911a688b2d04d2201849fc1",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

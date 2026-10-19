@@ -8,14 +8,14 @@
   {
    "repo": "kornia",
    "url": "https://github.com/kornia/kornia",
-   "sha": "584251cd694a4421385750a51898890161df8885",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "sha": "faa843d432d3b77b9a2c67f4d18063e97feb4c64",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",
     "by": "",
     "at": "",
-    "note": "author permission by email 2026-10-14 (reply to Corpus Hub outreach); selected commit 584251cd694a: \"fix(augmentation)!: reject a mixed gate on shape-changing augmentatio\u2026\". suggested use: adapt-with-attribution \u2014 G4 review of the LICENSE file at this pin still required."
+    "note": "author permission by email 2026-10-19 (reply to Corpus Hub outreach); selected commit faa843d432d3: \"fix(geometry): handle gimbal lock in euler_from_quaternion (#5702)\". suggested use: adapt-with-attribution \u2014 G4 review of the LICENSE file at this pin still required."
    }
   }
  ]

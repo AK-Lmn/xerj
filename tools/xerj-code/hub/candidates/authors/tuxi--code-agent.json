@@ -9,7 +9,7 @@
    "repo": "code-agent",
    "url": "https://github.com/tuxi/code-agent",
    "sha": "edfdbc0744526943179f78ebd496c47924661891",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

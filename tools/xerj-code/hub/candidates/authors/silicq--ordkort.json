@@ -9,7 +9,7 @@
    "repo": "ordkort",
    "url": "https://github.com/silicq/ordkort",
    "sha": "18e23e56e2ea7491e3381683f7b296ac7f441bce",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "FFmpeg-Builds",
    "url": "https://github.com/BtbN/FFmpeg-Builds",
    "sha": "bd26828f0e965c2c657553584b09caf5d57eee52",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

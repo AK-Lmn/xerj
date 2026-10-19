@@ -9,7 +9,7 @@
    "repo": "FortressWAF",
    "url": "https://github.com/FortressCommunity/FortressWAF",
    "sha": "098372bf6518cd6da43f29266db5f525967a04b6",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

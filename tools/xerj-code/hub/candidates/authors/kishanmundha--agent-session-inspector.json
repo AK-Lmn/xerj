@@ -9,7 +9,7 @@
    "repo": "agent-session-inspector",
    "url": "https://github.com/kishanmundha/agent-session-inspector",
    "sha": "cde4bd8e5a594e7534a3986da9bd3f636d67e6b8",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

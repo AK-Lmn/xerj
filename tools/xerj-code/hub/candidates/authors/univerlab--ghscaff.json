@@ -9,7 +9,7 @@
    "repo": "ghscaff",
    "url": "https://github.com/UniverLab/ghscaff",
    "sha": "510b126dca9e9591514e7e8891b7eae97ee4f112",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

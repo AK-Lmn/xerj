@@ -9,7 +9,7 @@
    "repo": "rivetOS",
    "url": "https://github.com/philbert440/rivetOS",
    "sha": "a397a231edd3ed0847ac9627b34f5c8deb144e47",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

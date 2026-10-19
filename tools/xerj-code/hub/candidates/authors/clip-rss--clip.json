@@ -9,7 +9,7 @@
    "repo": "clip",
    "url": "https://github.com/clip-rss/clip",
    "sha": "eccc50d0fcc8d6bb2687e3f6f84a4b84ac3efff7",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

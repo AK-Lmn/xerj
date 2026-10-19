@@ -9,7 +9,7 @@
    "repo": "agent-sessions",
    "url": "https://github.com/jazzyalex/agent-sessions",
    "sha": "6fa9a73f489d37f655873871e5e6a5cf6975d1ff",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

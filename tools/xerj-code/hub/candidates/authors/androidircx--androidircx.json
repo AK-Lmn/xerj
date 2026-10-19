@@ -9,7 +9,7 @@
    "repo": "AndroidIRCx",
    "url": "https://github.com/AndroidIRCx/AndroidIRCx",
    "sha": "8dcae4884d1adc75284bc9e4e42f4bd1d259a025",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

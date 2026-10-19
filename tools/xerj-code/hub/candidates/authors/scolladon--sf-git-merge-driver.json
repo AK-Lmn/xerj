@@ -9,7 +9,7 @@
    "repo": "sf-git-merge-driver",
    "url": "https://github.com/scolladon/sf-git-merge-driver",
    "sha": "2a42a3f59b147fce4c6f3e67e68c2021d4e191b8",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "prod-code",
    "url": "https://github.com/alex09x/prod-code",
    "sha": "5db473fe8b85bb3416dcfa73a00f6e481cf1e84b",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

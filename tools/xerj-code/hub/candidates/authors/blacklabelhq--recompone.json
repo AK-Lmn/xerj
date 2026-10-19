@@ -9,7 +9,7 @@
    "repo": "RecompOne",
    "url": "https://github.com/BlackLabelHQ/RecompOne",
    "sha": "1272fb80b1638efdae8f281ff6c6e90f93866ae6",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

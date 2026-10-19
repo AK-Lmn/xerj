@@ -9,7 +9,7 @@
    "repo": "ZygiskNextNext",
    "url": "https://github.com/VeryBaaad/ZygiskNextNext",
    "sha": "9e0c2922eacc6d4f082afd1d314ca393e50fe22a",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

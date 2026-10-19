@@ -9,7 +9,7 @@
    "repo": "gcode-tools",
    "url": "https://github.com/federicovezzoli/gcode-tools",
    "sha": "85d9fddf7f27eb966c74b770be042d0bf3d72bb5",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

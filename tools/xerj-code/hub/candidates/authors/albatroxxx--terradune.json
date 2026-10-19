@@ -9,7 +9,7 @@
    "repo": "terradune",
    "url": "https://github.com/albatroxxx/terradune",
    "sha": "b06eaa5409e5a395526a4afb14f24eb21febb01d",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

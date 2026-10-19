@@ -9,7 +9,7 @@
    "repo": "saw-script",
    "url": "https://github.com/GaloisInc/saw-script",
    "sha": "931a864623ec4d05a51c9d00f1cb4dc0595e04d1",
-   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "BSD-3-Clause",
     "use": "UNREVIEWED",

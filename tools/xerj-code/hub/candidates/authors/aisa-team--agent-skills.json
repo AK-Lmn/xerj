@@ -9,7 +9,7 @@
    "repo": "agent-skills",
    "url": "https://github.com/AIsa-team/agent-skills",
    "sha": "828c373b45e1aa8d7f4a51b1caeb1d0a6aaa6124",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

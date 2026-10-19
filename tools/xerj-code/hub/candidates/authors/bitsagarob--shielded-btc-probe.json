@@ -9,7 +9,7 @@
    "repo": "shielded-btc-probe",
    "url": "https://github.com/bitsagarob/shielded-btc-probe",
    "sha": "6f1a952a9c2fc1c9aa5d4f2c4c8b2936991dadcb",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

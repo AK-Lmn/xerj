@@ -9,7 +9,7 @@
    "repo": "kandinsky-6",
    "url": "https://github.com/kandinskylab/kandinsky-6",
    "sha": "0d134f48059d692ae9ecb640e6575f9aca1b2ecc",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

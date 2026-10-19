@@ -9,7 +9,7 @@
    "repo": "MARSYS",
    "url": "https://github.com/rezaho/MARSYS",
    "sha": "341ecb5f6f0ed9b301e3c9cd1744a31ba06b1f32",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

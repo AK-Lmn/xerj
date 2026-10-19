@@ -9,7 +9,7 @@
    "repo": "ripe",
    "url": "https://github.com/ripe-lang/ripe",
    "sha": "64502c6f24203138cdd6f06010429730a5031b52",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

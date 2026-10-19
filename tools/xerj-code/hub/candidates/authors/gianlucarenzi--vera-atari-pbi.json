@@ -9,7 +9,7 @@
    "repo": "VERA_ATARI_PBI",
    "url": "https://github.com/gianlucarenzi/VERA_ATARI_PBI",
    "sha": "a66448132b66e4e47d3bd0eea774fe1b9b9e59e9",
-   "licence": "hint only: BSD-2-Clause (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: BSD-2-Clause (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "BSD-2-Clause",
     "use": "UNREVIEWED",

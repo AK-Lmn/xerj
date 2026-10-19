@@ -9,7 +9,7 @@
    "repo": "pi-asterisk-tui",
    "url": "https://github.com/No-World/pi-asterisk-tui",
    "sha": "d130c7ebb6f069b1a9fd96b358a5b505b8048e1a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

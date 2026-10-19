@@ -9,7 +9,7 @@
    "repo": "wp-cli-sync",
    "url": "https://github.com/jonbp/wp-cli-sync",
    "sha": "0cdecce9df00c6841767e52f5f10dfbca17db18a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

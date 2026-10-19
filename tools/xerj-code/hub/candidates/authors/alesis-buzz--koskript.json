@@ -9,7 +9,7 @@
    "repo": "koskript",
    "url": "https://github.com/alesis-buzz/koskript",
    "sha": "79630200ada6f1781a88e54b2f1ba2177bb3b523",
-   "licence": "hint only: MPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MPL-2.0",
     "use": "UNREVIEWED",

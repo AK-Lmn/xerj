@@ -9,7 +9,7 @@
    "repo": "kaeso",
    "url": "https://github.com/logicplanes/kaeso",
    "sha": "cfa3a376c401476c21f022f9db42c1f6974cf4bb",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "lerobot",
    "url": "https://github.com/huggingface/lerobot",
    "sha": "b64fe1ed9f11eeac53ee821356d2797601701054",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

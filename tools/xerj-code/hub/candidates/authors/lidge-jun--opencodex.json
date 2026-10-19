@@ -9,7 +9,7 @@
    "repo": "opencodex",
    "url": "https://github.com/lidge-jun/opencodex",
    "sha": "7e3e37a6512c9c3bc843a2d46b7db649bf118287",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

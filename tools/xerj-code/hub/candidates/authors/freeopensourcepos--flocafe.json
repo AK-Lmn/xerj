@@ -9,7 +9,7 @@
    "repo": "FloCafe",
    "url": "https://github.com/FreeOpenSourcePOS/FloCafe",
    "sha": "453d412691c3ca7eb682a5554a0fdaa64f319944",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

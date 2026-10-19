@@ -9,7 +9,7 @@
    "repo": "crater",
    "url": "https://github.com/raids-lab/crater",
    "sha": "b8678eba27d8f61f89c553910451e435e50bc45b",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

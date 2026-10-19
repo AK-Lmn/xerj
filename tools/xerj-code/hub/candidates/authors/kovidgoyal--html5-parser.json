@@ -9,7 +9,7 @@
    "repo": "html5-parser",
    "url": "https://github.com/kovidgoyal/html5-parser",
    "sha": "17052935996206ccb98f8678eb32cad95f87c1e4",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

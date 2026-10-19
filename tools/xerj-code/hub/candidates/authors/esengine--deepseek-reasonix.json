@@ -9,7 +9,7 @@
    "repo": "DeepSeek-Reasonix",
    "url": "https://github.com/esengine/DeepSeek-Reasonix",
    "sha": "a078f8e30fa4a8986300f0f0b0f72c90cceac6d4",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

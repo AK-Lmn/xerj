@@ -9,7 +9,7 @@
    "repo": "cli",
    "url": "https://github.com/nself-org/cli",
    "sha": "f894559d8bdfd7eebe5ea6556f13eeed95465e88",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

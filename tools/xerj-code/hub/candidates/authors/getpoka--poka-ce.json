@@ -9,7 +9,7 @@
    "repo": "poka-ce",
    "url": "https://github.com/getpoka/poka-ce",
    "sha": "97d64bba3a256d261b1941bb7135190fd0e7619e",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

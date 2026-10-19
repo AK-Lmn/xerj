@@ -9,7 +9,7 @@
    "repo": "agent-devs",
    "url": "https://github.com/LucianoDPerez/agent-devs",
    "sha": "7d91143417f3018b5b2679f07be91bcdd80a2c6d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

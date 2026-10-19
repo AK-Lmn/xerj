@@ -9,7 +9,7 @@
    "repo": "spantruth",
    "url": "https://github.com/Plexito-de/spantruth",
    "sha": "6ddfa8a1a0a1b5dcdc363c67e1f9c3042ded6c0c",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

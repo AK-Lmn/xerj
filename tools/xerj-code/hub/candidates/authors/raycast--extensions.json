@@ -9,7 +9,7 @@
    "repo": "extensions",
    "url": "https://github.com/raycast/extensions",
    "sha": "b8676852fea8b920f9f3b37f172aa0b64d5016c4",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

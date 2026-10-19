@@ -9,7 +9,7 @@
    "repo": "apex",
    "url": "https://github.com/WhatSock/apex",
    "sha": "16e4e645494f88ab54ae2b7056755104064f230c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

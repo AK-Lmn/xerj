@@ -9,7 +9,7 @@
    "repo": "fastsafetensors",
    "url": "https://github.com/foundation-model-stack/fastsafetensors",
    "sha": "ff7d7fb50b55cb0165e179b725ecf1b33a7ee04e",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

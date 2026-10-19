@@ -9,7 +9,7 @@
    "repo": "vllm",
    "url": "https://github.com/vllm-project/vllm",
    "sha": "ce8853d27a977bd5d955c7e03c3d1dd9c735ef86",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

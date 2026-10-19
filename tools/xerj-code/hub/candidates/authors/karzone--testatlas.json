@@ -9,7 +9,7 @@
    "repo": "TestAtlas",
    "url": "https://github.com/Karzone/TestAtlas",
    "sha": "ba695007cf9e29391e296f4c87dd12ce15731b4c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

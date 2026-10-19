@@ -9,7 +9,7 @@
    "repo": "birdwatcher",
    "url": "https://github.com/milvus-io/birdwatcher",
    "sha": "7d13fcf14bb547555f19b1d9f7dcc60cf310bb4a",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "reactos",
    "url": "https://github.com/reactos/reactos",
    "sha": "af9ad54d466794075836c1f4f6beee3dc8588737",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

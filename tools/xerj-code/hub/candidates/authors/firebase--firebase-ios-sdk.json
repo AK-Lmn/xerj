@@ -9,7 +9,7 @@
    "repo": "firebase-ios-sdk",
    "url": "https://github.com/firebase/firebase-ios-sdk",
    "sha": "ba0c5cebc4b0f6d24f181b0cdf9a6ae1fa7c5d34",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

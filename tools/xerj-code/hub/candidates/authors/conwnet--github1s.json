@@ -9,7 +9,7 @@
    "repo": "github1s",
    "url": "https://github.com/conwnet/github1s",
    "sha": "8c92f3a282f699f07b082e683bbd456b398f4c3b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "podman",
    "url": "https://github.com/podman-container-tools/podman",
    "sha": "a55d383fc7d28a9649f2926a70286332284ae380",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

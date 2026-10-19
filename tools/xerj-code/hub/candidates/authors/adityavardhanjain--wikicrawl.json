@@ -9,7 +9,7 @@
    "repo": "WikiCrawl",
    "url": "https://github.com/Adityavardhanjain/WikiCrawl",
    "sha": "b5bb1cae9336e5557e7cd747238d1d5ee8aab26c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

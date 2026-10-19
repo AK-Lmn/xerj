@@ -9,7 +9,7 @@
    "repo": "nojs",
    "url": "https://github.com/no-js-dev/nojs",
    "sha": "079cb732e09c2b11f083db22968d2030cc2a5786",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

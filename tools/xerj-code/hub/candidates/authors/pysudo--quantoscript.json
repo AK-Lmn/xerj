@@ -9,7 +9,7 @@
    "repo": "QuantoScript",
    "url": "https://github.com/PySudo/QuantoScript",
    "sha": "642168e7f3104ad1b6e318523f5c30c2aa169d61",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "conway-life-game",
    "url": "https://github.com/xiaoxuhui/conway-life-game",
    "sha": "8c667b9cc4cb1547ad508f85dc82f9e408d938e3",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

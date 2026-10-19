@@ -9,7 +9,7 @@
    "repo": "SlackNet",
    "url": "https://github.com/soxtoby/SlackNet",
    "sha": "f3c78c8d3c91ed3a44574d870432e7dd0ba66dce",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

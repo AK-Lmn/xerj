@@ -9,7 +9,7 @@
    "repo": "metamorph",
    "url": "https://github.com/yohanvillarp/metamorph",
    "sha": "78bde9347af157343d4211217c66adb6c9fc6885",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

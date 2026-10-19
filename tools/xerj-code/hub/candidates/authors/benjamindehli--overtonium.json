@@ -9,7 +9,7 @@
    "repo": "overtonium",
    "url": "https://github.com/benjamindehli/overtonium",
    "sha": "d64c72874a08c5b6a5d98ce7fd662cf86c84cd1b",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

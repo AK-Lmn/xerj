@@ -9,7 +9,7 @@
    "repo": "pulse.nvim",
    "url": "https://github.com/willyelm/pulse.nvim",
    "sha": "1300d031fa3b62d755f59ca73584999ae302df0f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

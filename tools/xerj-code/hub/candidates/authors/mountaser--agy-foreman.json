@@ -9,7 +9,7 @@
    "repo": "agy-foreman",
    "url": "https://github.com/mountaser/agy-foreman",
    "sha": "73e4fe6ce5de28c6ee2ec62cf270c1ee6962d4db",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

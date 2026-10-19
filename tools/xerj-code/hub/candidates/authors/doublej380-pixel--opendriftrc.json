@@ -9,7 +9,7 @@
    "repo": "OpenDriftRC",
    "url": "https://github.com/doublej380-pixel/OpenDriftRC",
    "sha": "42bce24965dd867b0002a840038027bbaa29885b",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

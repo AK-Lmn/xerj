@@ -9,7 +9,7 @@
    "repo": "trading-analysis-platform",
    "url": "https://github.com/ramazangirgin/trading-analysis-platform",
    "sha": "ef468c653bcb300e4d85840996e75e86a00b65a5",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "dve",
    "url": "https://github.com/emmettmcdow/dve",
    "sha": "0999661806ccee166398aebb352a557461a8f197",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

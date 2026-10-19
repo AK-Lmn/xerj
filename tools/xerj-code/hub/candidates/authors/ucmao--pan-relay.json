@@ -9,7 +9,7 @@
    "repo": "pan-relay",
    "url": "https://github.com/ucmao/pan-relay",
    "sha": "78e6ff819f4d2972d9765b9881c7aa2019b9726e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

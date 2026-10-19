@@ -9,7 +9,7 @@
    "repo": "FanControl.LianLiWireless",
    "url": "https://github.com/MarcusSanchez/FanControl.LianLiWireless",
    "sha": "ed55d840f6a17ce7d3d854e409f1b8a300a16cd4",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "GHOST",
    "url": "https://github.com/vNeeL-code/GHOST",
    "sha": "aa36d210f0966ac3141b92f8d16f7267d7bc8d8f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

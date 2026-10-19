@@ -9,7 +9,7 @@
    "repo": "sentinel",
    "url": "https://github.com/Prateet-Github/sentinel",
    "sha": "1e550632dccb477de9018de8ca3bd2f008b9c27e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

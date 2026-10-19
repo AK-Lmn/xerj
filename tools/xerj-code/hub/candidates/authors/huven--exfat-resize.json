@@ -9,7 +9,7 @@
    "repo": "exfat-resize",
    "url": "https://github.com/huven/exfat-resize",
    "sha": "db7856900c141df593f5a396688d3aef9fc937c7",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

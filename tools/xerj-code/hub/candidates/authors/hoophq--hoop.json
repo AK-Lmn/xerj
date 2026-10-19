@@ -9,7 +9,7 @@
    "repo": "hoop",
    "url": "https://github.com/hoophq/hoop",
    "sha": "f111d3e555283ae0eea1c7c7c9cd6938f5bba7a5",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

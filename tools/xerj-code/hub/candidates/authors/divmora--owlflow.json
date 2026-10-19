@@ -9,7 +9,7 @@
    "repo": "owlflow",
    "url": "https://github.com/divmora/owlflow",
    "sha": "641b3779c6fd3e6c63f7b16743528695e1ff1c97",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

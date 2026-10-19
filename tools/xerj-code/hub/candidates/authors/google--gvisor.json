@@ -9,7 +9,7 @@
    "repo": "gvisor",
    "url": "https://github.com/google/gvisor",
    "sha": "aa42986c0959256e89b340b9c3db8a16dbb4ad6b",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

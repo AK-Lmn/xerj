@@ -9,7 +9,7 @@
    "repo": "dsh-vsc-integration",
    "url": "https://github.com/HarcoChen/dsh-vsc-integration",
    "sha": "7dd3d77d56ee819ed32f572235f8c904d2c3fb6d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "linux_util",
    "url": "https://github.com/acebmxer/linux_util",
    "sha": "b9d6499e32335107408b8b33192896b1cb384761",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "ditto",
    "url": "https://github.com/walsoup/ditto",
    "sha": "81596bd7527526dec83e63a5d6205049d98ef871",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "genai",
    "url": "https://github.com/noizu-labs-ml/genai",
    "sha": "19873b07fd0ffedc928e9b6d8ce741f430770493",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

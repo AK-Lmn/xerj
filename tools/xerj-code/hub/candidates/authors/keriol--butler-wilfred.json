@@ -9,7 +9,7 @@
    "repo": "butler-wilfred",
    "url": "https://github.com/keriol/butler-wilfred",
    "sha": "aa6978a589d3207c33c0b430acba35e48403a71f",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

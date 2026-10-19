@@ -9,7 +9,7 @@
    "repo": "openkos",
    "url": "https://github.com/jasonssdev/openkos",
    "sha": "b5715d653777a7795a0bbd68875d2e2aaecfca42",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

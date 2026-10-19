@@ -9,7 +9,7 @@
    "repo": "reporoad",
    "url": "https://github.com/reporoad/reporoad",
    "sha": "d19e4b7273b73fca8f012f040125c7e78515a6f2",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

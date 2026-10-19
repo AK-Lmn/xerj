@@ -9,7 +9,7 @@
    "repo": "Foundry",
    "url": "https://github.com/sphireinc/Foundry",
    "sha": "59badff8e8753f5556f69f244a55c0bf076cd7bc",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

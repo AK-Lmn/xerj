@@ -9,7 +9,7 @@
    "repo": "portop",
    "url": "https://github.com/padovanl/portop",
    "sha": "88d959a7ac4ed52c16c19f2c66efd05b8131634b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

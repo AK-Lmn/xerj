@@ -9,7 +9,7 @@
    "repo": "thinkrail",
    "url": "https://github.com/JetBrains/thinkrail",
    "sha": "3f7e0d495e6a969264b521c882f2c2ef01d73157",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

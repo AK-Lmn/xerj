@@ -9,7 +9,7 @@
    "repo": "cometline",
    "url": "https://github.com/Cometline/cometline",
    "sha": "a446a708be2f2d1e7b0710fdbb7928c17633d61c",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

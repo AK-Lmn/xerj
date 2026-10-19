@@ -9,7 +9,7 @@
    "repo": "DataTablesSrc",
    "url": "https://github.com/DataTables/DataTablesSrc",
    "sha": "a2878b40a07632e8a9954de503ba9e7501c647f6",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

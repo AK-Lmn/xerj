@@ -9,7 +9,7 @@
    "repo": "pegainfer",
    "url": "https://github.com/pegainfer-project/pegainfer",
    "sha": "d386999f8492d0d11c6c02a7e227c2dbe0e1ef7d",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

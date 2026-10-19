@@ -9,7 +9,7 @@
    "repo": "docling",
    "url": "https://github.com/docling-project/docling",
    "sha": "5f4509767647721a8ec011ce6a3a6a39b19bb1f0",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

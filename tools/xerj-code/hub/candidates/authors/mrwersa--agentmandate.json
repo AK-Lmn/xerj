@@ -9,7 +9,7 @@
    "repo": "agentmandate",
    "url": "https://github.com/mrwersa/agentmandate",
    "sha": "5c453072f6a5ffee2c96cbc5be303e09da967ebd",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

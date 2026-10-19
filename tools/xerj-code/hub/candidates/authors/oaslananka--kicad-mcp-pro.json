@@ -9,7 +9,7 @@
    "repo": "kicad-mcp-pro",
    "url": "https://github.com/oaslananka/kicad-mcp-pro",
    "sha": "a2ab498606e6069e78ebb73f258f5c15bb97a65e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

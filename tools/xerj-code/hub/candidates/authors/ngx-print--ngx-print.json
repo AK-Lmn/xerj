@@ -9,7 +9,7 @@
    "repo": "ngx-print",
    "url": "https://github.com/ngx-print/ngx-print",
    "sha": "a89dfb8596c269089dc3dd988859ab55d2aefbcf",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

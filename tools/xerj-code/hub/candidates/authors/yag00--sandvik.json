@@ -9,7 +9,7 @@
    "repo": "sandvik",
    "url": "https://github.com/yag00/sandvik",
    "sha": "8caa182b22d98a42d5bf5df6fceed27cafb5b9da",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

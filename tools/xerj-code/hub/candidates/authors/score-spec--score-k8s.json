@@ -9,7 +9,7 @@
    "repo": "score-k8s",
    "url": "https://github.com/score-spec/score-k8s",
    "sha": "6bd49d725a6ba5ec0c4a3681ea34c772039c70e3",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "network-operator",
    "url": "https://github.com/Mellanox/network-operator",
    "sha": "22c617062fd90a29be2b8be950462b8db78512ec",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

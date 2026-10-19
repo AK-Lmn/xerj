@@ -9,7 +9,7 @@
    "repo": "xqlite",
    "url": "https://github.com/dimitarvp/xqlite",
    "sha": "9e6db866a8584cdfb56a90a8c446c7d5589d7bde",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "wardeniq",
    "url": "https://github.com/adlerqa/wardeniq",
    "sha": "3e5d91aef7a407a455368a2b90f23ae6f566b334",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

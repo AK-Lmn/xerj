@@ -9,7 +9,7 @@
    "repo": "ronykit",
    "url": "https://github.com/clubpay/ronykit",
    "sha": "85c04b4f83c3f94dbe9597f124003494ad0603b4",
-   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "BSD-3-Clause",
     "use": "UNREVIEWED",

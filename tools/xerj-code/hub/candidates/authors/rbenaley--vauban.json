@@ -9,13 +9,13 @@
    "repo": "Vauban",
    "url": "https://github.com/rbenaley/Vauban",
    "sha": "848b088d2958d4ba748f9cf239841956fad5a80e",
-   "licence": "hint only: BSD-2-Clause (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: BSD-2-Clause (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "BSD-2-Clause",
     "use": "UNREVIEWED",
     "by": "",
     "at": "",
-    "note": "author permission by email 2026-10-05 (reply to Corpus Hub outreach); selected commit 848b088d2958: \"test(just): shorten validate and keep parallel tests stable\". suggested use: adapt-with-attribution \u2014 G4 review of the LICENSE file at this pin still required."
+    "note": "author permission by email 2026-10-19 (reply to Corpus Hub outreach); selected commit 848b088d2958: \"test(just): shorten validate and keep parallel tests stable\". suggested use: adapt-with-attribution \u2014 G4 review of the LICENSE file at this pin still required."
    }
   }
  ]

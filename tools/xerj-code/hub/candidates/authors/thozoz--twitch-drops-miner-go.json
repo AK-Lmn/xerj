@@ -9,7 +9,7 @@
    "repo": "twitch-drops-miner-go",
    "url": "https://github.com/thozoz/twitch-drops-miner-go",
    "sha": "dd5a1ebde41c16ab61fec697f608474fa20e2d94",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

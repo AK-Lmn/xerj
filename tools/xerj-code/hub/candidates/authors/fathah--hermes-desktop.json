@@ -9,7 +9,7 @@
    "repo": "hermes-desktop",
    "url": "https://github.com/fathah/hermes-desktop",
    "sha": "9ef06062c06ad24fdebdf97425054ac3a0541bd6",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

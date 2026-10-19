@@ -9,7 +9,7 @@
    "repo": "sprawlrun",
    "url": "https://github.com/jbinder/sprawlrun",
    "sha": "175756a6e0452074fa85f352232f7cb6878a21d6",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

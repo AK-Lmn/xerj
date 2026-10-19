@@ -9,7 +9,7 @@
    "repo": "ferris-forge",
    "url": "https://github.com/wanikhawar/ferris-forge",
    "sha": "0a47c7aeec1431654af442e1e0ec9c32b19bf742",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

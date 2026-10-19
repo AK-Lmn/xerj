@@ -9,7 +9,7 @@
    "repo": "zcode-jetbrains-plugin",
    "url": "https://github.com/csuftt/zcode-jetbrains-plugin",
    "sha": "f6a9919aa5dcf7f33eca38e56b4753165dbac72c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

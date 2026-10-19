@@ -9,7 +9,7 @@
    "repo": "open-spark-jev",
    "url": "https://github.com/abhishek085/open-spark-jev",
    "sha": "dd15399a180f4bb8777b8507c4f80991417166e7",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

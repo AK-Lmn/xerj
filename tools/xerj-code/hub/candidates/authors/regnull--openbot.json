@@ -9,7 +9,7 @@
    "repo": "openbot",
    "url": "https://github.com/regnull/openbot",
    "sha": "e98dc780c921ea577093bd49bb9c87cab2f14837",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

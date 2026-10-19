@@ -9,7 +9,7 @@
    "repo": "kaelly-amqp",
    "url": "https://github.com/kaellybot/kaelly-amqp",
    "sha": "d3939231fb18b23b0d4bca789c8bb3503fc17331",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

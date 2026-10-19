@@ -9,7 +9,7 @@
    "repo": "CMCP-TIME",
    "url": "https://github.com/redwakame/CMCP-TIME",
    "sha": "fb8890a83ae4a4d72ac2f9e1d9c2da014a4f7f91",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

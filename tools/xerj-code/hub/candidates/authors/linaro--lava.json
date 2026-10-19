@@ -9,7 +9,7 @@
    "repo": "lava",
    "url": "https://github.com/Linaro/lava",
    "sha": "79a9aa280c892b0fc047402149d7b3866702fa15",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

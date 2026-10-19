@@ -9,7 +9,7 @@
    "repo": "teaql-java",
    "url": "https://github.com/teaql/teaql-java",
    "sha": "c48acc2371c6882903cd4e03251761ae87601dc9",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

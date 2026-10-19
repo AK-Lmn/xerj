@@ -9,7 +9,7 @@
    "repo": "alchemy",
    "url": "https://github.com/alchemy-run/alchemy",
    "sha": "db7442f0361f20803f66931df520a031408ff10c",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

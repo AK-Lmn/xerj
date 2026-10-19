@@ -9,7 +9,7 @@
    "repo": "vectorcraft",
    "url": "https://github.com/storytold/vectorcraft",
    "sha": "e80b7e383bcf7c8dab1abe363b1c72ee6b852025",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

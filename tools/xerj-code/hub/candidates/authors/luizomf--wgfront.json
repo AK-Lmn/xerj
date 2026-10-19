@@ -9,7 +9,7 @@
    "repo": "wgfront",
    "url": "https://github.com/luizomf/wgfront",
    "sha": "4a37fe0757e0f61769e344e3d325bd4a713c6325",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

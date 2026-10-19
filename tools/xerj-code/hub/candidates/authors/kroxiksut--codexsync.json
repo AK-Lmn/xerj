@@ -9,7 +9,7 @@
    "repo": "codexSync",
    "url": "https://github.com/kroxiksut/codexSync",
    "sha": "0a19a9e54df353f43f7d36926def8266f4d84c60",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

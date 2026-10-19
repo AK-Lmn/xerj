@@ -9,7 +9,7 @@
    "repo": "openshield",
    "url": "https://github.com/Blackshield-Company/openshield",
    "sha": "e47fb86dc470120f3d21f37cbef7eff8e84e0117",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

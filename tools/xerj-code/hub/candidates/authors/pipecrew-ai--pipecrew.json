@@ -9,7 +9,7 @@
    "repo": "pipecrew",
    "url": "https://github.com/pipecrew-ai/pipecrew",
    "sha": "62a7c78313b37c8a87653919d15f33bac58e9451",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

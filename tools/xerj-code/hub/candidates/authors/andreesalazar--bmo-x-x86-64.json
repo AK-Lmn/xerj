@@ -9,7 +9,7 @@
    "repo": "BMO-X-x86-64",
    "url": "https://github.com/AndreeSalazar/BMO-X-x86-64",
    "sha": "1252c5709887be56942d56540a30e46669d32e96",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

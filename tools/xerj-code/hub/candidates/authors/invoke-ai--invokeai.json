@@ -9,7 +9,7 @@
    "repo": "InvokeAI",
    "url": "https://github.com/invoke-ai/InvokeAI",
    "sha": "f128d584a9bf6efed5eec5f2d050e497ca02ace9",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

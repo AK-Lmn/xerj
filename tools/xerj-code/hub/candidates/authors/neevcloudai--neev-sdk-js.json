@@ -9,7 +9,7 @@
    "repo": "neev-sdk-js",
    "url": "https://github.com/NeevCloudAI/neev-sdk-js",
    "sha": "f94a631f421302608b7be1b22ba8df146c94b70d",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

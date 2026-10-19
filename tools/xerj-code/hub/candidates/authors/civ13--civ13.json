@@ -9,7 +9,7 @@
    "repo": "Civ13",
    "url": "https://github.com/Civ13/Civ13",
    "sha": "fb1de758962933a314cbe5ea9a7e5169ff1964b9",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

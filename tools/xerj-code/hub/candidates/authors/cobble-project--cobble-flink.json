@@ -9,7 +9,7 @@
    "repo": "cobble-flink",
    "url": "https://github.com/cobble-project/cobble-flink",
    "sha": "9beb04366f54fcb4884517c800cb9474de5fe3be",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

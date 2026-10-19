@@ -9,7 +9,7 @@
    "repo": "simulator-action",
    "url": "https://github.com/futureware-tech/simulator-action",
    "sha": "e1ab0c47dfd6c6ae2dce140df96db566da3fd699",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "flats",
    "url": "https://github.com/gosuda/flats",
    "sha": "c04c680753725d2fa5812e91f6e897fd12cd9d83",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

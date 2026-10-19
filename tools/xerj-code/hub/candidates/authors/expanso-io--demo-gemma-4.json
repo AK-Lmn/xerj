@@ -9,7 +9,7 @@
    "repo": "demo-gemma-4",
    "url": "https://github.com/expanso-io/demo-gemma-4",
    "sha": "6373a7a17a3420a5c29b3ed048732664a59294ad",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

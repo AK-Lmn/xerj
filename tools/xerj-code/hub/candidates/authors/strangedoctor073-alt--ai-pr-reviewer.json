@@ -9,7 +9,7 @@
    "repo": "ai-pr-reviewer",
    "url": "https://github.com/strangedoctor073-alt/ai-pr-reviewer",
    "sha": "bee3629858f3b398f8bed0052a1e76d218bc3b6a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

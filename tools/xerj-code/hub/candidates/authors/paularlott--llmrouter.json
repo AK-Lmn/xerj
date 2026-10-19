@@ -9,7 +9,7 @@
    "repo": "llmrouter",
    "url": "https://github.com/paularlott/llmrouter",
    "sha": "a56ac10179c53929bcddc2912b8abdb2d0adbe2a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

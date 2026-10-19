@@ -9,7 +9,7 @@
    "repo": "codetrial",
    "url": "https://github.com/sysprog21/codetrial",
    "sha": "db85e87dec3700a2299fe04dd9e7364c58502f57",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

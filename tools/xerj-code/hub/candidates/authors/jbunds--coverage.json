@@ -9,7 +9,7 @@
    "repo": "coverage",
    "url": "https://github.com/jbunds/coverage",
    "sha": "e468a9cdb2d904348288a11248de4ed9a395f9a2",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "jobpilot",
    "url": "https://github.com/maazbin/jobpilot",
    "sha": "0e114c7a62fa051ae2a10241f859c576ea5a5924",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

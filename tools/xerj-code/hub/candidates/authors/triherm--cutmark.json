@@ -9,7 +9,7 @@
    "repo": "cutmark",
    "url": "https://github.com/TriHerm/cutmark",
    "sha": "0e8aaf43faa495215674b3243353a9e4f2f8845f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

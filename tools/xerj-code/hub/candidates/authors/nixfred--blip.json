@@ -9,7 +9,7 @@
    "repo": "blip",
    "url": "https://github.com/nixfred/blip",
    "sha": "2176213b22703d98c71e3a194c2ddce4bc9a0dde",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "lumitech-node-fastify-template",
    "url": "https://github.com/lumitech-co/lumitech-node-fastify-template",
    "sha": "259de666ccafa5b00af9f6c6ec9c059c03c52154",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

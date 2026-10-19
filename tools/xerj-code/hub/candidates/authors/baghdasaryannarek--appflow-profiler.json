@@ -9,7 +9,7 @@
    "repo": "appflow-profiler",
    "url": "https://github.com/BaghdasaryanNarek/appflow-profiler",
    "sha": "28cfb3ddcb9dacf4a5bee674f4f12dd03864846f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

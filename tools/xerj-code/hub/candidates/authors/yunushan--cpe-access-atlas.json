@@ -9,7 +9,7 @@
    "repo": "cpe-access-atlas",
    "url": "https://github.com/Yunushan/cpe-access-atlas",
    "sha": "068e70834e1f147a0afe66508242620ec5915dea",
-   "licence": "hint only: 0BSD (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: 0BSD (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "0BSD",
     "use": "UNREVIEWED",

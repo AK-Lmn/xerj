@@ -9,7 +9,7 @@
    "repo": "WaveEquation2D_solver",
    "url": "https://github.com/Samson-Mano/WaveEquation2D_solver",
    "sha": "927e39d2e1b8fb6a8cba761811adefc98fd97f70",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

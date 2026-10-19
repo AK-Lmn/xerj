@@ -9,7 +9,7 @@
    "repo": "settings-opencode",
    "url": "https://github.com/fmflurry/settings-opencode",
    "sha": "4bd9260405eff0fd58110820b2cb90323dab8ff7",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

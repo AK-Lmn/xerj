@@ -9,7 +9,7 @@
    "repo": "embed_sim_project",
    "url": "https://github.com/vectorsim/embed_sim_project",
    "sha": "049e81bb8254511dd345c20046c6fb9cf26d759f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

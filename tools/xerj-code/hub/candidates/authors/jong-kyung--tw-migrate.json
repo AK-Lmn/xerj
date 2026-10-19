@@ -9,7 +9,7 @@
    "repo": "tw-migrate",
    "url": "https://github.com/jong-kyung/tw-migrate",
    "sha": "f596e290485642e0318dc4795da086367883eae9",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

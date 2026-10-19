@@ -9,7 +9,7 @@
    "repo": "lorepack",
    "url": "https://github.com/burakdede/lorepack",
    "sha": "35a0273a9fd2257a3db5aed15ccdd3f00f3b7db5",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

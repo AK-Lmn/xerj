@@ -9,7 +9,7 @@
    "repo": "vallow.nvim",
    "url": "https://github.com/xeind/vallow.nvim",
    "sha": "c9d7913570222192cab432440ca380c1aedcfaee",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

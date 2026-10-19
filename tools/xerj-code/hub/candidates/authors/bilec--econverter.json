@@ -9,7 +9,7 @@
    "repo": "econverter",
    "url": "https://github.com/bilec/econverter",
    "sha": "36fdc1792aa3a0eacb0713f3e8ad7b86a8ff1fcb",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

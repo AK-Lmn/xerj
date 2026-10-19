@@ -9,7 +9,7 @@
    "repo": "tracehound",
    "url": "https://github.com/Noxiidus/tracehound",
    "sha": "ed2afaae7a027af594392ec2f95c850e3b39d6d7",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

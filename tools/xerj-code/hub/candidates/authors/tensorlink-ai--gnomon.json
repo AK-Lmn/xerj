@@ -9,7 +9,7 @@
    "repo": "Gnomon",
    "url": "https://github.com/TensorLink-AI/Gnomon",
    "sha": "abbe890681862c7a27c89b6608344ac1da177e2c",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "pipeshub-ai",
    "url": "https://github.com/pipeshub-ai/pipeshub-ai",
    "sha": "5cab6c5db991fa957d1f701936eb6d859331d56b",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

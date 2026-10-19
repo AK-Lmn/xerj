@@ -9,7 +9,7 @@
    "repo": "eu-ai-assurance-os",
    "url": "https://github.com/SVamseekar/eu-ai-assurance-os",
    "sha": "ad38a0e2a2b4d160533f98834b5483441f6deb67",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

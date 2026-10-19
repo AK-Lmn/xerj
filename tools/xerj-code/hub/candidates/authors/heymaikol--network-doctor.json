@@ -9,7 +9,7 @@
    "repo": "network-doctor",
    "url": "https://github.com/heymaikol/network-doctor",
    "sha": "6989e9e78fed1e512c1661da1d31a8086e7c17ce",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

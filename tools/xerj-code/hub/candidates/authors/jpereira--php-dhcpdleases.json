@@ -9,7 +9,7 @@
    "repo": "php-dhcpdleases",
    "url": "https://github.com/jpereira/php-dhcpdleases",
    "sha": "0be3e60e9f81bc4c440d33b38f393c0a8b863aa8",
-   "licence": "hint only: LGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: LGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "LGPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "anti_phishing_extension",
    "url": "https://github.com/Kidus-yahun/anti_phishing_extension",
    "sha": "b3322f254c1da971778e4380a6d2c0c1a334c1b9",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

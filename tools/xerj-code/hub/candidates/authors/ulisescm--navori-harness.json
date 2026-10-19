@@ -9,7 +9,7 @@
    "repo": "navori-harness",
    "url": "https://github.com/UlisesCm/navori-harness",
    "sha": "9c60f0d51758d32ef5feb774d0a165aca2acebb2",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

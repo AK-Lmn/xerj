@@ -9,7 +9,7 @@
    "repo": "sonic-ripper",
    "url": "https://github.com/TheeHk-blip/sonic-ripper",
    "sha": "4a76f219b33bc5ba481a586e8d86e0d65020840a",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

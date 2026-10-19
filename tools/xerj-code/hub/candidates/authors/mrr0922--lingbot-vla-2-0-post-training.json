@@ -9,7 +9,7 @@
    "repo": "lingbot-VLA-2.0_post-training",
    "url": "https://github.com/MrR0922/lingbot-VLA-2.0_post-training",
    "sha": "c3b2616640f831e887c648d5fc62d0fbf74a1ebf",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

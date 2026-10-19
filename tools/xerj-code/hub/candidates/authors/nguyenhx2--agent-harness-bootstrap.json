@@ -9,7 +9,7 @@
    "repo": "agent-harness-bootstrap",
    "url": "https://github.com/nguyenhx2/agent-harness-bootstrap",
    "sha": "ce97de55a11c1461c8ea3550dae9e4dafa456858",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

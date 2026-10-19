@@ -9,7 +9,7 @@
    "repo": "ehrcalc",
    "url": "https://github.com/PerAlexandersson/ehrcalc",
    "sha": "9c5715dd0441683ac94fdf100390429ee3dc3f49",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

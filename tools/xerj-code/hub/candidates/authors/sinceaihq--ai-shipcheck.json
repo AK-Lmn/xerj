@@ -9,7 +9,7 @@
    "repo": "ai-shipcheck",
    "url": "https://github.com/sinceaihq/ai-shipcheck",
    "sha": "d61ce359a91320aef88732916c7d72352ae03d9b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

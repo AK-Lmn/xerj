@@ -9,7 +9,7 @@
    "repo": "winpodx",
    "url": "https://github.com/kernalix7/winpodx",
    "sha": "f2fc60a5a5977dad637190eea38accd699bbb100",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

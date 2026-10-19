@@ -9,7 +9,7 @@
    "repo": "grafomem",
    "url": "https://github.com/GNS-Foundation/grafomem",
    "sha": "02e95546d647ee67b08b49ac53049b64596e009f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "hawkopsec",
    "url": "https://github.com/emrekybs/hawkopsec",
    "sha": "4959b41aa91de4e5b525bdd107be6cc4f075fd82",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

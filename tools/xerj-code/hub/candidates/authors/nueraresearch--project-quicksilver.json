@@ -9,7 +9,7 @@
    "repo": "project-quicksilver",
    "url": "https://github.com/nueraresearch/project-quicksilver",
    "sha": "07a4ed9f6573bae5e888eb324b8fc012c3ff42c6",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

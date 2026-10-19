@@ -9,7 +9,7 @@
    "repo": "sct",
    "url": "https://github.com/pacharanero/sct",
    "sha": "0f90bd4ae5b0f0329c3920ea563c948d877a4a89",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

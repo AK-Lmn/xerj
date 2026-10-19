@@ -9,7 +9,7 @@
    "repo": "HomRec",
    "url": "https://github.com/homaaio/HomRec",
    "sha": "543a4a5b5a43572471be7a28fa4d5986ac87da39",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "aurora",
    "url": "https://github.com/nessli420/aurora",
    "sha": "ff3e8e5a57805bc617ae4402e4102aa00b44e22b",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

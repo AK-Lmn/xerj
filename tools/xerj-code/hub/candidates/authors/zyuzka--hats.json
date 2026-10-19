@@ -9,7 +9,7 @@
    "repo": "hats",
    "url": "https://github.com/zyuzka/hats",
    "sha": "e568d7e3b2963bb9a48ab6799e6d0ae7940c6f1e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

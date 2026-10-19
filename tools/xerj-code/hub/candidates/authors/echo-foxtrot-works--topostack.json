@@ -9,7 +9,7 @@
    "repo": "topostack",
    "url": "https://github.com/Echo-Foxtrot-Works/topostack",
    "sha": "8020e7f1fdac300ce862511c1887b65126f9727e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

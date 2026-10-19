@@ -9,7 +9,7 @@
    "repo": "matchbook",
    "url": "https://github.com/tunahanaliozturk/matchbook",
    "sha": "21f9d2559e2ef0e50c150721b38680ef7ddfd66b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

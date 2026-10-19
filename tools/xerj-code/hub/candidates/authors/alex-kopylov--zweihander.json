@@ -9,7 +9,7 @@
    "repo": "zweihander",
    "url": "https://github.com/Alex-Kopylov/zweihander",
    "sha": "f6bc015b661b0a65a9c2d394b8d0a4e1224a4cb6",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

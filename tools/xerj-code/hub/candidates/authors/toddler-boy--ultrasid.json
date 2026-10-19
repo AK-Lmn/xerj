@@ -9,7 +9,7 @@
    "repo": "ultraSID",
    "url": "https://github.com/Toddler-Boy/ultraSID",
    "sha": "bb32f2353678ed66980cc048be2aff4e3c18b04d",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

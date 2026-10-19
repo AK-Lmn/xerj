@@ -9,7 +9,7 @@
    "repo": "ICdetector",
    "url": "https://github.com/Alexisgordr/ICdetector",
    "sha": "a6ec98d3072169539767b29bbf228a9695de3778",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

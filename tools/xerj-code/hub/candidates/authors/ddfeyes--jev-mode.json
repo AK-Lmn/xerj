@@ -9,7 +9,7 @@
    "repo": "jev-mode",
    "url": "https://github.com/ddfeyes/jev-mode",
    "sha": "6d4d8dcbd74c7163d4c7c45ddc504afc3a0508db",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

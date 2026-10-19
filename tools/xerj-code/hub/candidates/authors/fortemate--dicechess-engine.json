@@ -9,7 +9,7 @@
    "repo": "dicechess-engine",
    "url": "https://github.com/fortemate/dicechess-engine",
    "sha": "03c2d6e0e7afcabb8de184e038462f1b255dd3f8",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

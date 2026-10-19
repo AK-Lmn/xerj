@@ -9,7 +9,7 @@
    "repo": "lora-pilot",
    "url": "https://github.com/vavo/lora-pilot",
    "sha": "2b310e1d21cf5a549e59c2caa1c936f680d4753b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

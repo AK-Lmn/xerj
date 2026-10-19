@@ -9,7 +9,7 @@
    "repo": "hermes-mission-control",
    "url": "https://github.com/albidev/hermes-mission-control",
    "sha": "b04ef79fdc4a002d70eaced52c07e77ed9fdf6c6",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

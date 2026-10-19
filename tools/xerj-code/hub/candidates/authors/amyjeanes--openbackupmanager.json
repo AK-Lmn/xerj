@@ -9,7 +9,7 @@
    "repo": "OpenBackupManager",
    "url": "https://github.com/AmyJeanes/OpenBackupManager",
    "sha": "365e5666291a53b240b57176e7e14d2c51dc7b4d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

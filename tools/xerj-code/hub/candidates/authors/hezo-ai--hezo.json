@@ -9,7 +9,7 @@
    "repo": "hezo",
    "url": "https://github.com/hezo-ai/hezo",
    "sha": "238eecfdf5b1e3a6d85d3fa2940afb5fd9dba82c",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

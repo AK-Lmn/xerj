@@ -9,7 +9,7 @@
    "repo": "Cyrus",
    "url": "https://github.com/cyrus-lang/Cyrus",
    "sha": "4a17d508724a17c22ec449db48b61962f0c2028b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

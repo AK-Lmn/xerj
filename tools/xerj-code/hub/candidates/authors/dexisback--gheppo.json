@@ -9,7 +9,7 @@
    "repo": "gheppo",
    "url": "https://github.com/dexisback/gheppo",
    "sha": "7f84fdcc5d42f91a19d357358b58b06bcd861850",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

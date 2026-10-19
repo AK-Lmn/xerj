@@ -9,7 +9,7 @@
    "repo": "sample-governed-agentic-companion",
    "url": "https://github.com/aws-samples/sample-governed-agentic-companion",
    "sha": "435c2beee47568d0541ccb7331cfa5bc46841383",
-   "licence": "hint only: MIT-0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT-0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT-0",
     "use": "UNREVIEWED",

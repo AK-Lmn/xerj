@@ -9,7 +9,7 @@
    "repo": "libremusic",
    "url": "https://github.com/elzastrelitzia/libremusic",
    "sha": "8620718b4330b2e3b14ffb65773dba5590470933",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

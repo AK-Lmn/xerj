@@ -9,7 +9,7 @@
    "repo": "wafer",
    "url": "https://github.com/Averyy/wafer",
    "sha": "96180310ba8aa3bf09674b49cb9a6e0e75ab24e9",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

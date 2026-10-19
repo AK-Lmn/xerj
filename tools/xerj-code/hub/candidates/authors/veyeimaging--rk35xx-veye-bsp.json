@@ -9,7 +9,7 @@
    "repo": "rk35xx_veye_bsp",
    "url": "https://github.com/veyeimaging/rk35xx_veye_bsp",
    "sha": "e4516077e1fe5d3d7b7844019ed18ab22978540e",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

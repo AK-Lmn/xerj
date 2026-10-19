@@ -9,7 +9,7 @@
    "repo": "MailDesk",
    "url": "https://github.com/Danny7d/MailDesk",
    "sha": "c1e8600a040d9303088a780036435041b0c6aa03",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "Synapse",
    "url": "https://github.com/JktuJQ/Synapse",
    "sha": "eb7199b39566c9a653dacad5b50c767cdce7bc65",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

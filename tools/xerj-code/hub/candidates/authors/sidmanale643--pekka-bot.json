@@ -9,7 +9,7 @@
    "repo": "pekka-bot",
    "url": "https://github.com/sidmanale643/pekka-bot",
    "sha": "661d4bf4e1683b2209c1d2e4537235ce004d45e0",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

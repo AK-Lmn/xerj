@@ -9,7 +9,7 @@
    "repo": "kickstart-docker",
    "url": "https://github.com/sloopstash/kickstart-docker",
    "sha": "571f1194b81469c879da801f415d0d261c020e5d",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

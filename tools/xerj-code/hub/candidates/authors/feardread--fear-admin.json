@@ -9,7 +9,7 @@
    "repo": "fear-admin",
    "url": "https://github.com/FearDread/fear-admin",
    "sha": "e8547621694f4267e04c3c053e150cdaad062821",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

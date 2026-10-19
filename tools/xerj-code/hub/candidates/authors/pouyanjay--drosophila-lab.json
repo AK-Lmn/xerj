@@ -9,7 +9,7 @@
    "repo": "drosophila-lab",
    "url": "https://github.com/PouyanJay/drosophila-lab",
    "sha": "d35da43dc563e0a1ec3db97be08658f8d8f3c8ee",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

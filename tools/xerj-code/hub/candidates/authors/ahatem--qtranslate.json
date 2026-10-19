@@ -9,7 +9,7 @@
    "repo": "QTranslate",
    "url": "https://github.com/ahatem/QTranslate",
    "sha": "42f9c0dab4bd2aff1456bee2ae6ebecb63045675",
-   "licence": "hint only: MPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MPL-2.0",
     "use": "UNREVIEWED",

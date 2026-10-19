@@ -9,7 +9,7 @@
    "repo": "svdo-meter",
    "url": "https://github.com/brianofrokk3r/svdo-meter",
    "sha": "6128a077060c4984279c303956a122408274f0f8",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

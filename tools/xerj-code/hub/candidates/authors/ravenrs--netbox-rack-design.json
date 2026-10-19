@@ -9,7 +9,7 @@
    "repo": "netbox-rack-design",
    "url": "https://github.com/ravenrs/netbox-rack-design",
    "sha": "0180ec95509989b647524499c718ec06805367f7",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

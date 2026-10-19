@@ -9,7 +9,7 @@
    "repo": "pi-workflow",
    "url": "https://github.com/AgwaB/pi-workflow",
    "sha": "ba49da963eef82ec6c1d3fc15e81e9a5e62a1864",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

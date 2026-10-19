@@ -9,7 +9,7 @@
    "repo": "golang",
    "url": "https://github.com/searKing/golang",
    "sha": "e8ac8dd9e8f3e8b5e0cfc2bec473d4148f6df42b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

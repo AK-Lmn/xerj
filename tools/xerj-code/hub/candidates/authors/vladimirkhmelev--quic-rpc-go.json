@@ -9,7 +9,7 @@
    "repo": "quic-rpc-go",
    "url": "https://github.com/VladimirKhmelev/quic-rpc-go",
    "sha": "9b627619184c47ac1a954ae6c29952102691e251",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

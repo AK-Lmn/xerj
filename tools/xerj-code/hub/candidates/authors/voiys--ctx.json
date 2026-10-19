@@ -9,7 +9,7 @@
    "repo": "ctx",
    "url": "https://github.com/voiys/ctx",
    "sha": "07a7bca1d31cc2b49a0ea7aaa0bead43fa41d1f2",
-   "licence": "hint only: Unlicense (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Unlicense (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Unlicense",
     "use": "UNREVIEWED",

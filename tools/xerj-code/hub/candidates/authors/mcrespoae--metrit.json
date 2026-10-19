@@ -9,7 +9,7 @@
    "repo": "metrit",
    "url": "https://github.com/mcrespoae/metrit",
    "sha": "53994eccae5a3688cd2cf59e83259226d4141ac7",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

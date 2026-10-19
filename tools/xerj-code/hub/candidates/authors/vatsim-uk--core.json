@@ -9,7 +9,7 @@
    "repo": "core",
    "url": "https://github.com/VATSIM-UK/core",
    "sha": "9908d80c0c657cbe6ed91c3a819c4aa3ce0ce73f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

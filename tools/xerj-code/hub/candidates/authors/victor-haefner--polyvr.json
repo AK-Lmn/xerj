@@ -9,7 +9,7 @@
    "repo": "polyvr",
    "url": "https://github.com/Victor-Haefner/polyvr",
    "sha": "791f89c501df4faa152c84ce6cc31a9415865f56",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

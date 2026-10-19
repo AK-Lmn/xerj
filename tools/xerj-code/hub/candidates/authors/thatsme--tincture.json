@@ -9,7 +9,7 @@
    "repo": "tincture",
    "url": "https://github.com/thatsme/tincture",
    "sha": "fed8a34f47b85baeb76f7fd3a3a86d749157c7ae",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

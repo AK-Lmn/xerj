@@ -9,7 +9,7 @@
    "repo": "arifOS",
    "url": "https://github.com/ariffazil/arifOS",
    "sha": "6fcd9a023f800a8f62e00bc05e0ea291bb72bb91",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

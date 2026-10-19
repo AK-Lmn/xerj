@@ -9,7 +9,7 @@
    "repo": "railcast",
    "url": "https://github.com/casablanque-code/railcast",
    "sha": "505b4283fa9e1d5e324b1f117a6430ba147cda47",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "small_tel",
    "url": "https://github.com/eddyem/small_tel",
    "sha": "98a84fb7df2452ce2cc6e340eb407e7553f5cb4f",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

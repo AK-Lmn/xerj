@@ -9,7 +9,7 @@
    "repo": "jadx-gui-ai",
    "url": "https://github.com/cncsnet1/jadx-gui-ai",
    "sha": "8f210493876f65317277ca7b6cf81c788ff361ef",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

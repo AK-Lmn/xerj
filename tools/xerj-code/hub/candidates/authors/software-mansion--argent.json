@@ -9,7 +9,7 @@
    "repo": "argent",
    "url": "https://github.com/software-mansion/argent",
    "sha": "d40708ef8e31003fbe3806f365322497faa37e9a",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

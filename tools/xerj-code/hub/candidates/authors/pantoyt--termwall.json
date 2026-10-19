@@ -9,7 +9,7 @@
    "repo": "termwall",
    "url": "https://github.com/PantoYT/termwall",
    "sha": "b6f4674866143f180871a0995f24d5d8f00aed8a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

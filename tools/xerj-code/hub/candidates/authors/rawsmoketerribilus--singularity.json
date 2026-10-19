@@ -9,7 +9,7 @@
    "repo": "Singularity",
    "url": "https://github.com/RawSmokeTerribilus/Singularity",
    "sha": "bf882534aedabee9fe75f27f60632a2543de0690",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

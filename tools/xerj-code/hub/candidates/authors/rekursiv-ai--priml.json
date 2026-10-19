@@ -9,7 +9,7 @@
    "repo": "priml",
    "url": "https://github.com/rekursiv-ai/priml",
    "sha": "2bae58248b5e0f0f05d2793ae4b9254641551f53",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

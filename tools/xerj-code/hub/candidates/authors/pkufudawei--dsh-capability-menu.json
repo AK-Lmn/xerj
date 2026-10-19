@@ -9,7 +9,7 @@
    "repo": "dsh-capability-menu",
    "url": "https://github.com/PKUfudawei/dsh-capability-menu",
    "sha": "1faa053936bb7ec19e1cd12c35d2f60f88b0bdaa",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

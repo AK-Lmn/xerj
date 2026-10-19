@@ -9,7 +9,7 @@
    "repo": "Rein",
    "url": "https://github.com/AOSSIE-Org/Rein",
    "sha": "0bf54ad2a1a5f56b88cbd432cc25a504819436ee",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

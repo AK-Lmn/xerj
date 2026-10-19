@@ -9,7 +9,7 @@
    "repo": "tincan-cli",
    "url": "https://github.com/bilalyazicioglu/tincan-cli",
    "sha": "a3d9704b3845ff049932acfd88e325a4147005a0",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

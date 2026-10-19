@@ -9,7 +9,7 @@
    "repo": "pi-extensions",
    "url": "https://github.com/utpalsinghdev/pi-extensions",
    "sha": "d56c5cd94d296843e8710f257800fca77707126d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

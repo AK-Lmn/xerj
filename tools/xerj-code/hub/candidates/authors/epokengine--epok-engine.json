@@ -9,7 +9,7 @@
    "repo": "epok-engine",
    "url": "https://github.com/epokengine/epok-engine",
    "sha": "4c58e6a0825b764b553f7bcf4ecf56a01c1952a8",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

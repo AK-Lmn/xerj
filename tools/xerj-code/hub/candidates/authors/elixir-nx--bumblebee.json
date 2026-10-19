@@ -9,7 +9,7 @@
    "repo": "bumblebee",
    "url": "https://github.com/elixir-nx/bumblebee",
    "sha": "10e131e2dc72cc93b344b3ba3c2f4ffb15fd911d",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

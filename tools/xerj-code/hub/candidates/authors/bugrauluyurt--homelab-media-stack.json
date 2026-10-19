@@ -9,7 +9,7 @@
    "repo": "homelab-media-stack",
    "url": "https://github.com/bugrauluyurt/homelab-media-stack",
    "sha": "7314e98f883804b524026b188327a07964a27bf3",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "HPR",
    "url": "https://github.com/plexescor/HPR",
    "sha": "5dbc2349d338ae191c0bc90736fe5e6eba009156",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

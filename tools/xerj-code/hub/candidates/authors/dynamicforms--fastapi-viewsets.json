@@ -9,7 +9,7 @@
    "repo": "fastapi-viewsets",
    "url": "https://github.com/dynamicforms/fastapi-viewsets",
    "sha": "2f42e341511c904e3b8488d958d1e94ec6622b7e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

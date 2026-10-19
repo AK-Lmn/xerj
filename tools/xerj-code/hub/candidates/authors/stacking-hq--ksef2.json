@@ -9,7 +9,7 @@
    "repo": "ksef2",
    "url": "https://github.com/stacking-hq/ksef2",
    "sha": "87c3345a746b8a00451cffcd33dd6d138df3522e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

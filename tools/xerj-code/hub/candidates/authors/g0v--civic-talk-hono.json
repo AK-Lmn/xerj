@@ -9,7 +9,7 @@
    "repo": "civic-talk-hono",
    "url": "https://github.com/g0v/civic-talk-hono",
    "sha": "244de676e12617a7848f87ff930530415323bd45",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

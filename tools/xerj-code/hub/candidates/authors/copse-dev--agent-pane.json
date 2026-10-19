@@ -9,7 +9,7 @@
    "repo": "agent-pane",
    "url": "https://github.com/copse-dev/agent-pane",
    "sha": "cf2ccce60f13371af4a369f3685288f5ff8a24e6",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

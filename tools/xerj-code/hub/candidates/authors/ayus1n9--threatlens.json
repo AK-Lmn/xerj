@@ -9,7 +9,7 @@
    "repo": "ThreatLens",
    "url": "https://github.com/ayus1n9/ThreatLens",
    "sha": "329a157166cb178bca8bbdf2043c795521cf4e69",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

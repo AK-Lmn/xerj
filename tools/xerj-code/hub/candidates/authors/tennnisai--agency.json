@@ -9,7 +9,7 @@
    "repo": "Agency",
    "url": "https://github.com/TennnisAI/Agency",
    "sha": "364bec70e19a0ccd0c23597028cea72eef43b5aa",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

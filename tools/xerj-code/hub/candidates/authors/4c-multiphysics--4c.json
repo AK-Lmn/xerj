@@ -9,7 +9,7 @@
    "repo": "4C",
    "url": "https://github.com/4C-multiphysics/4C",
    "sha": "78b530a231c67afe70bcceaa1240ca8dd4f61b0e",
-   "licence": "hint only: LGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: LGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "LGPL-3.0",
     "use": "UNREVIEWED",

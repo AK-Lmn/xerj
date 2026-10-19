@@ -9,7 +9,7 @@
    "repo": "OpenWriter",
    "url": "https://github.com/achilleterzo/OpenWriter",
    "sha": "1b36af2dd733c3061e3c67d0f868bd8c4be030d6",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

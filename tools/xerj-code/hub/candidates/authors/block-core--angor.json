@@ -9,7 +9,7 @@
    "repo": "angor",
    "url": "https://github.com/block-core/angor",
    "sha": "32e9d87f2a9c88f232dc864014d0b76619feb4dc",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

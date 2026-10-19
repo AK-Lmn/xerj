@@ -9,7 +9,7 @@
    "repo": "PyRIT",
    "url": "https://github.com/microsoft/PyRIT",
    "sha": "83719c5950d3fca71189f8ae06101475339781ea",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "statusline.sh",
    "url": "https://github.com/tronschell/statusline.sh",
    "sha": "13642970e82846cb45e9b460f1a01b4532923990",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "ha-energy-outages",
    "url": "https://github.com/rodion981/ha-energy-outages",
    "sha": "3bb0345178decb45d7b2e2a88a4695791d47a6c8",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

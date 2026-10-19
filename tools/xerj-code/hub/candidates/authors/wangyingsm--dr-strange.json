@@ -9,7 +9,7 @@
    "repo": "dr-strange",
    "url": "https://github.com/wangyingsm/dr-strange",
    "sha": "9b318094f809a1efe333a25ba654d1ec58906f9d",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

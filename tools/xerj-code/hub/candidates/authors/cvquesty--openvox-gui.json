@@ -9,7 +9,7 @@
    "repo": "openvox-gui",
    "url": "https://github.com/cvquesty/openvox-gui",
    "sha": "7b1ccd4bf82fcbf03bc0d8a5f6c0a0f1f9a60e02",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

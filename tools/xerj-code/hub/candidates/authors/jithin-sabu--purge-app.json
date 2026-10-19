@@ -9,7 +9,7 @@
    "repo": "purge-app",
    "url": "https://github.com/jithin-sabu/purge-app",
    "sha": "972e0675dfce0eb557e77a3a305293a8c3b85237",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

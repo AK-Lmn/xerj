@@ -9,7 +9,7 @@
    "repo": "fedimint-sdk",
    "url": "https://github.com/fedimint/fedimint-sdk",
    "sha": "c771ac4085cbeb9bf3133029ea1a8b017d5c09f7",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

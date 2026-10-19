@@ -9,7 +9,7 @@
    "repo": "kernel_slicer",
    "url": "https://github.com/Ray-Tracing-Systems/kernel_slicer",
    "sha": "e46b73bd3b045fa9c75ff29f24f56876ecf0eac8",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

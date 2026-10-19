@@ -9,7 +9,7 @@
    "repo": "claude-code-memory-cache",
    "url": "https://github.com/jushayden/claude-code-memory-cache",
    "sha": "958096e222c93463446c589fef7641f05573d45e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

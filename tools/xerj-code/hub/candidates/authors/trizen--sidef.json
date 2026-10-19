@@ -9,7 +9,7 @@
    "repo": "sidef",
    "url": "https://github.com/trizen/sidef",
    "sha": "2ab19584973b0c65b39ee9d133ee11a929bf1152",
-   "licence": "hint only: Artistic-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Artistic-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Artistic-2.0",
     "use": "UNREVIEWED",

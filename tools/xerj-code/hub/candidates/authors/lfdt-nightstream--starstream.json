@@ -9,7 +9,7 @@
    "repo": "Starstream",
    "url": "https://github.com/LFDT-Nightstream/Starstream",
    "sha": "804588b256cca68f4bc97af54de856902016ecff",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

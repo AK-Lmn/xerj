@@ -9,7 +9,7 @@
    "repo": "CodeCollective",
    "url": "https://github.com/juliancoy/CodeCollective",
    "sha": "c50938a4f1b4dfad6c6051654d1e43835bb28e87",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

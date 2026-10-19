@@ -9,7 +9,7 @@
    "repo": "oc-control-plane",
    "url": "https://github.com/open-cluster/oc-control-plane",
    "sha": "6633564e8f5e964780e9a43d9fe4756cd5431097",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

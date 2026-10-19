@@ -9,7 +9,7 @@
    "repo": "finflow-core",
    "url": "https://github.com/ronitgupta138/finflow-core",
    "sha": "799b58f9eaf5022050e7b16e5c5b9ffe5771720a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "dsh-swarm-orchestrator",
    "url": "https://github.com/linkbag/dsh-swarm-orchestrator",
    "sha": "f3a7b32639e01124e5b2ddb5b10d4fb0aed39c2e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

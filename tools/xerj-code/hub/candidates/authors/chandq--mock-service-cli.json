@@ -9,7 +9,7 @@
    "repo": "mock-service-cli",
    "url": "https://github.com/chandq/mock-service-cli",
    "sha": "59619076ed43e2d7a5c228e03c725a0684ba8d53",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

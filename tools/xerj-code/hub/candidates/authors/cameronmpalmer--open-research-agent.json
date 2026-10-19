@@ -9,7 +9,7 @@
    "repo": "open-research-agent",
    "url": "https://github.com/cameronmpalmer/open-research-agent",
    "sha": "b6d7931542b524479249f5b863473236373c7ceb",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

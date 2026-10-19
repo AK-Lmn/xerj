@@ -9,7 +9,7 @@
    "repo": "AvoryOS",
    "url": "https://github.com/Hidotu-Labs/AvoryOS",
    "sha": "ff5370e556f1e70c9470d3a2067e0f4242d5163b",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

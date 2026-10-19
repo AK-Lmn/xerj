@@ -9,7 +9,7 @@
    "repo": "nanosandbox",
    "url": "https://github.com/Erio-Harrison/nanosandbox",
    "sha": "d23b4d2d8b29a95222f88eeb26514482a31a1af0",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

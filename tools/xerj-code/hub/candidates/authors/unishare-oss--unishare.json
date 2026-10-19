@@ -9,7 +9,7 @@
    "repo": "unishare",
    "url": "https://github.com/unishare-oss/unishare",
    "sha": "c14dca743f56fefe55468e6c2b707833b19b7e17",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

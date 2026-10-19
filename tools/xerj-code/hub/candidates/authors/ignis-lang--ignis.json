@@ -9,7 +9,7 @@
    "repo": "ignis",
    "url": "https://github.com/Ignis-lang/ignis",
    "sha": "31939d8c42a495a2f178579a19fd7d6481d45e85",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

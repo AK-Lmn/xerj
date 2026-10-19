@@ -9,7 +9,7 @@
    "repo": "vpn-server-manager",
    "url": "https://github.com/kureinmaxim/vpn-server-manager",
    "sha": "534155d9b0662c31dee07d677e4f5d3b7ace092d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "personal-agent-foundation",
    "url": "https://github.com/DongLiStudio/personal-agent-foundation",
    "sha": "e6962d28c81b8899eb82b611fd0b29a79bc16b61",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

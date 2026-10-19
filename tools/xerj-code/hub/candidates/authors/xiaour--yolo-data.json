@@ -9,7 +9,7 @@
    "repo": "yolo-data",
    "url": "https://github.com/xiaour/yolo-data",
    "sha": "4da555cbeffc1144c09173709868f2a60f93f2fc",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "opencrawling",
    "url": "https://github.com/opencrawling/opencrawling",
    "sha": "48ae658d03288074be0c2a93b8ab59f38026785c",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

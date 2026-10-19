@@ -9,7 +9,7 @@
    "repo": "opentelemetry-js-contrib",
    "url": "https://github.com/open-telemetry/opentelemetry-js-contrib",
    "sha": "60893066c1b6326bdd22384f150f7e742b839d15",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

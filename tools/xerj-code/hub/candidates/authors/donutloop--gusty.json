@@ -9,7 +9,7 @@
    "repo": "gusty",
    "url": "https://github.com/donutloop/gusty",
    "sha": "83c9f72af5da3c7400cfd0e0d92205741ce3c330",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "pdi-framework",
    "url": "https://github.com/Suraj151/pdi-framework",
    "sha": "6099395c428691570ae1c688846beff8943f6aac",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

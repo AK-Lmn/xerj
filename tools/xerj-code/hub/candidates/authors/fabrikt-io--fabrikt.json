@@ -9,7 +9,7 @@
    "repo": "fabrikt",
    "url": "https://github.com/fabrikt-io/fabrikt",
    "sha": "62f93b3acc155cab15c5c0c4cc47ca0be7fa489e",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

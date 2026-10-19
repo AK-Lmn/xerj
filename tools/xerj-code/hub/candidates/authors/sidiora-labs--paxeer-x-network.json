@@ -9,7 +9,7 @@
    "repo": "Paxeer-X-Network",
    "url": "https://github.com/Sidiora-Labs/Paxeer-X-Network",
    "sha": "d3b803ba53cb91561a68e966d65243b28ed96842",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

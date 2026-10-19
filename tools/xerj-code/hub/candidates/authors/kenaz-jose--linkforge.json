@@ -9,7 +9,7 @@
    "repo": "linkforge",
    "url": "https://github.com/Kenaz-jose/linkforge",
    "sha": "08aa07957b4508af6264c4f03719d0328a31f7ca",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

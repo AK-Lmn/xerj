@@ -9,7 +9,7 @@
    "repo": "Petrel",
    "url": "https://github.com/sezgynus/Petrel",
    "sha": "8a5a276edbfd8811a426aba6658d5fa336c190ec",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

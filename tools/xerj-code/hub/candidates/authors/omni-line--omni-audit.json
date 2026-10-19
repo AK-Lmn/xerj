@@ -9,7 +9,7 @@
    "repo": "omni-audit",
    "url": "https://github.com/omni-line/omni-audit",
    "sha": "a5e7606c813c69f645a86e5aa76675625e0c7e08",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

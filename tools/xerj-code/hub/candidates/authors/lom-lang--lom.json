@@ -9,7 +9,7 @@
    "repo": "lom",
    "url": "https://github.com/lom-lang/lom",
    "sha": "b3bb9f5051326d980841f5ec34fc1992b58f0a73",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

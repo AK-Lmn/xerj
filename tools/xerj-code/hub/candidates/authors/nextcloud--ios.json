@@ -9,7 +9,7 @@
    "repo": "ios",
    "url": "https://github.com/nextcloud/ios",
    "sha": "4ac2f0d797dbfdf31f65f2c1c9fe6b21062dc5d0",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

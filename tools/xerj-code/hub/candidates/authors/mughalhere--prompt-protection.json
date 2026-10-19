@@ -9,7 +9,7 @@
    "repo": "prompt-protection",
    "url": "https://github.com/mughalhere/prompt-protection",
    "sha": "9104c4d584b4fb3985c1760fe53cf422a7f4b640",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

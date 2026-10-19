@@ -9,7 +9,7 @@
    "repo": "filament",
    "url": "https://github.com/filamentphp/filament",
    "sha": "13d22bb8c983747b9cae6640a26de2d32e82ac66",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

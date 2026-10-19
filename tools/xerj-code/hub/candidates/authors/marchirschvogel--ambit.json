@@ -9,7 +9,7 @@
    "repo": "ambit",
    "url": "https://github.com/marchirschvogel/ambit",
    "sha": "5106441a44ab18962a46c9d86b2621ad56be517e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

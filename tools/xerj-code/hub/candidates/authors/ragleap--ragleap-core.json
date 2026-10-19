@@ -9,7 +9,7 @@
    "repo": "ragleap-core",
    "url": "https://github.com/antonyrag/ragleap-core",
    "sha": "7d3e27596b833d8183770537d0fed9b30172cab4",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

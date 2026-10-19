@@ -9,7 +9,7 @@
    "repo": "smallchat",
    "url": "https://github.com/johnnyclem/smallchat",
    "sha": "1577e1b478ec513f2ea057c7756cfae4286b1b2f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

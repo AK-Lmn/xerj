@@ -9,7 +9,7 @@
    "repo": "litmus",
    "url": "https://github.com/litmuschaos/litmus",
    "sha": "d848e23e23a59741adceee764682c7c880de98ec",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

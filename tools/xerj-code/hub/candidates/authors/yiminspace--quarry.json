@@ -9,7 +9,7 @@
    "repo": "quarry",
    "url": "https://github.com/yiminspace/quarry",
    "sha": "190492607e4c3b8068d618abe9ff380e3b67b6ae",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

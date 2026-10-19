@@ -9,7 +9,7 @@
    "repo": "Gravity",
    "url": "https://github.com/qunabu/Gravity",
    "sha": "28e912b8f6808a4bf892fa0f1ffacf857b0faa3a",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

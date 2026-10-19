@@ -9,7 +9,7 @@
    "repo": "spring-microservices-docker-kubernetes",
    "url": "https://github.com/IKauedev/spring-microservices-docker-kubernetes",
    "sha": "e748ef6f10b16504f74942c875250988d8d6ce15",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "pyrite",
    "url": "https://github.com/pyrite-wiki/pyrite",
    "sha": "2817f28953334b434e4bb2d6e49438157f3521c2",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

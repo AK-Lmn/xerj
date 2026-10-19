@@ -9,7 +9,7 @@
    "repo": "contexte-python",
    "url": "https://github.com/contexte-tech/contexte-python",
    "sha": "bc50ccfe4f7fc50c25890e84d9fa7e9696ab093c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

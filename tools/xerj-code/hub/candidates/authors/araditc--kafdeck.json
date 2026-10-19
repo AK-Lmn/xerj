@@ -9,7 +9,7 @@
    "repo": "Kafdeck",
    "url": "https://github.com/araditc/Kafdeck",
    "sha": "b26d297cbc95579a29f34602e8eb4ae837b18436",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

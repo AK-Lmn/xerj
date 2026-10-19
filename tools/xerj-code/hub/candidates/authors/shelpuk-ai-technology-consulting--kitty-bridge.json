@@ -9,7 +9,7 @@
    "repo": "kitty-bridge",
    "url": "https://github.com/Shelpuk-AI-Technology-Consulting/kitty-bridge",
    "sha": "128729ae40e247477a5501fc530ee53110a4b6fb",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

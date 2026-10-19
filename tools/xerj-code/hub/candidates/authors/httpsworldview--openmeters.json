@@ -9,7 +9,7 @@
    "repo": "openmeters",
    "url": "https://github.com/httpsworldview/openmeters",
    "sha": "e34e504a76f8d0bc2adb20eb4bd8cceec7e7d68d",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

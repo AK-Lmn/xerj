@@ -9,7 +9,7 @@
    "repo": "remade",
    "url": "https://github.com/replicraft/remade",
    "sha": "4362af71250e9e4e1351a74cfeb7b0d1b080733e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

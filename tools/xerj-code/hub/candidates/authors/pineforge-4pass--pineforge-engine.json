@@ -9,7 +9,7 @@
    "repo": "pineforge-engine",
    "url": "https://github.com/pineforge-4pass/pineforge-engine",
    "sha": "288f189cc5dafbb986172510b3827eb45b5f6524",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

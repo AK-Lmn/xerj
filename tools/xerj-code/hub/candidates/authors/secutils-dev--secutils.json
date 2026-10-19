@@ -9,7 +9,7 @@
    "repo": "secutils",
    "url": "https://github.com/secutils-dev/secutils",
    "sha": "84d45c54a217d3c7451264c9a15f98e75b9ec651",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

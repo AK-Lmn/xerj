@@ -9,7 +9,7 @@
    "repo": "agent_sandbox",
    "url": "https://github.com/katosh/agent_sandbox",
    "sha": "65a42fa559a5b911a4b1ce7df2d272302cee8ccc",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

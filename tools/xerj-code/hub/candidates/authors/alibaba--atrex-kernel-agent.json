@@ -9,7 +9,7 @@
    "repo": "atrex-kernel-agent",
    "url": "https://github.com/alibaba/atrex-kernel-agent",
    "sha": "7247206287ef2747342eccb89421fa4606368e2d",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

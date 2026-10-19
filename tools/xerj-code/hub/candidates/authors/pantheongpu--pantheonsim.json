@@ -9,7 +9,7 @@
    "repo": "pantheonsim",
    "url": "https://github.com/pantheongpu/pantheonsim",
    "sha": "111a079c9dceb5f910a58a0789a62f329a9d65fd",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

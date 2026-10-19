@@ -9,7 +9,7 @@
    "repo": "GoNavi",
    "url": "https://github.com/Syngnat/GoNavi",
    "sha": "2dbed25ddfe7bc76ded6ecdf16cfa7f7c6408aa0",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

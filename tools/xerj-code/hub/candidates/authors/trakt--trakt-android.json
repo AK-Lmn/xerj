@@ -9,7 +9,7 @@
    "repo": "trakt-android",
    "url": "https://github.com/trakt/trakt-android",
    "sha": "b4b91ac7a5590584efcea6984ce8a56a6906e6af",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "passive_liveness",
    "url": "https://github.com/andikatp/passive_liveness",
    "sha": "21a65df19db3c63207762ada349fcb3da1365b35",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

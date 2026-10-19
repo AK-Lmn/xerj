@@ -9,7 +9,7 @@
    "repo": "omarchy-dock",
    "url": "https://github.com/rosakodu/omarchy-dock",
    "sha": "5d39dfa32f8ef73c53c114dd610ce82ec817b126",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

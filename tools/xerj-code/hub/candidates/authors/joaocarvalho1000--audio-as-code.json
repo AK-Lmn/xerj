@@ -9,7 +9,7 @@
    "repo": "audio-as-code",
    "url": "https://github.com/joaoCarvalho1000/audio-as-code",
    "sha": "d34e33d706c6bc7d06b972b600b74942b63f006e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

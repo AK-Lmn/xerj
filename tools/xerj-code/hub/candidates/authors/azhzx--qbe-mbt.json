@@ -9,7 +9,7 @@
    "repo": "qbe.mbt",
    "url": "https://github.com/azhzx/qbe.mbt",
    "sha": "a2b0142852c1aa8ba9bad343ed1d412d9f5bfdf5",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

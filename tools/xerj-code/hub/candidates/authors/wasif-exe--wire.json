@@ -9,7 +9,7 @@
    "repo": "wire",
    "url": "https://github.com/wasif-exe/wire",
    "sha": "ef3ba2678358d87fd335f0a28c74fc50f5fc77f7",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

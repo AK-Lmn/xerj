@@ -9,7 +9,7 @@
    "repo": "PiWeb",
    "url": "https://github.com/RexVane/PiWeb",
    "sha": "e8164eee776f746ac94683590db0cb3b078987fc",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

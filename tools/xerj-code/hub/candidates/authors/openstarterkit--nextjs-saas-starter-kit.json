@@ -9,7 +9,7 @@
    "repo": "nextjs-saas-starter-kit",
    "url": "https://github.com/openstarterkit/nextjs-saas-starter-kit",
    "sha": "1f618d0fab954998b3a4541065e3ec681b2244ec",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

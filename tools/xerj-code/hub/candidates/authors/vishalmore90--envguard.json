@@ -9,7 +9,7 @@
    "repo": "EnvGuard",
    "url": "https://github.com/vishalmore90/EnvGuard",
    "sha": "2b94b4a1319508418a3d2a03bcaabf5ec03bd4f0",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

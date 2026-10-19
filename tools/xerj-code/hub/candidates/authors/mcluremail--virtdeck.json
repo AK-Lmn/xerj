@@ -9,7 +9,7 @@
    "repo": "virtdeck",
    "url": "https://github.com/mcluremail/virtdeck",
    "sha": "508e491e51a681f7fe3fbe9749eecd4e262b439a",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

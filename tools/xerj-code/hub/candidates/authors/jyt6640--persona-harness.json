@@ -9,7 +9,7 @@
    "repo": "persona-harness",
    "url": "https://github.com/jyt6640/persona-harness",
    "sha": "df3dcc00bc05408b471cc55e8abd74c9d80f53e3",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

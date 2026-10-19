@@ -9,7 +9,7 @@
    "repo": "IW4-Pocket",
    "url": "https://github.com/MarkusSela/IW4-Pocket",
    "sha": "caf80d42d551dd740e956ad1c08e64126bab6422",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

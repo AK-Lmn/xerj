@@ -9,7 +9,7 @@
    "repo": "Synapass",
    "url": "https://github.com/ShadowSafin/Synapass",
    "sha": "0feb9dd5cb60e80a1acdd9bd1d2335b3042baaac",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

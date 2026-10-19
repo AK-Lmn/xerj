@@ -9,7 +9,7 @@
    "repo": "agent-squad",
    "url": "https://github.com/2FastLabs/agent-squad",
    "sha": "cc3f6e0288d937c01f6aa139b3043953c779f456",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

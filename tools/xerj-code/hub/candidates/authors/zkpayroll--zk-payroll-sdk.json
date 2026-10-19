@@ -9,7 +9,7 @@
    "repo": "zk-payroll-sdk",
    "url": "https://github.com/zkpayroll/zk-payroll-sdk",
    "sha": "716d48adbbb8ff65850d40c8f711d8719e6bdb09",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "StaticCs",
    "url": "https://github.com/agocke/StaticCs",
    "sha": "00ce62c73704a2558dc2ab8ea0af10b29988f683",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

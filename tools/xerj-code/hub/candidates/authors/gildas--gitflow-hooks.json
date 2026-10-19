@@ -9,7 +9,7 @@
    "repo": "gitflow-hooks",
    "url": "https://github.com/gildas/gitflow-hooks",
    "sha": "271ff2a2c03dd47e90624c903981a98d73de9f05",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "zketch",
    "url": "https://github.com/nikhilswain/zketch",
    "sha": "fd0b1a38e8b1b152a380de06a8b646563c9be772",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

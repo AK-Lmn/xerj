@@ -9,7 +9,7 @@
    "repo": "taiga-ui",
    "url": "https://github.com/taiga-family/taiga-ui",
    "sha": "d983495255ce277232351b8561ca5a1f7464f846",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

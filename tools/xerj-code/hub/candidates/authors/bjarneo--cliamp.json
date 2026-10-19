@@ -9,7 +9,7 @@
    "repo": "cliamp",
    "url": "https://github.com/bjarneo/cliamp",
    "sha": "646b5735d44bc467b86a634e3cdae0deba9120f3",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

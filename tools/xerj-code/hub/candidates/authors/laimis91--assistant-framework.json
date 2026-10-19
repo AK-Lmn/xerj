@@ -9,7 +9,7 @@
    "repo": "assistant-framework",
    "url": "https://github.com/laimis91/assistant-framework",
    "sha": "242141b04b977f37da0bdf5570f4b71ae606784e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

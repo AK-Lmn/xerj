@@ -9,7 +9,7 @@
    "repo": "vless-server",
    "url": "https://github.com/gr219/vless-server",
    "sha": "568bea2c4dfbb47c6e83985e5f67de1ec8e8ee23",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

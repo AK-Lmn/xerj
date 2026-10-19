@@ -9,7 +9,7 @@
    "repo": "agent-router",
    "url": "https://github.com/theagentrouter/agent-router",
    "sha": "01142d5739fd599b5a7d273cef9efe105d2adbdb",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

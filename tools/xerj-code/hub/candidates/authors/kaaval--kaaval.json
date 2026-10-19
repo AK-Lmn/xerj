@@ -9,7 +9,7 @@
    "repo": "kaaval",
    "url": "https://github.com/kaaval/kaaval",
    "sha": "75e76c4ffbfdbb6a582d6cc78758e14cb57932bd",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

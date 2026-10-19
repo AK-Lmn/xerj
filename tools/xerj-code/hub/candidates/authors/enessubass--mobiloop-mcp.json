@@ -9,7 +9,7 @@
    "repo": "mobiloop-mcp",
    "url": "https://github.com/enessubass/mobiloop-mcp",
    "sha": "14a93893d22a825030bf3cfb9df632cd81450167",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

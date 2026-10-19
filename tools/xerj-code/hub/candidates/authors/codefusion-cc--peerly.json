@@ -9,7 +9,7 @@
    "repo": "peerly",
    "url": "https://github.com/codefusion-cc/peerly",
    "sha": "d581e3ac6bd8655bddcf51cb250dd96d8f0d001d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

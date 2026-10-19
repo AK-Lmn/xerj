@@ -9,7 +9,7 @@
    "repo": "datawarrior",
    "url": "https://github.com/thsa/datawarrior",
    "sha": "1ee22cfce6819f6ee926638d835ec81306b71aa4",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

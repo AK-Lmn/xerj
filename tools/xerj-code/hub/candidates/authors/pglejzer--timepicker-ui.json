@@ -9,7 +9,7 @@
    "repo": "timepicker-ui",
    "url": "https://github.com/pglejzer/timepicker-ui",
    "sha": "b4d0b82a21d29fa93153b5fbed316e1dbaa4a862",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

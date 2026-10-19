@@ -9,7 +9,7 @@
    "repo": "gripm",
    "url": "https://github.com/pablojavierrodriguez/gripm",
    "sha": "a9315ed2e6a31c73a644a49ff3bbea9dc2318864",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

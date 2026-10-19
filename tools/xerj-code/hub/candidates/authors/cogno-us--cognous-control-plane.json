@@ -9,7 +9,7 @@
    "repo": "cognous-control-plane",
    "url": "https://github.com/cogno-us/cognous-control-plane",
    "sha": "e66e5f163c5d5c112ff345a2f332b4c3893ee183",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

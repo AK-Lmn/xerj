@@ -9,7 +9,7 @@
    "repo": "database",
    "url": "https://github.com/utopia-php/database",
    "sha": "1f4ad1b36609a27e2a8e3407875e7ee274c37e12",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

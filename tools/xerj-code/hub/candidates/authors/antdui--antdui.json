@@ -9,7 +9,7 @@
    "repo": "AntdUI",
    "url": "https://github.com/AntdUI/AntdUI",
    "sha": "b2d244090f80c24c000d2c32dca79deea9aa3d27",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

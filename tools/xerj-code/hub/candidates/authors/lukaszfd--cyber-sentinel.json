@@ -9,7 +9,7 @@
    "repo": "cyber-sentinel",
    "url": "https://github.com/lukaszFD/cyber-sentinel",
    "sha": "077a9ef807aef2f2ffb2e25c26c295d2a1ba437b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

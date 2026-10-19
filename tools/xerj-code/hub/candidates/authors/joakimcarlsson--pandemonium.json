@@ -9,7 +9,7 @@
    "repo": "pandemonium",
    "url": "https://github.com/JoakimCarlsson/pandemonium",
    "sha": "521161926c8045241ff8aaa6dbf8b379b2856238",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "imi-lang",
    "url": "https://github.com/sunless2day/imi-lang",
    "sha": "34d6c8b9fcfdfa62c2ce6f8219f2db79093af65d",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

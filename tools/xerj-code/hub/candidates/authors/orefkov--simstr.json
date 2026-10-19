@@ -9,7 +9,7 @@
    "repo": "simstr",
    "url": "https://github.com/orefkov/simstr",
    "sha": "e8c1dc72b5de38d45df81e2d3f8f76046cb0d57f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

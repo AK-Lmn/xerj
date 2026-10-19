@@ -9,7 +9,7 @@
    "repo": "opencode-parser",
    "url": "https://github.com/TejasS1233/opencode-parser",
    "sha": "959fbd3f7cbdfc2fc0fed28ee8b285b827c62d34",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

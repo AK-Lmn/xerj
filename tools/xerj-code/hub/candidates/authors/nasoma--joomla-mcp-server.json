@@ -9,7 +9,7 @@
    "repo": "joomla-mcp-server",
    "url": "https://github.com/nasoma/joomla-mcp-server",
    "sha": "5741b5e4d2795af9466f7ff72a88ce5de468316b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

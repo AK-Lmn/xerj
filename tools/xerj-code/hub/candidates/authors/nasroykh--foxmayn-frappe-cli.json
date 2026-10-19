@@ -9,7 +9,7 @@
    "repo": "foxmayn_frappe_cli",
    "url": "https://github.com/nasroykh/foxmayn_frappe_cli",
    "sha": "5678ffe95423a7383ed8dc721b786bd32206b518",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

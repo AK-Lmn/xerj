@@ -9,7 +9,7 @@
    "repo": "graphlink",
    "url": "https://github.com/Oualitsen/graphlink",
    "sha": "329e66eb4cf3ae55100df76aee7be1202db67e11",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

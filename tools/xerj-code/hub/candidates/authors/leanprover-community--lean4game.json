@@ -9,7 +9,7 @@
    "repo": "lean4game",
    "url": "https://github.com/leanprover-community/lean4game",
    "sha": "aff9a939e191fc71f37cad84e6f2a6a3e0133091",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

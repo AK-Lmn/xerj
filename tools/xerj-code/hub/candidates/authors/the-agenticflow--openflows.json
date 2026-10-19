@@ -9,7 +9,7 @@
    "repo": "openflows",
    "url": "https://github.com/The-AgenticFlow/openflows",
    "sha": "f8e63ded6d72a8a632a8fe14ecbc491c8ff3f02f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

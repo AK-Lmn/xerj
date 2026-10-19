@@ -9,7 +9,7 @@
    "repo": "midnight-agent-skills",
    "url": "https://github.com/abouchard11/midnight-agent-skills",
    "sha": "37961b9f39aadcf69ff8b0f746fd32a1ff3d56f5",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

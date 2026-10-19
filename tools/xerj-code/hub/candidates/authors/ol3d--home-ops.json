@@ -9,7 +9,7 @@
    "repo": "home-ops",
    "url": "https://github.com/ol3d/home-ops",
    "sha": "c5a3b2ec6516680358c369137d3bd6021c998d42",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "moodle-auth_emailadmin",
    "url": "https://github.com/hrimhari/moodle-auth_emailadmin",
    "sha": "749e7b8eca0a5646711ab46b11b1ef7e2258516d",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

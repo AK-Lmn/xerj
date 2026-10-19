@@ -9,7 +9,7 @@
    "repo": "std_slop",
    "url": "https://github.com/hsaliak/std_slop",
    "sha": "dff47a9dd37b564001138494adbd598b1bd8a834",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

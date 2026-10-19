@@ -9,7 +9,7 @@
    "repo": "opencode-in-chrome",
    "url": "https://github.com/asaf-labs/opencode-in-chrome",
    "sha": "a68bed8aaecd8387676de56160c77453cbfd8c2c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

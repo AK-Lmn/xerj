@@ -9,7 +9,7 @@
    "repo": "arcamera",
    "url": "https://github.com/itcodehery/arcamera",
    "sha": "12cad6f2f37c8224a69213dd50fbde9687631ba9",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

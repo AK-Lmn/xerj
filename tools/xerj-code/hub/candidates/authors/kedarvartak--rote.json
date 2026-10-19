@@ -9,7 +9,7 @@
    "repo": "rote",
    "url": "https://github.com/kedarvartak/rote",
    "sha": "1b0fa16e8f2f6b0141386a292190191243272958",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "deer-flow",
    "url": "https://github.com/bytedance/deer-flow",
    "sha": "8ca2910b39d090a6e25a15ad08d09381a4140406",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

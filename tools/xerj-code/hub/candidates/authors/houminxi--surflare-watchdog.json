@@ -9,7 +9,7 @@
    "repo": "surflare-watchdog",
    "url": "https://github.com/HouMinXi/surflare-watchdog",
    "sha": "3a022cfec90ec0ed564ffb624a52e07471a29e53",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "rust-k8s-demo",
    "url": "https://github.com/caulagi/rust-k8s-demo",
    "sha": "0dbcd438fe13686d8f7efd2b883ed55ee1bf56ed",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

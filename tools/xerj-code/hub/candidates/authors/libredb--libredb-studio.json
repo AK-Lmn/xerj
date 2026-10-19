@@ -9,7 +9,7 @@
    "repo": "libredb-studio",
    "url": "https://github.com/libredb/libredb-studio",
    "sha": "9b370ee6d625ab2df37af9be3a345912764b84ea",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

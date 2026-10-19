@@ -9,7 +9,7 @@
    "repo": "QuantumAlpha",
    "url": "https://github.com/QuantSingularity/QuantumAlpha",
    "sha": "eed14d5dac30dc1f39b5b9bc02d7e3bda59323d6",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

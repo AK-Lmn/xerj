@@ -9,7 +9,7 @@
    "repo": "gascity",
    "url": "https://github.com/gastownhall/gascity",
    "sha": "8ab110141fc44352635a8d61e5e6ad07c6903594",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

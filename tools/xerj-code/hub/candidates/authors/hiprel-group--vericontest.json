@@ -9,7 +9,7 @@
    "repo": "VeriContest",
    "url": "https://github.com/HIPREL-Group/VeriContest",
    "sha": "2578227514cdd625b1d3f8086c82b9f075ed5432",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

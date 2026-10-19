@@ -9,7 +9,7 @@
    "repo": "dsh-inline-media-viewer-plugin",
    "url": "https://github.com/Wisdoverse/dsh-inline-media-viewer-plugin",
    "sha": "93c7b7ff71c7e23f30e3e3403a4b7243f2b65d4b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

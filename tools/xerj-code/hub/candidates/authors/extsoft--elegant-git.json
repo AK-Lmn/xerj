@@ -9,7 +9,7 @@
    "repo": "elegant-git",
    "url": "https://github.com/extsoft/elegant-git",
    "sha": "2b69ae74db49326423e5cb1a7ed6313c74503155",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

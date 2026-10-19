@@ -9,7 +9,7 @@
    "repo": "mslicer",
    "url": "https://github.com/connorslade/mslicer",
    "sha": "974a859f90fa4de5ee56d5e885c2dc60b1d90dcd",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

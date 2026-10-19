@@ -9,7 +9,7 @@
    "repo": "SignalLab",
    "url": "https://github.com/ProAnima/SignalLab",
    "sha": "4959e746f7c4fa5f9a4a6654021a336a5bc0654e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

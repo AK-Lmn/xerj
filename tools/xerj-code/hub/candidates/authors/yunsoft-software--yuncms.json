@@ -9,7 +9,7 @@
    "repo": "yuncms",
    "url": "https://github.com/Yunsoft-Software/yuncms",
    "sha": "bde8d4a025dcad670d2497f048d649983fbcc1a6",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

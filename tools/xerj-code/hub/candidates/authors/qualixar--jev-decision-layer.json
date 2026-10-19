@@ -9,7 +9,7 @@
    "repo": "jev-decision-layer",
    "url": "https://github.com/qualixar/jev-decision-layer",
    "sha": "88affbfe6f2b336c25c9bcf1c6a19375cd5060d7",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

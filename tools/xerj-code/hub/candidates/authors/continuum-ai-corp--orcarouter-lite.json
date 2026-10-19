@@ -9,7 +9,7 @@
    "repo": "OrcaRouter-Lite",
    "url": "https://github.com/Continuum-AI-Corp/OrcaRouter-Lite",
    "sha": "4cacea8538f6dc16c4c9a8364ec867a1c4c80088",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

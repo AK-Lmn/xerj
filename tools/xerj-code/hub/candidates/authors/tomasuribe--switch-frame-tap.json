@@ -9,7 +9,7 @@
    "repo": "switch-frame-tap",
    "url": "https://github.com/TomasUribe/switch-frame-tap",
    "sha": "bf740d4d39811c1705ffd1eaf97da0bc0a544540",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

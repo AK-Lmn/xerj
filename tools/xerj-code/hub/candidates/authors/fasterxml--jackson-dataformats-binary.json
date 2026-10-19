@@ -9,7 +9,7 @@
    "repo": "jackson-dataformats-binary",
    "url": "https://github.com/FasterXML/jackson-dataformats-binary",
    "sha": "7cfbad3496b96acb0fedb752de0b234c61aa8557",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

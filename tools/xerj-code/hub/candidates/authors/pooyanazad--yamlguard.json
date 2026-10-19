@@ -9,7 +9,7 @@
    "repo": "yamlguard",
    "url": "https://github.com/pooyanazad/yamlguard",
    "sha": "b4764bd09bde30cbce6bf4c83c2b6c14cfbf5dc2",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

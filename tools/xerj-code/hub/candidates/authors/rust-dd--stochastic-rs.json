@@ -9,7 +9,7 @@
    "repo": "stochastic-rs",
    "url": "https://github.com/rust-dd/stochastic-rs",
    "sha": "8df05b0466570ca26980c931f572a32b1f5f6b24",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

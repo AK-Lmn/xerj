@@ -9,7 +9,7 @@
    "repo": "fsharp-refactor",
    "url": "https://github.com/Thorium/fsharp-refactor",
    "sha": "95b1875d7d74211adb29154db7536eb277fce033",
-   "licence": "hint only: Unlicense (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Unlicense (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Unlicense",
     "use": "UNREVIEWED",

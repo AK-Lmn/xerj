@@ -9,7 +9,7 @@
    "repo": "phpantom_lsp",
    "url": "https://github.com/PHPantom-dev/phpantom_lsp",
    "sha": "40f6523af7ca1f5a1ca84716eaaa59f62cef76df",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

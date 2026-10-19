@@ -9,7 +9,7 @@
    "repo": "DIO",
    "url": "https://github.com/nisaral/DIO",
    "sha": "26a78c383f140b114297fd989bb1adfffd2c5828",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

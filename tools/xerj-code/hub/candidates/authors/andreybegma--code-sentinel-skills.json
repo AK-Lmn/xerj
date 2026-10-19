@@ -9,7 +9,7 @@
    "repo": "claude-code-plugin",
    "url": "https://github.com/AndreyBegma/claude-code-plugin",
    "sha": "bdce2e0dd083a0ffffad0cd56ee26e3ab60cdf61",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

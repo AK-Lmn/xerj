@@ -9,7 +9,7 @@
    "repo": "img2threejs",
    "url": "https://github.com/img2threejs/img2threejs",
    "sha": "809b72d048533ab196177ae3ba8762cad89167bd",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

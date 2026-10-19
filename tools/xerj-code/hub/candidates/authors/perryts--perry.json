@@ -9,7 +9,7 @@
    "repo": "perry",
    "url": "https://github.com/PerryTS/perry",
    "sha": "48573e0186e030cf7799c2ecf76c534a08c28b11",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

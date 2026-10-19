@@ -9,7 +9,7 @@
    "repo": "ZeroTTS",
    "url": "https://github.com/zeroweight-ai/ZeroTTS",
    "sha": "3d7feb0b74e559d630096661cb7184f2f6ece494",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

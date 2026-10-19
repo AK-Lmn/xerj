@@ -9,7 +9,7 @@
    "repo": "mod_earshot",
    "url": "https://github.com/wiringai/mod_earshot",
    "sha": "1bf18b4651bc4d50afc5b821d67cbccf50b4df59",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

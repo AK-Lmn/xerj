@@ -9,7 +9,7 @@
    "repo": "goggles_admin2",
    "url": "https://github.com/steveoro/goggles_admin2",
    "sha": "0502e20ef931237a59c35dd92d19467d5b7987de",
-   "licence": "hint only: LGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: LGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "LGPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "aether",
    "url": "https://github.com/mengsig/aether",
    "sha": "0df602a26ba89307940a553267aeeb3e3f10db85",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

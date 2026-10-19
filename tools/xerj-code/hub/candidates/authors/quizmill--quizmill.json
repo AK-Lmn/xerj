@@ -9,7 +9,7 @@
    "repo": "quizmill",
    "url": "https://github.com/quizmill/quizmill",
    "sha": "77b84630ad94bb6091d3097af75c2f3aec1edea8",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

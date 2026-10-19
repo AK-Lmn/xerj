@@ -9,7 +9,7 @@
    "repo": "aws-waf-rules-reviewer",
    "url": "https://github.com/chenghit/aws-waf-rules-reviewer",
    "sha": "70a98edf665eee5ea9d0810cc0057cac7b888b35",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

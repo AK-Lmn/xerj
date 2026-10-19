@@ -9,7 +9,7 @@
    "repo": "viva-genicam",
    "url": "https://github.com/VitalyVorobyev/viva-genicam",
    "sha": "221d1b9d811c36bc95cc206f6b076fcbf9188878",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "flint",
    "url": "https://github.com/programmersd21/flint",
    "sha": "33afda07958bf19f2fb915a1eca7db9e206f9ec7",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

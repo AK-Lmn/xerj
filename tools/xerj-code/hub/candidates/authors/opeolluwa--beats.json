@@ -9,7 +9,7 @@
    "repo": "beats",
    "url": "https://github.com/opeolluwa/beats",
    "sha": "0e0b568fd045691cecb2f48b528ad87b12b2e1fd",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

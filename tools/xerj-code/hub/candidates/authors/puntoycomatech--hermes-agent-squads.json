@@ -9,7 +9,7 @@
    "repo": "hermes-agent-squads",
    "url": "https://github.com/PuntoyComaTech/hermes-agent-squads",
    "sha": "e003020602b171f3c198eab523535f35c2f4a1a3",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

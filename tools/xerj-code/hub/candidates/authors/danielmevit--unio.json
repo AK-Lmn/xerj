@@ -9,7 +9,7 @@
    "repo": "unio",
    "url": "https://github.com/danielmevit/unio",
    "sha": "4516d5130572fa7eb94a6c63164c91d705502a30",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

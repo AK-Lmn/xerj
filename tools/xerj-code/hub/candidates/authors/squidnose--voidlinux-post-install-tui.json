@@ -9,7 +9,7 @@
    "repo": "Voidlinux-Post-Install-TUI",
    "url": "https://github.com/squidnose/Voidlinux-Post-Install-TUI",
    "sha": "9ace1c334ba7d652d26be0ee2c0286bea6c1e972",
-   "licence": "hint only: BSD-2-Clause (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: BSD-2-Clause (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "BSD-2-Clause",
     "use": "UNREVIEWED",

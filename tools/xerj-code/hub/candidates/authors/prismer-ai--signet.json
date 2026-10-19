@@ -9,7 +9,7 @@
    "repo": "signet",
    "url": "https://github.com/Prismer-AI/signet",
    "sha": "f97c3281f96d19636e11426e4c0a467eb01e3015",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

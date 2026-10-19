@@ -9,7 +9,7 @@
    "repo": "mcp-for-nextcloud",
    "url": "https://github.com/sintax-tech/mcp-for-nextcloud",
    "sha": "331bdede7ad5fede9eb0db2dec3fc484fa42447f",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "autodesk-ai",
    "url": "https://github.com/demenking105-lab/autodesk-ai",
    "sha": "34663bdc832c2efb1bee97f322f0a0c8fb222404",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

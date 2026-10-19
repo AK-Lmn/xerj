@@ -9,7 +9,7 @@
    "repo": "socialseed-tasker",
    "url": "https://github.com/daironpf/socialseed-tasker",
    "sha": "b2bcfefd48b4ced483d676a4150984a2c40a4dc4",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

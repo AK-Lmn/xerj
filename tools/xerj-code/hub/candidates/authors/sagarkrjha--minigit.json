@@ -9,7 +9,7 @@
    "repo": "minigit",
    "url": "https://github.com/sagarkrjha/minigit",
    "sha": "4a06f60760d3e0eb261da74a004658dd3c879450",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

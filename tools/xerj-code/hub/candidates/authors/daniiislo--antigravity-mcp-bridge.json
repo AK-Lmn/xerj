@@ -9,7 +9,7 @@
    "repo": "antigravity-mcp-bridge",
    "url": "https://github.com/Daniiislo/antigravity-mcp-bridge",
    "sha": "2a965d41f1450ec09db335ef22554afec64309e3",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

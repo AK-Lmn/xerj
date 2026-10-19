@@ -9,7 +9,7 @@
    "repo": "mloda",
    "url": "https://github.com/mloda-ai/mloda",
    "sha": "e8f8eae2d296f7957d3f94c266b051cd44d0c608",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

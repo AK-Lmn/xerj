@@ -9,7 +9,7 @@
    "repo": "sample-agentcore-enterprise-platform",
    "url": "https://github.com/aws-samples/sample-agentcore-enterprise-platform",
    "sha": "d9fe244be3cba7be0afeb5c473b45e79d3ed71be",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

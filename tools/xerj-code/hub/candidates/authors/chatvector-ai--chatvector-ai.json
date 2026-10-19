@@ -9,7 +9,7 @@
    "repo": "chatvector-ai",
    "url": "https://github.com/chatvector-ai/chatvector-ai",
    "sha": "18057e0f46fafb6cd9ceac7ad0106939e4bf5bfe",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

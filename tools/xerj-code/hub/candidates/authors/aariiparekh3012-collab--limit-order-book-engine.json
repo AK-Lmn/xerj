@@ -9,7 +9,7 @@
    "repo": "limit-order-book-engine",
    "url": "https://github.com/aariiparekh3012-collab/limit-order-book-engine",
    "sha": "37b042b6612c5cce696cb29d30a8e2320a9b5bb3",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

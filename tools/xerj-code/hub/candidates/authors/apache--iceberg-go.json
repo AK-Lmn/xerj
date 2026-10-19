@@ -9,7 +9,7 @@
    "repo": "iceberg-go",
    "url": "https://github.com/apache/iceberg-go",
    "sha": "97720316a4a206c600b9357c18d158d8eda570be",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

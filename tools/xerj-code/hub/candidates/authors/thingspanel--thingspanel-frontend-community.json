@@ -9,7 +9,7 @@
    "repo": "thingspanel-frontend-community",
    "url": "https://github.com/ThingsPanel/thingspanel-frontend-community",
    "sha": "7a3c7ddfe0f3a9476de8e60fa3623f4a7183514f",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "SQLiteGraphStudio",
    "url": "https://github.com/Albertsteenstrup/SQLiteGraphStudio",
    "sha": "9b840981da0dad554e9ce94dedbdbd5df6b9e967",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

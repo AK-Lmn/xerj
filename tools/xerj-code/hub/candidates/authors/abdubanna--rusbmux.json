@@ -9,7 +9,7 @@
    "repo": "rusbmux",
    "url": "https://github.com/abdullah-albanna/rusbmux",
    "sha": "4a4aec5aa8c43ded30d72b8431f107bbd585d0a8",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

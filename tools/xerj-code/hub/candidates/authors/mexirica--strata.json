@@ -9,7 +9,7 @@
    "repo": "strata",
    "url": "https://github.com/mexirica/strata",
    "sha": "c42e18da98daf4a9b683ff3c4b9af6530d623e92",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

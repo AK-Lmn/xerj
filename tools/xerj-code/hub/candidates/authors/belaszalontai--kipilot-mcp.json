@@ -9,7 +9,7 @@
    "repo": "kipilot-mcp",
    "url": "https://github.com/belaszalontai/kipilot-mcp",
    "sha": "bd3e0106b0489c27785ec4154e102e065721fb62",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

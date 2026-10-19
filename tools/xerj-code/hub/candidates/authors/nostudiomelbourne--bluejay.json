@@ -9,7 +9,7 @@
    "repo": "bluejay",
    "url": "https://github.com/nostudioMelbourne/bluejay",
    "sha": "73ab5519c169a15bbe568ce2f628a01ed50ef678",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

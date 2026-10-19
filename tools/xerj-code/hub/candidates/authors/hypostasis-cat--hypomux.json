@@ -9,7 +9,7 @@
    "repo": "HypoMux",
    "url": "https://github.com/Hypostasis-Cat/HypoMux",
    "sha": "ef9311b102ef3063f51c4757086a5ab7f27d3ed4",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "idict",
    "url": "https://github.com/hadasbro/idict",
    "sha": "22a4812e247857a3bad54815697ef29580a0ed0f",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "dockercart",
    "url": "https://github.com/kdbsoft/dockercart",
    "sha": "3e31e37fb8e45ea0351c9cb8d23194c2326e9c30",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

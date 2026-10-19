@@ -9,7 +9,7 @@
    "repo": "disensor",
    "url": "https://github.com/NicolasRocchia/disensor",
    "sha": "56edef3be30963fbcc551fe4112c051d13c8d2f8",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

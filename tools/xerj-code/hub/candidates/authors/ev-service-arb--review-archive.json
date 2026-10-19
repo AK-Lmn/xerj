@@ -9,7 +9,7 @@
    "repo": "review_archive",
    "url": "https://github.com/EV-Service-Arb/review_archive",
    "sha": "702716c452e03644bcd952db386e116e268ecba1",
-   "licence": "hint only: BlueOak-1.0.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: BlueOak-1.0.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "BlueOak-1.0.0",
     "use": "UNREVIEWED",

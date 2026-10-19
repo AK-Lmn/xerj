@@ -9,7 +9,7 @@
    "repo": "python-agent-harness",
    "url": "https://github.com/beacoder/python-agent-harness",
    "sha": "df727f4e3e43183655997eb514c13365a371fadf",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

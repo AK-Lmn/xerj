@@ -9,7 +9,7 @@
    "repo": "animus",
    "url": "https://github.com/Arete-Consortium/animus",
    "sha": "e339041b8330295cd5b8dd50d8f5331acbada556",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

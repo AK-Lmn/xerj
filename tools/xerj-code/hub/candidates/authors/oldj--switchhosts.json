@@ -9,7 +9,7 @@
    "repo": "SwitchHosts",
    "url": "https://github.com/oldj/SwitchHosts",
    "sha": "7a2cba255293996e0d6eab4c5c7c4a05dd5ee27f",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

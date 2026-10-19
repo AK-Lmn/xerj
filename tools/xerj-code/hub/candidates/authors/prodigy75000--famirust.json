@@ -9,7 +9,7 @@
    "repo": "FamiRust",
    "url": "https://github.com/Prodigy75000/FamiRust",
    "sha": "3c87da64f07be87451125e9f832f14af41c0f83d",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

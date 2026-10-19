@@ -9,7 +9,7 @@
    "repo": "CopyQ",
    "url": "https://github.com/hluk/CopyQ",
    "sha": "0ca0dcec858802b2293187178d3272c10cf7e50d",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

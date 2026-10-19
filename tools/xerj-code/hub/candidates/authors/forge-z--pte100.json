@@ -9,7 +9,7 @@
    "repo": "pte100",
    "url": "https://github.com/forge-z/pte100",
    "sha": "3f592bb7956b477b21430518b98e31537c5e7fcf",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

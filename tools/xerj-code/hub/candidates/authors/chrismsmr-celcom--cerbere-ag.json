@@ -9,7 +9,7 @@
    "repo": "cerbere-AG",
    "url": "https://github.com/chrismsmr-celcom/cerbere-AG",
    "sha": "5898fa41d5b715e9f693e11ab8fbbb85803e74c8",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

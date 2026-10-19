@@ -9,7 +9,7 @@
    "repo": "Wimsy",
    "url": "https://github.com/dwd/Wimsy",
    "sha": "e307c78223da850189a7f21797abc110acbab0c1",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

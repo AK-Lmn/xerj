@@ -9,7 +9,7 @@
    "repo": "rusto-rs",
    "url": "https://github.com/byrizki/rusto-rs",
    "sha": "2f826fe0b0942260e98063a1d22deef45a66e3ef",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "endora-commerce",
    "url": "https://github.com/endora-commerce/endora-commerce",
    "sha": "e9fb6677d9dc0c3adf6b3e3ec674a6736efe51de",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

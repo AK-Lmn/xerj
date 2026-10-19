@@ -9,7 +9,7 @@
    "repo": "sn-copilot",
    "url": "https://github.com/j-raghavan/sn-copilot",
    "sha": "6b1f2bb5b4185dc0514d5d25b1fecd47cedf219c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "agent-memory",
    "url": "https://github.com/xChuCx/agent-memory",
    "sha": "f3e18a10f0db4f06202fc2dd0074874316852b52",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "agriculuture-agent",
    "url": "https://github.com/AI123-cmd/agriculuture-agent",
    "sha": "9cd784242384bc4efac87e3335b3a714edead657",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

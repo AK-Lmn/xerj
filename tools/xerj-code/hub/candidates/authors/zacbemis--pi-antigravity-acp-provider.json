@@ -9,7 +9,7 @@
    "repo": "pi-antigravity-acp-provider",
    "url": "https://github.com/zacbemis/pi-antigravity-acp-provider",
    "sha": "220b028a0a9d91fb5c3e1522e9aaf76851630961",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

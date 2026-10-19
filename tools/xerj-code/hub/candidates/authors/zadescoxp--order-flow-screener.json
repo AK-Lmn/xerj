@@ -9,7 +9,7 @@
    "repo": "order-flow-screener",
    "url": "https://github.com/zadescoxp/order-flow-screener",
    "sha": "09591805cf849b13b4832505551415be8de836ce",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

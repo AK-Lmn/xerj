@@ -9,7 +9,7 @@
    "repo": "OpenCADStudio",
    "url": "https://github.com/HakanSeven12/OpenCADStudio",
    "sha": "7d008c4914af10fad64833c2626bf12c3073b4df",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

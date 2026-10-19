@@ -9,7 +9,7 @@
    "repo": "wireforge",
    "url": "https://github.com/lenitain/wireforge",
    "sha": "c616de73b1f2a2ed45b79479bd7fea1e2451cbf9",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

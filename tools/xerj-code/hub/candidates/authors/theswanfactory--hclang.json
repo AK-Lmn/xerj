@@ -9,7 +9,7 @@
    "repo": "hclang",
    "url": "https://github.com/TheSwanFactory/hclang",
    "sha": "a8641b2c279999e0eae4a511bd48f6ed01e87991",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

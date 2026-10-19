@@ -9,7 +9,7 @@
    "repo": "loadout-cli",
    "url": "https://github.com/ntatschner/loadout-cli",
    "sha": "4028bcaaa44a4c34baefc33d2d47cc5128eed3fc",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "kafka",
    "url": "https://github.com/cookieMonsterDev/kafka",
    "sha": "3cf25b3a135a64ccfde9074d6ea3427957795845",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

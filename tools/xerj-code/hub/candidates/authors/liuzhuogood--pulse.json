@@ -9,7 +9,7 @@
    "repo": "Pulse",
    "url": "https://github.com/liuzhuogood/Pulse",
    "sha": "5b9d1b9e505e698fbd2a23204d7a959fc17ef998",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

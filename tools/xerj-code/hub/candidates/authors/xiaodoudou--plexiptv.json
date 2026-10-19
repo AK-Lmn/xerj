@@ -9,7 +9,7 @@
    "repo": "PlexIPTV",
    "url": "https://github.com/xiaodoudou/PlexIPTV",
    "sha": "a7a14fda029a719a94988953685e2ea6925dc0af",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

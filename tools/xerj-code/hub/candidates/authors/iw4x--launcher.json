@@ -9,7 +9,7 @@
    "repo": "launcher",
    "url": "https://github.com/iw4x/launcher",
    "sha": "dfdb1566305a4c7d3de6d9e8d04b2d4186812678",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

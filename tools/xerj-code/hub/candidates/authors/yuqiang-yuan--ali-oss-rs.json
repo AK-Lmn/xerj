@@ -9,7 +9,7 @@
    "repo": "ali-oss-rs",
    "url": "https://github.com/yuqiang-yuan/ali-oss-rs",
    "sha": "876409ff738ff067d543ce4fa0023e0f115852f7",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

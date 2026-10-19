@@ -9,7 +9,7 @@
    "repo": "bt2usb",
    "url": "https://github.com/chefzaid/bt2usb",
    "sha": "1c22207df3974c0dd0a77646b1deeaf90850ed10",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

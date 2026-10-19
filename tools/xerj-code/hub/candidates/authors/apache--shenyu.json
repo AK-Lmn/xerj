@@ -9,7 +9,7 @@
    "repo": "shenyu",
    "url": "https://github.com/apache/shenyu",
    "sha": "1fc1dfb771c18895f7897e641df5b04dce16812c",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

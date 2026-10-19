@@ -9,7 +9,7 @@
    "repo": "causal-triangulations",
    "url": "https://github.com/acgetchell/causal-triangulations",
    "sha": "ed3845079182e0b1ef97fa2074741dd5c1b55248",
-   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "BSD-3-Clause",
     "use": "UNREVIEWED",

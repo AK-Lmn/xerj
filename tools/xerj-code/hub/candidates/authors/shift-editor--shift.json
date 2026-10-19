@@ -9,7 +9,7 @@
    "repo": "shift",
    "url": "https://github.com/shift-editor/shift",
    "sha": "433a6604b0f5a38dd08aaa4ca5e934f2000bd907",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

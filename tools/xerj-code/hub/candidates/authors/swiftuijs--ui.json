@@ -9,7 +9,7 @@
    "repo": "ui",
    "url": "https://github.com/swiftuijs/ui",
    "sha": "2b6f5e8027bfebb82c35c9fcc92311d2007e0c70",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

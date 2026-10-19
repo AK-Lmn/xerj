@@ -9,7 +9,7 @@
    "repo": "react-native-healthkit",
    "url": "https://github.com/kingstinct/react-native-healthkit",
    "sha": "b6de7ddc7d8ec8d8139faab332516f1b7f216fb0",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

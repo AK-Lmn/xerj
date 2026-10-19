@@ -9,7 +9,7 @@
    "repo": "orcbot",
    "url": "https://github.com/fredabila/orcbot",
    "sha": "d3cd92c635ee935860c3e5a46331999d259e5e8a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

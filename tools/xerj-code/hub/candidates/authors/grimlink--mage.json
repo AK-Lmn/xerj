@@ -9,7 +9,7 @@
    "repo": "mage",
    "url": "https://github.com/GrimLink/mage",
    "sha": "fc3aa5e7369bc2be69f847cd5bb06db0faaf897c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

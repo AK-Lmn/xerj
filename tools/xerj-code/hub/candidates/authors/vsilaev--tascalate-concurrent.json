@@ -9,7 +9,7 @@
    "repo": "tascalate-concurrent",
    "url": "https://github.com/vsilaev/tascalate-concurrent",
    "sha": "16fa5bc748c969e6c2b38ca503477add4e753ab0",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "basalt",
    "url": "https://github.com/basaltkit/basalt",
    "sha": "a327caaeae916f103fea3df8450c24bb6fe2ae0b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

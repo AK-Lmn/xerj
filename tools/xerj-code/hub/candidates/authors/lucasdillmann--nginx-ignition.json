@@ -9,7 +9,7 @@
    "repo": "nginx-ignition",
    "url": "https://github.com/lucasdillmann/nginx-ignition",
    "sha": "5599cfe7e04f7c615a9f67d1ae953436cbf6ac90",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

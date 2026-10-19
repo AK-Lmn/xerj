@@ -9,7 +9,7 @@
    "repo": "clipscribe",
    "url": "https://github.com/Zelenov/clipscribe",
    "sha": "f9e751a7539377a55fd7aa030e4ef7f19a4bbb2c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

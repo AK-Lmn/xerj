@@ -9,7 +9,7 @@
    "repo": "nixos",
    "url": "https://github.com/Daniel-W-Innes/nixos",
    "sha": "6050270496f8880f07dfc1f9a25d24a55e554943",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

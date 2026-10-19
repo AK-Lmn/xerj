@@ -9,7 +9,7 @@
    "repo": "pulse-monitor",
    "url": "https://github.com/refora-technologies/pulse-monitor",
    "sha": "431570689487896bfab97b7e7cda4e7a5c653c8c",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

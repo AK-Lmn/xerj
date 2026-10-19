@@ -9,7 +9,7 @@
    "repo": "nfs-mamont",
    "url": "https://github.com/RMamonts/nfs-mamont",
    "sha": "0007594ed0a026147a6059d65094e535aa030326",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

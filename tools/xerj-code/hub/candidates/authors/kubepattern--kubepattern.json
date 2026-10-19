@@ -9,7 +9,7 @@
    "repo": "kubepattern",
    "url": "https://github.com/kubepattern/kubepattern",
    "sha": "3c4f0a5fc333f3fbd15382779741f03eeee16f63",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "fursy",
    "url": "https://github.com/coregx/fursy",
    "sha": "15910e3b4026f0fdc682b60e2596495342a9196b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

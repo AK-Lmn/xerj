@@ -9,7 +9,7 @@
    "repo": "rtelevision",
    "url": "https://github.com/rainygirl/rtelevision",
    "sha": "4108d66e30deef5e27bb778a7d7024fae7d6a629",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

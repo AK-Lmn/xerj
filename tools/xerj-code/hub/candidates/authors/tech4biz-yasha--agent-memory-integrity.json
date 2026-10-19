@@ -9,7 +9,7 @@
    "repo": "agent-memory-integrity",
    "url": "https://github.com/tech4biz-yasha/agent-memory-integrity",
    "sha": "6e766aefc7059cfe8ac56ae9ee547f30dc29044e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "libcdsa",
    "url": "https://github.com/ayevexy/libcdsa",
    "sha": "e6b99021afc9fce118a6296e025a2e193bc87e6c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

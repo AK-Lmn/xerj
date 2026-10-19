@@ -9,7 +9,7 @@
    "repo": "gravity",
    "url": "https://github.com/ahilles107/gravity",
    "sha": "e2e52dc3217df255a2f7a9a662004764f6112e99",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

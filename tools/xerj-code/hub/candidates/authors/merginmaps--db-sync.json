@@ -9,7 +9,7 @@
    "repo": "db-sync",
    "url": "https://github.com/MerginMaps/db-sync",
    "sha": "14f85287e29a609582e581a0b5241bbd42e9167e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

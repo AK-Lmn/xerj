@@ -9,7 +9,7 @@
    "repo": "Agent-Quest",
    "url": "https://github.com/FulAppiOS/Agent-Quest",
    "sha": "49ab182d458cb4e88ede0dc69364c57c9b9f2ba4",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

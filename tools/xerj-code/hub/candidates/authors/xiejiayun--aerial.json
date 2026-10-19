@@ -9,7 +9,7 @@
    "repo": "aerial",
    "url": "https://github.com/Xiejiayun/aerial",
    "sha": "2a35d2c750ff33ee9d374599e71803865a1ef8c8",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

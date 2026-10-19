@@ -9,7 +9,7 @@
    "repo": "penguin-mail",
    "url": "https://github.com/c9dev/penguin-mail",
    "sha": "1b25c6e38a73750c9cad2d41b2d201c83d2c1028",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

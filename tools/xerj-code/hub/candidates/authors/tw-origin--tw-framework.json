@@ -9,7 +9,7 @@
    "repo": "tw-framework",
    "url": "https://github.com/tw-origin/tw-framework",
    "sha": "7ffe5cd08abe9c5205fc6dfd7fa362fa0adc932d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

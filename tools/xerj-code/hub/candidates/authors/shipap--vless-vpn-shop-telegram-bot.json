@@ -9,7 +9,7 @@
    "repo": "vless-vpn-shop-telegram-bot",
    "url": "https://github.com/shipap/vless-vpn-shop-telegram-bot",
    "sha": "70200ae7c791b523c2ad651f705b2863209d916e",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

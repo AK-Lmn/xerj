@@ -9,7 +9,7 @@
    "repo": "agent-readiness-action",
    "url": "https://github.com/alipajand/agent-readiness-action",
    "sha": "ffce68aa8be3636ad72ddae000be91ce49a9bfc4",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

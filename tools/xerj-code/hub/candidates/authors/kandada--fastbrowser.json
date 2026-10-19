@@ -9,7 +9,7 @@
    "repo": "fastbrowser",
    "url": "https://github.com/kandada/fastbrowser",
    "sha": "11bba09a6e0aa08c266877bc282fd6708d31ecf8",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

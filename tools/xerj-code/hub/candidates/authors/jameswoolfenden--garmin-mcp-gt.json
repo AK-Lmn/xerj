@@ -9,7 +9,7 @@
    "repo": "garmin-mcp-gt",
    "url": "https://github.com/JamesWoolfenden/garmin-mcp-gt",
    "sha": "f23c958e646e3fcd99eeb5952d6ca5c104ab4b5c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

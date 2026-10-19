@@ -9,7 +9,7 @@
    "repo": "swarm-kit",
    "url": "https://github.com/moseleydev/swarm-kit",
    "sha": "82d0237584a74fd0dfb6ab642b22890b2a0d1edf",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

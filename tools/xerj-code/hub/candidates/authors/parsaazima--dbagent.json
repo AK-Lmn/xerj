@@ -9,7 +9,7 @@
    "repo": "DBAgent",
    "url": "https://github.com/ParsaAzima/DBAgent",
    "sha": "b7b44ff968c32e9cd33ccfcf43e3faed5ee06131",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

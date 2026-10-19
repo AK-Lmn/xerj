@@ -9,7 +9,7 @@
    "repo": "komi-store",
    "url": "https://github.com/komi-store/komi-store",
    "sha": "a628f6bfa01e8d2f8c19e64cee532ee93c607f2d",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

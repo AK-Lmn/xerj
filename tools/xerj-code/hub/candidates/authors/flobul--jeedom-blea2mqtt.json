@@ -9,7 +9,7 @@
    "repo": "jeedom-blea2mqtt",
    "url": "https://github.com/Flobul/jeedom-blea2mqtt",
    "sha": "56df46a60cb16d311f7f6024ea95efa3274e6400",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

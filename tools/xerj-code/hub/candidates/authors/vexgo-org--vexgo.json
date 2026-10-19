@@ -9,7 +9,7 @@
    "repo": "vexgo",
    "url": "https://github.com/vexgo-org/vexgo",
    "sha": "9db69822a3c5a98642e46b84ea336db2dfea7151",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

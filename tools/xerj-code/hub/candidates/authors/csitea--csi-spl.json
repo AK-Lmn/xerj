@@ -9,7 +9,7 @@
    "repo": "csi-spl",
    "url": "https://github.com/csitea/csi-spl",
    "sha": "f2ec75c2cddfa88b6703e20102b53beff65a248d",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

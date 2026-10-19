@@ -9,7 +9,7 @@
    "repo": "jsonyx",
    "url": "https://github.com/nineteendo/jsonyx",
    "sha": "e102beea9804b7bf3c653ff2c6346d894c29a617",
-   "licence": "hint only: LGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: LGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "LGPL-3.0",
     "use": "UNREVIEWED",

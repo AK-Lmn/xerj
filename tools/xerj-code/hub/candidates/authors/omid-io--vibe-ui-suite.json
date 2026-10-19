@@ -9,7 +9,7 @@
    "repo": "vibe-ui-suite",
    "url": "https://github.com/omid-io/vibe-ui-suite",
    "sha": "61692c748a12925cb967d034ebc47dd09d14943b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

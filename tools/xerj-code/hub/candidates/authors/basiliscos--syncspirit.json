@@ -9,7 +9,7 @@
    "repo": "syncspirit",
    "url": "https://github.com/basiliscos/syncspirit",
    "sha": "777170b375519fddbd108e182f8661af24e5c2c8",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

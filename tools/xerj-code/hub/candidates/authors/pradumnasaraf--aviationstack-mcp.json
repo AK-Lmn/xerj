@@ -9,7 +9,7 @@
    "repo": "aviationstack-mcp",
    "url": "https://github.com/Pradumnasaraf/aviationstack-mcp",
    "sha": "1235c985258ebd675a164110199aa86c750909cb",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

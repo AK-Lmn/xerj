@@ -9,7 +9,7 @@
    "repo": "pixie",
    "url": "https://github.com/Malkovsky/pixie",
    "sha": "f8de6ee9d9e726f2af34f86fdc076e1ebea31187",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

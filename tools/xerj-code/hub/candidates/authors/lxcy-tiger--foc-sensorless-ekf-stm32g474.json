@@ -9,7 +9,7 @@
    "repo": "FOC-Sensorless-EKF-STM32G474",
    "url": "https://github.com/lxcy-tiger/FOC-Sensorless-EKF-STM32G474",
    "sha": "5a17053062a1d925c912f5a4f85794e8dc89f523",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

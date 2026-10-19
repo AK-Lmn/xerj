@@ -9,7 +9,7 @@
    "repo": "mingling",
    "url": "https://github.com/mingling-rs/mingling",
    "sha": "5b272c34f9a25ee40372021d251b4c33654c7da0",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

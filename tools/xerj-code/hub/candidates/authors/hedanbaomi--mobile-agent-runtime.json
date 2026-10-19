@@ -9,7 +9,7 @@
    "repo": "mobile-agent-runtime",
    "url": "https://github.com/hedanbaomi/mobile-agent-runtime",
    "sha": "e62099961ac96f8b55796bbbd907e82799d05f99",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

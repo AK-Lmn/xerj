@@ -9,7 +9,7 @@
    "repo": "pyrag-core",
    "url": "https://github.com/SheikhSarvar/pyrag-core",
    "sha": "45cd4a9a4b50c2e138641d36276d011b5c276a5a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

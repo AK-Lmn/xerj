@@ -9,7 +9,7 @@
    "repo": "godot-google-play-iapp",
    "url": "https://github.com/code-with-max/godot-google-play-iapp",
    "sha": "0e73208db53b37f9f782ae5dc4c470793a2d6ccd",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

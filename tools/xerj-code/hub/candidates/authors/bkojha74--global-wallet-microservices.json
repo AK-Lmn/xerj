@@ -9,7 +9,7 @@
    "repo": "global-wallet-microservices",
    "url": "https://github.com/bkojha74/global-wallet-microservices",
    "sha": "05c02c2ad6b38b495eee84d287257223b148c265",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

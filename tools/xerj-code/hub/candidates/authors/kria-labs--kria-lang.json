@@ -9,7 +9,7 @@
    "repo": "kria-lang",
    "url": "https://github.com/Kria-Labs/kria-lang",
    "sha": "116a22d5f0f171fdc8189844b911234bcce74033",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

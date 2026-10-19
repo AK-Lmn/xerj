@@ -9,7 +9,7 @@
    "repo": "PeaZip",
    "url": "https://github.com/peazip/PeaZip",
    "sha": "8061e54a8b0cec04909ad2d2a457c13284e91b03",
-   "licence": "hint only: LGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: LGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "LGPL-3.0",
     "use": "UNREVIEWED",

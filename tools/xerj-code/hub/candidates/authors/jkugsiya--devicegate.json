@@ -9,7 +9,7 @@
    "repo": "DeviceGate",
    "url": "https://github.com/jkugsiya/DeviceGate",
    "sha": "1268dc021dd02bd0acbb2a4e0cc26e3f4d9a40b8",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

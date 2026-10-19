@@ -9,7 +9,7 @@
    "repo": "RadarForge",
    "url": "https://github.com/LibexiL/RadarForge",
    "sha": "ece829de460e3b0d1c5300c654d3ba8b25b3e004",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

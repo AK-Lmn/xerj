@@ -9,7 +9,7 @@
    "repo": "backend-doctor",
    "url": "https://github.com/yamkin29/backend-doctor",
    "sha": "26dcff3deeab27a3e5f14dfeb7ba97877d5eefde",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

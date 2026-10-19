@@ -9,7 +9,7 @@
    "repo": "physicsnemo",
    "url": "https://github.com/NVIDIA/physicsnemo",
    "sha": "e424d0eba29735c0393d55ef7ab7d94c81dcf521",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

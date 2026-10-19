@@ -9,7 +9,7 @@
    "repo": "aws-staticsite",
    "url": "https://github.com/flaviomilan/aws-staticsite",
    "sha": "4d93e25f5bb2df3c7f4af69d30eec858e3941fb3",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

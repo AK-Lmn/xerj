@@ -9,7 +9,7 @@
    "repo": "latent-service-fabric",
    "url": "https://github.com/KirilsTurkins/latent-service-fabric",
    "sha": "442c4cba24df285b8f7e0eb035527a4c71171c39",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

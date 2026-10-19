@@ -9,7 +9,7 @@
    "repo": "enterpriseglue-the-bridge-oss",
    "url": "https://github.com/EnterpriseGlue/enterpriseglue-the-bridge-oss",
    "sha": "e6ef51a85fa094698908638c55ad533ad6371174",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

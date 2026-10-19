@@ -9,7 +9,7 @@
    "repo": "pollinations",
    "url": "https://github.com/pollinations/pollinations",
    "sha": "82c495c01d98392967c94483149eac07df952b1e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

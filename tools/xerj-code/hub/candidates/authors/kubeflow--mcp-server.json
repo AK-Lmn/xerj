@@ -9,7 +9,7 @@
    "repo": "mcp-server",
    "url": "https://github.com/kubeflow/mcp-server",
    "sha": "0255571dbbd5a53973f316abdaf3b6aabc5ae079",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

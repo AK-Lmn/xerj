@@ -9,7 +9,7 @@
    "repo": "thinkingbox",
    "url": "https://github.com/microsoft/thinkingbox",
    "sha": "ef2546974a286afa3f189dc711d31bc5aa6d1f39",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

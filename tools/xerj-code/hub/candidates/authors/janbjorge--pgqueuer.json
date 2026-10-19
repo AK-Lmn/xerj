@@ -9,7 +9,7 @@
    "repo": "pgqueuer",
    "url": "https://github.com/janbjorge/pgqueuer",
    "sha": "0578460703a1fe64252149c9d9d82ba918bdf1e8",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

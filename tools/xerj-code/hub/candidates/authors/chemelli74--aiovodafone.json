@@ -9,7 +9,7 @@
    "repo": "aiovodafone",
    "url": "https://github.com/chemelli74/aiovodafone",
    "sha": "96e7ab8323273565d96477b8d280912ec41cf1c4",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

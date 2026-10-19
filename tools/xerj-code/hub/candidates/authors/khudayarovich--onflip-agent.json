@@ -9,7 +9,7 @@
    "repo": "onflip-agent",
    "url": "https://github.com/khudayarovich/onflip-agent",
    "sha": "53190b53d651a56e3229e84ea0937c81a6862186",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

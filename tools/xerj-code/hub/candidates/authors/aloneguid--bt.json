@@ -9,7 +9,7 @@
    "repo": "bt",
    "url": "https://github.com/aloneguid/bt",
    "sha": "5c7e44d1b8e8b522234b1cf84d61288b69634248",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

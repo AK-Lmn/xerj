@@ -9,13 +9,13 @@
    "repo": "self-hosted-n100",
    "url": "https://github.com/Yann39/self-hosted-n100",
    "sha": "140555d6f1476fc9f98f94f39a7fc2d6bd040f25",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
-    "spdx": "GPL-3.0",
+    "spdx": "Apache-2.0",
     "use": "UNREVIEWED",
     "by": "",
     "at": "",
-    "note": "author permission by email 2026-10-17 (reply to Corpus Hub outreach); selected commit 140555d6f147: \"added ghostfolio\". suggested use: approach-only \u2014 G4 review of the LICENSE file at this pin still required."
+    "note": "author permission by email 2026-10-17 (reply to Corpus Hub outreach); selected commit 140555d6f147: \"added ghostfolio\". suggested use: adapt-with-attribution \u2014 G4 review of the LICENSE file at this pin still required."
    }
   }
  ]

@@ -9,7 +9,7 @@
    "repo": "photon",
    "url": "https://github.com/ryan-stoffel/photon",
    "sha": "1e7455b2dbb76c8d7dfa3b129363650127863c0f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

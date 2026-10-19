@@ -9,7 +9,7 @@
    "repo": "ignite",
    "url": "https://github.com/apache/ignite",
    "sha": "6ffb8718571d0a470eb6b018e441d4925e572ffd",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "go-iap",
    "url": "https://github.com/awa/go-iap",
    "sha": "536d9a5bb546d3c076233023f6ff6afb57eef296",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

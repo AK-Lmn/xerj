@@ -9,7 +9,7 @@
    "repo": "holidays",
    "url": "https://github.com/vacanza/holidays",
    "sha": "b7a2da6e03ae4b60c12d13c5c7abb1e4af5fb0d3",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "lw-cookie",
    "url": "https://github.com/lwplugins/lw-cookie",
    "sha": "c924ae889c321c6900fca890fdf267ebe5847f49",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

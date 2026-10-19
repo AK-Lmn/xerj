@@ -9,7 +9,7 @@
    "repo": "free-ocr-api",
    "url": "https://github.com/Ethos6/free-ocr-api",
    "sha": "27203709d130c54e5b01912c3a33f18df7cb6f29",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

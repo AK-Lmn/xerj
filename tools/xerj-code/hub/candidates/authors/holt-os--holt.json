@@ -9,7 +9,7 @@
    "repo": "holt",
    "url": "https://github.com/holt-os/holt",
    "sha": "91f5955e771be1a1482b9f7f1429d7e09b6e875d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

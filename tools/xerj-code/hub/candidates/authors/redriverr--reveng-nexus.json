@@ -9,7 +9,7 @@
    "repo": "reveng-nexus",
    "url": "https://github.com/RedRiveRR/reveng-nexus",
    "sha": "43f581e5a08762d2733150b626ebc45db5adc5c5",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

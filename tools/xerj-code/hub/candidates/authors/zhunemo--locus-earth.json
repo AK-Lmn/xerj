@@ -9,7 +9,7 @@
    "repo": "locus-earth",
    "url": "https://github.com/ZhuNemo/locus-earth",
    "sha": "ea8860e0a950fdea6923e209c113e4d16d9f6931",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

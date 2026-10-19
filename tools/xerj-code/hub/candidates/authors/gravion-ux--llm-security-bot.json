@@ -9,7 +9,7 @@
    "repo": "llm-security-bot",
    "url": "https://github.com/gravion-ux/llm-security-bot",
    "sha": "717970df21124a81e57aa93e41eb3a8d3f9767c9",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

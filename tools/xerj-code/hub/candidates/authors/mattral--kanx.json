@@ -9,7 +9,7 @@
    "repo": "KANX",
    "url": "https://github.com/Mattral/KANX",
    "sha": "50f1fad47a6283d1595ac237864dfdb494454057",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "one",
    "url": "https://github.com/noxgle/one",
    "sha": "a04f14603920b1413162d26b39d1ced81b7babee",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

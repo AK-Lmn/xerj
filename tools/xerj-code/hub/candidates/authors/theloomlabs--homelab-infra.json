@@ -3,13 +3,13 @@
  "cloned_at": null,
  "status": "draft",
  "shelf": "OPS",
- "domain": "an agent working on Jinja queries this for how TheLoomLabs/homelab-infra implements it: TheLoomLabs/homelab-infra (Jinja) (selected work: ansible, logging, the project root)",
+ "domain": "an agent working on Python queries this for how TheLoomLabs/homelab-infra implements it: TheLoomLabs/homelab-infra (Python) (selected work: ansible, logging, the project root)",
  "repos": [
   {
    "repo": "homelab-infra",
    "url": "https://github.com/TheLoomLabs/homelab-infra",
    "sha": "4ba94533d03d2de47a1d2632ab5147eec5d72116",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

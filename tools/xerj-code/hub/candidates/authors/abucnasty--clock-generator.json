@@ -9,7 +9,7 @@
    "repo": "clock-generator",
    "url": "https://github.com/abucnasty/clock-generator",
    "sha": "f902d78f8671fb49ab82d5a9de0da4efb9c2642b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

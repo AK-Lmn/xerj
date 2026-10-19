@@ -9,7 +9,7 @@
    "repo": "EmbodiChain",
    "url": "https://github.com/DexForce/EmbodiChain",
    "sha": "7a9c2675d49c6aee7a33082a5585a9932f5b945b",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

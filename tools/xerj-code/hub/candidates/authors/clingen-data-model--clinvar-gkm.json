@@ -9,7 +9,7 @@
    "repo": "clinvar-gkm",
    "url": "https://github.com/clingen-data-model/clinvar-gkm",
    "sha": "bbe3aa64b7a1419711894239f754a49dac23afb2",
-   "licence": "hint only: CC0-1.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: CC0-1.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "CC0-1.0",
     "use": "UNREVIEWED",

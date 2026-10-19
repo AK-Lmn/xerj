@@ -9,7 +9,7 @@
    "repo": "qanat",
    "url": "https://github.com/kamyar1979/qanat",
    "sha": "7ea36457746c768c087d0d8f89bfdbb65f82dfaa",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "genex-desktop",
    "url": "https://github.com/genex-games/genex-desktop",
    "sha": "1526f83f27d985fdeb18664d62943562fdbf1a67",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

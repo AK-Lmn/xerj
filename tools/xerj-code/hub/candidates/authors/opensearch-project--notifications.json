@@ -9,7 +9,7 @@
    "repo": "notifications",
    "url": "https://github.com/opensearch-project/notifications",
    "sha": "bde7d2edc73421382c30a45b4cca8cb7565ab3b1",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "octen-mcp",
    "url": "https://github.com/Octen-Team/octen-mcp",
    "sha": "7b4cae8325dcd389379d86008753aa4f3fe2c6bb",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

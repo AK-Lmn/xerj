@@ -9,7 +9,7 @@
    "repo": "camellia",
    "url": "https://github.com/netease-im/camellia",
    "sha": "3608cc944122c022852aa9b692171312769c1ac1",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

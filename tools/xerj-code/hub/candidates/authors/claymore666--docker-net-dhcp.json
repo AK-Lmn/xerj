@@ -9,7 +9,7 @@
    "repo": "docker-net-dhcp",
    "url": "https://github.com/claymore666/docker-net-dhcp",
    "sha": "4d8c53c0c9072f16b1513345081a2950ff92fe04",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

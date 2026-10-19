@@ -9,7 +9,7 @@
    "repo": "pulsar",
    "url": "https://github.com/Krv-Labs/pulsar",
    "sha": "7e7cb8d0d57d232686f69651527338d8e22d5faf",
-   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "BSD-3-Clause",
     "use": "UNREVIEWED",

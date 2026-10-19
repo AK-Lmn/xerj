@@ -9,7 +9,7 @@
    "repo": "PromptSentinel",
    "url": "https://github.com/sandeepmothukuri/PromptSentinel",
    "sha": "a492d2da65a77c0f6f180530edbdbfb8062320b9",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

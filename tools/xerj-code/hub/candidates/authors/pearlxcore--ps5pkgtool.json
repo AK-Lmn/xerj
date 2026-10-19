@@ -9,7 +9,7 @@
    "repo": "PS5PKGTool",
    "url": "https://github.com/pearlxcore/PS5PKGTool",
    "sha": "b520d370f6e136cc736a21a0ffd39e6ce19f3133",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

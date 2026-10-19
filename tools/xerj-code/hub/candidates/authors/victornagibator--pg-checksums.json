@@ -9,7 +9,7 @@
    "repo": "pg_checksums",
    "url": "https://github.com/VictorNagibator/pg_checksums",
    "sha": "913f8236e6dd9581e5b9578aa927082167c8cb0d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

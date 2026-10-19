@@ -9,7 +9,7 @@
    "repo": "computer-use-linux",
    "url": "https://github.com/agent-sh/computer-use-linux",
    "sha": "3ece2e4b19d847f2b375fa071789da5c91d8a34a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "Italian-LLM",
    "url": "https://github.com/jeaders/Italian-LLM",
    "sha": "4a91b55998713db9ad0c90688fb0155aaab5907f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

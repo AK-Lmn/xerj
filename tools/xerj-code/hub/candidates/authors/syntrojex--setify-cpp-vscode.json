@@ -9,7 +9,7 @@
    "repo": "setify-cpp-vscode",
    "url": "https://github.com/Syntrojex/setify-cpp-vscode",
    "sha": "92d538f4961c1dac873e5bcb8d57ecd3e24c4fc9",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

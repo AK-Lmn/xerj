@@ -9,7 +9,7 @@
    "repo": "socai",
    "url": "https://github.com/socai-io/socai",
    "sha": "746d899baf106195b9a26d07d60e118b139926be",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

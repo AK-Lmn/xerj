@@ -9,7 +9,7 @@
    "repo": "palantir",
    "url": "https://github.com/xorza/palantir",
    "sha": "36b28550c990ac2f7e38a3b0dd952b75732127b0",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

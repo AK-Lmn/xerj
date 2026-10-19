@@ -9,7 +9,7 @@
    "repo": "Carbotrace",
    "url": "https://github.com/DChitale/Carbotrace",
    "sha": "e4be1e01fb6b5807e69ed7fdb7d4c4ab9486a266",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

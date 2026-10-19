@@ -9,7 +9,7 @@
    "repo": "q2",
    "url": "https://github.com/quarto-dev/q2",
    "sha": "cf2f111aa60e82dca0a14b0763db9c361ec64694",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

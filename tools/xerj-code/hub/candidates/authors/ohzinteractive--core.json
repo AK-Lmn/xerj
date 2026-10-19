@@ -9,7 +9,7 @@
    "repo": "core",
    "url": "https://github.com/ohzinteractive/core",
    "sha": "bb4d3157015f2b48db669d38485f9f853c3aa694",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

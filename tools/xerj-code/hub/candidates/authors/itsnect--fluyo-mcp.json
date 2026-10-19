@@ -9,7 +9,7 @@
    "repo": "fluyo-mcp",
    "url": "https://github.com/itsnect/fluyo-mcp",
    "sha": "81ee6d49739542699f06c52778a697ffcba831e7",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

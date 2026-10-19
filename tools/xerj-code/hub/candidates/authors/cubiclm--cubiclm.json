@@ -9,7 +9,7 @@
    "repo": "CubicLM",
    "url": "https://github.com/CubicLM/CubicLM",
    "sha": "3d0775b028af7b8721822daf1387d0b260314707",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "riemann-lab",
    "url": "https://github.com/SaumayAshish/riemann-lab",
    "sha": "827297fc7939a6c908c19210ccc83be08cb59ffc",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

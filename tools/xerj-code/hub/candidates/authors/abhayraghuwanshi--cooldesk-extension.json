@@ -9,7 +9,7 @@
    "repo": "cooldesk-extension",
    "url": "https://github.com/abhayraghuwanshi/cooldesk-extension",
    "sha": "f2b1d521d1f817316916a0aa5f9c9805d4d1eff3",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

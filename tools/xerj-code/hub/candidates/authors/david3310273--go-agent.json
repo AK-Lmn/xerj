@@ -9,7 +9,7 @@
    "repo": "go-agent",
    "url": "https://github.com/David3310273/go-agent",
    "sha": "03d297be80a8eb2b2370503152ccad5619352139",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "CompuMaster.OpenCollaborationService",
    "url": "https://github.com/CompuMasterGmbH/CompuMaster.OpenCollaborationService",
    "sha": "c48ab1b73edb7419fcf8a0607c90ab39d98b36be",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

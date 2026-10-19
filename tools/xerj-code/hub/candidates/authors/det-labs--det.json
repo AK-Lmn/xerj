@@ -9,7 +9,7 @@
    "repo": "det",
    "url": "https://github.com/det-Labs/det",
    "sha": "db3112f7ad5c52677737a0f3de43c3f36acf52c4",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

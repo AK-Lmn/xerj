@@ -9,7 +9,7 @@
    "repo": "LocalRepoManagerRus",
    "url": "https://github.com/MrKus1/LocalRepoManagerRus",
    "sha": "5e4965c05619b32d39f817e266a839c81f4688d2",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

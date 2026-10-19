@@ -9,7 +9,7 @@
    "repo": "scaneval",
    "url": "https://github.com/Har1sh-k/scaneval",
    "sha": "8031a44c3a399ef297c7c926988f125e22e8da56",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

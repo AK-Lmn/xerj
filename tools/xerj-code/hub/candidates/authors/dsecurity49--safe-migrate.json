@@ -9,7 +9,7 @@
    "repo": "safe-migrate",
    "url": "https://github.com/dsecurity49/safe-migrate",
    "sha": "3c8791a7e7405c5e54e9bd7d1086aab2a6d9d145",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

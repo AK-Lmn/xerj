@@ -9,7 +9,7 @@
    "repo": "tiferet",
    "url": "https://github.com/greatstrength/tiferet",
    "sha": "3fa3c58254dd7d4fc6b02cba4f74ddb56d7ce6c5",
-   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "BSD-3-Clause",
     "use": "UNREVIEWED",

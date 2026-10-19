@@ -9,7 +9,7 @@
    "repo": "react-native-linux",
    "url": "https://github.com/react-native-linux/react-native-linux",
    "sha": "1916bd66fd9cc7da43a08c100199d5dcbff9c6bc",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

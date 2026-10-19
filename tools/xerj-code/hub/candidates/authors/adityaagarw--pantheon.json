@@ -9,7 +9,7 @@
    "repo": "Pantheon",
    "url": "https://github.com/adityaagarw/Pantheon",
    "sha": "fbbbed352ab0eccd10edd4ba27c29012c8437797",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "agent-takkub",
    "url": "https://github.com/takkub/agent-takkub",
    "sha": "a74939df4dbffd7ade1e54943ff0a1eb23059493",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

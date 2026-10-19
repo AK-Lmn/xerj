@@ -9,7 +9,7 @@
    "repo": "AUTO-MAS",
    "url": "https://github.com/AUTO-MAS-Project/AUTO-MAS",
    "sha": "016d082ac035a28f80b89470984d9cb28148f41b",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

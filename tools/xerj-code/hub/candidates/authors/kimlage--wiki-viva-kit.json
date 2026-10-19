@@ -9,7 +9,7 @@
    "repo": "wiki-viva-kit",
    "url": "https://github.com/kimlage/wiki-viva-kit",
    "sha": "c60a19107e8962d38fb87f1d4c69c6a7673bb6e5",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

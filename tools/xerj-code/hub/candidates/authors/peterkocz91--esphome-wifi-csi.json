@@ -9,7 +9,7 @@
    "repo": "esphome-wifi-csi",
    "url": "https://github.com/PeterkoCZ91/esphome-wifi-csi",
    "sha": "9bde43c234eea0731ed1f5343d0bd01257e9f8ed",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

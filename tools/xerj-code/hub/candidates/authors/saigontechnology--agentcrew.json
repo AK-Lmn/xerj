@@ -9,7 +9,7 @@
    "repo": "AgentCrew",
    "url": "https://github.com/saigontechnology/AgentCrew",
    "sha": "34059cda3d31dc1bdb9d234d0cdf8885a280296b",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

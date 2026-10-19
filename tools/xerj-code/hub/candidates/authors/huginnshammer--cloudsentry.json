@@ -9,7 +9,7 @@
    "repo": "CloudSentry",
    "url": "https://github.com/HuginnsHammer/CloudSentry",
    "sha": "1646b266316b9b75e294f58c3eadbb66f26fd1a6",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

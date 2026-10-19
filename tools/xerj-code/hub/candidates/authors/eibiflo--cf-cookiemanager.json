@@ -9,7 +9,7 @@
    "repo": "cf_cookiemanager",
    "url": "https://github.com/eibiflo/cf_cookiemanager",
    "sha": "60051a40000f4e04f154dd403f7f156dc94bea75",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

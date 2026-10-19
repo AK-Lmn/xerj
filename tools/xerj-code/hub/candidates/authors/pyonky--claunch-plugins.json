@@ -9,7 +9,7 @@
    "repo": "CLaunch-Plugins",
    "url": "https://github.com/pyonky/CLaunch-Plugins",
    "sha": "cd95c180241e8939fa1576512979e86d2e123fce",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

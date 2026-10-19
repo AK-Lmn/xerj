@@ -9,7 +9,7 @@
    "repo": "esgo-python",
    "url": "https://github.com/ESGO-Logistics/esgo-python",
    "sha": "75da3c55214ed5aabd17345153af4e3b37d8b674",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

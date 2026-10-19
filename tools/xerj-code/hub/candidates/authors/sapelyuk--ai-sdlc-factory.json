@@ -9,7 +9,7 @@
    "repo": "ai-sdlc-factory",
    "url": "https://github.com/sapelyuk/ai-sdlc-factory",
    "sha": "256ce89a0db482e794ba11d110a70c58626c2d4a",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

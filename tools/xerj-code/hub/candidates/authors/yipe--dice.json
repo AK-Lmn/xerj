@@ -9,7 +9,7 @@
    "repo": "dice",
    "url": "https://github.com/yipe/dice",
    "sha": "6ac2d9c4a0cf94bc342f62b8ac41771edafa4b0a",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

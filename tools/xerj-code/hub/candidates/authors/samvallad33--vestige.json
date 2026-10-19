@@ -9,7 +9,7 @@
    "repo": "vestige",
    "url": "https://github.com/samvallad33/vestige",
    "sha": "94aad0734beb63a7d1884d214b82ce239adb8c8d",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

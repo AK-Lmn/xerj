@@ -9,7 +9,7 @@
    "repo": "linkmerce",
    "url": "https://github.com/minyeamer/linkmerce",
    "sha": "f65f7c22dff0cdb66d50b4db5f0b374550b10717",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

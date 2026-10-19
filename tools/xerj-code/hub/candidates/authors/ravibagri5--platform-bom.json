@@ -9,7 +9,7 @@
    "repo": "platform-bom",
    "url": "https://github.com/ravibagri5/platform-bom",
    "sha": "92935f0028ba439a19354f190e3a9bff2e87dd90",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

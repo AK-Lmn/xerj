@@ -9,7 +9,7 @@
    "repo": "moodle-local_helpdesk",
    "url": "https://github.com/EduardoKrausME/moodle-local_helpdesk",
    "sha": "61b08b1870d01a67c0adecb83c5235d37e4113c8",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "OpenCal",
    "url": "https://github.com/BoazCohenJ/OpenCal",
    "sha": "1dde8896d49ca648580b43a7a1322accd71d0793",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

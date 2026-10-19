@@ -9,7 +9,7 @@
    "repo": "dsh-plugin-memory",
    "url": "https://github.com/justhalfbit/dsh-plugin-memory",
    "sha": "fe345a72578f1c5b4f00237e980f52602b1d091d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

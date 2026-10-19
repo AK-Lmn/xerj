@@ -9,7 +9,7 @@
    "repo": "compiler",
    "url": "https://github.com/PeeperLanguage/compiler",
    "sha": "a145d6465443f5b0984a0ad7ed6f13f746613dfb",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

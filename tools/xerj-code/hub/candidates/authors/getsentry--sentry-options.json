@@ -9,7 +9,7 @@
    "repo": "sentry-options",
    "url": "https://github.com/getsentry/sentry-options",
    "sha": "96d38cec4ca6f1362fe247c01f8b8b70d29a18c6",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

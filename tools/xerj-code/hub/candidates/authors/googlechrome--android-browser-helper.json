@@ -9,7 +9,7 @@
    "repo": "android-browser-helper",
    "url": "https://github.com/GoogleChrome/android-browser-helper",
    "sha": "6f38f1c376bd7daaccef6503ffe970f2f5b174f3",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

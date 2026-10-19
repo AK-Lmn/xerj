@@ -9,7 +9,7 @@
    "repo": "pihole-ha-cluster",
    "url": "https://github.com/RamSet/pihole-ha-cluster",
    "sha": "cb3754fd0b053e92f672f6aa1a1dd13f73c896c2",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

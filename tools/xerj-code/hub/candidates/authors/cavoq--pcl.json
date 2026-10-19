@@ -9,7 +9,7 @@
    "repo": "PCL",
    "url": "https://github.com/cavoq/PCL",
    "sha": "a3043a03e1ec41f385183fe5900a79e044b02776",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

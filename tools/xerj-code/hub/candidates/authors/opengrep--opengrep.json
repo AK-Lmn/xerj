@@ -9,7 +9,7 @@
    "repo": "opengrep",
    "url": "https://github.com/opengrep/opengrep",
    "sha": "566bdf9127762086d9616a465f8dff9025911379",
-   "licence": "hint only: LGPL-2.1 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: LGPL-2.1 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "LGPL-2.1",
     "use": "UNREVIEWED",

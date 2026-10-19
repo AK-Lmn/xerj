@@ -9,7 +9,7 @@
    "repo": "mecalin",
    "url": "https://github.com/nacho/mecalin",
    "sha": "a98d6fce9fb306c264e7429fc779a76d3a86125d",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "sst",
    "url": "https://github.com/sst-community/sst",
    "sha": "5ec1341607f7c03b623e2fb753cba8a2879c5d65",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

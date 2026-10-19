@@ -9,7 +9,7 @@
    "repo": "OnlySwitch",
    "url": "https://github.com/jacklandrin/OnlySwitch",
    "sha": "42c02587c1b7acd2da6a3865e1a6b1ac7c2ed992",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

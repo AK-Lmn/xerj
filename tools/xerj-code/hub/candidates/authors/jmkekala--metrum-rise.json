@@ -9,7 +9,7 @@
    "repo": "metrum_rise",
    "url": "https://github.com/jmkekala/metrum_rise",
    "sha": "03c1cf4549ff8ac026f9bf6887aea1ac8d4bf9f6",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

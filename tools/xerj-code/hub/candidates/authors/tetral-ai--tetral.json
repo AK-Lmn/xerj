@@ -9,7 +9,7 @@
    "repo": "tetral",
    "url": "https://github.com/tetral-ai/tetral",
    "sha": "53e4b340f9cea3c4904aeb240a0821dda895c64d",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

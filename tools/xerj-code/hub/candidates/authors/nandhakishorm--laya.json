@@ -9,7 +9,7 @@
    "repo": "laya",
    "url": "https://github.com/NandhaKishorM/laya",
    "sha": "71e43b75e5f701239c232f32b894af315350c05e",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "platform",
    "url": "https://github.com/intabia-fusion/platform",
    "sha": "ccc79e91b1434c7a24b188187bce687baafe9ca1",
-   "licence": "hint only: EPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: EPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "EPL-2.0",
     "use": "UNREVIEWED",

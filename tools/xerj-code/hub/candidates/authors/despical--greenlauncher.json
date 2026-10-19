@@ -9,7 +9,7 @@
    "repo": "GreenLauncher",
    "url": "https://github.com/Despical/GreenLauncher",
    "sha": "4a9f5a37f927c90d7ac0ea9a9f57cbf334cefa3f",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "asyncvideo",
    "url": "https://github.com/BalzaniEdoardo/asyncvideo",
    "sha": "ac5507b3e296c28b93cc83f9419b97d029a2dfe8",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

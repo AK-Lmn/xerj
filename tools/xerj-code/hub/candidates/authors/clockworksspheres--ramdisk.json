@@ -9,7 +9,7 @@
    "repo": "ramdisk",
    "url": "https://github.com/clockworksspheres/ramdisk",
    "sha": "9b226434c2cb29dd6169a6853202305f25679c52",
-   "licence": "hint only: Unlicense (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Unlicense (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Unlicense",
     "use": "UNREVIEWED",

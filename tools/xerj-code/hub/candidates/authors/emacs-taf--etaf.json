@@ -9,7 +9,7 @@
    "repo": "etaf",
    "url": "https://github.com/emacs-taf/etaf",
    "sha": "9fca953208b5b399bdbd69b37ae87905e8d0acd4",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

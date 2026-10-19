@@ -9,7 +9,7 @@
    "repo": "db-free",
    "url": "https://github.com/farzanshibu/db-free",
    "sha": "e7ec4b72c466a270748de0f002ae72cbb99d7825",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

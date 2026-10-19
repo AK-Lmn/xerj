@@ -9,7 +9,7 @@
    "repo": "operon",
    "url": "https://github.com/hasanyilmaz/operon",
    "sha": "95513fece960148b7eaa957ce8ec377f461dcfc1",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

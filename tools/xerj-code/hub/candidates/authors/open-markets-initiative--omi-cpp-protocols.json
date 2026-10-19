@@ -9,7 +9,7 @@
    "repo": "omi-cpp-protocols",
    "url": "https://github.com/Open-Markets-Initiative/omi-cpp-protocols",
    "sha": "0d5e44bf1590e1334aca2938a18ae227cdc19679",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

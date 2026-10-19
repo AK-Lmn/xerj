@@ -9,7 +9,7 @@
    "repo": "luci-app-yandex-internetometer",
    "url": "https://github.com/sergeylopukhov/luci-app-yandex-internetometer",
    "sha": "1c9246d6eab35990d7dacce59668f1d4cd79d0bc",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

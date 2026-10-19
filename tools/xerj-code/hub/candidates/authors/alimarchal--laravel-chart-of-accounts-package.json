@@ -9,7 +9,7 @@
    "repo": "laravel-chart-of-accounts-package",
    "url": "https://github.com/alimarchal/laravel-chart-of-accounts-package",
    "sha": "4bbc54b42b7c011a2c7456da7236a76185d61249",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "logfold",
    "url": "https://github.com/AndreyKilanov/logfold",
    "sha": "b6715a6918f3d7b72b8ee000aa49c1081d1ff696",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

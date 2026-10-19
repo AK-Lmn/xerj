@@ -9,7 +9,7 @@
    "repo": "entra-scim-mcp",
    "url": "https://github.com/darrenjrobinson/entra-scim-mcp",
    "sha": "bb11a6ae0f3052cd2505b9401a4882cb0698469e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

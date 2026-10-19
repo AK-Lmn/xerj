@@ -9,7 +9,7 @@
    "repo": "faiss_index",
    "url": "https://github.com/jovempedr0/faiss_index",
    "sha": "134d1babd18511ff40ce0af45fe993c7aa001a75",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

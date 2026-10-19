@@ -9,7 +9,7 @@
    "repo": "cherry-studio",
    "url": "https://github.com/CherryHQ/cherry-studio",
    "sha": "b0508791107365134157917aded0e6002e79c098",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

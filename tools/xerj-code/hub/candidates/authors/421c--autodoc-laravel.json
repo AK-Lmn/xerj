@@ -9,7 +9,7 @@
    "repo": "autodoc-laravel",
    "url": "https://github.com/421C/autodoc-laravel",
    "sha": "45d546cd6c552b13c8aa0bdfd7f88ba8ccd80a3e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

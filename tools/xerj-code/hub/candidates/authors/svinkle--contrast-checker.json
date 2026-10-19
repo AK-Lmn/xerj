@@ -9,7 +9,7 @@
    "repo": "contrast-checker",
    "url": "https://github.com/svinkle/contrast-checker",
    "sha": "e4bee67869bf6776adb7eb3f15be210cc84a16d9",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

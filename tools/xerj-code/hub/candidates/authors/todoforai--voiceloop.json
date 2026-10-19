@@ -9,7 +9,7 @@
    "repo": "voiceloop",
    "url": "https://github.com/todoforai/voiceloop",
    "sha": "4b432211c56560d4a2876fc1fcf5085ecb57b57b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

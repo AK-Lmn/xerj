@@ -9,7 +9,7 @@
    "repo": "serial-tool",
    "url": "https://github.com/wdfdsyhb/serial-tool",
    "sha": "27d4d263d8f96e69097df9f88bb526f310791615",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

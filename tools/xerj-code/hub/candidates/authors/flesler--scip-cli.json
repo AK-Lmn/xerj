@@ -9,7 +9,7 @@
    "repo": "scip-cli",
    "url": "https://github.com/flesler/scip-cli",
    "sha": "37eda9d675fa68159d1bb26fe43656217fd0db7f",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

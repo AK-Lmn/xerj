@@ -9,7 +9,7 @@
    "repo": "metto",
    "url": "https://github.com/aliinreallife/metto",
    "sha": "66f3cc2f20cb082ce11ea5666ab308895f083055",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

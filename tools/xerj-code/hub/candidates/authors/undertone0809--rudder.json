@@ -9,7 +9,7 @@
    "repo": "rudder",
    "url": "https://github.com/Undertone0809/rudder",
    "sha": "2c21c5241c3bb2387b5ff671629f3aba7b3a51db",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

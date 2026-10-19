@@ -9,7 +9,7 @@
    "repo": "FileConverter",
    "url": "https://github.com/Marentius/FileConverter",
    "sha": "95dc3db7b43240fe3e92af8b8919cedb6b1b5b03",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

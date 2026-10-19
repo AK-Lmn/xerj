@@ -9,7 +9,7 @@
    "repo": "gpu-compute-platform",
    "url": "https://github.com/avaargsh/gpu-compute-platform",
    "sha": "5b26eee61202ab657d42763e350a1e414e16c527",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

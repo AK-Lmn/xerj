@@ -9,7 +9,7 @@
    "repo": "dsh-ssc-agent",
    "url": "https://github.com/Baiiduu/dsh-ssc-agent",
    "sha": "774fdff1e8d9dad41b78f4d5f800b7bd01d4c590",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

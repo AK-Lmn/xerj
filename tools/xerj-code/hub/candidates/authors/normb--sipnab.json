@@ -9,7 +9,7 @@
    "repo": "sipnab",
    "url": "https://github.com/NormB/sipnab",
    "sha": "a26c1edf4a5d3d4a47cabcf2175edb77cd76f8dd",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

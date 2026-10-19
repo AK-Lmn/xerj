@@ -9,7 +9,7 @@
    "repo": "robotshield",
    "url": "https://github.com/Amin-Ahmed-G/robotshield",
    "sha": "f925f3e4924b0a7a8a8a6ce42ba8a3fac9835347",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

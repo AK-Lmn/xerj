@@ -9,7 +9,7 @@
    "repo": "r2filebox",
    "url": "https://github.com/workHMZ/r2filebox",
    "sha": "ff635c71ac7598ada8a9f5e75bf15851c22e380c",
-   "licence": "hint only: LGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: LGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "LGPL-3.0",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "SSHintel",
    "url": "https://github.com/SonitBahl/SSHintel",
    "sha": "43eaa32d95ac39324dc233f123b242e6af2637e9",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

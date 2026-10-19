@@ -9,7 +9,7 @@
    "repo": "osie",
    "url": "https://github.com/deosha/osie",
    "sha": "52a1ec9a21aca5d9212d546e1436e9b08383aa8d",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

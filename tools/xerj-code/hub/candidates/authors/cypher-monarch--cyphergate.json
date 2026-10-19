@@ -9,7 +9,7 @@
    "repo": "CypherGate",
    "url": "https://github.com/Cypher-Monarch/CypherGate",
    "sha": "6eebd4265556240f6805e08c0c3efc50839f3d53",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

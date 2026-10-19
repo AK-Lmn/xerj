@@ -9,7 +9,7 @@
    "repo": "Sentinel-Civil",
    "url": "https://github.com/contactochronoshield-cyber/Sentinel-Civil",
    "sha": "0fb064a04fc56d2948b2b4b89f240d5cb7090e74",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

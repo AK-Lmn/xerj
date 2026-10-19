@@ -9,7 +9,7 @@
    "repo": "ant-renamer-qt",
    "url": "https://github.com/morfredus/ant-renamer-qt",
    "sha": "a5ffb9bf0fdd4d94d18dfb44b223900b1e986466",
-   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-2.0",
     "use": "UNREVIEWED",

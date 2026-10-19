@@ -9,7 +9,7 @@
    "repo": "agent-flow",
    "url": "https://github.com/Xch4rt/agent-flow",
    "sha": "3bab7bad1fedcb60a24705872b63d86967427e84",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

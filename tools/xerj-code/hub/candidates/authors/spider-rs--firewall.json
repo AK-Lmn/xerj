@@ -9,7 +9,7 @@
    "repo": "firewall",
    "url": "https://github.com/spider-rs/firewall",
    "sha": "e9ee41124e085e2738477a962a18f315613824c2",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

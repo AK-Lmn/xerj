@@ -9,7 +9,7 @@
    "repo": "sandbase-harness",
    "url": "https://github.com/sandbaseai/sandbase-harness",
    "sha": "0cda12b033a7ce5827d0622dcfeddc19a3898668",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

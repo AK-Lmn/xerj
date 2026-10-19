@@ -9,7 +9,7 @@
    "repo": "TwitchDropsMiner",
    "url": "https://github.com/rangermix/TwitchDropsMiner",
    "sha": "191ba1c023fbf676788504d9342fb1212a7a51ba",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

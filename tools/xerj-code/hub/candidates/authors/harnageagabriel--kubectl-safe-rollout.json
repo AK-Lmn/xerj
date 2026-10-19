@@ -9,7 +9,7 @@
    "repo": "kubectl-safe-rollout",
    "url": "https://github.com/HarnageaGabriel/kubectl-safe-rollout",
    "sha": "e5036826d3b75a9ed72bc8d8fe6510120809d8e8",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

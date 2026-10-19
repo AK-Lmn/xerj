@@ -9,7 +9,7 @@
    "repo": "arcadehub-id",
    "url": "https://github.com/ravi-arnan/arcadehub-id",
    "sha": "52e408290f8c0fc36170df028b936ed865e9e61b",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

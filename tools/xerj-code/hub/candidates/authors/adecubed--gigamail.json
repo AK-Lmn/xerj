@@ -9,7 +9,7 @@
    "repo": "gigamail",
    "url": "https://github.com/adecubed/gigamail",
    "sha": "e8f19974740b84c95dee5d4511565451110fd433",
-   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: AGPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "AGPL-3.0",
     "use": "UNREVIEWED",

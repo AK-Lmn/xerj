@@ -9,7 +9,7 @@
    "repo": "ircafe",
    "url": "https://github.com/wodencafe/ircafe",
    "sha": "c3da3343245b9d27ecd9b68bf6be73bc09c66ded",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

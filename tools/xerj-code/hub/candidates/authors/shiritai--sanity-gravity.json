@@ -9,7 +9,7 @@
    "repo": "sanity-gravity",
    "url": "https://github.com/Shiritai/sanity-gravity",
    "sha": "5ca936d9d47b74848c32f22aceb3e71bbeabb921",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

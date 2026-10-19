@@ -9,7 +9,7 @@
    "repo": "mediaclinic",
    "url": "https://github.com/junqueirach/mediaclinic",
    "sha": "c308d07c6b4fc442309dcabf85d7fd60ac5ea7c3",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

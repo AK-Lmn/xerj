@@ -9,7 +9,7 @@
    "repo": "cure-lang",
    "url": "https://github.com/cure-lang/cure-lang",
    "sha": "7edc023d6d37338f348b4b0714a35109b87774c9",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

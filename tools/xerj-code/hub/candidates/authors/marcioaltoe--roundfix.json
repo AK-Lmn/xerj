@@ -9,7 +9,7 @@
    "repo": "roundfix",
    "url": "https://github.com/marcioaltoe/roundfix",
    "sha": "02c7675e3b7edf68367555c6586b19efb7e9bf70",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

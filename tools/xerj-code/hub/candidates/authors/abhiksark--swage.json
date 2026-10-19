@@ -9,7 +9,7 @@
    "repo": "swage",
    "url": "https://github.com/abhiksark/swage",
    "sha": "d8d270a6f788bf4412db38e5cfb8e5f75ee3ec1e",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

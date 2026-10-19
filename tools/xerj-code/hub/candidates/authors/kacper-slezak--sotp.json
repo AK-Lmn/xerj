@@ -9,7 +9,7 @@
    "repo": "SOTP",
    "url": "https://github.com/Kacper-Slezak/SOTP",
    "sha": "2b9620c934bd2155f11cc804a0e054f68e72a43c",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

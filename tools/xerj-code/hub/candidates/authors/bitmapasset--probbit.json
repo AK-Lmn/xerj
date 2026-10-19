@@ -9,7 +9,7 @@
    "repo": "probbit",
    "url": "https://github.com/BitmapAsset/probbit",
    "sha": "da7e3a95eb837f95443dbda2cfe8353f745a56c1",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

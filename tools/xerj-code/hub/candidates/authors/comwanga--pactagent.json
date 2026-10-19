@@ -9,7 +9,7 @@
    "repo": "pactagent",
    "url": "https://github.com/comwanga/pactagent",
    "sha": "b49edae2ce3e3453beebbc90e429cf477b1901e7",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

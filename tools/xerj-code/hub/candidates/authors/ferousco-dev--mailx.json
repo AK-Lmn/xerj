@@ -9,7 +9,7 @@
    "repo": "Mailx",
    "url": "https://github.com/Ferousco-dev/Mailx",
    "sha": "7a0e73928c04d5acb9ec3652b8d929edd2f01a03",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "checkpointctl",
    "url": "https://github.com/checkpoint-restore/checkpointctl",
    "sha": "ac3080c00d601843cb20c69598434ffa5443aeb6",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

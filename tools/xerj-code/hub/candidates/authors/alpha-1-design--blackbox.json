@@ -9,7 +9,7 @@
    "repo": "BLACKBOX",
    "url": "https://github.com/alpha-1-design/BLACKBOX",
    "sha": "416e1329dae4c3d33e93deabc2f960dc7b618cd0",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

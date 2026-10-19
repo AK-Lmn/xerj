@@ -9,7 +9,7 @@
    "repo": "Copperline",
    "url": "https://github.com/CopperlineHQ/Copperline",
    "sha": "02178639b877dc1af5eb5a543691c6cae7fa1871",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

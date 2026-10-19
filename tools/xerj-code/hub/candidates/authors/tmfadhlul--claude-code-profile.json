@@ -9,7 +9,7 @@
    "repo": "claude-code-profile",
    "url": "https://github.com/tmfadhlul/claude-code-profile",
    "sha": "fd79421d583944a96c5aa821a918eb44b1b8aa82",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

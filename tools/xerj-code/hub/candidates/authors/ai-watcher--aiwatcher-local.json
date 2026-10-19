@@ -9,7 +9,7 @@
    "repo": "aiwatcher-local",
    "url": "https://github.com/ai-watcher/aiwatcher-local",
    "sha": "80bd8f0a29464f93642107345d223d843c41d7e7",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

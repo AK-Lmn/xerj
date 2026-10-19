@@ -9,7 +9,7 @@
    "repo": "EDI",
    "url": "https://github.com/kapelner/EDI",
    "sha": "4d2531e97bc0636d3409003576a5766d15a308d0",
-   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: GPL-3.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "GPL-3.0",
     "use": "UNREVIEWED",

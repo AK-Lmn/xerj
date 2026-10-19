@@ -9,7 +9,7 @@
    "repo": "ik_llama.cpp",
    "url": "https://github.com/ikawrakow/ik_llama.cpp",
    "sha": "d9e286846d6f8232db48ec5c111a4ea3aea675ef",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

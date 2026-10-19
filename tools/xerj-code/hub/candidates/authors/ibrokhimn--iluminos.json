@@ -9,7 +9,7 @@
    "repo": "IluminOS",
    "url": "https://github.com/IbrokhimN/IluminOS",
    "sha": "949f5dac2503993aceb46c6f852c634cca65cec8",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

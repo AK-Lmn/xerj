@@ -9,7 +9,7 @@
    "repo": "omnigent",
    "url": "https://github.com/omnigent-ai/omnigent",
    "sha": "d24856cb01aa5f0d29081c4a4700b4808cae3d21",
-   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: Apache-2.0 (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "Apache-2.0",
     "use": "UNREVIEWED",

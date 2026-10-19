@@ -9,7 +9,7 @@
    "repo": "KubePeek",
    "url": "https://github.com/Captain-Sangam/KubePeek",
    "sha": "d45acd7624ac047dbd8ee03c53066aa4a5abf167",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

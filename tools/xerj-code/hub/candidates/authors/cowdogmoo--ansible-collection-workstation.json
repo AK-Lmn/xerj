@@ -9,7 +9,7 @@
    "repo": "ansible-collection-workstation",
    "url": "https://github.com/CowDogMoo/ansible-collection-workstation",
    "sha": "78b4498052d3af54b8ac7200874e759a66b7b840",
-   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: MIT (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "MIT",
     "use": "UNREVIEWED",

@@ -9,7 +9,7 @@
    "repo": "FERIS",
    "url": "https://github.com/Ruochun/FERIS",
    "sha": "d21967ce69f3fa3900f98e8d09d5849cd7470fc8",
-   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-18; verify at pin)",
+   "licence": "hint only: BSD-3-Clause (GitHub licenseInfo 2026-10-19; verify at pin)",
    "review": {
     "spdx": "BSD-3-Clause",
     "use": "UNREVIEWED",
