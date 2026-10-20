@@ -48,8 +48,8 @@ PAGES: dict[str, dict[str, str]] = {
     # ── root / product ──────────────────────────────────────────────────────
     "index.html": dict(
         label="Home", kind="software",
-        title='XERJ: ask a GitHub repo without cloning, get file:line',
-        description='Local search for coding agents. xerj "question" pulls one signed, pre-indexed corpus pack and answers with file:line citations. CLI, MCP server, Apache-2.0.',
+        title='XERJ: search for AI agents, answers cited to file and line',
+        description='A new way for AI to search data. Give your coding agent one prompt; it answers from a local index with file:line citations. CLI and MCP server, Apache-2.0.',
         og_image="og/page-home.png",
         og_image_alt='Cover: a question routed to the lz4 tile among the 14 corpora of the signed catalogue, its 4.4 MB pack pulled once to a local node on port 9300, answering with lz4/lib/lz4frame.h:186',
     ),
