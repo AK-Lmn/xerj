@@ -179,11 +179,10 @@ fn classify_one(text: &str) -> &'static str {
         return from_title;
     }
     let from_body = classify_text(text.chars().take(4000).collect::<String>().as_str());
-    if from_title == "BSD" && (from_body == "UNKNOWN" || from_body == "BSD") {
+    // A generic `BSD` title stays `BSD` when the body names nothing more
+    // specific; otherwise (and for an UNKNOWN title) the body decides.
+    if from_title == "BSD" && from_body == "UNKNOWN" {
         return "BSD";
-    }
-    if from_title == "UNKNOWN" {
-        return from_body;
     }
     from_body
 }
