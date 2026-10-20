@@ -6,7 +6,7 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 
 ## Current state
 
-300 corpora attempted: 254 published at their latest attempt, 46 not.
+326 corpora attempted: 281 published at their latest attempt, 45 not.
 
 ### Latest attempt did not publish (fix or delist on purpose)
 
@@ -47,7 +47,7 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 | `cassandra` | `ec2c276b` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `exploit-pocs-2023` | `af9e194d` |  |  | cancelled at `build` | [FAIL] django-security-advisory-3.2.16: git fetch 4ac74feb7ad380decf41d37cf796b410262b64fd failed; continuing |
+| `exploit-pocs-2023` | `af9e194d` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
 | `exploit-pocs-2024` | `7855e58f` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
 | `exploit-pocs-2025` | `374cf8f1` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
 | `exploit-pocs-2026` | `160f470e` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
@@ -56,10 +56,54 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 | `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `ipsum-blocklist` | `444b4802` | 26449698 | 0 | failed at `e2e` | no question from ask_for (reputation |
-| `kyverno-policies` | `ec478cb5` | 1761907 | 0 | failed at `e2e` | release not found |
+| `ipsum-blocklist` | `444b4802` | 26362352 | 0 | failed at `e2e` | no question from ask_for (reputation |
 
 ## Runs (newest first)
+
+### Run [39454084138](https://github.com/xerj-org/xerj/actions/runs/39454084138), 2026-10-20: 27 of 40 published
+
+| slug | pin8 | bytes | defs | result | error |
+|---|---|---:|---:|---|---|
+| `cassandra` | `ec2c276b` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `exploit-pocs-2023` | `af9e194d` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2024` | `7855e58f` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2025` | `374cf8f1` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2026` | `160f470e` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploitdb-src` | `12879ca7` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `fluent-bit` | `3b6ce5cf` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ipsum-blocklist` | `444b4802` | 26362352 | 0 | failed at `e2e` | no question from ask_for (reputation |
+| `kyverno-policies` | `ec478cb5` | 1761922 | 0 | published `pack-kyverno-policies-ec478cb5-r2` |  |
+| `ldnoobw-bad-words` | `5faf2ba4` | 225193 | 0 | published `pack-ldnoobw-bad-words-5faf2ba4` |  |
+| `lego` | `748e608a` | 24518009 | 11869 | published `pack-lego-748e608a` |  |
+| `leveldb` | `7ee830d0` | 3708922 | 1870 | published `pack-leveldb-7ee830d0` |  |
+| `lexbuild` | `8cc0b93b` | 11085419 | 1009 | published `pack-lexbuild-8cc0b93b` |  |
+| `libcbor` | `ab8c72b1` | 3886704 | 1716 | published `pack-libcbor-ab8c72b1` |  |
+| `libhydrogen` | `264bf429` | 672746 | 351 | published `pack-libhydrogen-264bf429` |  |
+| `libopenapi` | `c4c4be74` | 62741994 | 11360 | published `pack-libopenapi-c4c4be74` |  |
+| `libsodium` | `61478971` | 11086618 | 4320 | published `pack-libsodium-61478971` |  |
+| `libuv` | `49b1c064` | 7754716 | 8259 | published `pack-libuv-49b1c064` |  |
+| `licensee` | `9261af40` | 3461400 | 588 | published `pack-licensee-9261af40` |  |
+| `lightningcss` | `ab14f90d` | 11069855 | 4088 | published `pack-lightningcss-ab14f90d` |  |
+| `lit` | `01dbc667` | 24454051 | 7300 | published `pack-lit-01dbc667` |  |
+| `llhttp` | `69936dbc` | 2027695 | 322 | published `pack-llhttp-69936dbc` |  |
+| `llm-course` | `7abd96e8` | 475872 | 0 | published `pack-llm-course-7abd96e8` |  |
+| `lmdb` | `700e10f9` | 2429570 | 873 | published `pack-lmdb-700e10f9` |  |
+| `lol-html` | `608cc4a6` | 4963167 | 1873 | published `pack-lol-html-608cc4a6` |  |
+| `loldrivers` | `6f6f5b49` | 138928678 | 283 | published `pack-loldrivers-6f6f5b49` |  |
+| `markdownlint` | `3f1f4793` | 12806147 | 262 | published `pack-markdownlint-3f1f4793` |  |
+| `mashqa` | `86e0a7d7` | 1926365 | 675 | published `pack-mashqa-86e0a7d7` |  |
+| `material-components-web` | `6ceadb81` | 26068507 | 2390 | published `pack-material-components-web-6ceadb81` |  |
+| `material-web` | `e3471c04` | 19361409 | 2514 | published `pack-material-web-e3471c04` |  |
+| `mbedtls` | `de23569a` | 22607262 | 4192 | published `pack-mbedtls-de23569a` |  |
+| `mdn-browser-compat-data` | `85c50b0b` | 72394960 | 499 | published `pack-mdn-browser-compat-data-85c50b0b` |  |
+| `mdn-data` | `2c16ea05` | 2862912 | 3 | published `pack-mdn-data-2c16ea05` |  |
+| `medical-abbreviations` | `3970d38b` | 537513 | 0 | published `pack-medical-abbreviations-3970d38b` |  |
+| `medmcqa` | `c59ef14c` | 301169 | 27 | published `pack-medmcqa-c59ef14c` |  |
 
 ### Run [39419437459](https://github.com/xerj-org/xerj/actions/runs/39419437459), 2026-10-20: 26 of 40 published
 
