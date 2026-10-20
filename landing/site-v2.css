@@ -60,6 +60,25 @@
 .v2-copy:hover, .v2-copy:focus-visible { background: var(--z-ink); color: var(--z-bg); border-color: var(--z-ink); }
 .v2-note { font-size: var(--fs-13); color: var(--z-mute); line-height: 1.55; margin: 0; max-width: 70ch; }
 
+/* ---------- hero, one column: headline, one subline, the prompt CTA ---------- */
+.v2-hero.v2-hero-solo { display: block; max-width: 880px; }
+.v2-hero .v2-sub { font-size: var(--fs-20); line-height: 1.5; max-width: 46ch; margin: 0 0 var(--sp-8); color: var(--z-ink); }
+.v2-go { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sp-4); max-width: 760px; }
+.v2-go-btn { justify-self: start; font-family: var(--font-data); font-weight: 700; text-transform: uppercase;
+  letter-spacing: var(--track-ui); font-size: clamp(20px, 2vw, 26px); line-height: 1;
+  background: var(--z-brand); color: var(--z-on-brand); border: 2px solid var(--z-brand-deep);
+  padding: 22px 40px; min-height: 64px; cursor: pointer; }
+.v2-go-btn:hover, .v2-go-btn:focus-visible { background: var(--z-ink); color: var(--z-bg); border-color: var(--z-ink); }
+.v2-go-btn:focus-visible { outline: 3px solid var(--z-brand-deep); outline-offset: 3px; }
+.v2-go-text { background: var(--z-code-bg); border: 1px solid var(--z-code-line); border-left: 4px solid var(--z-brand);
+  padding: var(--sp-3) var(--sp-4); }
+.v2-go-text code { display: block; font-family: var(--font-mono); font-size: var(--fs-13); line-height: 1.6;
+  color: var(--z-ink); overflow-wrap: break-word; }
+.v2-go-alt { margin: 0; font-size: var(--fs-13); line-height: 1.8; color: var(--z-mute); }
+.v2-go-alt .v2-copy { padding: 2px 8px; margin-left: 4px; }
+.nav .nav-gh { display: inline-flex; align-self: center; color: var(--z-mute); }
+.nav .nav-gh:hover { color: var(--z-ink); }
+
 /* ---------- terminal transcript ---------- */
 .v2-term { background: var(--z-code-bg); border: 1px solid var(--z-code-line); border-radius: 6px;
   overflow: hidden; margin: 0 0 var(--sp-4); }
@@ -83,7 +102,7 @@
 
 /* ---------- cards: three ways in, use cases ---------- */
 .v2-cards { display: grid; grid-template-columns: repeat(var(--v2-cols, 3), minmax(0, 1fr)); gap: var(--sp-6); }
-.v2-card { border: 1px solid var(--z-line); background: var(--z-bg); padding: var(--sp-6);
+.v2-card { border: 1px solid var(--z-line); background: var(--z-bg); padding: var(--sp-6); min-width: 0;
   display: flex; flex-direction: column; gap: var(--sp-3); }
 .v2-card .v2-tag { font-family: var(--font-data); font-size: var(--fs-11); font-weight: 700;
   letter-spacing: var(--track-label); text-transform: uppercase; color: var(--z-mute); }
@@ -137,7 +156,7 @@ a.v2-card:hover .v2-more { text-decoration: underline; }
   .v2-ladder { --v2-cols: 2; }
 }
 @media (max-width: 820px) {
-  .v2-cards, .v2-proof, .v2-steps { grid-template-columns: 1fr; }
+  .v2-cards, .v2-proof, .v2-steps { grid-template-columns: minmax(0, 1fr); }
   .v2-proof > div { padding-right: 0; }
   .v2-ladder { --v2-cols: 1; }
   .v2 section { margin-bottom: var(--sp-12); }
@@ -145,6 +164,7 @@ a.v2-card:hover .v2-more { text-decoration: underline; }
 }
 @media (max-width: 480px) {
   .v2-hero h1 { font-size: 44px; }
+  .v2-go-btn { justify-self: stretch; }
   .v2-hero .v2-answer { font-size: var(--fs-16); }
   .v2-facts, .v2-facts tbody, .v2-facts tr, .v2-facts th, .v2-facts td { display: block; width: 100%; }
   .v2-facts th { border-bottom: 0; padding-bottom: 0; }
