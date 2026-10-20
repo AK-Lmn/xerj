@@ -6,7 +6,7 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 
 ## Current state
 
-247 corpora attempted: 201 published at their latest attempt, 46 not.
+273 corpora attempted: 228 published at their latest attempt, 45 not.
 
 ### Latest attempt did not publish (fix or delist on purpose)
 
@@ -44,7 +44,6 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 | `awesome-ai-system-prompts` | `74964625` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `axe-core` | `7e287a6a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `axolotl` | `e767fe07` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `biome` | `39d7595b` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `cassandra` | `ec2c276b` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
@@ -57,9 +56,54 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 | `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `googleapis` | `dfaf98d4` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ipsum-blocklist` | `444b4802` | 26583768 | 0 | failed at `e2e` | no question from ask_for (reputation |
 
 ## Runs (newest first)
+
+### Run [39335555740](https://github.com/xerj-org/xerj/actions/runs/39335555740), 2026-10-19: 27 of 40 published
+
+| slug | pin8 | bytes | defs | result | error |
+|---|---|---:|---:|---|---|
+| `cassandra` | `ec2c276b` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `exploit-pocs-2023` | `af9e194d` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2024` | `7855e58f` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2025` | `374cf8f1` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2026` | `160f470e` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploitdb-src` | `12879ca7` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `fluent-bit` | `3b6ce5cf` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ipsum-blocklist` | `444b4802` | 26583768 | 0 | failed at `e2e` | no question from ask_for (reputation |
+| `biome` | `39d7595b` | 232702957 | 107317 | published `pack-biome-39d7595b` |  |
+| `googleapis` | `dfaf98d4` | 320918461 | 37 | published `pack-googleapis-dfaf98d4` |  |
+| `h2` | `e64c1662` | 66863481 | 1948 | published `pack-h2-e64c1662` |  |
+| `h2o` | `d21e7cb5` | 70215323 | 24686 | published `pack-h2o-d21e7cb5` |  |
+| `hacl-star` | `504c2987` | 62683093 | 16889 | published `pack-hacl-star-504c2987` |  |
+| `harbor` | `23bfa9a1` | 54233081 | 18043 | published `pack-harbor-23bfa9a1` |  |
+| `harper` | `6a0f42d1` | 25758119 | 13709 | published `pack-harper-6a0f42d1` |  |
+| `haystack` | `441023dc` | 38627674 | 9557 | published `pack-haystack-441023dc` |  |
+| `head-qa` | `da54ff23` | 348559 | 104 | published `pack-head-qa-da54ff23` |  |
+| `helm` | `dc56a44f` | 13864788 | 4471 | published `pack-helm-dc56a44f` |  |
+| `hivemq-mqtt-client` | `99ab2013` | 11512829 | 7434 | published `pack-hivemq-mqtt-client-99ab2013` |  |
+| `how-they-sre` | `284703b1` | 1030499 | 1 | published `pack-how-they-sre-284703b1` |  |
+| `httparse` | `a0fa552e` | 733791 | 301 | published `pack-httparse-a0fa552e` |  |
+| `httpx` | `b5addb64` | 2986507 | 1335 | published `pack-httpx-b5addb64` |  |
+| `huggingface-hub-docs` | `fa1174ae` | 16452015 | 42 | published `pack-huggingface-hub-docs-fa1174ae` |  |
+| `hyper` | `2b454af2` | 5095340 | 2176 | published `pack-hyper-2b454af2` |  |
+| `ibm-openapi-validator` | `cf6ec487` | 8770807 | 369 | published `pack-ibm-openapi-validator-cf6ec487` |  |
+| `icd10-who` | `bff0a1dc` | 2362152 | 121 | published `pack-icd10-who-bff0a1dc` |  |
+| `icd10cm-codes` | `98ad49ef` | 21156520 | 40 | published `pack-icd10cm-codes-98ad49ef` |  |
+| `icd9-icd10-hierarchy` | `1b03a8c0` | 34469561 | 0 | published `pack-icd9-icd10-hierarchy-1b03a8c0` |  |
+| `iceberg` | `8102f4cb` | 125981560 | 93392 | published `pack-iceberg-8102f4cb` |  |
+| `in-solidarity-bot` | `9f069c62` | 2790122 | 43 | published `pack-in-solidarity-bot-9f069c62` |  |
+| `influxdb` | `06200ef9` | 92123891 | 21488 | published `pack-influxdb-06200ef9` |  |
+| `infracost` | `ccc476fb` | 33012153 | 6110 | published `pack-infracost-ccc476fb` |  |
+| `inspect-ai` | `81c1668d` | 121530391 | 37678 | published `pack-inspect-ai-81c1668d` |  |
+| `instructor` | `035c77b7` | 27758641 | 5904 | published `pack-instructor-035c77b7` |  |
+| `jaeger-docs` | `231b67c0` | 23494060 | 57 | published `pack-jaeger-docs-231b67c0` |  |
 
 ### Run [39306424180](https://github.com/xerj-org/xerj/actions/runs/39306424180), 2026-10-19: 26 of 40 published
 
