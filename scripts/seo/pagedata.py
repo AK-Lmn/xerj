@@ -217,7 +217,7 @@ PAGES: dict[str, dict[str, str]] = {
         description="Hub v2 routes a plain question to one signed corpus, pulls only that pack (lz4: 4.4 MB) and answers locally: 1.7 to 2.3 s cold, under 60 ms warm.",
         published="2026-10-19", updated="2026-10-20",
         og_image="og/blog-corpus-hub-v2.png",
-        og_image_alt="Cover: a wall of 251 faint pack tiles behind the 14 corpora of the signed catalogue; a question routes to the lz4 tile, whose 4.4 MB pack goes to a local node on port 9300; 1.72 to 2.27 s cold, 37 to 57 ms warm",
+        og_image_alt="Cover: “Corpus Hub v2” in display type beside the post’s square-matrix art, labelled with its figures. The art: a faint wall of 251 small tiles above 14 larger square-matrix tiles; a yellow route runs from the top into one yellow tile and down to a framed node",
     ),
     "blog/index.html": dict(
         label="Blog", kind="collection",
