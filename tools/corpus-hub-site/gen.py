@@ -511,6 +511,7 @@ gap:1px;background:var(--z-line);border:1px solid var(--z-line)}
 .stat{background:var(--z-bg);padding:var(--sp-4) var(--sp-5);min-height:88px;
 display:flex;flex-direction:column;justify-content:center;gap:4px}
 .stat.wide{grid-column:1 / -1}
+.stat a{display:block;text-decoration:none;color:inherit}.stat a:hover b{color:var(--z-accent)}
 .stat b{font-family:var(--font-display);font-weight:800;white-space:nowrap;
 font-size:var(--fs-32);line-height:1;color:var(--z-ink)}
 .stat span{font-family:var(--font-data);font-size:var(--fs-11);font-weight:500;
@@ -887,7 +888,7 @@ document.querySelectorAll('.copy').forEach(function(b){
 </script>"""
 
 
-def render_index(corpora, g7, graded, impact, prov):
+def render_index(corpora, g7, graded, impact, prov, people=None):
     live = [c for c in corpora if c["status"] == "live"]
     total_bytes = sum(sum(r.get("bytes") or 0 for r in c["repos"]) for c in live)
     n_imp = sum(1 for c in live if impact.get(c["slug"], {}).get("status") == "measured")
@@ -932,6 +933,12 @@ def render_index(corpora, g7, graded, impact, prov):
     treemap = "\n".join(groups)
     cat_chips = "".join(f'<button class="chip" data-cat="{k}">{k}</button>' for k in CATS)
     region_chips = "".join(f'<button class="chip" data-region="{esc(r)}">{esc(r)}</button>' for r in regions)
+    # owner request: real numbers instead of "registry rows" / "live corpora".
+    # Stars: distinct pinned repos with a recorded count only (never estimated).
+    stars, n_star_repos = contributors.pinned_repo_stars(people or {})
+    stars_stat = (f'<div class="stat" title="{stars:,} GitHub stars, summed over {n_star_repos:,} distinct pinned repositories '
+                  f'that have a recorded star count"><b>{contributors.compact(stars)}</b><span>GitHub stars across pinned repos</span></div>'
+                  if n_star_repos else "")
     body = f'''<main>
 <div class="kicker"><span class="accent">HUB.XERJ.ORG</span><span class="dash">·</span><span>REFERENCE MEMORY HUB FOR AI AGENTS</span></div>
 <div class="herorow">
@@ -943,9 +950,9 @@ that loads one works like a domain expert.</p>
 </div>
 <div class="heroside">
 <div class="statgrid">
-<div class="stat"><b>{len(live)}</b><span>live corpora</span></div>
+{stars_stat}
 <div class="stat"><b>{len(CATS)}</b><span>domains</span></div>
-<div class="stat"><b>{len(corpora)}</b><span>registry rows</span></div>
+<div class="stat"><a href="contributors/index.html"><b>{len(people or {}):,}</b><span>contributors</span></a></div>
 <div class="stat"><b>{human_bytes(total_bytes)}</b><span>pinned text</span></div>
 </div>
 <a class="cta" href="contribute.html">Add your corpus &rarr;</a>
@@ -1159,8 +1166,8 @@ def main():
     g7 = parse_waves_g7()
     graded = parse_graded_suites()
     impact, prov = load_impact()
-    (OUT / "index.html").write_text(render_index(corpora, g7, graded, impact, prov))
     people = contributors.load(HUB, corpora)
+    (OUT / "index.html").write_text(render_index(corpora, g7, graded, impact, prov, people))
     # every corpus page credits its people: signed-up contributors, the upstream
     # owners of its pinned repositories, or the curator (contributors.credits)
     credit, upstream = contributors.credits(corpora, people)

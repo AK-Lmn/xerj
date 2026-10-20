@@ -135,6 +135,16 @@ class ContributorVolumeTest(unittest.TestCase):
         self.assertIn('href="../contributors/Ann.html"', html)
         self.assertEqual(contributors.corpus_section([], gen.esc, people), "")
 
+    def test_pinned_repo_stars_are_distinct_and_never_estimated(self):
+        import contributors
+        with tempfile.TemporaryDirectory() as d:
+            people = contributors.load(self._hub(d))
+        # Ann/one (10) is reached twice (ledger + themed row) and counts once;
+        # cat/three comes only from the themed table, has no count, and is left out
+        self.assertEqual(contributors.pinned_repo_stars(people), (15, 2))
+        self.assertEqual([contributors.compact(n) for n in (950, 48_200, 5_501_659, 12_400_000, 2_000_000)],
+                         ["950", "48.2K", "5.5M", "12.4M", "2M"])
+
     def test_no_licence_is_marked_reviewed(self):
         import contributors
         with tempfile.TemporaryDirectory() as d:
@@ -460,6 +470,19 @@ class SiteLinksTest(unittest.TestCase):
         self.assertTrue(all((d / f"{l}.html").is_file() for l in logins))
         self.assertIn('class="pager"', html)                                   # plain links without JS
         self.assertIn('class="tmap"', html)
+
+    def test_home_stats_are_stars_and_contributors(self):
+        # owner request: "registry rows" / "live corpora" replaced by real numbers
+        import contributors
+        html = (self.out / "index.html").read_text()
+        strip = html.split('class="statgrid"', 1)[1].split("</div>\n</div>", 1)[0]
+        self.assertNotIn("registry rows", strip)
+        self.assertNotIn("live corpora", strip)
+        people = contributors.load(gen.HUB, gen.load_registry())
+        stars, n = contributors.pinned_repo_stars(people)
+        self.assertIn(f"<b>{len(people):,}</b><span>contributors</span>", strip)
+        self.assertIn(f"<b>{contributors.compact(stars)}</b><span>GitHub stars across pinned repos</span>", strip)
+        self.assertIn(f"{stars:,} GitHub stars, summed over {n:,} distinct pinned repositories", strip)
 
     def test_whats_this_replaces_about(self):
         self.assertTrue((self.out / "whats-this" / "index.html").is_file())

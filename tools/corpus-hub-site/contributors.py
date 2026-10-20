@@ -223,6 +223,28 @@ def volume(pp, live_slugs=()):
     }
 
 
+def pinned_repo_stars(people):
+    """(total, repos): GitHub stars summed over DISTINCT pinned repositories that
+    have a recorded star count. The only star figures the generator has are the
+    outreach ledger's repo_stars (CONTRIBUTORS.jsonl, one per contributor repo,
+    each pinned at a commit); registry manifests carry none, so those repos
+    are left out rather than estimated. Same figures the treemap uses."""
+    by_repo = {}
+    for pp in people.values():
+        for w in pp["work"].values():
+            if isinstance(w.get("repo_stars"), int) and w.get("repo_url"):
+                by_repo[w["repo_url"].rstrip("/").lower()] = w["repo_stars"]
+    return sum(by_repo.values()), len(by_repo)
+
+
+def compact(n):
+    """12,400,000 -> '12.4M', 5,501,659 -> '5.5M', 48,200 -> '48.2K', 950 -> '950'."""
+    for div, suf in ((1_000_000_000, "B"), (1_000_000, "M"), (1_000, "K")):
+        if n >= div:
+            return f"{n / div:.1f}".rstrip("0").rstrip(".") + suf
+    return f"{n:,}"
+
+
 def badge_svg(label="XERJ Corpus Hub", value="contributor"):
     # shields-style flat badge; widths from a fixed 6.6 px/char estimate for 11px Verdana
     lw, vw = int(len(label) * 6.6) + 14, int(len(value) * 6.6) + 14
