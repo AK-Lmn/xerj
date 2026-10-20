@@ -49,7 +49,15 @@ def ring(x: float, y: float, r: float, ink: str, sw: float = 1.2) -> str:
             f'class="{ink}-s" fill="none" stroke-width="{_f(sw)}"/>')
 
 
+# Art-only renders (the in-post hero and the index thumbnail) set this to
+# False: the page already carries the title, so those covers draw no text at
+# all. The og card keeps its labels.
+LABELS = True
+
+
 def label(x: float, y: float, text: str, cls: str = "lab", anchor: str = "start") -> str:
+    if not LABELS:
+        return ""
     text = (text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"))
     return f'<text x="{_f(x)}" y="{_f(y)}" class="{cls}" text-anchor="{anchor}">{text}</text>'
 
@@ -431,7 +439,7 @@ def m_scars(w: float, h: float, rng: random.Random) -> str:
 
 
 def m_route(w: float, h: float, rng: random.Random) -> str:
-    """corpus-hub-v2: the router as a wall of pack tiles. Back wall: 245 faint
+    """corpus-hub-v2: the router as a wall of pack tiles. Back wall: 251 faint
     tiles, the post's count of distinct slugs with a signed v2 pack on GitHub
     Releases. Front: the 14 corpora in the signed catalogue the router reads
     (generated 2026-10-18), by slug. The question from the post's lede routes
@@ -441,10 +449,10 @@ def m_route(w: float, h: float, rng: random.Random) -> str:
              "arroyo", "astro", "attack-mappings-explorer", "autorag", "avro",
              "lz4", "snappy", "zstd"]
     out = []
-    # back wall: 245 packs on Releases
-    cols = 35
+    # back wall: 251 packs on Releases (re-counted 2026-10-20); 36 x 7 holds them
+    cols = 36
     bp = w / cols
-    for k in range(245):
+    for k in range(251):
         i, j = k % cols, k // cols
         out.append(halftone(i * bp + 1, 30 + j * bp + 1, bp - 3, bp - 3, (bp - 3) / 2,
                             lambda u, v: 0.5, "f"))

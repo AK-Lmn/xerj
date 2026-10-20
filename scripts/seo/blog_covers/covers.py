@@ -37,6 +37,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 REPO = HERE.parent.parent.parent
 LANDING = REPO / "landing"
 sys.path.insert(0, str(HERE))
+import motifs  # noqa: E402
 from motifs import MOTIFS  # noqa: E402
 
 # ── brand tokens: the brand book's print palette on the site's day paper ────
@@ -67,42 +68,55 @@ POSTS: list[dict[str, str]] = [
     dict(slug="does-xerj-beat-jev", date="2026-09-21", motif="jevbars",
          title="Does XERJ beat JEV?",
          subtitle="On the bill, outright. On FiQA, no.",
-         alt="Cover: square-matrix bars of nDCG@10 for XERJ and BM25+Jev on SciFact (0.6993 vs 0.7410), NFCorpus (0.3448 vs 0.3312) and FiQA (0.2382 vs 0.3638), and the FiQA rerank bill, $0.6375 against $0 local"),
+         alt="Cover art: three pairs of square-matrix bars, ink for XERJ and blue for BM25+Jev, over one long blue bar and a single yellow square for the zero-cost local run",
+         og_alt="Cover: “Does XERJ beat JEV?” in display type beside the post’s square-matrix art, labelled with its figures. The art: three pairs of square-matrix bars, ink for XERJ and blue for BM25+Jev, over one long blue bar and a single yellow square for the zero-cost local run"),
     dict(slug="jev-vs-a-bm25-vote", date="2026-09-22", motif="vote",
          title="A BM25 vote ties Jev on spam and beats it on intent",
          subtitle="Count your labels before you pay for a model.",
-         alt="Cover: two grids of 500 Banking77 decisions, filled squares for correct answers, the vote's extra correct answers in yellow: BM25 vote 0.9140, Jev 0.8240; SMS spam is a tie, 0.9840 vs 0.9880"),
+         alt="Cover art: two grids of 500 squares, filled for correct answers; the ink grid has a band of yellow squares where it beats the blue grid",
+         og_alt="Cover: “A BM25 vote ties Jev on spam and beats it on intent” in display type beside the post’s square-matrix art, labelled with its figures. The art: two grids of 500 squares, filled for correct answers; the ink grid has a band of yellow squares where it beats the blue grid"),
     dict(slug="cutting-the-index-28-percent", date="2026-09-27", motif="index28",
          title="Cutting the index 28%",
          subtitle="Dissect first, write Rust second.",
-         alt="Cover: a block of squares for the 5.52 MB index with the 3.99 MB index drawn inside it to scale and the 28% cut in yellow, and bars for the .seg (minus 73.1%) and .meta (minus 93.1%) formats"),
+         alt="Cover art: a large ink block of squares wrapped in a yellow L-shaped band that marks the 28% cut, beside two pairs of thin before-and-after bars",
+         og_alt="Cover: “Cutting the index 28%” in display type beside the post’s square-matrix art, labelled with its figures. The art: a large ink block of squares wrapped in a yellow L-shaped band that marks the 28% cut, beside two pairs of thin before-and-after bars"),
     dict(slug="one-vulnerability-three-names", date="2026-09-27", motif="names",
          title="One vulnerability, three names",
          subtitle="Checksums prove integrity. They do not prove origin.",
-         alt="Cover: the labels RUSTSEC-2021-0003, GHSA-43w2-9j62-hq99 and CVE-2021-25900 converging on one signed record; 4,107 filings to 1,950 records"),
+         alt="Cover art: three outlined boxes trailing lines of small squares that converge on one square-matrix disc with a yellow seal at its centre",
+         og_alt="Cover: “One vulnerability, three names” in display type beside the post’s square-matrix art, labelled with its figures. The art: three outlined boxes trailing lines of small squares that converge on one square-matrix disc with a yellow seal at its centre"),
     dict(slug="the-rc80-gates", date="2026-09-30", motif="gates",
          title="The rc.80 gates",
          subtitle="Measured in public, losses left in.",
-         alt="Cover: a row of ten gates, one per feature: three pass, three fail, one split, one reported, two not measured"),
+         alt="Cover art: ten gates built from squares in two rows: three yellow with check marks, three ink with crosses, one half yellow and three faint",
+         og_alt="Cover: “The rc.80 gates” in display type beside the post’s square-matrix art, labelled with its figures. The art: ten gates built from squares in two rows: three yellow with check marks, three ink with crosses, one half yellow and three faint"),
     dict(slug="the-corpus-hub", date="2026-10-01", motif="tiles",
          title="The Corpus Hub",
          subtitle="Pinned, licenced, signed, contributed by pull request.",
-         alt="Cover: a wall of 100 pack tiles with the four launch corpora in yellow and a seal frame on the signed pack"),
+         alt="Cover art: a 10 by 10 wall of square-matrix pack tiles in shades of ink, the first four solid yellow and the fifth framed",
+         og_alt="Cover: “The Corpus Hub” in display type beside the post’s square-matrix art, labelled with its figures. The art: a 10 by 10 wall of square-matrix pack tiles in shades of ink, the first four solid yellow and the fifth framed"),
     dict(slug="eval-scars-from-agent-memory", date="2026-10-07", motif="scars",
          title="Six eval scars from production agent memory",
          subtitle="If every query scores zero hits, suspect your mask.",
-         alt="Cover: six scratch marks, one per eval pattern, tagged with the post's figures: recall@1, +2.75pt, group by qid, 0.87 vs 0.78, 4x unpaired, mask to zero hits"),
+         alt="Cover art: six clusters of diagonal scratch marks made of small squares, five in ink and one in yellow",
+         og_alt="Cover: “Six eval scars from production agent memory” in display type beside the post’s square-matrix art, labelled with its figures. The art: six clusters of diagonal scratch marks made of small squares, five in ink and one in yellow"),
     dict(slug="the-exploit-hub", date="2026-10-08", motif="network",
          title="The exploit hub, tested on three fresh CVEs",
          subtitle="One query, exact attribution, wrong patch.",
-         alt="Cover: a network of proof-of-concept documents; CVE-2026-23744 links to 36 PoCs, CVE-2026-105844 to one neighbouring exploit, CVE-2026-97332 to none"),
+         alt="Cover art: a network of small square nodes; a yellow hub linked to 36 yellow nodes, an ink node with one link, and an empty square frame with none",
+         og_alt="Cover: “The exploit hub, tested on three fresh CVEs” in display type beside the post’s square-matrix art, labelled with its figures. The art: a network of small square nodes; a yellow hub linked to 36 yellow nodes, an ink node with one link, and an empty square frame with none"),
     dict(slug="corpus-hub-v2", date="2026-10-19", motif="route",
          title="Corpus Hub v2",
          subtitle="Ask the question, get the one pack that answers it.",
-         alt="Cover: a wall of 245 faint pack tiles behind the 14 corpora of the signed catalogue; a question routes to the lz4 tile, whose 4.4 MB pack goes to a local node on port 9300; 1.72 to 2.27 s cold, 37 to 57 ms warm"),
+         alt="Cover art: a faint wall of 251 small tiles above 14 larger square-matrix tiles; a yellow route runs from the top into one yellow tile and down to a framed node",
+         og_alt="Cover: “Corpus Hub v2” in display type beside the post’s square-matrix art, labelled with its figures. The art: a faint wall of 251 small tiles above 14 larger square-matrix tiles; a yellow route runs from the top into one yellow tile and down to a framed node"),
 ]
 
-SIZES = {"og": (1200, 630), "hero": (1600, 640)}
+# og: title + motif with its labels, for social feeds that show the card alone.
+# hero / thumb: art only (no title, no labels); the page around them already
+# carries the title. "thumb" renders at og size and is downscaled to THUMB.
+SIZES = {"og": (1200, 630), "hero": (1600, 640), "thumb": (1200, 630)}
+ART_ONLY = {"hero", "thumb"}
 THUMB = (640, 336)
 
 
@@ -157,6 +171,15 @@ svg text { paint-order: stroke; stroke: %(bg)s; stroke-width: 5px; stroke-linejo
 .big { font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; font-size: %(bfs)spx; }
 """
 
+FIT_ART_JS = """
+() => {
+  const svg = document.getElementById('art'), b = document.getElementById('artg').getBBox();
+  const pad = 6;
+  svg.setAttribute('viewBox', `${b.x - pad} ${b.y - pad} ${b.width + 2 * pad} ${b.height + 2 * pad}`);
+  return [b.width, b.height];
+}
+"""
+
 FIT_JS = """
 () => {
   const h1 = document.querySelector('h1'), col = document.querySelector('.textcol');
@@ -169,6 +192,12 @@ FIT_JS = """
 
 def layout(kind: str) -> dict:
     W, H = SIZES[kind]
+    if kind == "hero":
+        return dict(W=W, H=H, P=64, kfs=16, ttop=0, tw=0, th=0, tfs=0, sfs=0,
+                    mx=90, my=70, mw=1140, mh=470, aw=1420, ah=500, fb=40, ffs=15, lfs=13, nfs=14, gfs=12, bfs=64)
+    if kind == "thumb":
+        return dict(W=W, H=H, P=56, kfs=15, ttop=0, tw=0, th=0, tfs=0, sfs=0,
+                    mx=90, my=70, mw=980, mh=470, aw=1020, ah=490, fb=40, ffs=15, lfs=12, nfs=13, gfs=11, bfs=54)
     if kind == "og":
         return dict(W=W, H=H, P=56, kfs=15, ttop=104, tw=500, th=410, tfs=92, sfs=30,
                     mx=610, my=112, mw=536, mh=400, fb=40, ffs=15, lfs=12, nfs=13, gfs=11, bfs=54)
@@ -197,13 +226,28 @@ def page(post: dict, kind: str, number: int, total: int) -> str:
     L = layout(kind)
     seed = sum(post["slug"].encode()) % 997
     rng = random.Random(post["slug"] + ":" + kind)
-    motif = MOTIFS[post["motif"]](L["mw"], L["mh"], rng)
+    motifs.LABELS = kind not in ART_ONLY
+    try:
+        motif = MOTIFS[post["motif"]](L["mw"], L["mh"], rng)
+    finally:
+        motifs.LABELS = True
     motif_svg = (f'<svg class="motif" width="{L["mw"]}" height="{L["mh"] + 4}" '
                  f'viewBox="0 0 {L["mw"]} {L["mh"] + 4}" overflow="visible" xmlns="http://www.w3.org/2000/svg">'
                  f'{motif}</svg>')
     css = CSS % {**TOKENS, **L, "display": font_url("BigShouldersDisplay-wght.ttf"),
                  "mono": font_url("JetBrainsMono-wght.ttf")}
     e = html.escape
+    if kind in ART_ONLY:
+        # the motif is drawn in its own (mw x mh) box, then FIT_ART_JS fits its
+        # real bounding box, centred, into the (aw x ah) art area
+        art = (f'<svg id="art" class="motif" width="{L["aw"]}" height="{L["ah"]}" '
+               f'viewBox="0 0 {L["mw"]} {L["mh"]}" preserveAspectRatio="xMidYMid meet" '
+               f'xmlns="http://www.w3.org/2000/svg"><g id="artg">{motif}</g></svg>')
+        return f"""<!DOCTYPE html><html><head><meta charset="utf-8"><style>{css}</style></head><body>
+<div class="card">
+{background(L["W"], L["H"], seed)}
+{art}
+</div></body></html>"""
     return f"""<!DOCTYPE html><html><head><meta charset="utf-8"><style>{css}</style></head><body>
 <div class="card">
 {background(L["W"], L["H"], seed)}
@@ -269,7 +313,7 @@ def render(posts: list[dict], series_total: int, numbers: dict[str, int],
                 pg.goto(tmp.as_uri())
                 pg.evaluate("document.fonts.ready")
                 pg.wait_for_timeout(150)
-                pg.evaluate(FIT_JS)
+                pg.evaluate(FIT_ART_JS if kind in ART_ONLY else FIT_JS)
                 png = pg.locator(".card").screenshot(type="png")
                 tmp.unlink()
                 pg.close()
@@ -299,15 +343,16 @@ def write(images: dict[str, dict]) -> list[pathlib.Path]:
         thumb = LANDING / "blog" / "covers" / f"{slug}-thumb.webp"
         # the thumbnail is a downscale, full of in-between tones: lossy wins there
         thumb.parent.mkdir(parents=True, exist_ok=True)
-        imgs["og"].resize(THUMB, Image.LANCZOS).save(thumb, "WEBP", quality=80, method=6)
+        imgs["thumb"].resize(THUMB, Image.LANCZOS).save(thumb, "WEBP", quality=80, method=6)
         written += [og, hero, thumb]
     return written
 
 
-def contact_sheet(images: dict[str, dict], path: pathlib.Path) -> None:
+def contact_sheet(images: dict[str, dict], path: pathlib.Path,
+                  cell: tuple[int, int] = (600, 315)) -> None:
     from PIL import Image
     cols = 3
-    cw, ch = 600, 315
+    cw, ch = cell
     gap = 24
     rows = (len(images) + cols - 1) // cols
     sheet = Image.new("RGB", (cols * cw + (cols + 1) * gap, rows * ch + (rows + 1) * gap), (255, 255, 255))
@@ -336,6 +381,9 @@ def main() -> int:
     if a.contact:
         contact_sheet(images, a.contact)
         print(f"wrote {a.contact}")
+        art = a.contact.with_name(a.contact.stem + "-art" + a.contact.suffix)
+        contact_sheet({k: {"og": v["hero"]} for k, v in images.items()}, art, (600, 240))
+        print(f"wrote {art}")
     return 0
 
 

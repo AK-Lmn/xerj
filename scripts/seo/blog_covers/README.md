@@ -12,6 +12,12 @@ it keeps its edge on white timelines (X, Slack, LinkedIn). All of it comes from 
 rendered by headless Chromium. No image model is involved, and the same
 inputs give the same pixels.
 
+The og card carries the title and the motif's figure labels, because a
+social feed shows it on its own. The in-post hero and the index thumbnail are
+**art only**: no title, no subtitle, no labels (`motifs.LABELS = False`), and
+the motif's real bounding box is fitted, centred, into the frame. The page
+around them already carries the title, so the cover never repeats the header.
+
 | output | size | used for |
 |---|---|---|
 | `landing/og/blog-<slug>.png` | 1200×630, 96-colour PNG | `og:image`, `twitter:image`, Article JSON-LD `image` |
@@ -43,14 +49,15 @@ ink, yellow and ochre (`landing/brand.html`), copied into `TOKENS` in `covers.py
 
 1. Add an entry to `POSTS` in `covers.py`: `slug`, `date` (the post's
    published date), `title`, `subtitle` (a phrase lifted from the post),
-   `motif`, and `alt` (describe only what the card draws).
+   `motif`, `alt` (the hero/thumbnail alt: describe the art only, since
+   those covers carry no text) and `og_alt` (the og card: its title plus the art).
 2. Pick a motif in `motifs.py` or write one: `motif(w, h, rng) -> svg`.
    Every number it draws must appear in the post. Name the source in the
    motif's docstring. `rng` is seeded with the slug and may only decide
    placement (jitter, scatter), never a value.
 3. Render, then wire it:
    - `scripts/seo/pagedata.py`: `og_image="og/blog-<slug>.png"` and
-     `og_image_alt=` the same text as `alt`, then
+     `og_image_alt=` the same text as `og_alt`, then
      `python3 scripts/seo/fix_heads.py --write`;
    - the post: `<figure class="blog-cover"><img src="/blog/covers/<slug>-hero.webp"
      width="1600" height="640" alt="…" fetchpriority="high" decoding="async"></figure>`
@@ -73,7 +80,7 @@ ink, yellow and ochre (`landing/brand.html`), copied into `TOKENS` in `covers.py
 | `tiles` | the-corpus-hub | a wall of 100 pack tiles, the launch four in yellow |
 | `scars` | eval-scars-from-agent-memory | six scratch marks, one per pattern |
 | `network` | the-exploit-hub | PoC documents linked to the three CVEs of the eval |
-| `route` | corpus-hub-v2 | 245 packs, the 14 catalogue corpora, a question routed to lz4 |
+| `route` | corpus-hub-v2 | 251 packs, the 14 catalogue corpora, a question routed to lz4 |
 
 Inks: yellow fill (with ochre for its labels and hairlines) for the one
 result the post is about, grey-blue (day `--z-cmp`) for the comparison series
