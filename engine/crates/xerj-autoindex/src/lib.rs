@@ -1400,6 +1400,50 @@ fn generated_exit_code(summary: &Value) -> i32 {
     }
 }
 
+/// The FIRST line of a finished run's human summary on stdout (#1843).
+///
+/// Exit 3 is success, but an agent that sees a non-zero exit reads failure
+/// unless something it reads first says otherwise. The `xerj-done` line on
+/// stderr already carries `ok=true`, yet it is the LAST line of a long progress
+/// stream and the summary on stdout opened with a timing line that never
+/// mentioned the exit code at all. So every finished run now leads with one
+/// line that starts `ok:` and names the exit code in words; exit 3 also says
+/// what was recorded and where to look, so junk stays visible.
+pub(crate) fn outcome_headline(
+    code: i32,
+    junk_files: u64,
+    junk_records: u64,
+    alias_sweep_failed: bool,
+) -> String {
+    if code != 3 {
+        return format!("ok: indexed and searchable (exit {code}, completed)");
+    }
+    if alias_sweep_failed {
+        return format!(
+            "ok: indexed and searchable — exit 3 ({ALIAS_SWEEP_FAILED_REASON}) is SUCCESS, not \
+             an error: the corpus is indexed and the journal committed; only the catalog's \
+             duplicate-alias cleanup could not run, so rerun the same command once the server \
+             condition clears"
+        );
+    }
+    let mut recorded = Vec::new();
+    if junk_files > 0 {
+        recorded.push(estimate::count_phrase(junk_files, "file", "files"));
+    }
+    if junk_records > 0 {
+        recorded.push(estimate::count_phrase(junk_records, "record", "records"));
+    }
+    let recorded = if recorded.is_empty() {
+        "some input".to_string()
+    } else {
+        recorded.join(" and ")
+    };
+    format!(
+        "ok: indexed and searchable — exit 3 (completed-with-junk) is SUCCESS, not an error: \
+         {recorded} recorded as junk (skipped, never fatal; `xerj autoindex map` lists them)"
+    )
+}
+
 /// Terminal progress line for a run that ends on the generated `--no-graph`
 /// path.
 ///
@@ -1494,6 +1538,22 @@ fn begin_non_graph_generation(
         .context("generation cutover has no committed base")?
         .clone();
     let tx_id = format!("{}-g{}", journal.run_id, base.generation + 1);
+    // #1723: derive the content groups and check the plan's projection onto
+    // them BEFORE sealing. Both depend only on the plan, the inventory and the
+    // base; only the counts need the snapshot (`bind_prepared_counts` below).
+    // A plan that cannot be accepted used to be refused only after the whole
+    // corpus was sealed — ~25 minutes per attempt on the report's corpus.
+    let mut groups = desired_content_groups(&base.groups, &plan, inventory)?;
+    sync::preflight_plan_projection(&plan, &groups).with_context(|| {
+        format!(
+            "autoindex refused generation {} before sealing any file: the plan built from this \
+             walk does not project onto its own content groups, so every run over this input \
+             fails the same way, --fresh included. No snapshot was written and no remote data \
+             was changed. This is an autoindex defect for this corpus; please report it with \
+             this message",
+            base.generation + 1
+        )
+    })?;
     let preparation_contract = preparation_contract_digest(cfg, &plan)?;
     // #971: the prior committed generation's snapshot is the reuse source for
     // sealing. A file whose content digest and preparation identity match its
@@ -1574,6 +1634,61 @@ fn begin_non_graph_generation(
         }
     };
 
+    sync_executor::bind_prepared_counts(&mut groups, &snapshot, &inventory.keys)?;
+    let (schema_identity, index_identity) = generation_contract_identities(&plan)?;
+    let desired = sync::GenerationManifest {
+        generation: base.generation + 1,
+        execution: Some(sync::ExecutionIdentity {
+            version: sync::EXECUTION_IDENTITY_VERSION,
+            root_identity: root_identity.to_owned(),
+            url: cfg.url.clone(),
+            prefix: cfg.prefix.clone(),
+            follow_symlinks: cfg.follow_symlinks,
+            chunker_identity,
+            embedding_identity_sha256: identity.identity_sha256,
+            embedding_backend: identity.backend,
+            embedding_dimension: identity.dimensions,
+            embedding_semantic_contract: identity.semantic_contract,
+            embedding_resumable: identity.resumable,
+            graph_enabled: false,
+            brain: "disabled".into(),
+            detector_identity: DETECTOR_DISABLED_IDENTITY.into(),
+            schema_identity,
+            index_identity,
+            source_policy: sync::SourceExecutionPolicy::DurableSnapshot {
+                reference: format!("sync-snapshots/{tx_id}"),
+                snapshot_digest: snapshot.snapshot_digest,
+            },
+        }),
+        plan,
+        groups,
+    };
+    // A failure here is the generation machinery contradicting itself about
+    // durable state, and the invariant text alone gives the user nothing to
+    // act on (#283). Name the recovery route; the invariant stays attached as
+    // the cause so the report keeps its diagnostic value.
+    let pending = sync::PendingSync::new(tx_id, &base, desired).with_context(|| {
+        format!(
+            "autoindex could not derive generation {} from committed generation {}; the durable \
+             generation state in {} is not internally consistent, and re-running will not repair \
+             it. No remote data was changed. Rebuild with a new --state-dir and a new --prefix",
+            base.generation + 1,
+            base.generation,
+            state_dir.display()
+        )
+    })?;
+    journal.sync_begin(&pending)
+}
+
+/// The desired content groups for a generation: one per planned content
+/// file, canonical path first, then its aliases, reconciled against the
+/// committed base. Counts are zero until [`sync_executor::bind_prepared_counts`]
+/// fills them from the sealed snapshot.
+fn desired_content_groups(
+    base_groups: &[sync::ManifestGroup],
+    plan: &Plan,
+    inventory: &content::Inventory,
+) -> Result<Vec<sync::ManifestGroup>> {
     let aliases_by_content = plan.duplicate_files.iter().fold(
         HashMap::<&str, Vec<sync::ManifestPath>>::new(),
         |mut aliases, alias| {
@@ -1628,51 +1743,7 @@ fn begin_non_graph_generation(
             expected_records_by_dataset: BTreeMap::new(),
         });
     }
-    let mut groups = sync::reconcile_groups(&base.groups, candidates)?;
-    sync_executor::bind_prepared_counts(&mut groups, &snapshot, &inventory.keys)?;
-    let (schema_identity, index_identity) = generation_contract_identities(&plan)?;
-    let desired = sync::GenerationManifest {
-        generation: base.generation + 1,
-        execution: Some(sync::ExecutionIdentity {
-            version: sync::EXECUTION_IDENTITY_VERSION,
-            root_identity: root_identity.to_owned(),
-            url: cfg.url.clone(),
-            prefix: cfg.prefix.clone(),
-            follow_symlinks: cfg.follow_symlinks,
-            chunker_identity,
-            embedding_identity_sha256: identity.identity_sha256,
-            embedding_backend: identity.backend,
-            embedding_dimension: identity.dimensions,
-            embedding_semantic_contract: identity.semantic_contract,
-            embedding_resumable: identity.resumable,
-            graph_enabled: false,
-            brain: "disabled".into(),
-            detector_identity: DETECTOR_DISABLED_IDENTITY.into(),
-            schema_identity,
-            index_identity,
-            source_policy: sync::SourceExecutionPolicy::DurableSnapshot {
-                reference: format!("sync-snapshots/{tx_id}"),
-                snapshot_digest: snapshot.snapshot_digest,
-            },
-        }),
-        plan,
-        groups,
-    };
-    // A failure here is the generation machinery contradicting itself about
-    // durable state, and the invariant text alone gives the user nothing to
-    // act on (#283). Name the recovery route; the invariant stays attached as
-    // the cause so the report keeps its diagnostic value.
-    let pending = sync::PendingSync::new(tx_id, &base, desired).with_context(|| {
-        format!(
-            "autoindex could not derive generation {} from committed generation {}; the durable \
-             generation state in {} is not internally consistent, and re-running will not repair \
-             it. No remote data was changed. Rebuild with a new --state-dir and a new --prefix",
-            base.generation + 1,
-            base.generation,
-            state_dir.display()
-        )
-    })?;
-    journal.sync_begin(&pending)
+    sync::reconcile_groups(base_groups, candidates)
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -1775,6 +1846,106 @@ fn without_excluded_rels(
         .collect();
     let dropped = before - kept.len();
     (kept, dropped)
+}
+
+#[cfg(test)]
+mod generation_preflight_tests {
+    use super::*;
+
+    /// A temp corpus holding two byte-identical files, resolved the way a run
+    /// resolves it: one content file (`a.txt`) and one alias (`b.txt`).
+    fn duplicate_inventory(dir: &Path) -> content::Inventory {
+        std::fs::write(dir.join("a.txt"), "same bytes").unwrap();
+        std::fs::write(dir.join("b.txt"), "same bytes").unwrap();
+        let files = walk::walk(dir, false).unwrap();
+        let inventory = content::resolve_reporting(files, &|_| {}).unwrap();
+        assert_eq!(inventory.files.len(), 1);
+        assert_eq!(inventory.duplicates.len(), 1);
+        inventory
+    }
+
+    /// The plan a run builds from `inventory`: every content file assigned to
+    /// one dataset, its duplicates recorded as aliases.
+    fn plan_for(inventory: &content::Inventory) -> Plan {
+        let files: HashMap<String, FileAssignment> = inventory
+            .files
+            .iter()
+            .enumerate()
+            .map(|(i, file)| {
+                (
+                    inventory.keys[i].clone(),
+                    FileAssignment {
+                        rel: file.rel.clone(),
+                        path_id: file.rel_id.clone(),
+                        is_symlink: Some(file.is_symlink),
+                        family: "text".into(),
+                        gzip: false,
+                        content_digest: Some(inventory.digests[i].clone()),
+                        assignments: vec![(None, "docs".into())],
+                        as_document: false,
+                    },
+                )
+            })
+            .collect();
+        Plan {
+            datasets: vec![PlanDataset {
+                slug: "docs".into(),
+                index: "ax-docs".into(),
+                family: "text".into(),
+                group: None,
+                specs: vec![],
+                time_field: None,
+                semantic_field: None,
+                text_analyzer: None,
+                scope: None,
+                sampled_records: 1,
+                file_count: files.len(),
+            }],
+            files,
+            duplicate_files: inventory.duplicates.clone(),
+            alias_paths_indexed: false,
+            ..Plan::default()
+        }
+    }
+
+    #[test]
+    fn a_consistent_plan_passes_the_preflight() {
+        let dir = tempfile::tempdir().unwrap();
+        let inventory = duplicate_inventory(dir.path());
+        let plan = plan_for(&inventory);
+        let groups = desired_content_groups(&[], &plan, &inventory).unwrap();
+        sync::preflight_plan_projection(&plan, &groups)
+            .expect("the plan a run builds must pass the preflight");
+    }
+
+    /// #1723: a plan whose canonical copy is not the lowest native identity —
+    /// the shape the Windows `rel`-vs-`path_id` ranking produced — is refused
+    /// by the preflight, i.e. before `create_prepared_snapshot_reporting` seals
+    /// anything, with the same invariant `PendingSync::new` reports after it.
+    #[test]
+    fn a_plan_that_cannot_project_is_refused_before_sealing() {
+        let dir = tempfile::tempdir().unwrap();
+        let mut inventory = duplicate_inventory(dir.path());
+        // Promote the alias to canonical and demote the real canonical to an
+        // alias. The groups re-rank by `(is_symlink, path_id)` and put `a.txt`
+        // back first, so the plan's canonical (`b.txt`) disagrees with them.
+        let alias = inventory.duplicates[0].clone();
+        let file = inventory.files[0].clone();
+        inventory.files[0].rel = alias.rel.clone();
+        inventory.files[0].rel_id = alias.path_id.clone();
+        inventory.duplicates[0].rel = file.rel.clone();
+        inventory.duplicates[0].path_id = file.rel_id.clone();
+        inventory.duplicates[0].duplicate_of = alias.rel.clone();
+        let plan = plan_for(&inventory);
+
+        let groups = desired_content_groups(&[], &plan, &inventory).unwrap();
+        let err = sync::preflight_plan_projection(&plan, &groups)
+            .expect_err("a plan that cannot project must be refused");
+        assert!(
+            format!("{err:#}").contains("plan canonical projection disagrees with manifest group"),
+            "{err:#}"
+        );
+    }
 }
 
 #[cfg(test)]
@@ -2053,6 +2224,40 @@ impl Drop for SampleLimitOverride {
 /// which every test owns as its own tempdir — makes it unstealable instead.
 #[cfg(test)]
 static REPLACEMENT_FAILPOINT: Mutex<Option<(u8, std::path::PathBuf)>> = Mutex::new(None);
+
+/// A test-only action run once when phase B starts, for the run that uses the
+/// given state directory: the window between phase A's digest and phase B's
+/// read, where a live file (a lock file, a log) changes under the run (#1911).
+/// Keyed on the state directory for the same reason as
+/// [`REPLACEMENT_FAILPOINT`].
+#[cfg(test)]
+type PhaseBStartHook = (std::path::PathBuf, Box<dyn FnOnce() + Send>);
+#[cfg(test)]
+static PHASE_B_START_HOOK: Mutex<Option<PhaseBStartHook>> = Mutex::new(None);
+
+#[cfg(test)]
+pub(crate) fn arm_phase_b_start_hook(state_dir: &Path, action: impl FnOnce() + Send + 'static) {
+    *PHASE_B_START_HOOK.lock().unwrap_or_else(|p| p.into_inner()) =
+        Some((state_dir.to_path_buf(), Box::new(action)));
+}
+
+#[cfg(test)]
+fn phase_b_start_hook(state_dir: &Path) {
+    let action = {
+        let mut armed = PHASE_B_START_HOOK.lock().unwrap_or_else(|p| p.into_inner());
+        match armed.as_ref() {
+            Some((dir, _)) if dir == state_dir => armed.take().map(|(_, action)| action),
+            _ => None,
+        }
+    };
+    if let Some(action) = action {
+        action();
+    }
+}
+
+#[cfg(not(test))]
+#[inline]
+fn phase_b_start_hook(_state_dir: &Path) {}
 
 /// Arm [`replacement_failpoint`] for the run that uses `state_dir`, once.
 #[cfg(test)]
@@ -3132,6 +3337,7 @@ mod phase_a_grouping_tests {
             snapshot_max_bytes: 64 << 30,
             prefix: "t".into(),
             replace_prefix: false,
+            prefix_note: None,
             state_dir: None,
             fresh: true,
             follow_symlinks: false,
@@ -5051,6 +5257,16 @@ fn finish_generated_run(es: &Es, journal: &mut state::Journal, cfg: &IndexCfg) -
     if cfg.json {
         println!("{summary}");
     } else if !cfg.quiet {
+        let count = |field: &str| summary.get(field).and_then(Value::as_u64).unwrap_or(0);
+        println!(
+            "{}",
+            outcome_headline(
+                generated_exit_code(&summary),
+                count("files_junk"),
+                count("junk_records_total"),
+                false,
+            )
+        );
         println!(
             "generation {} committed — {}, {} live",
             generation,
@@ -6049,6 +6265,11 @@ fn run_index_report_inner(
     // any endpoint I/O below, and mirrored into the --json result. map/status
     // deliver the same note; they have no progress surface, so they `eprintln`.
     if let Some(note) = &cfg.xerj_url_note {
+        pr.warn(&format!("autoindex: {note}"));
+    }
+    // #1845: a rewritten --prefix is said out loud, next to the other
+    // "this run is not quite what you typed" warning.
+    if let Some(note) = &cfg.prefix_note {
         pr.warn(&format!("autoindex: {note}"));
     }
     // One throughput meter for the whole run: both phase-A routes (the legacy
@@ -7851,6 +8072,7 @@ fn run_index_report_inner(
         "phase B: indexing {} files with {} workers → {}",
         n_todo, cfg.workers, cfg.url
     ));
+    phase_b_start_hook(&state_dir);
     if n_pdf_spools > 0 {
         pr.note(&format!(
             "phase B: reusing {n_pdf_spools} run-local PDF extraction(s); these PDFs will not be \
@@ -7993,11 +8215,17 @@ fn run_index_report_inner(
                     continue;
                 }
             };
+            // #1911: a file that changed since phase A hashed it (a lock
+            // file, a log, a sqlite -wal) is ONE skipped file, not a reason
+            // to abort every other file's run. Nothing of it is staged yet.
             if let Err(error) = content::verify(&f.path, f.size, expected_digest) {
-                let mut errors = bulk_errors.lock().unwrap();
-                if errors.len() < 5 {
-                    errors.push(format!("{error:#}"));
-                }
+                extra_junk.lock().unwrap().push(changed_during_run_junk(
+                    key,
+                    &f.rel,
+                    &format_str(Some(&sn)),
+                    f.size,
+                    &error,
+                ));
                 continue;
             }
             // File-card anchor node (§6.6.2a): one card doc per corpus
@@ -8333,10 +8561,18 @@ fn run_index_report_inner(
                 }
             }
             if send_err.is_none() {
+                // #1911: changed while it was being extracted. Its records are
+                // only staged locally (visibility starts below), so skipping it
+                // here leaves nothing of it on the node from this run.
                 if let Err(error) = content::verify(&f.path, f.size, expected_digest) {
-                    send_err = Some(format!(
-                        "{error:#}; no records from this changing file were made visible"
+                    extra_junk.lock().unwrap().push(changed_during_run_junk(
+                        key,
+                        &f.rel,
+                        &format_str(Some(&sn)),
+                        f.size,
+                        &error,
                     ));
+                    continue;
                 }
             }
             // Visibility begins only after extraction and the second
@@ -9431,11 +9667,36 @@ fn run_index_report_inner(
 
     // ── summary ──────────────────────────────────────────────────────────
     let junk_total_records = junk_records.load(Ordering::Relaxed);
+    // Exit 3 means "completed, some input was unusable". Backend rejections
+    // are not consulted and must not be: a rejected item aborts the run with
+    // an error long before this line, so `rejected_records` is provably 0
+    // here. Splitting them out of `junk_total_records` therefore changes no
+    // exit code.
+    //
+    // A failed alias sweep lands here too, and on 3 rather than on a code of
+    // its own: 3 already means "completed, and something about this run is
+    // recorded rather than fatal" (`cli.rs` EXIT CODES), and inventing a fourth
+    // success code would break every caller that already branches on 0/3. The
+    // `reason` is what tells the two apart.
+    let code = if junk_total_records > 0 || junk_file_count > 0 || alias_sweep_error.is_some() {
+        3
+    } else {
+        0
+    };
     if cfg.json {
         println!("{run_doc}");
     } else if !cfg.quiet {
         println!(
-            "\n{}",
+            "{}",
+            outcome_headline(
+                code,
+                junk_file_count as u64,
+                junk_total_records,
+                alias_sweep_error.is_some(),
+            )
+        );
+        println!(
+            "{}",
             estimate::done_summary_line(
                 wall,
                 plan.datasets.len() as u64,
@@ -9528,22 +9789,6 @@ fn run_index_report_inner(
             println!("{}", mixed_corpus_hint(&fams));
         }
     }
-    // Exit 3 means "completed, some input was unusable". Backend rejections
-    // are not consulted and must not be: a rejected item aborts the run with
-    // an error long before this line, so `rejected_records` is provably 0
-    // here. Splitting them out of `junk_total_records` therefore changes no
-    // exit code.
-    //
-    // A failed alias sweep lands here too, and on 3 rather than on a code of
-    // its own: 3 already means "completed, and something about this run is
-    // recorded rather than fatal" (`cli.rs` EXIT CODES), and inventing a fourth
-    // success code would break every caller that already branches on 0/3. The
-    // `reason` is what tells the two apart.
-    let code = if junk_total_records > 0 || junk_file_count > 0 || alias_sweep_error.is_some() {
-        3
-    } else {
-        0
-    };
     // Terminal line, in every progress mode but `none` (which `--quiet`
     // selects, and which prints nothing by definition). Exit 3 means
     // "completed, some files were unparseable" — success — and an agent reading
@@ -9606,6 +9851,35 @@ fn run_index_report_inner(
     );
     drop(ticker);
     Ok((code, Some(run_doc)))
+}
+
+/// The catalog entry for a source file that changed between phase A's digest
+/// and phase B's read (#1911).
+///
+/// That used to land in `bulk_errors`, which aborts the whole run after phase B:
+/// one live lock file on Windows stopped a 1,894-file run at ~258 s and left
+/// its partial indices and journal for hand cleanup — and every retry met the
+/// same still-changing file. It is now one `skipped` file with the reason, the
+/// run finishes (exit 3, like any other skipped file), and because the file is
+/// never journaled done, the next run picks up whatever it then holds.
+fn changed_during_run_junk(
+    file_key: &str,
+    rel: &str,
+    format: &str,
+    bytes: u64,
+    error: &anyhow::Error,
+) -> JunkFile {
+    JunkFile {
+        file_key: file_key.to_string(),
+        rel: rel.to_string(),
+        format: format.to_string(),
+        status: "skipped".into(),
+        reason: format!(
+            "changed while this run was reading it, so it was skipped and nothing from it was \
+             made visible ({error:#}); rerun to index its current content"
+        ),
+        bytes,
+    }
 }
 
 fn format_str(sn: Option<&Sniffed>) -> String {
@@ -11482,6 +11756,35 @@ mod generation_contract_identity_tests {
             !code.contains("curl"),
             "the code hint must not send the reader to a raw search, got: {code}"
         );
+    }
+
+    /// #1843: exit 3 read as failure because nothing an agent reads FIRST
+    /// said otherwise. Every finished run's stdout summary now opens with an
+    /// `ok:` line that names the exit code in words, and an exit-3 line says
+    /// what was recorded instead of hiding it.
+    #[test]
+    fn a_finished_run_leads_with_an_ok_line_that_spells_out_exit_3() {
+        let clean = outcome_headline(0, 0, 0, false);
+        assert!(clean.starts_with("ok: indexed and searchable"), "{clean}");
+        assert!(clean.contains("exit 0"), "{clean}");
+
+        let junk = outcome_headline(3, 1, 0, false);
+        assert!(junk.starts_with("ok: indexed and searchable"), "{junk}");
+        assert!(
+            junk.contains("exit 3 (completed-with-junk) is SUCCESS, not an error"),
+            "{junk}"
+        );
+        assert!(junk.contains("1 file recorded as junk"), "{junk}");
+        assert!(junk.contains("xerj autoindex"), "{junk}");
+        assert!(!junk.contains('\n'), "one line: {junk}");
+
+        let both = outcome_headline(3, 2, 5, false);
+        assert!(both.contains("2 files and 5 records"), "{both}");
+
+        let sweep = outcome_headline(3, 4, 0, true);
+        assert!(sweep.starts_with("ok: indexed and searchable"), "{sweep}");
+        assert!(sweep.contains(ALIAS_SWEEP_FAILED_REASON), "{sweep}");
+        assert!(sweep.contains("rerun the same command"), "{sweep}");
     }
 
     /// Resume of an already-indexed tokio tree printed

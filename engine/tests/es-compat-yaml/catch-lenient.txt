@@ -8,63 +8,27 @@
 # make a new failure go away; a new failure is a regression.
 #
 # Format: <path under yaml/> · <test name>
-aggregations/avg_bucket.yml · bad path
 aggregations/avg_metric.yml · Aggregating wrong datatype test
 aggregations/bucket_script.yml · bad script
-aggregations/bucket_script.yml · invalid parent aggregation
-aggregations/bucket_script.yml · invalid path
-aggregations/bucket_script.yml · top level fails
 aggregations/bucket_selector.yml · bad script
-aggregations/bucket_selector.yml · invalid parent aggregation
-aggregations/bucket_selector.yml · invalid path
-aggregations/bucket_selector.yml · top level fails
-aggregations/bucket_sort.yml · invalid parent aggregation
-aggregations/bucket_sort.yml · invalid path fails
-aggregations/bucket_sort.yml · no action fails
-aggregations/bucket_sort.yml · top level fails
-aggregations/cardinality_metric.yml · invalid execution hint throws
-aggregations/cardinality_metric.yml · Invalid Precision test
 aggregations/composite.yml · Composite aggregation with invalid format
 aggregations/composite.yml · Composite aggregation with lossy format
-aggregations/cumulative_sum.yml · bad path
-aggregations/cumulative_sum.yml · invalid parent aggregation
-aggregations/derivative.yml · bad path
-aggregations/derivative.yml · invalid parent aggregation
-aggregations/derivative.yml · Not under date_histo
 aggregations/extended_stats_metric.yml · Bad sigma test
-aggregations/filters_bucket.yml · Bad params
-aggregations/filters_bucket.yml · null meta
-aggregations/ip_prefix.yml · Invalid IPv4 prefix
-aggregations/ip_prefix.yml · Invalid IPv6 prefix
 aggregations/matrix_stats_multi_value_field.yml · With script
 aggregations/matrix_stats_multi_value_field.yml · With script params
 aggregations/matrix_stats_single_value_field.yml · With script
 aggregations/matrix_stats_single_value_field.yml · With script params
 aggregations/max_buckets.yml · Max bucket
-aggregations/max_bucket.yml · bad path
 aggregations/max_metric.yml · Aggregating wrong datatype test
-aggregations/median_absolute_deviation_metric.yml · bad arguments
-aggregations/median_absolute_deviation_metric.yml · with execution hint
-aggregations/min_bucket.yml · bad path
 aggregations/min_metric.yml · Aggregating wrong datatype test
-aggregations/moving_fn.yml · bad path
-aggregations/moving_fn.yml · Bad window
-aggregations/moving_fn.yml · invalid parent aggregation
-aggregations/moving_fn.yml · Not under date_histo
 aggregations/nested.yml · Illegal reverse nested aggregation to a child nested object
-aggregations/percentile_ranks_hdr_metric.yml · invalid params
-aggregations/percentile_ranks_tdigest_metric.yml · invalid params
-aggregations/percentile_ranks_tdigest_metric.yml · with execution hint
-aggregations/percentiles_bucket.yml · bad path
 aggregations/percentiles_hdr_metric.yml · Invalid params test
-aggregations/percentiles_tdigest_metric.yml · Execution hint
 aggregations/percentiles_tdigest_metric.yml · Invalid params test
 aggregations/pipeline.yml · Max pipeline on percentiles hdr agg without specifying percent
 aggregations/pipeline.yml · Max pipeline on percentiles tdigest agg without specifying percent
 aggregations/pipeline.yml · Max pipeline on percentiles with incorrect name
 aggregations/pipeline.yml · Max pipeline on terms agg
 aggregations/pipeline.yml · Max pipeline through terms agg
-aggregations/random_sampler.yml · Test random_sampler aggregation with poor settings
 aggregations/rare_terms.yml · IP test
 aggregations/scripted_metric_allow_list.yml · allowed inline scripts do not affect allowed stored scripts
 aggregations/scripted_metric_allow_list.yml · allowed stored scripts do not affect allowed inline scripts
@@ -77,20 +41,11 @@ aggregations/scripted_metric_allow_list.yml · stored combine_script must be all
 aggregations/scripted_metric_allow_list.yml · stored init_script must be allowed
 aggregations/scripted_metric_allow_list.yml · stored map_script must be allowed
 aggregations/scripted_metric_allow_list.yml · stored reduce_script must be allowed
-aggregations/serial_diff.yml · invalid parent aggregation
 aggregations/sig_terms.yml · IP test
 aggregations/sig_terms.yml · Misspelled fields get "did you mean"
 aggregations/stats_metric_fail_formatting.yml · fail formatting
-aggregations/sum_bucket.yml · bad path
 aggregations/sum_metric.yml · Aggregating wrong datatype test
 aggregations/terms.yml · IP test
-aggregations/terms.yml · No field or script
-aggregations/time_series.yml · auto_date_histogram aggregation with time_series aggregation
-aggregations/time_series.yml · Composite aggregation with nested time series aggregation failure
-aggregations/time_series.yml · Global aggregation with nested time series aggregation failure
-aggregations/time_series.yml · rare_terms aggregation with time_series aggregation
-aggregations/time_series.yml · Sampler aggregation with nested time series aggregation failure
-aggregations/time_series.yml · variable_width_histogram aggregation with time_series aggregation
 aggregations/top_hits.yml · having
 aggregations/weighted_avg.yml · Multi weight field not allowed
 bulk/10_basic.yml · empty action
@@ -115,14 +70,6 @@ search/170_terms_query.yml · Terms Query with No.of terms exceeding index.max_t
 search/220_total_hits_object.yml · hits.total as an object
 search/260_parameter_validation.yml · test negative size throws IAE
 search/260_parameter_validation.yml · test negative terminate_after throws IAE
-search/30_limits.yml · Docvalues_fields size limit
-search/30_limits.yml · Prefix length limit
-search/30_limits.yml · Regexp length limit
-search/30_limits.yml · Request window limits without scroll
-search/30_limits.yml · Request window limits with scroll
-search/30_limits.yml · Request with negative from value in body
-search/30_limits.yml · Request with negative from value url parameter
-search/30_limits.yml · Rescore window limits
 search/320_disallow_queries.yml · Test disallow expensive queries
 search/330_fetch_fields.yml · error for flattened includes whole path
 search/330_fetch_fields.yml · error includes field name
