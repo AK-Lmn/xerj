@@ -65,7 +65,7 @@
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-08-21",
-  "dateModified": "2026-08-23",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,70 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Do I even need embeddings for search, or is full-text enough?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Full-text is enough until the queries stop sharing tokens with the files. XERJ's default embedder is lexical feature hashing, and on our judged set it never recovered a synonym BM25 missed."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When should I turn on neural embeddings?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "When paraphrases matter more than exact wording. On 8 judged queries, precision at 3 moved from 0.4167 to 0.6667 and recall from 0.7083 to 1.0 after --embed-mode neural."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When should I combine keyword search and vector search?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "When both are partly right. The hybrid clause fuses a BM25 sub-query and a kNN sub-query, and weighted linear fusion was the strongest lexical-mode result at 0.4583."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "My embedding API bill is too high. How do I cut it?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Run the embedder on the host. The default is lexical feature hashing inside the binary and calls nothing, and --embed-mode neural runs a MiniLM-class model on the CPU, so neither path bills per request."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is XERJ's default embedder?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Signed feature hashing over word unigrams and character trigrams, into 384 dimensions. It has no model, no training and no semantics."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does the neural embedder cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A downloaded MiniLM-class model, which occupied 88 MB in our machine's cache, CPU-only execution, and about 15 docs/s on short strings. It also makes an autoindex state non-resumable."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is BM25 enough on its own?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "BM25 alone scored 0.375 precision at 3 and 0.6875 recall on our set. It found every literal token and missed every synonym."
+      }
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -144,7 +208,12 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>WHEN SHOULD I TURN ON NEURAL EMBEDDINGS, AND WHEN IS THE LEXICAL DEFAULT ENOUGH?</div>
   <div class="kicker"><span>ANSWERS · EMBEDDINGS: SELECTION</span></div>
   <h1>When should I turn on neural embeddings, and when is the lexical default enough?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-08-23</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>Do I even need embeddings for search, or is full-text enough? On XERJ's default lexical embedder, full-text BM25 is close: 0.4167 precision at 3 against BM25's 0.375 on 8 judged queries. Embeddings clearly helped only after opting into --embed-mode neural, which moved precision at 3 to 0.6667 and recall to 1.0.</p>
+    <p class="key-fact"><strong>Key number:</strong> On BEIR SciFact, hybrid RRF with the neural embedder scored nDCG@10 0.6993 against 0.6572 for BM25 alone. <span class="mute">(as of 2026-09-18 · source: <a href="https://github.com/xerj-org/xerj/blob/main/benchmarks/beir-hybrid/results/scifact.txt">benchmarks/beir-hybrid/results/scifact.txt</a>)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — Embeddings help only when you opt into XERJ's neural embedder. The default embedder is lexical feature hashing, and on 8 judged queries it scored 0.4167 precision at 3 against BM25's 0.375. The opt-in flag <code class="inline">--embed-mode neural</code> moved the same measurement to 0.6667 and recall to 1.0.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
@@ -247,6 +316,9 @@
     <li><a href="/compare/xerj-vs-vector-database">Should my agent call a search API or stand up Qdrant for persistent memory?</a></li>
     <li><a href="/answers/vector-database-vs-full-text-search">What's the actual difference between a vector database and full-text search when I have a folder?</a></li>
     <li><a href="/answers/reduce-embedding-api-cost">How do I reduce embedding API cost?</a></li>
+    <li><a href="/answers/mcp-api-search-or-vector-search">Should an agent use API search or vector search?</a> <span class="mute">· same intent: retrieval research and eval</span></li>
+    <li><a href="/answers/how-xerj-combines-search">How does XERJ combine BM25 and kNN?</a> <span class="mute">· same intent: retrieval research and eval</span></li>
+    <li><a href="/answers/hybrid-search-quality-measured-ndcg">How much better is hybrid search than BM25? Measured nDCG numbers</a> <span class="mute">· same intent: retrieval research and eval</span></li>
   </ul>
 </main>
 <nav class="docs-nav" aria-label="Article sections">

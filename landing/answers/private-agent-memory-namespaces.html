@@ -65,7 +65,7 @@
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-08-21",
-  "dateModified": "2026-08-23",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,70 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I keep one agent's memory from leaking into another agent's?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Give each agent its own namespace and its own scoped API key. A scoped key is confined to its named indices, and authorization runs before the existence check."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can two local agents share a search engine but not memory?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Both can query the same document indices on one node, while each scoped key reaches only its own reserved .xerj-memory-* namespace."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I point an MCP memory server at a folder I choose?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Point the node's data directory there. XERJ has no separate memory path: memory lives in the data directory as .xerj-memory-{namespace}, and the MCP server stores nothing itself."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does XERJ enforce roles?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The node itself answers \"enforced\": false and warns that every authenticated caller has full superuser access. Full role enforcement is deferred."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What authorization does exist?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Scoped API keys. XERJ confines a scoped key to its named indices and reserves the .xerj-memory-* namespace, which is principal scoping rather than roles."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can an attacker enumerate my namespaces?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not through status codes on a secured node. Authorization runs before the existence check, so an absent brain and an unauthorized brain both answer 403."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does --insecure turn off?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "TLS and API-key authentication. Any client that reaches the port can then read and delete every index, so use it on a development machine only."
+      }
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -144,7 +208,12 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>HOW DO I GIVE TWO AGENTS PRIVATE MEMORY ON ONE LAPTOP?</div>
   <div class="kicker"><span>ANSWERS · AGENT MEMORY: SECURITY</span></div>
   <h1>How do I give two agents private memory on one laptop?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-08-23</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>How do I keep one agent's memory from leaking into another agent's? Give each agent its own namespace and its own scoped API key. XERJ keeps memory on local disk, and our capture saw 0 non-loopback connections during store and recall, but roles are stored, not enforced, so the key is the boundary.</p>
+    <p class="key-fact"><strong>Key number:</strong> Our capture recorded 0 non-loopback connections while storing and recalling memory. <span class="mute">(as of 2026-08-23 · source: the captured run documented on this page)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — Agent memory stays on local disk, and our capture recorded 0 non-loopback connections during store and recall. Privacy from other callers is a different question. XERJ stores roles but does not enforce them, so a namespace is only as private as the scoped API key that reaches it.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
@@ -225,6 +294,9 @@ access regardless of any role assignment. Full RBAC enforcement is deferred.
     <li><a href="/answers/knowledge-graphs-for-agent-memory">Should agent memory use a knowledge graph?</a></li>
     <li><a href="/docs/security">Auth &amp; TLS</a></li>
     <li><a href="/answers/set-mcp-memory-storage-path">How do I set the MCP memory storage path?</a></li>
+    <li><a href="/answers/agent-memory-without-postgres-qdrant">What's a simple way to give an agent long-term memory on my laptop without Qdrant?</a> <span class="mute">· same intent: agent memory</span></li>
+    <li><a href="/compare/xerj-vs-vector-database">Should my agent call a search API or stand up Qdrant for persistent memory?</a> <span class="mute">· same intent: agent memory</span></li>
+    <li><a href="/answers/evidence-for-agent-memory-links">How can agent-memory links retain evidence?</a> <span class="mute">· same intent: agent memory</span></li>
   </ul>
 </main>
 <nav class="docs-nav" aria-label="Article sections">

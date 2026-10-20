@@ -65,7 +65,7 @@
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-08-21",
-  "dateModified": "2026-08-23",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,70 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why is my FAISS RAG pipeline missing obvious answers?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A vector-only pipeline has no term signal. On our judged set BM25 found literal tokens that the vector clause missed, and fusion recovered both."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I migrate a chunk store into XERJ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Create one index with a semantic_text content field, then _bulk the chunks in. Our 20-chunk migration reported \"errors\": false and 20 created items."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does my kNN request return 400?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "XERJ rejects query_vector_builder and needs a literal embedding in query_vector. Index the query text first, then read the companion vector out of _source."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does my hybrid request return 400?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The hybrid clause must be nested inside query. A top-level hybrid key returns Unknown key for a START_OBJECT in [hybrid]."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does XERJ chunk long documents for me?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, for semantic_text fields: 512 characters with a 64-character overlap, split at sentence breaks first. The field must be top-level, not nested."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I highlight results from a hybrid query?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The hybrid sub-request zeroes highlight, sort, collapse, rescore, min_score, explain and profile, and the result carries no aggregations."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will fusion fix a weak embedder?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Partly. Weighted linear fusion reached 0.4583 precision at 3 on the lexical default, against 0.6667 for every vector-backed mode under --embed-mode neural."
+      }
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -144,7 +208,12 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>HOW DO I IMPROVE A BASIC FAISS RAG PIPELINE?</div>
   <div class="kicker"><span>ANSWERS · RAG: TROUBLESHOOTING</span></div>
   <h1>How do I improve a basic FAISS RAG pipeline?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-08-23</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>How can I improve a basic FAISS RAG pipeline? Load the chunk store into one XERJ index with a semantic_text field and retrieve with the hybrid clause, which fuses BM25 and kNN, instead of vectors alone. Our 20-chunk migration indexed cleanly, and the two request shapes FAISS users write first both returned HTTP 400.</p>
+    <p class="key-fact"><strong>Key number:</strong> With the neural embedder, hybrid RRF beat vectors alone on BEIR SciFact: nDCG@10 0.6993 against 0.6764. <span class="mute">(as of 2026-09-18 · source: <a href="https://github.com/xerj-org/xerj/blob/main/benchmarks/beir-hybrid/results/scifact.txt">benchmarks/beir-hybrid/results/scifact.txt</a>)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — Load the chunk store into one XERJ index with a <code class="inline">semantic_text</code> field. Retrieve with the <code class="inline">hybrid</code> clause instead of vectors alone. Our 20-chunk migration indexed cleanly, and the two request shapes a FAISS user writes first both returned HTTP 400.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
@@ -234,6 +303,9 @@
     <li><a href="/answers/rag-without-vector-database">How do I build RAG without a vector database?</a></li>
     <li><a href="/answers/reciprocal-rank-fusion-when-to-use">What is Reciprocal Rank Fusion?</a></li>
     <li><a href="/answers/vector-database-vs-full-text-search">What's the actual difference between a vector database and full-text search when I have a folder?</a></li>
+    <li><a href="/answers/how-xerj-combines-search">How does XERJ combine BM25 and kNN?</a> <span class="mute">· same intent: retrieval research and eval</span></li>
+    <li><a href="/answers/rerank-search-results-calibrated-judge">How do I rerank search results with a relevance judge?</a> <span class="mute">· same intent: retrieval research and eval</span></li>
+    <li><a href="/answers/classify-text-from-labelled-history-without-llm">Can I route tickets or filter spam from labelled history, without an LLM call?</a> <span class="mute">· same intent: retrieval research and eval</span></li>
   </ul>
 </main>
 <nav class="docs-nav" aria-label="Article sections">

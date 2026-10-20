@@ -65,7 +65,7 @@
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-08-21",
-  "dateModified": "2026-08-21",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,118 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I search a Slack export without a Slack connection?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Unzip the export to local disk and run xerj autoindex on the folder. The captured node observed 0 non-loopback peers over its whole life."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are messages inside a thread searchable?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. A phrase written only inside a threaded reply returned 2 hits. The hit carried ax_path incidents/2026-01-15.json and ax_locator e1."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does XERJ keep the Slack timestamps and the author?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The captured hit carried ts 1768478460.0002, thread_ts 1768478400.0001 and user U02BBBB, so a reply can be traced to its parent."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do Japanese and emoji messages survive indexing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. A Japanese message returned 1 hit and came back byte-identical, and French accented text and emoji appear unchanged in the captured hits."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I filter on reactions or on reply users?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "reply_users is a keyword array, so a terms filter returns the thread. reactions holds the whole array as one string, so it needs a wildcard."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is ts indexed as a date field?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. XERJ typed ts and thread_ts as double in the captured run, because Slack writes an epoch value with a fractional part."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I convert the export to JSONL first?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Keep every line under 4,096 characters. A captured reproduction indexed 30 documents at 4,095 characters per line and 0 at 4,096."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "I downloaded a Discord server export. How do I search it?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Unzip it to local disk and run the same xerj autoindex command on the folder. A Discord export is JSON, and XERJ picks the family by reading the content rather than the file name. No Discord export was captured for this page, so read xerj autoindex map and the mapping for your own export before you write a filter."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How do I search a Slack JSON export?",
+  "description": "Point xerj autoindex at an unzipped Slack export. A captured run found a threaded reply, kept ts, thread_ts and user, and round-tripped Japanese text.",
+  "tool": [
+    {
+      "@type": "HowToTool",
+      "name": "xerj (Apache-2.0)"
+    }
+  ],
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Index an unzipped Slack export folder from local disk.",
+      "text": "xerj autoindex ./slack-export --url http://127.0.0.1:9200 --prefix sl --progress plain"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Find a phrase written inside a threaded reply, across every channel index.",
+      "text": "curl -s -XPOST http://127.0.0.1:9200/sl-*/_search -H 'content-type: application/json' -d '{\"query\":{\"match_phrase\":{\"text\":\"narwhal deployment freeze\"}},\"size\":5,\"track_total_hits\":true}'"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Read the fields one channel produced, with the type XERJ inferred for each.",
+      "text": "curl -s -XGET http://127.0.0.1:9200/sl-incidents/_mapping"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "name": "Filter the multi-valued reply_users field for one user id.",
+      "text": "curl -s -XPOST http://127.0.0.1:9200/sl-incidents/_search -H 'content-type: application/json' -d '{\"query\":{\"terms\":{\"reply_users\":[\"U02BBBB\"]}},\"size\":10,\"_source\":[\"ax_path\",\"ax_locator\",\"user\",\"ts\",\"reply_users\"],\"track_total_hits\":true}'"
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -144,32 +256,37 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>HOW DO I SEARCH A SLACK JSON EXPORT?</div>
   <div class="kicker"><span>ANSWERS · FILES AND FORMATS</span></div>
   <h1>How do I search a Slack JSON export?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-08-21</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>How do I search a Slack or Discord JSON export? Unzip the export to local disk and run xerj autoindex on the folder. In a captured run, a phrase inside a threaded reply returned 2 hits at incidents/2026-01-15.json with ax_locator e1, and the ts, thread_ts and user values all survived, as did Japanese text.</p>
+    <p class="key-fact"><strong>Key number:</strong> Records keep up to 512 fields each (<code class="inline">MAX_FIELDS_PER_RECORD</code>), so nested Slack message fields map without a schema. <span class="mute">(as of 2026-10-19 · source: <a href="https://github.com/xerj-org/xerj/blob/main/engine/crates/xerj-autoindex/src/extract/mod.rs">engine/crates/xerj-autoindex/src/extract/mod.rs</a>)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — Unzip the Slack export to local disk, then run <code class="inline">xerj autoindex</code> on the folder. In a captured run, a phrase written inside a threaded reply returned 2 hits at <code class="inline">incidents/2026-01-15.json</code> with <code class="inline">ax_locator</code> <code class="inline">e1</code>. The <code class="inline">ts</code>, <code class="inline">thread_ts</code> and <code class="inline">user</code> values all survived.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
     <code>Act as a coding agent. Read https://xerj.org/llms.txt, start a local XERJ node, unzip a Slack export so that channels.json sits beside one folder per channel, run `xerj autoindex ./slack-export --url http://127.0.0.1:9200 --prefix sl --progress plain`, then POST a match_phrase on text for a string written inside a threaded reply, GET the mapping for one channel index, and report the hit ax_path, ax_locator, ts, thread_ts and user for every hit.</code>
     <button type="button" class="prompt-copy" data-copy="Act as a coding agent. Read https://xerj.org/llms.txt, start a local XERJ node, unzip a Slack export so that channels.json sits beside one folder per channel, run `xerj autoindex ./slack-export --url http://127.0.0.1:9200 --prefix sl --progress plain`, then POST a match_phrase on text for a string written inside a threaded reply, GET the mapping for one channel index, and report the hit ax_path, ax_locator, ts, thread_ts and user for every hit.">COPY THE PROMPT</button>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-1">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj autoindex ./slack-export --url http://127.0.0.1:9200 --prefix sl --progress plain</code>
     <button type="button" class="prompt-copy" data-copy="xerj autoindex ./slack-export --url http://127.0.0.1:9200 --prefix sl --progress plain">COPY COMMAND</button>
     <span class="hero-proof">Index an unzipped Slack export folder from local disk.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-2">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XPOST http://127.0.0.1:9200/sl-*/_search -H 'content-type: application/json' -d '{"query":{"match_phrase":{"text":"narwhal deployment freeze"}},"size":5,"track_total_hits":true}'</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XPOST http://127.0.0.1:9200/sl-*/_search -H &#x27;content-type: application/json&#x27; -d &#x27;{&quot;query&quot;:{&quot;match_phrase&quot;:{&quot;text&quot;:&quot;narwhal deployment freeze&quot;}},&quot;size&quot;:5,&quot;track_total_hits&quot;:true}&#x27;">COPY COMMAND</button>
     <span class="hero-proof">Find a phrase written inside a threaded reply, across every channel index.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-3">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XGET http://127.0.0.1:9200/sl-incidents/_mapping</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XGET http://127.0.0.1:9200/sl-incidents/_mapping">COPY COMMAND</button>
     <span class="hero-proof">Read the fields one channel produced, with the type XERJ inferred for each.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-4">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XPOST http://127.0.0.1:9200/sl-incidents/_search -H 'content-type: application/json' -d '{"query":{"terms":{"reply_users":["U02BBBB"]}},"size":10,"_source":["ax_path","ax_locator","user","ts","reply_users"],"track_total_hits":true}'</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XPOST http://127.0.0.1:9200/sl-incidents/_search -H &#x27;content-type: application/json&#x27; -d &#x27;{&quot;query&quot;:{&quot;terms&quot;:{&quot;reply_users&quot;:[&quot;U02BBBB&quot;]}},&quot;size&quot;:10,&quot;_source&quot;:[&quot;ax_path&quot;,&quot;ax_locator&quot;,&quot;user&quot;,&quot;ts&quot;,&quot;reply_users&quot;],&quot;track_total_hits&quot;:true}&#x27;">COPY COMMAND</button>
@@ -247,6 +364,9 @@
     <li><a href="/answers/search-json-and-jsonl-logs">What's the easiest way to search JSON logs plus some old gzip text logs in the same folder?</a></li>
     <li><a href="/answers/give-chatgpt-claude-local-file-access">Can ChatGPT search a folder on my laptop, or do I need something else?</a></li>
     <li><a href="/answers/catalog-files-with-autoindex-map">How should an agent figure out what's in a messy data folder before searching?</a></li>
+    <li><a href="/answers/search-zendesk-ticket-json-export">I have a JSON export of Jira issues (or Zendesk tickets). How do I search it like a help-center search?</a> <span class="mute">· same intent: JSONL and data files</span></li>
+    <li><a href="/answers/full-text-search-sqlite-database">How do I full-text search a SQLite database I just copied onto disk?</a> <span class="mute">· same intent: JSONL and data files</span></li>
+    <li><a href="/answers/how-xerj-autoindexes-a-folder">I want to point something at a folder and then ask questions about what's in it. What should I use?</a> <span class="mute">· same intent: JSONL and data files</span></li>
   </ul>
 </main>
 <nav class="docs-nav" aria-label="Article sections">

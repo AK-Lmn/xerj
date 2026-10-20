@@ -260,19 +260,19 @@
   <h1 class="h1-long">Full-text search over JSONL files from the CLI: index a folder and query it with BM25</h1>
   <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-10-19 · UPDATED · 2026-10-19</div>
   <p><strong>TL;DR</strong> — For full-text search over JSONL files from the CLI, run <code class="inline">xerj autoindex</code> on the folder and query it with BM25. No schema or mapping is needed; CSV works the same way. On 2026-10-19 a folder of 2,902 JSONL and CSV rows indexed in 12.4 s, and field queries returned ranked hits in 1 to 3 ms.</p>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-1">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj --insecure --data-dir ./xerj-data</code>
     <button type="button" class="prompt-copy" data-copy="xerj --insecure --data-dir ./xerj-data">COPY COMMAND</button>
     <span class="hero-proof">Start a single-user node on localhost:9200 in its own terminal.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-2">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj autoindex ./scraped --prefix scr</code>
     <button type="button" class="prompt-copy" data-copy="xerj autoindex ./scraped --prefix scr">COPY COMMAND</button>
     <span class="hero-proof">Sniff each file by content and index it; one index per inferred dataset.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-3">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s 'localhost:9200/scr-csv/_search' -H 'content-type: application/json' -d '{"size":3,"query":{"match":{"query":"bm25 jsonl folder"}}}'</code>
     <button type="button" class="prompt-copy" data-copy="curl -s &#x27;localhost:9200/scr-csv/_search&#x27; -H &#x27;content-type: application/json&#x27; -d &#x27;{&quot;size&quot;:3,&quot;query&quot;:{&quot;match&quot;:{&quot;query&quot;:&quot;bm25 jsonl folder&quot;}}}&#x27;">COPY COMMAND</button>

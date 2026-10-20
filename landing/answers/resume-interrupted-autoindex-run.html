@@ -65,7 +65,7 @@
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-08-21",
-  "dateModified": "2026-08-23",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,70 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "The indexer died overnight. Do I have to start over?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Re-run the identical command with the same --state-dir. XERJ reads the resume journal, prints how many files it already holds, and indexes only what remains."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens if folder indexing stops halfway through? Can I resume it?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The finished files stay indexed and the journal in --state-dir records them. In the capture the re-run submitted 0 records and the document count was unchanged."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "I killed the search indexer. Is the work lost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not the part the journal already recorded. The interrupted run, the resumed run and a clean control run all ended at 82,231 documents on the same corpus."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will restarting an indexer duplicate documents?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Document ids are derived from content, so the resumed run and a clean control run produced identical first-20 ids and identical totals of 82,231."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens if I lose the state directory?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The re-run starts from the beginning and re-reads every file. Ids stay stable, so the index converges to the same content rather than doubling."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does SIGINT stop autoindex immediately?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not in this capture. The signal arrived 6 s into a 12.0 s run and the client still reported reason=completed, so a mid-file abort was not demonstrated."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens if the node stops instead of the client?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The client reports xerj-done ok=false exit=1 reason=aborted and a connection error. Re-run with the same --state-dir once the node is back."
+      }
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -144,7 +208,12 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>THE INDEXER DIED OVERNIGHT. DO I HAVE TO START OVER?</div>
   <div class="kicker"><span>ANSWERS · OPERATIONS: RECOVERY</span></div>
   <h1>The indexer died overnight. Do I have to start over?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-08-23</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>The indexer died overnight; do I have to start over? No. XERJ writes a resume journal into the --state-dir, so re-running the identical autoindex command is idempotent. In a capture the interrupted run, the resumed run and a clean control run all ended at 82,231 documents, and the first 20 document ids matched exactly.</p>
+    <p class="key-fact"><strong>Key number:</strong> A resumed full-corpus generation with all 47,444 operations already applied finished on a restarted node without re-sending them. <span class="mute">(as of 2026-10-19 · source: <a href="https://github.com/xerj-org/xerj/blob/main/benchmarks/autoindex-resilience/after-955.full-corpus-resume.stderr.txt">benchmarks/autoindex-resilience/after-955.full-corpus-resume.stderr.txt</a>)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — XERJ writes a resume journal into the <code class="inline">--state-dir</code>, so re-running the identical <code class="inline">autoindex</code> command is idempotent. In a capture the interrupted run, the resumed run and a clean control run all ended at 82,231 documents. The first 20 document ids matched exactly.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
@@ -225,6 +294,9 @@ xerj-done ok=true exit=0 reason=completed wall=1.2s files=0 records=82231
     <li><a href="/answers/read-autoindex-progress">How do I read autoindex progress?</a></li>
     <li><a href="/answers/estimate-autoindex-time-before-running">How do I estimate folder-indexing time?</a></li>
     <li><a href="/answers/catalog-files-with-autoindex-map">How should an agent figure out what's in a messy data folder before searching?</a></li>
+    <li><a href="/answers/autoindex-exit-codes">The indexer exited 3 (or 4). Did it fail?</a> <span class="mute">· same intent: operating autoindex</span></li>
+    <li><a href="/answers/keep-index-current-as-files-change">How do I keep a search index up to date as files change, without re-indexing everything?</a> <span class="mute">· same intent: operating autoindex</span></li>
+    <li><a href="/answers/why-autoindex-skipped-files">Why would a folder search miss files that I can see on disk?</a> <span class="mute">· same intent: operating autoindex</span></li>
   </ul>
 </main>
 <nav class="docs-nav" aria-label="Article sections">

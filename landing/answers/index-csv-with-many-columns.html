@@ -89,6 +89,102 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I index a CSV with hundreds of columns?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Run xerj autoindex on the folder holding the file. XERJ reads the header, infers one type per column, and writes the mapping without a schema file."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many columns can one CSV have?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "XERJ caps a dataset at 512 fields, which includes the 7 provenance fields. The captured 120-column file used 128 of that budget."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which types does XERJ infer for CSV columns?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "XERJ infers boolean, date, long, double, keyword, text and semantic_text. A column needs at least 95% of its non-null values to parse as a type."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are aggregations over a wide CSV exact?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. XERJ returns doc_count_error_upper_bound 0 and sum_other_doc_count 0, and cardinality is a true distinct count rather than a sketch."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I have to name the columns I want to search?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Every column becomes a mapped field, so a term filter or a terms aggregation works on any of them straight after the run."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens to a column that mixes types?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "XERJ falls back to a string type when fewer than 95% of the non-null values parse as one type. The column stays searchable as text or as a keyword."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How do I index a CSV with many columns?",
+  "description": "xerj autoindex infers a mapping for a wide CSV with no schema work. A captured 120-column file produced 128 mapped fields and an exact terms aggregation.",
+  "tool": [
+    {
+      "@type": "HowToTool",
+      "name": "xerj (Apache-2.0)"
+    }
+  ],
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Index the wide CSV file; XERJ infers one type per column.",
+      "text": "xerj autoindex ./csv-wide --url http://127.0.0.1:9200 --prefix wide --progress plain"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Read the inferred mapping, including the 7 provenance fields.",
+      "text": "curl -s -XGET http://127.0.0.1:9200/wide-csv/_mapping"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Run an exact terms aggregation on two inferred keyword columns.",
+      "text": "curl -s -XPOST http://127.0.0.1:9200/wide-csv/_search -H 'content-type: application/json' -d '{\"size\":0,\"aggs\":{\"by_region\":{\"terms\":{\"field\":\"region\",\"size\":10}},\"by_status\":{\"terms\":{\"field\":\"status\",\"size\":10}}}}'"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "name": "Count the documents the CSV produced.",
+      "text": "curl -s -XGET http://127.0.0.1:9200/wide-csv/_count"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
     {
@@ -145,31 +241,36 @@
   <div class="kicker"><span>ANSWERS · FILES AND FORMATS</span></div>
   <h1>How do I index a CSV with many columns?</h1>
   <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>How do you index CSV files with a big number of columns or fields? Point xerj autoindex at the file; it infers the mapping with no schema work. In a captured run a 120-column CSV became 128 mapped fields across 501 documents, and a terms aggregation on an inferred keyword column returned 4 exact buckets.</p>
+    <p class="key-fact"><strong>Key number:</strong> Type inference keeps up to 512 fields per dataset (<code class="inline">MAX_FIELDS_PER_DATASET</code>), the ceiling for a very wide CSV. <span class="mute">(as of 2026-10-19 · source: <a href="https://github.com/xerj-org/xerj/blob/main/engine/crates/xerj-autoindex/src/infer/mod.rs">engine/crates/xerj-autoindex/src/infer/mod.rs</a>)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — <code class="inline">xerj autoindex</code> infers a mapping for a wide CSV with no schema work. In a captured run a 120-column file became 128 mapped fields, 121 from the file and 7 provenance fields, across 501 documents. A terms aggregation on an inferred <code class="inline">keyword</code> column returned 4 exact buckets of 125.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
     <code>Act as a coding agent. Read https://xerj.org/llms.txt, start a local XERJ node, run `xerj autoindex ./csv-wide --url http://127.0.0.1:9200 --prefix wide --progress plain`, GET /wide-csv/_mapping to read the inferred field types, then POST a terms aggregation on an inferred keyword field and report the bucket counts with doc_count_error_upper_bound.</code>
     <button type="button" class="prompt-copy" data-copy="Act as a coding agent. Read https://xerj.org/llms.txt, start a local XERJ node, run `xerj autoindex ./csv-wide --url http://127.0.0.1:9200 --prefix wide --progress plain`, GET /wide-csv/_mapping to read the inferred field types, then POST a terms aggregation on an inferred keyword field and report the bucket counts with doc_count_error_upper_bound.">COPY THE PROMPT</button>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-1">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj autoindex ./csv-wide --url http://127.0.0.1:9200 --prefix wide --progress plain</code>
     <button type="button" class="prompt-copy" data-copy="xerj autoindex ./csv-wide --url http://127.0.0.1:9200 --prefix wide --progress plain">COPY COMMAND</button>
     <span class="hero-proof">Index the wide CSV file; XERJ infers one type per column.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-2">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XGET http://127.0.0.1:9200/wide-csv/_mapping</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XGET http://127.0.0.1:9200/wide-csv/_mapping">COPY COMMAND</button>
     <span class="hero-proof">Read the inferred mapping, including the 7 provenance fields.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-3">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XPOST http://127.0.0.1:9200/wide-csv/_search -H 'content-type: application/json' -d '{"size":0,"aggs":{"by_region":{"terms":{"field":"region","size":10}},"by_status":{"terms":{"field":"status","size":10}}}}'</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XPOST http://127.0.0.1:9200/wide-csv/_search -H &#x27;content-type: application/json&#x27; -d &#x27;{&quot;size&quot;:0,&quot;aggs&quot;:{&quot;by_region&quot;:{&quot;terms&quot;:{&quot;field&quot;:&quot;region&quot;,&quot;size&quot;:10}},&quot;by_status&quot;:{&quot;terms&quot;:{&quot;field&quot;:&quot;status&quot;,&quot;size&quot;:10}}}}&#x27;">COPY COMMAND</button>
     <span class="hero-proof">Run an exact terms aggregation on two inferred keyword columns.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-4">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XGET http://127.0.0.1:9200/wide-csv/_count</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XGET http://127.0.0.1:9200/wide-csv/_count">COPY COMMAND</button>
@@ -232,6 +333,9 @@
     <li><a href="/answers/full-text-search-sqlite-database">How do I full-text search a SQLite database I just copied onto disk?</a></li>
     <li><a href="/docs/aggregations">Aggregations</a></li>
     <li><a href="/answers/full-text-search-over-jsonl-files-cli">Full-text search over JSONL files from the CLI: index a folder and query it with BM25</a></li>
+    <li><a href="/answers/how-xerj-autoindexes-a-folder">I want to point something at a folder and then ask questions about what's in it. What should I use?</a> <span class="mute">· same intent: JSONL and data files</span></li>
+    <li><a href="/answers/catalog-files-with-autoindex-map">How should an agent figure out what's in a messy data folder before searching?</a> <span class="mute">· same intent: JSONL and data files</span></li>
+    <li><a href="/answers/search-zendesk-ticket-json-export">I have a JSON export of Jira issues (or Zendesk tickets). How do I search it like a help-center search?</a> <span class="mute">· same intent: JSONL and data files</span></li>
   </ul>
 </main>
 <nav class="docs-nav" aria-label="Article sections">

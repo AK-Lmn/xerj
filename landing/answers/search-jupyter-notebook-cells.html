@@ -65,7 +65,7 @@
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-08-21",
-  "dateModified": "2026-10-05",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,110 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "I need to find a function I wrote in a notebook months ago. How do I search all .ipynb files?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Index the folder and query body for the function name. XERJ writes 1 document per Markdown-heading section, so a hit returns the heading, the heading_path and the cell where the section starts."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I search text inside Jupyter notebooks and jump to the cell?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Query body and read cell from the hit. In the captured run, the printed accuracy came back from the section Okapi retrieval sweep > Run the sweep, which starts at cell 3."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I search notebooks and scripts as one project?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Point one autoindex run at the folder that holds both. In the captured run, the 2 notebooks and the .py beside them landed in 1 index, jp-docs, and one query for okapi_transform returned both notebooks and the .py file."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does XERJ search executed cell output as well as code?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, for text output. Printed text, text/plain results and errors are written into the section body after their cell. Image outputs and HTML-only outputs are not indexed."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is XERJ notebook-aware?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, in every release after v1.0.0-rc.82; the current release is v1.0.0-rc.97 (checked 2026-10-19). XERJ recognizes a notebook by its content, not its extension, and groups cells by their Markdown headings. It reads any kernel and records the kernel language. It never executes a notebook."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which notebook fields can I filter on?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "heading and language are keyword, cell is long, and heading_path and title are text. body holds the Markdown, the code and the text outputs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do markdown cells and code cells end up in the same document?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. A section holds every cell from its heading to the next heading, Markdown and code together, with the code fenced in the kernel language and each text output after its cell."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "I need to find a function I wrote in a notebook months ago. How do I search all .ipynb files and the .py next to them?",
+  "description": "A captured run indexed 2 notebooks by heading section, with the heading path and starting cell, and the .py beside them, all in one index.",
+  "tool": [
+    {
+      "@type": "HowToTool",
+      "name": "xerj (Apache-2.0)"
+    }
+  ],
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Index a folder of .ipynb files, and the .py files beside them, from local disk.",
+      "text": "xerj autoindex ./notebooks --url http://127.0.0.1:9200 --prefix jp --progress plain"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Find a function in notebook sections and in the .py that defines it, and get the section and cell back.",
+      "text": "curl -s -XPOST http://127.0.0.1:9200/jp-*/_search -H 'content-type: application/json' -d '{\"query\":{\"match\":{\"body\":\"okapi_transform\"}},\"size\":10,\"_source\":[\"ax_path\",\"ax_locator\",\"heading\",\"heading_path\",\"cell\"],\"track_total_hits\":true}'"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Find text that exists only in an executed cell's stored output.",
+      "text": "curl -s -XPOST http://127.0.0.1:9200/jp-*/_search -H 'content-type: application/json' -d '{\"query\":{\"match_phrase\":{\"body\":\"okapi accuracy 0.9137\"}},\"size\":5,\"_source\":[\"ax_path\",\"ax_locator\",\"heading_path\",\"cell\"],\"track_total_hits\":true}'"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "name": "Read the fields a notebook section produces, with the type of each.",
+      "text": "curl -s -XGET http://127.0.0.1:9200/jp-docs/_mapping"
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -144,32 +248,37 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>I NEED TO FIND A FUNCTION I WROTE IN A NOTEBOOK MONTHS AGO. HOW DO I SEARCH ALL .IPYNB FILES AND THE .PY NEXT TO THEM?</div>
   <div class="kicker"><span>ANSWERS · FILES AND FORMATS</span></div>
   <h1 class="h1-long">I need to find a function I wrote in a notebook months ago. How do I search all .ipynb files and the .py next to them?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-10-05</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>How do I search all my .ipynb files for a function I wrote months ago? Run xerj autoindex on the folder. XERJ writes one document per Markdown-heading section of a notebook, with the heading path and starting cell. A captured query for okapi_transform found both notebooks and the .py file that defines it.</p>
+    <p class="key-fact"><strong>Key number:</strong> The captured section <code class="inline">Okapi retrieval sweep &gt; Run the sweep</code> started at cell 3 and returned the printed line <code class="inline">okapi accuracy 0.9137</code>. <span class="mute">(as of 2026-10-05 · source: the captured run documented on this page)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — XERJ writes 1 document per Markdown-heading section of a notebook. In a captured run, the printed accuracy <code class="inline">okapi accuracy 0.9137</code> came back from the section <code class="inline">Okapi retrieval sweep &gt; Run the sweep</code>, starting at cell 3, and a query for <code class="inline">okapi_transform</code> found both notebooks and the <code class="inline">.py</code> that defines it.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
     <code>Act as a coding agent. Read https://xerj.org/llms.txt, start a local XERJ node, run `xerj autoindex ./notebooks --url http://127.0.0.1:9200 --prefix jp --progress plain`, then POST a match on body for a function name, a match_phrase on body for text printed only by an executed cell, and report ax_path, ax_locator, heading, heading_path and cell for every hit.</code>
     <button type="button" class="prompt-copy" data-copy="Act as a coding agent. Read https://xerj.org/llms.txt, start a local XERJ node, run `xerj autoindex ./notebooks --url http://127.0.0.1:9200 --prefix jp --progress plain`, then POST a match on body for a function name, a match_phrase on body for text printed only by an executed cell, and report ax_path, ax_locator, heading, heading_path and cell for every hit.">COPY THE PROMPT</button>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-1">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj autoindex ./notebooks --url http://127.0.0.1:9200 --prefix jp --progress plain</code>
     <button type="button" class="prompt-copy" data-copy="xerj autoindex ./notebooks --url http://127.0.0.1:9200 --prefix jp --progress plain">COPY COMMAND</button>
     <span class="hero-proof">Index a folder of .ipynb files, and the .py files beside them, from local disk.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-2">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XPOST http://127.0.0.1:9200/jp-*/_search -H 'content-type: application/json' -d '{"query":{"match":{"body":"okapi_transform"}},"size":10,"_source":["ax_path","ax_locator","heading","heading_path","cell"],"track_total_hits":true}'</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XPOST http://127.0.0.1:9200/jp-*/_search -H &#x27;content-type: application/json&#x27; -d &#x27;{&quot;query&quot;:{&quot;match&quot;:{&quot;body&quot;:&quot;okapi_transform&quot;}},&quot;size&quot;:10,&quot;_source&quot;:[&quot;ax_path&quot;,&quot;ax_locator&quot;,&quot;heading&quot;,&quot;heading_path&quot;,&quot;cell&quot;],&quot;track_total_hits&quot;:true}&#x27;">COPY COMMAND</button>
     <span class="hero-proof">Find a function in notebook sections and in the .py that defines it, and get the section and cell back.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-3">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XPOST http://127.0.0.1:9200/jp-*/_search -H 'content-type: application/json' -d '{"query":{"match_phrase":{"body":"okapi accuracy 0.9137"}},"size":5,"_source":["ax_path","ax_locator","heading_path","cell"],"track_total_hits":true}'</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XPOST http://127.0.0.1:9200/jp-*/_search -H &#x27;content-type: application/json&#x27; -d &#x27;{&quot;query&quot;:{&quot;match_phrase&quot;:{&quot;body&quot;:&quot;okapi accuracy 0.9137&quot;}},&quot;size&quot;:5,&quot;_source&quot;:[&quot;ax_path&quot;,&quot;ax_locator&quot;,&quot;heading_path&quot;,&quot;cell&quot;],&quot;track_total_hits&quot;:true}&#x27;">COPY COMMAND</button>
     <span class="hero-proof">Find text that exists only in an executed cell's stored output.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-4">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XGET http://127.0.0.1:9200/jp-docs/_mapping</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XGET http://127.0.0.1:9200/jp-docs/_mapping">COPY COMMAND</button>
@@ -232,7 +341,7 @@ corpus labelled-20
   <h3>Does XERJ search executed cell output as well as code?</h3>
   <p>Yes, for text output. Printed text, <code class="inline">text/plain</code> results and errors are written into the section body after their cell. Image outputs and HTML-only outputs are not indexed.</p>
   <h3>Is XERJ notebook-aware?</h3>
-  <p>Yes, from the release after v1.0.0-rc.82. XERJ recognizes a notebook by its content, not its extension, and groups cells by their Markdown headings. It reads any kernel and records the kernel language. It never executes a notebook.</p>
+  <p>Yes, in every release after v1.0.0-rc.82; the current release is v1.0.0-rc.97 (checked 2026-10-19). XERJ recognizes a notebook by its content, not its extension, and groups cells by their Markdown headings. It reads any kernel and records the kernel language. It never executes a notebook.</p>
   <h3>Which notebook fields can I filter on?</h3>
   <p><code class="inline">heading</code> and <code class="inline">language</code> are <code class="inline">keyword</code>, <code class="inline">cell</code> is <code class="inline">long</code>, and <code class="inline">heading_path</code> and <code class="inline">title</code> are <code class="inline">text</code>. <code class="inline">body</code> holds the Markdown, the code and the text outputs.</p>
   <h3>Do markdown cells and code cells end up in the same document?</h3>
@@ -242,6 +351,9 @@ corpus labelled-20
     <li><a href="/answers/search-json-and-jsonl-logs">What's the easiest way to search JSON logs plus some old gzip text logs in the same folder?</a></li>
     <li><a href="/answers/local-embeddings-without-openai-api">I want local search that works offline, no cloud embeddings. What are my options?</a></li>
     <li><a href="/answers/give-chatgpt-claude-local-file-access">Can ChatGPT search a folder on my laptop, or do I need something else?</a></li>
+    <li><a href="/answers/code-search-mcp-for-claude-code">I need my agent to find a passage and cite the file, not dump the whole tree. How?</a> <span class="mute">· same intent: code search for agents</span></li>
+    <li><a href="/answers/index-monorepo-for-agent">How do I stop my agent from reading the whole repo into context?</a> <span class="mute">· same intent: code search for agents</span></li>
+    <li><a href="/answers/search-unity-project-assets">How do I search Unity YAML scenes and the C# that references them as one project?</a> <span class="mute">· same intent: code search for agents</span></li>
   </ul>
 </main>
 <nav class="docs-nav" aria-label="Article sections">

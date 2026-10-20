@@ -65,7 +65,7 @@
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-09-19",
-  "dateModified": "2026-09-20",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,78 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "My documents live in an S3 or R2 bucket. How do I keep a XERJ index current as objects change?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Poll the bucket with xerj autoindex s3://bucket/prefix --watch. It lists the prefix, compares each object's ETag, size and modification time against a journal, and emits one JSON event per added, changed or deleted object. Choose the poll interval from the cost table, not from the latency you would like."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does a poll actually cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ListObjectsV2 is a Class A operation, the expensive class, and one call returns at most 1,000 keys. A prefix holding N objects therefore costs at least ceil(N / 1000) Class A operations every cycle, whether anything changed or not — at least, because when a store stops paging is its own choice: MinIO served 11 calls for 10,000 objects, not 10. A cycle where nothing changed issues zero object reads on top of that, which the MinIO test asserts directly."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a safe poll interval on Cloudflare R2's free tier?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The free tier is 1,000,000 Class A operations a month, which is about 23 a minute for a whole account. The default 300-second interval runs 8,640 cycles a month, so it stays inside a 200,000-operation budget up to roughly 23,000 objects. A 5-second poll costs 518,400 a month even on an empty bucket."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens if I ask for an interval that cannot stay inside the budget?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The cycle is refused. Nothing further is listed, nothing is read and nothing is emitted; a JSON decision-request document goes to stdout, the exit code is 4, and it names the smallest interval that fits. --allow-cost accepts the spend instead. The budget is a circuit breaker checked on every cycle, not a greeting on the first one: a prefix that grows past it while the watch is running stops the watch, and the month's spend is counted in the state directory, so restarting the watcher does not hand it a fresh allowance."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I watch a bucket with a million objects?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not whole. A full pass is 1,000 list calls, so 8,640,000 Class A operations a month at the default interval. Scope the watch to the prefixes that change, run one watcher per prefix, or use --append-only if the key space only grows."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does --append-only detect deletions?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No, and that is the trade. It passes the highest key seen as start-after, so the listing is partial, and absent from a partial listing does not mean deleted. It also cannot see an edit to a key below that point."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does --watch update a XERJ index by itself?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No, and it is not the same command as xerj autoindex s3://bucket/prefix, which does index a bucket — once, by mirroring the prefix to local disk and running the ordinary pipeline over it. --watch emits a change feed and never writes to a node. Wiring the feed into that indexer, so a bucket stays current without a cron, is still separate work; today the feed tells you which keys to re-read."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does XERJ support event notifications from S3 or R2 instead of polling?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not yet. The docs page writes down exactly what it would take, including the piece people forget: a reconciling full pass on a long interval, because at-least-once delivery means a missed event is otherwise invisible."
+      }
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -144,7 +216,12 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>HOW DO I KEEP AN INDEX CURRENT WHEN THE FILES LIVE IN AN OBJECT STORE?</div>
   <div class="kicker"><span>ANSWERS · OBJECT STORAGE</span></div>
   <h1>How do I keep an index current when the files live in an object store?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-09-19 · UPDATED · 2026-09-20</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-09-19 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>My documents live in an S3 or R2 bucket; how do I keep a XERJ index current as objects change? Poll the prefix with xerj autoindex s3://bucket/prefix --watch, and pick the interval from the operation count. ListObjectsV2 is a Class A operation, one call per 1,000 keys, on every cycle, even for an empty bucket.</p>
+    <p class="key-fact"><strong>Key number:</strong> The default poll interval is 300 seconds and the default budget is 200,000 Class A operations a month. <span class="mute">(as of 2026-10-19 · source: <a href="https://github.com/xerj-org/xerj/blob/main/engine/crates/xerj-autoindex/src/objwatch/cost.rs">engine/crates/xerj-autoindex/src/objwatch/cost.rs</a>)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — Poll the prefix with <code class="inline">xerj autoindex s3://bucket/prefix --watch</code>. Decide the interval from the operation count, not from the latency you want. <code class="inline">ListObjectsV2</code> is a Class A operation at one call per 1,000 keys, <strong>every cycle</strong>. Cloudflare R2's free tier is 1,000,000 Class A operations a month. A 5-second poll spends half of that to watch an empty bucket. Full detail in <a href="https://github.com/xerj-org/xerj/blob/main/docs/WATCHING_OBJECT_STORAGE.md">docs/WATCHING_OBJECT_STORAGE.md</a>.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
@@ -288,6 +365,9 @@
     <li><a href="/answers/does-xerj-support-s3-alerting-plugins">Does XERJ support S3 storage, alerting or custom plugins yet?</a></li>
     <li><a href="/answers/cheap-low-volume-log-search">What can I use for low-volume log search?</a></li>
     <li><a href="/answers/check-codebase-index-is-complete">My codebase indexer says indexed but I don't see my code. How do I check it actually finished?</a></li>
+    <li><a href="/answers/keep-index-current-as-files-change">How do I keep a search index up to date as files change, without re-indexing everything?</a> <span class="mute">· same intent: operating autoindex</span></li>
+    <li><a href="/answers/search-files-in-an-s3-bucket">How do I search files that live in an S3 bucket?</a> <span class="mute">· same intent: operating autoindex</span></li>
+    <li><a href="/answers/estimate-autoindex-time-before-running">How do I estimate folder-indexing time?</a> <span class="mute">· same intent: operating autoindex</span></li>
   </ul>
 </main>
 <nav class="docs-nav" aria-label="Article sections">

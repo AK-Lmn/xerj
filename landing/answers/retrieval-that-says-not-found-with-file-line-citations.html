@@ -260,19 +260,19 @@
   <h1>Retrieval that says not found, and cites file and line when it does answer</h1>
   <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-10-19 · UPDATED · 2026-10-19</div>
   <p><strong>TL;DR</strong> — For retrieval that says not found and cites file and line, <code class="inline">xerj ask</code> answers with file:line, the pinned commit and the licence, and exits 1 when a symbol or corpus is missing. It does not yet abstain on weak free-text matches: calibrated confidence is issue #1786. Measured 2026-10-19 on v1.0.0-rc.97.</p>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-1">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj ask --corpus lz4 --def LZ4_compress_default</code>
     <button type="button" class="prompt-copy" data-copy="xerj ask --corpus lz4 --def LZ4_compress_default">COPY COMMAND</button>
     <span class="hero-proof">An exact definition: file:line, declaration, pinned commit and licence, exit 0.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-2">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj ask --corpus lz4 --def LZ4_DOES_NOT_EXIST_XYZ</code>
     <button type="button" class="prompt-copy" data-copy="xerj ask --corpus lz4 --def LZ4_DOES_NOT_EXIST_XYZ">COPY COMMAND</button>
     <span class="hero-proof">A symbol that is not there: no match, exit 1.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-3">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj ask "what is the capital of australia"</code>
     <button type="button" class="prompt-copy" data-copy="xerj ask &quot;what is the capital of australia&quot;">COPY COMMAND</button>

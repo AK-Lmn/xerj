@@ -283,37 +283,37 @@
     <code>Read https://xerj.org/llms.txt. Install xerj, start a node with xerj --insecure --data-dir ~/xerj-data, run xerj autoindex on this repository, run xerj init so the xerj MCP server is registered, then answer my next code question with one xerj search or xerj def call and cite path:line instead of opening whole files.</code>
     <button type="button" class="prompt-copy" data-copy="Read https://xerj.org/llms.txt. Install xerj, start a node with xerj --insecure --data-dir ~/xerj-data, run xerj autoindex on this repository, run xerj init so the xerj MCP server is registered, then answer my next code question with one xerj search or xerj def call and cite path:line instead of opening whole files.">COPY THE PROMPT</button>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-1">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -fsSL https://xerj.org/get | sh</code>
     <button type="button" class="prompt-copy" data-copy="curl -fsSL https://xerj.org/get | sh">COPY COMMAND</button>
     <span class="hero-proof">Install the release binary into ~/.local/bin (the installer checks its SHA-256).</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-2">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj --insecure --data-dir ./xerj-data</code>
     <button type="button" class="prompt-copy" data-copy="xerj --insecure --data-dir ./xerj-data">COPY COMMAND</button>
     <span class="hero-proof">Start a single-user node on localhost:9200 in its own terminal.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-3">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj autoindex ./requests --prefix req</code>
     <button type="button" class="prompt-copy" data-copy="xerj autoindex ./requests --prefix req">COPY COMMAND</button>
     <span class="hero-proof">Index the repository once; code files get defs and symbols with line numbers.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-4">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj search --prefix req -k 3 --full 400 "rebuild auth on redirect strip authorization"</code>
     <button type="button" class="prompt-copy" data-copy="xerj search --prefix req -k 3 --full 400 &quot;rebuild auth on redirect strip authorization&quot;">COPY COMMAND</button>
     <span class="hero-proof">Three ranked passages with path:line, each body capped at 400 characters.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-5">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj def --prefix req should_strip_auth</code>
     <button type="button" class="prompt-copy" data-copy="xerj def --prefix req should_strip_auth">COPY COMMAND</button>
     <span class="hero-proof">Exact definition lookup: the declaration line and the file's symbol list.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-6">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj init</code>
     <button type="button" class="prompt-copy" data-copy="xerj init">COPY COMMAND</button>

@@ -65,7 +65,7 @@
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-09-19",
-  "dateModified": "2026-09-20",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,112 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I keep a search index up to date as files change, without re-indexing everything?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Run xerj autoindex with --watch --no-graph. It indexes the folder once, then stays resident and reindexes only what the filesystem reports as changed, using one OS watch per indexed directory and no polling."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does --watch require --no-graph?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Reconciling an added or deleted file exists only on the --no-graph route. On the default graph path a re-run resumes a frozen plan: a file added after that plan was frozen is reported as appeared after the resume plan was frozen and is not indexed until a --fresh rebuild, and a deleted file aborts the run and every re-run after it. A file whose content changed is reconciled there, so the limitation is additions and deletions, not edits."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is a file watcher cheaper than re-running the indexer on a timer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "At idle, yes, and measurably. On a 10,000-file tree a re-run with nothing changed took 1.7 s and re-read all 4,576,300 bytes, while an idle watcher used 0.00 CPU-seconds over 60 s and read nothing. It does hold about 157 MiB resident between passes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does --watch use less CPU per change than a re-run?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not measurably. It skips the corpus re-hash, but that saving is inside the run-to-run noise: on a 10,000-file tree, modifying one file cost 7.6 CPU-seconds by re-running against 6.6 under --watch in one measurement and 5.6 against 7.2 in another, and the wall clock was no better (44.3 s against 47.6 s), because each pass still seals a snapshot over the whole corpus and rewrites one catalog document per file. Against re-indexing the folder from scratch, which took 293.8 s and 127.9 CPU-seconds, both incremental routes win by an order of magnitude."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will a watched index match a full re-index?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Two tests assert it. After any sequence of changes a plain re-run that re-hashes every byte must change nothing, and that is asserted after a randomised create, modify, rename, delete and recreate sequence. A watched index also equals an independently built full index, except that an incremental run keeps the dataset name it was built with."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens when the index hits the inotify watch limit?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The run stops with a message naming fs.inotify.max_user_watches, its current value, how many directories the tree needs, the sysctl that raises it, and the ways out that need no root. A half-watched tree would look live and silently miss changes, so it is refused."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does a watcher notice a file that was deleted?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The pass reconciles the folder against the committed generation, so a deleted file's documents stop appearing in search."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What can --watch miss?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A write that produces no filesystem event and leaves size, mtime and inode identical, which touch -r and a same-size rewrite with a restored timestamp can do. A plain xerj autoindex re-run hashes every byte and repairs it."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How do I keep a search index up to date as files change, without re-indexing everything?",
+  "description": "Run xerj autoindex --watch --no-graph. It indexes once, then reindexes what the filesystem reports. Measured: 0.00 CPU-seconds per idle minute against 1.7 s and a full corpus re-read for every poll.",
+  "tool": [
+    {
+      "@type": "HowToTool",
+      "name": "xerj (Apache-2.0)"
+    }
+  ],
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Index the folder once. This is the pass a watcher would run first.",
+      "text": "xerj autoindex ./notes --url http://127.0.0.1:9200 --prefix notes --state-dir ./state-notes --no-graph"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Stay resident and reindex what changes. Needs --no-graph.",
+      "text": "xerj autoindex ./notes --url http://127.0.0.1:9200 --prefix notes --state-dir ./state-notes --no-graph --watch --debounce 400"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Read the journal for the corpus the watcher is maintaining.",
+      "text": "xerj autoindex status --url http://127.0.0.1:9200 --state-dir ./state-notes"
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -144,26 +250,31 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>HOW DO I KEEP A SEARCH INDEX UP TO DATE AS FILES CHANGE, WITHOUT RE-INDEXING EVERYTHING?</div>
   <div class="kicker"><span>ANSWERS · OPERATIONS: FRESHNESS</span></div>
   <h1 class="h1-long">How do I keep a search index up to date as files change, without re-indexing everything?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-09-19 · UPDATED · 2026-09-20</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-09-19 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>How do I keep a search index up to date as files change, without re-indexing everything? Run xerj autoindex ./folder --watch --no-graph. It indexes once, then reindexes only what the filesystem reports changed. Measured idle cost was 0.00 CPU-seconds per minute, against 1.7 s and a full corpus re-read for every timed re-run.</p>
+    <p class="key-fact"><strong>Key number:</strong> The --debounce quiet period accepts at most 60,000 ms (<code class="inline">MAX_DEBOUNCE_MS</code>); longer than a minute is a timer, not a debounce. <span class="mute">(as of 2026-10-19 · source: <a href="https://github.com/xerj-org/xerj/blob/main/engine/crates/xerj-autoindex/src/cli.rs">engine/crates/xerj-autoindex/src/cli.rs</a>)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — <code class="inline">xerj autoindex ./folder --watch --no-graph</code> indexes once, then reindexes what changed. At idle it costs nothing; a re-run on a timer costs a full walk and a full re-hash of the corpus on every tick.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
     <code>Act as a coding agent keeping a folder searchable. Read https://xerj.org/llms.txt first. Index the folder once with xerj autoindex --no-graph, then start xerj autoindex --watch --no-graph on the same --state-dir and --prefix, read the per-pass watch lines on stderr to confirm hashed= versus carried=, and do not add a cron job that re-runs the indexer.</code>
     <button type="button" class="prompt-copy" data-copy="Act as a coding agent keeping a folder searchable. Read https://xerj.org/llms.txt first. Index the folder once with xerj autoindex --no-graph, then start xerj autoindex --watch --no-graph on the same --state-dir and --prefix, read the per-pass watch lines on stderr to confirm hashed= versus carried=, and do not add a cron job that re-runs the indexer.">COPY THE PROMPT</button>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-1">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj autoindex ./notes --url http://127.0.0.1:9200 --prefix notes --state-dir ./state-notes --no-graph</code>
     <button type="button" class="prompt-copy" data-copy="xerj autoindex ./notes --url http://127.0.0.1:9200 --prefix notes --state-dir ./state-notes --no-graph">COPY COMMAND</button>
     <span class="hero-proof">Index the folder once. This is the pass a watcher would run first.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-2">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj autoindex ./notes --url http://127.0.0.1:9200 --prefix notes --state-dir ./state-notes --no-graph --watch --debounce 400</code>
     <button type="button" class="prompt-copy" data-copy="xerj autoindex ./notes --url http://127.0.0.1:9200 --prefix notes --state-dir ./state-notes --no-graph --watch --debounce 400">COPY COMMAND</button>
     <span class="hero-proof">Stay resident and reindex what changes. Needs --no-graph.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-3">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj autoindex status --url http://127.0.0.1:9200 --state-dir ./state-notes</code>
     <button type="button" class="prompt-copy" data-copy="xerj autoindex status --url http://127.0.0.1:9200 --state-dir ./state-notes">COPY COMMAND</button>
@@ -248,6 +359,9 @@ xerj autoindex ./notes --url http://127.0.0.1:9200 \
     <li><a href="/answers/check-codebase-index-is-complete">My codebase indexer says indexed but I don't see my code. How do I check it actually finished?</a></li>
     <li><a href="/answers/autoindex-exit-codes">The indexer exited 3 (or 4). Did it fail?</a></li>
     <li><a href="/answers/catalog-files-with-autoindex-map">How should an agent figure out what's in a messy data folder before searching?</a></li>
+    <li><a href="/answers/keep-s3-bucket-index-current">How do I keep an index current when the files live in an object store?</a> <span class="mute">· same intent: operating autoindex</span></li>
+    <li><a href="/answers/estimate-autoindex-time-before-running">How do I estimate folder-indexing time?</a> <span class="mute">· same intent: operating autoindex</span></li>
+    <li><a href="/answers/read-autoindex-progress">How do I read autoindex progress?</a> <span class="mute">· same intent: operating autoindex</span></li>
   </ul>
 </main>
 <nav class="docs-nav" aria-label="Article sections">

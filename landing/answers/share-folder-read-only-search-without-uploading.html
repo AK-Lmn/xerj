@@ -65,7 +65,7 @@
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-09-18",
-  "dateModified": "2026-09-20",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,110 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "I need my accountant to search a folder of emails and PDFs. How do I do that without uploading everything somewhere?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Run xerj brain on the folder, then xerj share on the same folder. Your accountant gets a link and a passcode and searches from a browser. The documents and the index stay on your machine."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the other person have to install anything?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. They open the link in a browser and type the passcode. The page is served by your node and loads nothing from anywhere else."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can they change or delete my files?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The guest key is read-only and reaches only the shared index. Writes, deletes and every other index on the node are refused by the server, not by the page."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I stop the access?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Run the xerj share --revoke command that was printed when you created the share. The guest's next request is refused. A share also ends on its own: the default lifetime is 24h."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What if they are not on my network?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Add --tunnel. XERJ starts your own cloudflared, prints a public link, and closes the tunnel and revokes the share when you press Ctrl-C. That traffic passes through Cloudflare, which can read it: the passcode, the guest key, the searches and the documents. The command prints this with the link."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can they come back to the link later?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Only while the browser tab stays open, unless you allow more than one open. One open is one browser tab. Opening the same link again in that tab keeps the session. A closed tab is a spent open, so give --max-claims 5 to someone who will read over several days."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the search AI? Does it write answers?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. It is search and reading only: no text is generated and no model is called. The default embedder is lexical feature hashing, so ranking is by word and sub-word overlap plus BM25."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How do I give my lawyer or accountant read-only search over a folder of email and PDFs without uploading it?",
+  "description": "Index the folder on your own machine, then run xerj share: the other person gets a link, a passcode and a read-only search page. The folder is not uploaded.",
+  "tool": [
+    {
+      "@type": "HowToTool",
+      "name": "xerj (Apache-2.0)"
+    }
+  ],
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Index the folder. This boots a local node with authentication on and prints the share command for this folder when it finishes.",
+      "text": "xerj brain ./casefiles"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Create the share. Prints the link, the passcode, the expiry and the revoke command, once.",
+      "text": "xerj share ./casefiles --label 'for Dana' --expires 7d"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Same, with a temporary public address from cloudflared for someone who is not on this machine. Ctrl-C closes the tunnel and revokes the share.",
+      "text": "xerj share ./casefiles --label 'for Dana' --tunnel"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "name": "Every share on this node: handle, status, claims used, expiry, index, label.",
+      "text": "xerj share --list"
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -144,32 +248,37 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>HOW DO I GIVE MY LAWYER OR ACCOUNTANT READ-ONLY SEARCH OVER A FOLDER OF EMAIL AND PDFS WITHOUT UPLOADING IT?</div>
   <div class="kicker"><span>ANSWERS · SHARING: READ-ONLY GUEST ACCESS</span></div>
   <h1 class="h1-long">How do I give my lawyer or accountant read-only search over a folder of email and PDFs without uploading it?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-09-18 · UPDATED · 2026-09-20</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-09-18 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>How do I let my accountant search a folder of emails and PDFs without uploading everything somewhere? Index the folder with xerj brain, then run xerj share on it. The other person gets a link and a passcode and opens a read-only search page. Documents and index stay on your machine, and you can revoke it anytime.</p>
+    <p class="key-fact"><strong>Key number:</strong> A share defaults to 24 hours and 1 claim; the maximum is 30 days and 50 claims. <span class="mute">(as of 2026-10-19 · source: <a href="https://github.com/xerj-org/xerj/blob/main/engine/crates/xerj-api/src/share.rs">engine/crates/xerj-api/src/share.rs</a>)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — Index the folder with <code class="inline">xerj brain</code>, then run <code class="inline">xerj share</code> on the same folder. The other person gets a link and a passcode. They open a read-only search page in a browser and read what they find. The documents and the index stay on your machine. You can revoke it at any time.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
     <code>Act as a coding agent. Read https://xerj.org/llms.txt, run xerj brain on the folder the user names, then run xerj share on the same folder with a label and an expiry, and give the user the link and the passcode separately. Tell them the link only works on this machine unless they add --tunnel, and show them the xerj share --revoke command that was printed.</code>
     <button type="button" class="prompt-copy" data-copy="Act as a coding agent. Read https://xerj.org/llms.txt, run xerj brain on the folder the user names, then run xerj share on the same folder with a label and an expiry, and give the user the link and the passcode separately. Tell them the link only works on this machine unless they add --tunnel, and show them the xerj share --revoke command that was printed.">COPY THE PROMPT</button>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-1">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj brain ./casefiles</code>
     <button type="button" class="prompt-copy" data-copy="xerj brain ./casefiles">COPY COMMAND</button>
     <span class="hero-proof">Index the folder. This boots a local node with authentication on and prints the share command for this folder when it finishes.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-2">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj share ./casefiles --label 'for Dana' --expires 7d</code>
     <button type="button" class="prompt-copy" data-copy="xerj share ./casefiles --label &#x27;for Dana&#x27; --expires 7d">COPY COMMAND</button>
     <span class="hero-proof">Create the share. Prints the link, the passcode, the expiry and the revoke command, once.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-3">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj share ./casefiles --label 'for Dana' --tunnel</code>
     <button type="button" class="prompt-copy" data-copy="xerj share ./casefiles --label &#x27;for Dana&#x27; --tunnel">COPY COMMAND</button>
     <span class="hero-proof">Same, with a temporary public address from cloudflared for someone who is not on this machine. Ctrl-C closes the tunnel and revokes the share.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-4">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj share --list</code>
     <button type="button" class="prompt-copy" data-copy="xerj share --list">COPY COMMAND</button>

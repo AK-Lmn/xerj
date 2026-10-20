@@ -65,7 +65,7 @@
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-09-18",
-  "dateModified": "2026-09-21",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,116 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I rebuild a reference-coding corpus index from scratch?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Run xerj corpus index <corpus> --fresh. It builds a replacement beside the existing index, verifies that it holds records, switches the state file, and only then deletes the old indices by exact name."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "xerj corpus index --fresh failed. How do I rebuild a corpus index?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Update the binary. Older releases shipped wrapper scripts that forwarded --fresh to xerj autoindex, which refuses it once a corpus generation has committed. The built-in command never forwards it and rebuilds under a new prefix instead."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does --fresh delete my working index first?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The old index stays live until the replacement exited 0 or 3 and its record count is above zero. A build that fails or comes back empty is removed, and the old index and state file are left exactly as they were."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does the state file have both prefix and index_prefix?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "prefix is always xc-<corpus>, the whole namespace, so anything that globs on it keeps working. index_prefix is the one verified build, and it is what xerj code queries."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is xerj corpus index --fresh the same as xerj autoindex --fresh?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. xerj autoindex --fresh only discards the resume journal, never removes records, and is refused once a durable generation exists. The corpus command's --fresh is a full rebuild under a new prefix and state directory."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens if the first build of a corpus is interrupted?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "With no working index to fall back to, the command keeps the partial build, records salvaged: true and the real exit code in the state file, and warns. xerj code then warns on every query that coverage is incomplete. A plain xerj corpus index <corpus> resumes the run under the same prefix and state directory."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much disk does a rebuild need?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Room for the corpus twice. Both builds exist on the node from the start of the rebuild until the old one is retired. This was not measured; plan for double."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "xerj corpus index --fresh failed. How do I rebuild a corpus index?",
+  "description": "xerj corpus index --fresh builds a replacement index beside the old one, verifies it has records, switches the state file, and only then retires the old index. A failed build costs nothing.",
+  "tool": [
+    {
+      "@type": "HowToTool",
+      "name": "xerj (Apache-2.0)"
+    }
+  ],
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Index a corpus, or update in place the build an earlier run recorded.",
+      "text": "xerj corpus index xerj-storage"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Rebuild from scratch: build beside the old index, verify, switch, then retire.",
+      "text": "xerj corpus index xerj-storage --fresh"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Read the ledger. prefix is the whole namespace; index_prefix is the one verified build.",
+      "text": "bash -c 'cat ~/.xerj-code/state/xerj-storage.json'"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "name": "Count the records yourself. The command already did, and refused to switch on zero.",
+      "text": "curl -s 'http://127.0.0.1:9200/xc-xerj-storage*/_count'"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 5,
+      "name": "Query the rebuilt corpus. xerj code addresses the verified build, not the whole namespace.",
+      "text": "env XERJ_URL=http://127.0.0.1:9200 xerj code xerj-storage 'merge policy segment selection'"
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -144,38 +254,43 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>XERJ CORPUS INDEX --FRESH FAILED. HOW DO I REBUILD A CORPUS INDEX?</div>
   <div class="kicker"><span>ANSWERS · CODING AGENTS: REFERENCE RETRIEVAL</span></div>
   <h1>xerj corpus index --fresh failed. How do I rebuild a corpus index?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-09-18 · UPDATED · 2026-09-21</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-09-18 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>How do I rebuild a reference-coding corpus index from scratch? Run xerj corpus index with --fresh. It builds a replacement beside the existing index, checks that it holds records, switches the state file, and only then deletes the old indices by exact name. A failed build costs you nothing; the old index keeps serving.</p>
+    <p class="key-fact"><strong>Key number:</strong> On v1.0.0-rc.74, xerj autoindex --fresh over a committed generation aborted with exit 1; --fresh now swaps instead of discarding. <span class="mute">(as of 2026-10-19 · source: <a href="https://github.com/xerj-org/xerj/blob/main/benchmarks/autoindex-resilience/fresh-before-rc74.committed-generation.txt">benchmarks/autoindex-resilience/fresh-before-rc74.committed-generation.txt</a>)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — Run <code class="inline">xerj corpus index &lt;corpus&gt; --fresh</code>. It builds a replacement beside the existing index, checks that it holds records, switches the state file, and only then deletes the old indices by exact name. A build that fails costs you nothing. Older releases' wrapper scripts failed on every corpus that had been indexed before.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
     <code>Act as a coding agent maintaining a reference-coding corpus. Read https://xerj.org/llms.txt. When xerj code reports an index older than 30 days, or a plain `xerj corpus index` run says the state directory cannot become generation authority, run `xerj corpus index &lt;corpus&gt; --fresh`. Do not delete the old indices yourself and do not pass --fresh to xerj autoindex directly. Read the command's last lines: it states the record count of the verified replacement, or that the existing index was NOT touched.</code>
     <button type="button" class="prompt-copy" data-copy="Act as a coding agent maintaining a reference-coding corpus. Read https://xerj.org/llms.txt. When xerj code reports an index older than 30 days, or a plain `xerj corpus index` run says the state directory cannot become generation authority, run `xerj corpus index &lt;corpus&gt; --fresh`. Do not delete the old indices yourself and do not pass --fresh to xerj autoindex directly. Read the command&#x27;s last lines: it states the record count of the verified replacement, or that the existing index was NOT touched.">COPY THE PROMPT</button>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-1">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj corpus index xerj-storage</code>
     <button type="button" class="prompt-copy" data-copy="xerj corpus index xerj-storage">COPY COMMAND</button>
     <span class="hero-proof">Index a corpus, or update in place the build an earlier run recorded.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-2">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj corpus index xerj-storage --fresh</code>
     <button type="button" class="prompt-copy" data-copy="xerj corpus index xerj-storage --fresh">COPY COMMAND</button>
     <span class="hero-proof">Rebuild from scratch: build beside the old index, verify, switch, then retire.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-3">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>bash -c 'cat ~/.xerj-code/state/xerj-storage.json'</code>
     <button type="button" class="prompt-copy" data-copy="bash -c &#x27;cat ~/.xerj-code/state/xerj-storage.json&#x27;">COPY COMMAND</button>
     <span class="hero-proof">Read the ledger. prefix is the whole namespace; index_prefix is the one verified build.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-4">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s 'http://127.0.0.1:9200/xc-xerj-storage*/_count'</code>
     <button type="button" class="prompt-copy" data-copy="curl -s &#x27;http://127.0.0.1:9200/xc-xerj-storage*/_count&#x27;">COPY COMMAND</button>
     <span class="hero-proof">Count the records yourself. The command already did, and refused to switch on zero.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-5">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>env XERJ_URL=http://127.0.0.1:9200 xerj code xerj-storage 'merge policy segment selection'</code>
     <button type="button" class="prompt-copy" data-copy="env XERJ_URL=http://127.0.0.1:9200 xerj code xerj-storage &#x27;merge policy segment selection&#x27;">COPY COMMAND</button>
@@ -264,6 +379,9 @@
     <li><a href="/answers/resume-interrupted-autoindex-run">The indexer died overnight. Do I have to start over?</a></li>
     <li><a href="/answers/autoindex-exit-codes">The indexer exited 3 (or 4). Did it fail?</a></li>
     <li><a href="/answers/check-codebase-index-is-complete">My codebase indexer says indexed but I don't see my code. How do I check it actually finished?</a></li>
+    <li><a href="/answers/index-monorepo-for-agent">How do I stop my agent from reading the whole repo into context?</a> <span class="mute">· same intent: code search for agents</span></li>
+    <li><a href="/compare/xerj-vs-ripgrep-for-code-agents">Is ripgrep enough for a coding agent, or do I need a code index?</a> <span class="mute">· same intent: code search for agents</span></li>
+    <li><a href="/answers/audit-php-codebase-with-an-index">How do I audit a PHP codebase with an index instead of grepping 1,400 files?</a> <span class="mute">· same intent: code search for agents</span></li>
   </ul>
 </main>
 <nav class="docs-nav" aria-label="Article sections">

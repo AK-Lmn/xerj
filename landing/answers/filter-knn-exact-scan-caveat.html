@@ -65,7 +65,7 @@
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-08-22",
-  "dateModified": "2026-08-23",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,78 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why is filtered kNN slower than unfiltered?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Because the filter takes the query off the HNSW graph. A filtered kNN runs the exact scan, and the cost of an exact scan scales with the number of vectors it has to scan."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does a metadata filter on vector search use HNSW?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The graph serves the unfiltered case. Adding a filter to a knn clause moves the query onto the exact path."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When is exact scan used instead of HNSW?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "On a filtered or nested kNN, a non-cosine similarity, an SQ8-quantized field, an index holding fewer than 1,024 documents, a stale graph, and on semantic and _memory recall."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why did my filtered vector search get slower when I added a filter?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The filter changed the retrieval path, not just the result set. The unfiltered query was a beam search over a graph; the filtered one is a scan whose work grows with the corpus."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much slower is a filtered kNN query?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This page does not say, because no latency was measured for it. Measure it on your own index and your own filter, because the answer scales with the vectors scanned."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does a kNN query with aggregations use the graph?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. An aggregation-bearing kNN always runs the exact scan, and there is no published performance claim for that path."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does a small index behave differently from a big one?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "An index holding fewer than 1,024 documents always uses the exact scan. A test corpus that crosses that line will change path even if the query text never changed."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the exact scan less accurate?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No, the opposite. The exact scan has recall 1.00 by construction. The graph path is approximate, and its recall is measured rather than guaranteed."
+      }
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -144,7 +216,12 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>WHY DID MY FILTERED VECTOR SEARCH GET SLOWER WHEN I ADDED A FILTER?</div>
   <div class="kicker"><span>ANSWERS · RETRIEVAL BEHAVIOUR</span></div>
   <h1>Why did my filtered vector search get slower when I added a filter?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-22 · UPDATED · 2026-08-23</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-22 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>Why is filtered kNN slower than unfiltered in XERJ? The filter changes the retrieval path. An unfiltered cosine knn on a large full-precision field is served by beam search over a persisted HNSW graph; a filtered one runs an exact scan whose cost grows with the vectors it reads. This page publishes no latency figure.</p>
+    <p class="key-fact"><strong>Key number:</strong> The HNSW beam width (<code class="inline">num_candidates</code>) is floored at 800, and indexes under 1,024 documents always use the exact scan. <span class="mute">(as of 2026-10-19 · source: <a href="https://github.com/xerj-org/xerj/blob/main/landing/llms.txt">landing/llms.txt</a>)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — The filter changed the retrieval path. An unfiltered cosine <code class="inline">knn</code> over a large enough full-precision field is served by a beam search over a persisted HNSW graph. A filtered one runs an exact scan, and its cost grows with the vectors it reads. This page publishes no latency measurement.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
@@ -259,6 +336,9 @@
     <li><a href="/answers/vector-database-vs-full-text-search">What's the actual difference between a vector database and full-text search when I have a folder?</a></li>
     <li><a href="/answers/rag-without-vector-database">How do I build RAG without a vector database?</a></li>
     <li><a href="/compare/xerj-vs-vector-database">Should my agent call a search API or stand up Qdrant for persistent memory?</a></li>
+    <li><a href="/answers/hybrid-search-quality-measured-ndcg">How much better is hybrid search than BM25? Measured nDCG numbers</a> <span class="mute">· same intent: retrieval research and eval</span></li>
+    <li><a href="/answers/reciprocal-rank-fusion-when-to-use">What is Reciprocal Rank Fusion?</a> <span class="mute">· same intent: retrieval research and eval</span></li>
+    <li><a href="/answers/classify-text-from-labelled-history-without-llm">Can I route tickets or filter spam from labelled history, without an LLM call?</a> <span class="mute">· same intent: retrieval research and eval</span></li>
   </ul>
 </main>
 <nav class="docs-nav" aria-label="Article sections">

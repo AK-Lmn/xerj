@@ -65,7 +65,7 @@
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-08-21",
-  "dateModified": "2026-08-21",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,110 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I search a Confluence HTML export?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Unzip the export to local disk and run xerj autoindex on the folder. In the captured run a phrase on a nested page returned 1 hit with its page title attached."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do Confluence page titles survive the export?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The captured run returned titles as Confluence writes them, for example PLAT : Recovery procedure, including the space key and the separator."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why do I see 2 titles for one page?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Each page yields both the HTML title and the file name as titles on different documents. A listing query therefore prints PLAT : Change window and Change-window_262148.html."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are Confluence attachments searchable?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. A phrase inside the PDF under attachments/262146/393217/1/ returned 1 hit with ax_locator p1-s0, which names page 1, passage 0."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does XERJ connect to a Confluence server?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. XERJ reads the unzipped folder from local disk. The captured node observed 0 non-loopback peers across 185 samples over its whole life."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens to the CSS and image files in the export?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The captured run detected styles/site.css as csv and indexed 2 documents from it, and refused images/icons/bullet_blue.gif as binary content."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where do these results come from?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "All results come from run RUN-B, captured on 2026-08-21 on a 16-core AMD EPYC 9645 host."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How do I search a Confluence export?",
+  "description": "Point xerj autoindex at an unzipped Confluence HTML space export. A captured run kept page titles, nested page bodies, and the attachment tree.",
+  "tool": [
+    {
+      "@type": "HowToTool",
+      "name": "xerj (Apache-2.0)"
+    }
+  ],
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Index an unzipped Confluence HTML space export from local disk.",
+      "text": "xerj autoindex ./confluence-export --url http://127.0.0.1:9200 --prefix cf --progress plain"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Find body text that lives on a nested page, and read the title and headings back.",
+      "text": "curl -s -XPOST http://127.0.0.1:9200/cf-*/_search -H 'content-type: application/json' -d '{\"query\":{\"match_phrase\":{\"body\":\"axolotl recovery procedure\"}},\"size\":5,\"_source\":[\"ax_path\",\"ax_format\",\"title\",\"headings\"],\"track_total_hits\":true}'"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "List every title the export produced, so the two title forms are visible.",
+      "text": "curl -s -XPOST http://127.0.0.1:9200/cf-*/_search -H 'content-type: application/json' -d '{\"query\":{\"exists\":{\"field\":\"title\"}},\"size\":30,\"_source\":[\"ax_path\",\"ax_format\",\"title\",\"headings\"],\"sort\":[{\"ax_path\":\"asc\"}],\"track_total_hits\":true}'"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "name": "Find text inside a PDF under the attachments tree.",
+      "text": "curl -s -XPOST http://127.0.0.1:9200/cf-*/_search -H 'content-type: application/json' -d '{\"query\":{\"match_phrase\":{\"body\":\"Axolotl recovery checklist\"}},\"size\":5,\"_source\":[\"ax_path\",\"ax_format\",\"ax_locator\"],\"track_total_hits\":true}'"
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -144,32 +248,37 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>HOW DO I SEARCH A CONFLUENCE EXPORT?</div>
   <div class="kicker"><span>ANSWERS · FILES AND FORMATS</span></div>
   <h1>How do I search a Confluence export?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-08-21</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>How do I search my Confluence export? Unzip the Confluence HTML space export to local disk and run xerj autoindex on the folder. A captured run kept page titles, nested page bodies and the attachment tree: body text on a nested page returned 1 hit, titled as Confluence writes it, PLAT : Recovery procedure.</p>
+    <p class="key-fact"><strong>Key number:</strong> One body-text query on a nested page returned 1 hit at <code class="inline">Recovery-procedure_262146.html</code> in the captured run. <span class="mute">(as of 2026-08-21 · source: the captured run documented on this page)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — Unzip the Confluence space export to local disk, then run <code class="inline">xerj autoindex</code> on the folder. In a captured run, body text on a nested page returned 1 hit at <code class="inline">Recovery-procedure_262146.html</code>. The title came back as Confluence writes it: <code class="inline">PLAT : Recovery procedure</code>.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
     <code>Act as a coding agent. Read https://xerj.org/llms.txt, start a local XERJ node, unzip a Confluence HTML space export to a folder, run `xerj autoindex ./confluence-export --url http://127.0.0.1:9200 --prefix cf --progress plain`, then POST a match_phrase on body for text inside a nested page, POST an exists query on title sorted by ax_path, and report every distinct title and the attachment paths that matched.</code>
     <button type="button" class="prompt-copy" data-copy="Act as a coding agent. Read https://xerj.org/llms.txt, start a local XERJ node, unzip a Confluence HTML space export to a folder, run `xerj autoindex ./confluence-export --url http://127.0.0.1:9200 --prefix cf --progress plain`, then POST a match_phrase on body for text inside a nested page, POST an exists query on title sorted by ax_path, and report every distinct title and the attachment paths that matched.">COPY THE PROMPT</button>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-1">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj autoindex ./confluence-export --url http://127.0.0.1:9200 --prefix cf --progress plain</code>
     <button type="button" class="prompt-copy" data-copy="xerj autoindex ./confluence-export --url http://127.0.0.1:9200 --prefix cf --progress plain">COPY COMMAND</button>
     <span class="hero-proof">Index an unzipped Confluence HTML space export from local disk.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-2">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XPOST http://127.0.0.1:9200/cf-*/_search -H 'content-type: application/json' -d '{"query":{"match_phrase":{"body":"axolotl recovery procedure"}},"size":5,"_source":["ax_path","ax_format","title","headings"],"track_total_hits":true}'</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XPOST http://127.0.0.1:9200/cf-*/_search -H &#x27;content-type: application/json&#x27; -d &#x27;{&quot;query&quot;:{&quot;match_phrase&quot;:{&quot;body&quot;:&quot;axolotl recovery procedure&quot;}},&quot;size&quot;:5,&quot;_source&quot;:[&quot;ax_path&quot;,&quot;ax_format&quot;,&quot;title&quot;,&quot;headings&quot;],&quot;track_total_hits&quot;:true}&#x27;">COPY COMMAND</button>
     <span class="hero-proof">Find body text that lives on a nested page, and read the title and headings back.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-3">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XPOST http://127.0.0.1:9200/cf-*/_search -H 'content-type: application/json' -d '{"query":{"exists":{"field":"title"}},"size":30,"_source":["ax_path","ax_format","title","headings"],"sort":[{"ax_path":"asc"}],"track_total_hits":true}'</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XPOST http://127.0.0.1:9200/cf-*/_search -H &#x27;content-type: application/json&#x27; -d &#x27;{&quot;query&quot;:{&quot;exists&quot;:{&quot;field&quot;:&quot;title&quot;}},&quot;size&quot;:30,&quot;_source&quot;:[&quot;ax_path&quot;,&quot;ax_format&quot;,&quot;title&quot;,&quot;headings&quot;],&quot;sort&quot;:[{&quot;ax_path&quot;:&quot;asc&quot;}],&quot;track_total_hits&quot;:true}&#x27;">COPY COMMAND</button>
     <span class="hero-proof">List every title the export produced, so the two title forms are visible.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-4">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XPOST http://127.0.0.1:9200/cf-*/_search -H 'content-type: application/json' -d '{"query":{"match_phrase":{"body":"Axolotl recovery checklist"}},"size":5,"_source":["ax_path","ax_format","ax_locator"],"track_total_hits":true}'</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XPOST http://127.0.0.1:9200/cf-*/_search -H &#x27;content-type: application/json&#x27; -d &#x27;{&quot;query&quot;:{&quot;match_phrase&quot;:{&quot;body&quot;:&quot;Axolotl recovery checklist&quot;}},&quot;size&quot;:5,&quot;_source&quot;:[&quot;ax_path&quot;,&quot;ax_format&quot;,&quot;ax_locator&quot;],&quot;track_total_hits&quot;:true}&#x27;">COPY COMMAND</button>
@@ -239,6 +348,9 @@
     <li><a href="/answers/search-html-export">I saved a help-center as HTML. How do I search it like the real help-center search?</a></li>
     <li><a href="/answers/catalog-files-with-autoindex-map">How should an agent figure out what's in a messy data folder before searching?</a></li>
     <li><a href="/answers/give-chatgpt-claude-local-file-access">Can ChatGPT search a folder on my laptop, or do I need something else?</a></li>
+    <li><a href="/answers/cheap-low-volume-log-search">What can I use for low-volume log search?</a> <span class="mute">· same intent: logs and docs</span></li>
+    <li><a href="/answers/notion-export-duplicate-search-results">Why does my Notion export duplicate titles?</a> <span class="mute">· same intent: logs and docs</span></li>
+    <li><a href="/answers/search-all-pdfs-in-a-folder">I downloaded a bunch of papers as PDFs. How do I search across them?</a> <span class="mute">· same intent: logs and docs</span></li>
   </ul>
 </main>
 <nav class="docs-nav" aria-label="Article sections">

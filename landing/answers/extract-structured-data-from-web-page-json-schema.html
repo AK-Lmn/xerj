@@ -260,19 +260,19 @@
   <h1 class="h1-long">Extract structured data from a web page into JSON with a schema, and prove each field</h1>
   <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-10-19 · UPDATED · 2026-10-19</div>
   <p><strong>TL;DR</strong> — To extract structured data from a web page into JSON with a schema and evidence, use a model for the extraction and xerj for the evidence. Schema-driven extraction in xerj is planned (issue #1797). Today it indexes saved pages and checks each field: on 2026-10-19, 4 of 5 fields were found, 1 flagged.</p>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-1">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj --insecure --data-dir ./xerj-data</code>
     <button type="button" class="prompt-copy" data-copy="xerj --insecure --data-dir ./xerj-data">COPY COMMAND</button>
     <span class="hero-proof">Start a single-user node on localhost:9200 in its own terminal.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-2">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj autoindex ./pages --prefix web</code>
     <button type="button" class="prompt-copy" data-copy="xerj autoindex ./pages --prefix web">COPY COMMAND</button>
     <span class="hero-proof">Index the saved HTML: tables become one record per row, prose becomes sections.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-3">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>bash verify.sh</code>
     <button type="button" class="prompt-copy" data-copy="bash verify.sh">COPY COMMAND</button>

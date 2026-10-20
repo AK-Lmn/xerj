@@ -271,25 +271,25 @@
     <code>Read https://xerj.org/llms.txt. Install xerj, then answer my question about the library with xerj ask (add --corpus and --def for an exact symbol). Quote the corpus, the pinned commit, the file:line and the licence line it prints, and say so when it exits 1 with no match.</code>
     <button type="button" class="prompt-copy" data-copy="Read https://xerj.org/llms.txt. Install xerj, then answer my question about the library with xerj ask (add --corpus and --def for an exact symbol). Quote the corpus, the pinned commit, the file:line and the licence line it prints, and say so when it exits 1 with no match.">COPY THE PROMPT</button>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-1">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -fsSL https://xerj.org/get | sh</code>
     <button type="button" class="prompt-copy" data-copy="curl -fsSL https://xerj.org/get | sh">COPY COMMAND</button>
     <span class="hero-proof">Install the release binary into ~/.local/bin.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-2">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj ask "how does snappy decompress a literal"</code>
     <button type="button" class="prompt-copy" data-copy="xerj ask &quot;how does snappy decompress a literal&quot;">COPY COMMAND</button>
     <span class="hero-proof">Route the question to a corpus, pull its signed pack once and answer with file:line.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-3">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj ask --corpus zstd --def ZSTD_CLEVEL_DEFAULT --json</code>
     <button type="button" class="prompt-copy" data-copy="xerj ask --corpus zstd --def ZSTD_CLEVEL_DEFAULT --json">COPY COMMAND</button>
     <span class="hero-proof">Exact definition lookup in one corpus, as JSON with the pin, licence class and hits.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-4">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj hub status</code>
     <button type="button" class="prompt-copy" data-copy="xerj hub status">COPY COMMAND</button>

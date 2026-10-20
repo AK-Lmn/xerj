@@ -65,7 +65,7 @@
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-09-18",
-  "dateModified": "2026-09-26",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,78 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why did xerj autoindex say the server pushed back with HTTP 429?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The node answered a bulk, or some items inside one, with HTTP 429. Its memory circuit breaker does that for the moments its resident memory sits above a watermark. xerj autoindex lowers its bulk concurrency, re-sends only the rejected items after a short backoff, and carries on."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is a 429 from the server fatal?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not on its own. Only the items the node rejected are re-sent, after a backoff, for up to 600 s measured from the moment that bulk was first offered. Only then does the run exit 1, and it says so in words: the server kept rejecting after the re-sends, nothing from that bulk was journaled, rerun to resume."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does bulk_retries on the xerj-done line mean?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "How many bulks the run had to re-send because the server answered items with 429. It appears only when it happened. bulk_retries=3 with ok=true means the run fought back-pressure three times and every record still landed."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are records written twice when a bulk is re-sent?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The bulk response lists an answer per action in order, so the run cuts exactly the rejected actions out of the body it sent and re-issues those. Accepted items are not sent again."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does the progress percentage stop moving during back-pressure?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Because nothing is landing while the client waits out the backoff. since_progress_s climbs honestly and a server is shedding load line on stderr names the cause, how long the wait has run and when the run gives up. That is different from a hang, where no such line appears."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "My run exited 1 with 'kept rejecting'. What now?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The node stayed above its memory watermark for the whole 600 s a bulk waits. On the --no-graph path the terminal line reads reason=server-backpressure and carries ops_applied and ops_remaining. Check the node log for its memory cap, raise limits.max_process_memory_mb or give the machine more memory, then rerun the same command: the journal resumes from the last committed operation. If the node log shows resident memory pinned at the watermark long after ingest stopped, that was #950, closed 2026-09-21 by PRs #1009 and #1017; on a build from before the fix, only a restart of the node cleared it. Some at-rest retention remains — per-segment caches stay unbounded until a merge retires their segment — and that is open as #1032."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is an HTTP 413 from the node back-pressure?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. A 413 means the request was too large for limits.max_body_bytes or limits.max_actions_per_bulk. The run cuts the request in two, sends both halves, and reports bulk_splits=N. Its concurrency does not drop."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does a 429 on a mapping request count the same way?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. A 429 on create-index or put-mapping is the endpoint saying it is busy, not a per-item rejection inside a bulk, and it still aborts the run with exit 1 after the transport retries. Only HTTP 400 there is a dataset refusal."
+      }
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -144,7 +216,12 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>THE SERVER PUSHED BACK WITH HTTP 429. DID XERJ AUTOINDEX LOSE THE RUN?</div>
   <div class="kicker"><span>ANSWERS · OPERATIONS: EXIT CODES</span></div>
   <h1>The server pushed back with HTTP 429. Did xerj autoindex lose the run?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-09-18 · UPDATED · 2026-09-26</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-09-18 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>Why did xerj autoindex say the server pushed back with HTTP 429? The node shed load for a moment through its memory circuit breaker. autoindex lowers bulk concurrency, re-sends only the rejected items, and reports bulk_retries on the terminal line. It exits 1 only after 600 seconds of re-sends the node never accepts, and the same command resumes.</p>
+    <p class="key-fact"><strong>Key number:</strong> One bulk request carries at most 10,000 actions (<code class="inline">BULK_MAX_ACTIONS</code>), a fifth of the engine's default limit. <span class="mute">(as of 2026-10-19 · source: <a href="https://github.com/xerj-org/xerj/blob/main/engine/crates/xerj-autoindex/src/esclient.rs">engine/crates/xerj-autoindex/src/esclient.rs</a>)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — No. A per-item HTTP 429 is the node shedding load for a moment. <code class="inline">xerj autoindex</code> lowers its bulk concurrency, re-sends only the items the node rejected, and continues. The terminal line then carries <code class="inline">bulk_retries=N</code>. The run exits 1 only after 600 seconds of re-sends that the node never takes, and the same command resumes it.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
@@ -249,6 +326,9 @@ error: the server kept rejecting …
     <li><a href="/answers/read-autoindex-progress">How do I read autoindex progress?</a></li>
     <li><a href="/answers/resume-interrupted-autoindex-run">The indexer died overnight. Do I have to start over?</a></li>
     <li><a href="/answers/autoindex-dataset-refused-by-server">One dataset was REFUSED by the server. Did I lose the whole index?</a></li>
+    <li><a href="/answers/autoindex-says-extract-the-archive-first">xerj autoindex recorded my Takeout .zip as junk and said to extract it first. Why?</a> <span class="mute">· same intent: operating autoindex</span></li>
+    <li><a href="/answers/reindex-taking-forever">Reindexing my files is taking forever. What usually causes that?</a> <span class="mute">· same intent: operating autoindex</span></li>
+    <li><a href="/answers/why-autoindex-skipped-files">Why would a folder search miss files that I can see on disk?</a> <span class="mute">· same intent: operating autoindex</span></li>
   </ul>
 </main>
 <nav class="docs-nav" aria-label="Article sections">

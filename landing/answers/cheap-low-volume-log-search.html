@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>What can I use for low-volume log search?</title>
+<title>Search logs locally without ELK: low-volume log search</title>
 <meta name="description" content="XERJ indexes plain-text logs on one node with exact error counts and sub-millisecond filters. A measured ladder stops at 16 MB: memory grows about 200x the corpus.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +16,7 @@
 <link rel="canonical" href="https://xerj.org/answers/cheap-low-volume-log-search">
 <meta property="og:site_name" content="XERJ.ai">
 <meta property="og:type" content="article">
-<meta property="og:title" content="What can I use for low-volume log search?">
+<meta property="og:title" content="Search logs locally without ELK: low-volume log search">
 <meta property="og:description" content="XERJ indexes plain-text logs on one node with exact error counts and sub-millisecond filters. A measured ladder stops at 16 MB: memory grows about 200x the corpus.">
 <meta property="og:url" content="https://xerj.org/answers/cheap-low-volume-log-search">
 <meta property="og:image" content="https://xerj.org/og/xerj-card.png">
@@ -25,7 +25,7 @@
 <meta property="og:image:alt" content="XERJ.ai — the search engine built for AI agents">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="What can I use for low-volume log search?">
+<meta name="twitter:title" content="Search logs locally without ELK: low-volume log search">
 <meta name="twitter:description" content="XERJ indexes plain-text logs on one node with exact error counts and sub-millisecond filters. A measured ladder stops at 16 MB: memory grows about 200x the corpus.">
 <meta name="twitter:image" content="https://xerj.org/og/xerj-card.png">
 <script type="application/ld+json">
@@ -59,13 +59,13 @@
 {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "What can I use for low-volume log search?",
+  "headline": "Search logs locally without ELK: low-volume log search",
   "description": "XERJ indexes plain-text logs on one node with exact error counts and sub-millisecond filters. A measured ladder stops at 16 MB: memory grows about 200x the corpus.",
   "url": "https://xerj.org/answers/cheap-low-volume-log-search",
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-08-21",
-  "dateModified": "2026-08-23",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,70 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Can XERJ replace a hosted log service?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For low volume on one node, yes. A measured 16 MB corpus indexed in 22.237 s and answered exact error counts in under a millisecond. Large volumes are a different question."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much memory does log indexing use?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "About 200x the corpus size. The measured ladder reached 2,755.9 MB peak resident memory after 28 MB of cumulative log data on one node."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How large a log corpus can XERJ handle?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This capture measured up to 16 MB per step and stopped there for memory headroom. Plan for corpora up to a few million documents, and measure your own host."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are XERJ log counts exact or estimated?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Exact. At every ladder step the level=ERROR document count matched the generator's own count exactly: 424, 848 and 1,696."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How fast are queries over an indexed log corpus?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "On the 16 MB corpus, p50 was 0.488 ms for an error filter, 0.536 ms for a terms aggregation and 0.676 ms for a date range with an aggregation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does a match query on the text field find log lines?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The logs family writes ts, level and message fields with no generic text field, and message is a keyword. Query message or level instead."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much disk does an indexed log corpus need?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The 3 measured steps stored 1.045, 1.319 and 1.039 bytes per source byte. The ratio is not stable, so do not publish a single storage multiplier."
+      }
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -144,7 +208,12 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>WHAT CAN I USE FOR LOW-VOLUME LOG SEARCH?</div>
   <div class="kicker"><span>ANSWERS · OPERATIONS: LOW-VOLUME LOGS</span></div>
   <h1>What can I use for low-volume log search?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-08-23</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>Is there a free or cheap alternative for low-volume log management and searching? XERJ indexes plain-text logs on one node with no ELK stack, returns exact error counts, and answered a level=ERROR filter at p50 0.488 ms on a 16 MB corpus. Memory is the limit: peak resident memory grew to about 200 times the corpus.</p>
+    <p class="key-fact"><strong>Key number:</strong> The page's measured ladder stopped at a 16 MB log corpus, where peak resident memory was about 200 times the corpus size. <span class="mute">(as of 2026-08-23 · source: the captured run documented on this page)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — XERJ indexes plain-text logs on one node, returns exact error counts, and answered a <code class="inline">level=ERROR</code> filter at p50 0.488 ms on a 16 MB corpus. Memory is the limit, not speed: peak resident memory grew to about 200× the corpus, and the measured ladder stopped at 16 MB.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
@@ -238,6 +307,9 @@ error: write catalog: bulk send (request timeout 300s): ... tcp connect error: C
     <li><a href="/answers/search-gzip-logs-without-zgrep">How do I search gzipped logs without decompressing the whole file — including when JSONL sits next to them?</a></li>
     <li><a href="/answers/search-kubernetes-pod-logs-on-disk">How do I search Kubernetes pod logs?</a></li>
     <li><a href="/docs/recipes/log-analytics">Log analytics</a></li>
+    <li><a href="/compare/xerj-vs-docfetcher">What's a free DocFetcher alternative that an agent can call?</a> <span class="mute">· same intent: logs and docs</span></li>
+    <li><a href="/answers/search-all-pdfs-in-a-folder">I downloaded a bunch of papers as PDFs. How do I search across them?</a> <span class="mute">· same intent: logs and docs</span></li>
+    <li><a href="/answers/search-confluence-html-export">How do I search a Confluence export?</a> <span class="mute">· same intent: logs and docs</span></li>
   </ul>
 </main>
 <nav class="docs-nav" aria-label="Article sections">
