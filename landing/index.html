@@ -274,7 +274,7 @@ xerj search "how do we rotate the WAL segment"</pre>
   <ul class="v2-list">
     <li><strong>Libraries the model already knows.</strong> Retrieval wins on private, niche or post-cutoff code and is neutral to harmful on popular public libraries, where it only adds cost (<a href="/case-studies/reference-coding">limits section of the case study</a>).</li>
     <li><strong>"Semantic" is lexical by default.</strong> The built-in embedder is feature-hashing over words and sub-words, not a neural model. Start the node with <code class="inline">--embed-mode neural</code> for real semantics (about 90 MB downloaded on first use).</li>
-    <li><strong>One node.</strong> XERJ runs single-node. There is no replication or failover.</li>
+    <li><strong>One node.</strong> XERJ runs single-node. There is no replication or failover. When to choose Elasticsearch instead: you need a replicated cluster, or steady read p99 under a heavy concurrent write load, which is where all four of its benchmark wins came from (<a href="/benchmarks/">benchmarks</a>).</li>
     <li><strong><code class="inline">--insecure</code> is for one user on one machine.</strong> It turns off TLS and API-key auth. A fresh node binds 127.0.0.1 only; see <a href="/security/">the security model</a>.</li>
   </ul>
 </section>

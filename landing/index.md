@@ -62,7 +62,7 @@ https://hub.xerj.org lists 513 live corpora in 11 domains, 78.6 GB of pinned tex
 
 - Libraries the model already knows: retrieval is neutral to harmful there and only adds cost.
 - "Semantic" is lexical by default (feature hashing). `--embed-mode neural` for real semantics, about 90 MB on first use.
-- Single node: no replication or failover.
+- Single node: no replication or failover. When to choose Elasticsearch instead: you need a replicated cluster, or steady read p99 under a heavy concurrent write load, where all 4 of its benchmark wins came from (https://xerj.org/benchmarks/).
 - `--insecure` turns off TLS and API-key auth; a fresh node binds 127.0.0.1 only.
 
 ## Community
