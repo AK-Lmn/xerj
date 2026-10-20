@@ -130,7 +130,7 @@ def corpus_section(slug, esc, rel="../"):
 <div><h3>Top topics</h3><p class="topics" data-u-topics></p>
 <h3>Top query templates</h3><table data-u-templates><tr><th>template</th><th>requests</th></tr></table></div>
 </div>
-<p class="note">{WHAT_COUNTS} <a href="{rel}about.html#privacy">What is collected</a>.</p></section>'''
+<p class="note">{WHAT_COUNTS} <a href="{rel}whats-this/#privacy">What is collected</a>.</p></section>'''
 
 
 def traffic_section(slug, esc):
@@ -157,7 +157,7 @@ def traffic_section(slug, esc):
 day, by a hash salted with the day, so the 14-day unique figure adds up daily uniques. Pulls: growth of the
 GitHub release download count of this corpus&rsquo;s pack (<code>xerj hub pull</code> downloads from
 there; includes our own pack-verification downloads). Searches: hosted-hub queries for this corpus.
-Referring sites appear after 3 views. <a href="../about.html#privacy">What is collected</a>.</p></section>'''
+Referring sites appear after 3 views. <a href="../whats-this/#privacy">What is collected</a>.</p></section>'''
 
 
 def home_section():
@@ -165,7 +165,7 @@ def home_section():
 <p class="note" data-u-msg>Usage stats load from <code>/api/hub-usage</code> when this page runs JavaScript.</p>
 <ol hidden></ol>
 <p class="note">Requests agents sent to the hosted hub API in the last 30 days. Local queries are not counted.
-<a href="about.html#privacy">What is collected</a>.</p></section>'''
+<a href="whats-this/#privacy">What is collected</a>.</p></section>'''
 
 
 PRIVACY = '''<section class="detail" id="privacy"><h2>Privacy: what the hub collects</h2>

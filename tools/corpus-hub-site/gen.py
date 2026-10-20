@@ -8,7 +8,7 @@ Reads ONLY registry state on this branch (corpus-hub):
   tools/xerj-code/hub/backlog/*-graded.json  - graded G7 suites (non-IT lane)
   tools/xerj-code/hub/backlog/impact-snapshot-*.json - benchmark A/B snapshot
   tools/packs/*/recipe.toml                  - lane B packs
-Writes out/ (index, per-corpus, per-category, about, style, data.json).
+Writes out/ (index, per-corpus, per-category, whats-this, style, data.json).
 
 Design: xerj.org brandbook, day palette only (user directive 2026-10-06:
 strictly main-site fonts and CSS, domains as large typography, white default).
@@ -252,10 +252,13 @@ def impact_badge(c, impact):
             f'A/B {esc(r["p"])} to {esc(r["x"])}</span>')
 
 
-def card(c, g7, graded, impact):
+def card(c, g7, graded, impact, rel=""):
+    """One corpus card. `rel` is the path back to the site root: category
+    pages live one level down, and their cards linked category/corpus/<slug>
+    (a 404) before it existed."""
     files, nbytes, licences = corpus_stats(c)
     st, stcls = STATUSES.get(c["status"], (c["status"], "mute"))
-    return f'''<a class="card" data-cat="{esc(c['cat'])}" data-region="{esc(region(c))}" data-slug="{esc(c['slug'].lower())}" href="corpus/{esc(c['slug'])}.html">
+    return f'''<a class="card" data-cat="{esc(c['cat'])}" data-region="{esc(region(c))}" data-slug="{esc(c['slug'].lower())}" href="{rel}corpus/{esc(c['slug'])}.html">
   <div class="chead"><span class="cname">{esc(c['slug'])}</span><span class="dot {stcls}"></span></div>
   <p class="cuse">{esc(plain(c['usecase'])[:180])}{'...' if len(c['usecase']) > 180 else ''}</p>
   {tag_line(c)}
@@ -637,15 +640,14 @@ PAGE = """<!doctype html><html lang="en"><head><meta charset="utf-8">
 {fonts}
 <link rel="stylesheet" href="{rel}assets/style.css?v={ver}"></head>
 <body><nav class="nav"><a class="brand" href="https://xerj.org">XERJ<b>·</b>HUB</a>
-<a href="{rel}index.html">CORPORA</a><a href="{rel}index.html#domains">DOMAINS</a>
+<a href="{rel}index.html">CORPORA</a>
 <a href="{rel}contributors/index.html">CONTRIBUTORS</a>
-<a href="{rel}about.html">ABOUT</a>
-<a href="https://github.com/xerj-org/xerj/tree/corpus-hub/tools/xerj-code/hub">REGISTRY (GIT)</a>
+<a href="{rel}whats-this/">WHAT'S THIS?</a>
 <span class="spacer"></span><details class="authbox" id="hubauth" hidden></details><a class="navicon" href="https://x.com/xerj_org" title="XERJ on X" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a><a class="navicon" href="https://discord.com/invite/yetXFusXfs" title="XERJ on Discord" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.37a19.79 19.79 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.74 19.74 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.1 13.1 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.3 12.3 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.84 19.84 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></a><a href="https://xerj.org">XERJ.ORG</a><a href="{rel}contribute.html" class="navcta">ADD YOUR CORPUS</a></nav>
 {body}
 <footer><span>XERJ · CORPUS HUB · {stamp}</span>
 <span>PINNED SOURCES · VERIFIED LICENCES · MEASURED RETRIEVAL</span>
-<span><a href="{rel}index.html">CORPORA</a> · <a href="{rel}about.html">ABOUT</a> ·
+<span><a href="{rel}index.html">CORPORA</a> · <a href="{rel}whats-this/">WHAT'S THIS?</a> ·
 <a href="{rel}llms.txt">LLMS.TXT</a></span></footer>
 {navjs}{authjs}
 </body></html>"""
@@ -669,6 +671,11 @@ NAVCTA_JS = """<script>
 # Content hash of the stylesheet: appended as ?v= on every page's CSS link so a
 # changed stylesheet always busts the browser cache (assets carry a long max-age).
 STYLE += contributors.STYLE
+STYLE += """
+/* What's this? (WHATS_THIS): short, readable measure */
+.whats .lead,.whats .detail{max-width:72ch}
+.steps{padding-left:1.4em}.steps li{margin:0 0 var(--sp-4)}
+"""
 STYLE += usage.STYLE
 STYLE += agent_score.STYLE
 STYLE_VER = hashlib.sha1(STYLE.encode("utf-8")).hexdigest()[:8]
@@ -1055,10 +1062,10 @@ The review block records a human opening each licence file at the pin. Detector 
 
 def category_body(k, cs, g7, graded, impact):
     title, what = CATS[k]
-    cards = "\n".join(card(c, g7, graded, impact) for c in cs)
+    cards = "\n".join(card(c, g7, graded, impact, rel="../") for c in cs)
     n_live = sum(1 for c in cs if c["status"] == "live")
     return f'''<main>
-<p><a class="backlink" href="../index.html">&larr; all domains</a></p>
+<p><a class="backlink" href="../index.html">&larr; all corpora</a></p>
 <div class="kicker"><span class="accent">{esc(k)}</span><span class="dash">·</span><span>DOMAIN</span></div>
 <h1 class="hero" style="font-size:clamp(56px,9vw,var(--fs-160))">{esc(k)}</h1>
 <p class="lead">{esc(title)}. Agent asks: {esc(what)}. {n_live} live of {len(cs)} entries.</p>
@@ -1067,46 +1074,42 @@ def category_body(k, cs, g7, graded, impact):
 </main>{agent_score.CARDS_JS}'''
 
 
-ABOUT = '''<main>
-<div class="kicker"><span class="accent">ABOUT</span><span class="dash">·</span><span>THE HUB IN ONE PAGE</span></div>
-<h1 class="hero" style="font-size:clamp(48px,7vw,120px)">WHY A<br><span class="accent">CORPUS HUB</span></h1>
-<p class="lead">Agents answer from memory, and memory is stale, generic, or wrong on exactly
-the questions that matter: what the regulation says at this pin, whether this CVE is
-exploited, how this engine actually implements it. A corpus fixes that. The agent
-downloads the domain it needs, searches it, and cites what it found. This hub is the
-registry of those corpora: pinned, licence-checked, and measured.</p>
-<section class="detail"><h2>Every corpus passes seven gates</h2>
-<table>
-<tr><th>gate</th><th>what satisfies it</th></tr>
-<tr><td>G1 domain</td><td>the row finishes "an agent working on ___ would query this for ___" in one specific sentence</td></tr>
-<tr><td>G2 shape</td><td>the retrieval unit matches the question: clause-level sections for standards, function bodies for code, advisory records for precedent</td></tr>
-<tr><td>G3 un-memorisation</td><td>answer-bearing content is niche, internal, post-cutoff, or too detailed for recall. Famous-and-small is killed as retrieval theatre</td></tr>
-<tr><td>G4 licence</td><td>a human opened the licence at the pin and wrote the review block. Detector output is a hint, never the verdict</td></tr>
-<tr><td>G5 pin truth</td><td>manifest SHA equals the commit the build used. Rewrites are withdrawals, not re-pins</td></tr>
-<tr><td>G6 registry validation</td><td>validate_hub.py green in CI on the corpus-hub branch</td></tr>
-<tr><td>G7 retrieval spot-check</td><td>5 pre-registered domain queries, top-5 graded manually, median 3 or more relevant to pass</td></tr>
-</table></section>
-<section class="detail"><h2>Scores on the cards</h2>
-<p><b>G7</b> is the retrieval spot-check above. <b>A/B</b> is the drift-anchored agent
-benchmark: the same task run bare (offline, instructed to answer honestly rather than
-fabricate) and with the corpus. The badge shows pass counts, bare then corpus.
-A tie is a publishable outcome; the registry records it either way.</p></section>
-<section class="detail"><h2>Tags</h2>
-<p>Every corpus carries a region (US, UK, DE, EU, or GLOBAL) and topics. Filter the
-front page by domain and region; free-text search covers topics and subtopics.</p></section>
-<section class="detail"><h2>Rights policy</h2>
-<p>Per-source licence verdicts live in each manifest's review block. PD (US government
-works), OGL v3.0 (UK), and permissive licences ship as <code>adapt-with-attribution</code>.
-GPL, AGPL, SSPL, and other restrictive sources are <code>approach-only</code>: readable
-as design evidence, never copied. Closed families (ICC I-codes, Eurocodes, NEC, ASTM,
-ISO, DIN) are documented as closed and excluded.</p></section>
+# "What's this?" (was About; /about redirects here, see REDIRECTS). Short and
+# plain on purpose: what the hub is for, in facts the repo can back up, and
+# no numbers that are not computed from the registry at build time.
+WHATS_THIS = '''<main class="whats">
+<div class="kicker"><span class="accent">WHAT'S THIS?</span></div>
+<h1 class="hero" style="font-size:clamp(44px,6vw,var(--fs-96))">A SHARED LIBRARY<br><span class="accent">FOR AI AGENTS</span></h1>
+<p class="lead">AI agents often answer from memory, or crawl the web, or grep a repository they cloned a minute ago.
+The XERJ Corpus Hub is a shared library of corpora that are already indexed, so an agent can search the real source
+on its own machine and cite what it found.</p>
+<section class="detail"><h2>How it works</h2><ol class="steps">
+<li><b>A corpus is a pinned source.</b> A library's code at one commit, a standard, a regulation, an advisory feed.
+Each one records where it came from and the licence a person reviewed.</li>
+<li><b>It is pre-indexed and signed.</b> The hub builds a search pack for each corpus. The catalogue and the packs are
+signed (ed25519), and the <code>xerj</code> CLI refuses anything that does not verify against the hub key built into it.</li>
+<li><b>The agent searches locally.</b> <code>xerj hub pull</code> fetches a pack, then <code>xerj code &lt;corpus&gt; "question"</code>
+answers with passages headed by a file path and line, so every answer can be cited as <code>file:line</code>.
+Your queries stay on your machine.</li>
+</ol></section>
+<section class="detail"><h2>People get the credit</h2>
+<p>Corpora come from the community. Every contributor has a <a href="{rel}contributors/index.html">profile</a> that lists
+their work and the corpora it is in, and visitors can give hub stars to contributors and corpora. Each corpus page names
+the people behind it, with attribution under each source's own licence.</p></section>
+<section class="detail"><h2>Agents say what worked</h2>
+<p>After they use a corpus, agents can send a structured review: was it useful, was the answer found, is it fresh.
+That becomes the corpus's <b>agent score</b>, shown on its page apart from the human stars.</p></section>
+<section class="detail"><h2>Start</h2>
+<p><a href="{rel}index.html">Browse the corpora</a> · <a href="{rel}llms.txt">llms.txt</a> (the agent's guide) ·
+<a href="{rel}contribute.html">Add your corpus</a> · <a href="https://github.com/xerj-org/xerj/tree/corpus-hub/tools/xerj-code/hub">The registry on GitHub</a></p></section>
 ''' + usage.PRIVACY + '''
-<section class="detail"><h2>Contribute</h2>
-<p>The registry is a git branch: <a href="https://github.com/xerj-org/xerj/tree/corpus-hub">corpus-hub</a>.
-Read <a href="https://github.com/xerj-org/xerj/blob/corpus-hub/tools/xerj-code/hub/CONTRIBUTING.md">CONTRIBUTING.md</a>
-and the program doc (PROGRAM-100.md). This site is generated from the registry by
-<code>tools/corpus-hub-site/gen.py</code>. No hand-written corpus pages, ever.</p></section>
 </main>'''
+
+# Cloudflare Pages _redirects: the old About URLs keep working.
+REDIRECTS = """/about /whats-this/ 301
+/about/ /whats-this/ 301
+/about.html /whats-this/ 301
+"""
 
 
 def contribute_prompt():
@@ -1170,7 +1173,12 @@ def main():
         cs = [c for c in corpora if c["cat"] == k]
         (OUT / "category" / f"{k}.html").write_text(
             page(f"{k}: {title} domain", what, category_body(k, cs, g7, graded, impact), rel="../"))
-    (OUT / "about.html").write_text(page("About: XERJ Corpus Hub", "How corpora are gated, scored, tagged, and licenced", ABOUT, rel=""))
+    (OUT / "whats-this").mkdir(exist_ok=True)
+    (OUT / "whats-this" / "index.html").write_text(page(
+        "What's this? XERJ Corpus Hub", "A shared, signed library of pre-indexed corpora that AI agents search locally, with cited file:line answers",
+        WHATS_THIS.replace("{rel}", "../"), rel="../"))
+    (OUT / "about.html").unlink(missing_ok=True)   # replaced by whats-this/; _redirects keeps the old URL
+    (OUT / "_redirects").write_text(REDIRECTS)
     (OUT / "me.html").write_text(page("Your hub: XERJ Corpus Hub", "Your hub stars, after you sign in", ME_BODY + ME_JS, rel=""))
     # 404.html: Cloudflare Pages serves it, with status 404, for any path that
     # has no file. Without it Pages falls back to index.html with a 200, so a
@@ -1301,7 +1309,7 @@ def main():
         (ROOT / "functions" / "_lib" / "hubdata.js").write_text(mod)
         print(f"signed-in details: functions/_lib/hubdata.js, {len(mod):,} bytes")
     n = len(list((OUT / "corpus").glob("*.html")))
-    print(f"generated: index, about, {len(CATS)} category pages, {n} corpus pages ({len(corpora)} registry), "
+    print(f"generated: index, whats-this, {len(CATS)} category pages, {n} corpus pages ({len(corpora)} registry), "
           f"{n_people} contributor pages, {len(upstream)} upstream/curator pages -> {OUT}")
 
 

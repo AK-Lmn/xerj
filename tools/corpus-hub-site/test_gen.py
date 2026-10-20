@@ -202,7 +202,7 @@ class UsageSectionTest(unittest.TestCase):
         import usage
         for phrase in ("raw query", "IP address", "3 times", "X-Xerj-Disable-Feedback", "changes every\nday", "host name"):
             self.assertIn(phrase, usage.PRIVACY)
-        self.assertIn('id="privacy"', gen.ABOUT)
+        self.assertIn('id="privacy"', gen.WHATS_THIS)
 
 
 class PrivateDataTest(unittest.TestCase):
@@ -292,6 +292,24 @@ class NotFoundPageTest(unittest.TestCase):
         self.assertIn('href="/assets/style.css', html)
         self.assertNotIn('href="assets/', html)
         self.assertIn('"404.html"', pathlib.Path(gen.__file__).read_text())
+class NavTest(unittest.TestCase):
+    # owner request 2026-10-20: no Domains / Registry (git) links; About became "What's this?"
+    def test_nav_and_footer(self):
+        html = gen.page("t", "d", "<main></main>", rel="../")
+        self.assertNotIn("DOMAINS", html)
+        self.assertNotIn("#domains", html)
+        self.assertNotIn("REGISTRY (GIT)", html)
+        self.assertNotIn("about.html", html)
+        self.assertEqual(html.count('href="../whats-this/">WHAT\'S THIS?</a>'), 2)   # nav + footer
+
+    def test_whats_this_says_what_the_hub_is_for(self):
+        w = gen.WHATS_THIS
+        for fact in ("pre-indexed", "signed", "file:line", "agent score", "profile", "hub stars", 'id="privacy"'):
+            self.assertIn(fact, w)
+        self.assertIn("/about.html /whats-this/ 301", gen.REDIRECTS)
+        self.assertIn("/about /whats-this/ 301", gen.REDIRECTS)
+
+
 class BusyPortStepTest(unittest.TestCase):
     # issue #1891: step 2 must cover the busy-port case and say which port --url takes.
     def test_setup_steps_name_the_port_flag_and_the_url_port(self):
@@ -432,6 +450,17 @@ class SiteLinksTest(unittest.TestCase):
         self.assertTrue(all((d / f"{l}.html").is_file() for l in logins))
         self.assertIn('class="pager"', html)                                   # plain links without JS
         self.assertIn('class="tmap"', html)
+
+    def test_whats_this_replaces_about(self):
+        self.assertTrue((self.out / "whats-this" / "index.html").is_file())
+        self.assertFalse((self.out / "about.html").exists())
+        self.assertIn("/about.html /whats-this/ 301", (self.out / "_redirects").read_text())
+
+    def test_no_broken_relative_links_anywhere(self):
+        bad = []
+        for f in self.out.rglob("*.html"):
+            bad += [(str(f.relative_to(self.out)), h) for h in self.HREF.findall(f.read_text()) if not self._resolves(f, h)]
+        self.assertEqual(bad, [])
 
 
 if __name__ == "__main__":
