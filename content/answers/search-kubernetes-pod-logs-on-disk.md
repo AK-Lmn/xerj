@@ -7,7 +7,7 @@ cluster: "Files and formats"
 question: "Grep for specific text from kubernetes multiple pods"
 intent: "how-to"
 published: "2026-08-21"
-updated: "2026-10-19"
+updated: "2026-10-20"
 author: "XERJ documentation team"
 reviewer: "XERJ engineering team"
 schema_type: "TechArticle"
@@ -26,6 +26,9 @@ commands:
     note: "Run 1 phrase query across every pod, and read the spread from the hits."
   - cmd: "curl -s -XPOST http://127.0.0.1:9200/autoindex-catalog/_search -H 'content-type: application/json' -d '{\"query\":{\"bool\":{\"filter\":[{\"term\":{\"doc_kind\":\"file\"}}],\"must\":[{\"wildcard\":{\"path\":\"*var/log/pods*\"}}]}},\"size\":10,\"_source\":[\"path\",\"format\",\"status\",\"records\"],\"sort\":[{\"path\":\"asc\"}]}'"
     note: "Read the family XERJ gave each log file, and the document count per file."
+evidence:
+  - claim: "JSONL line cap is 16 MB (MAX_LINE = 16 << 20). A line at or above that length is skipped; the rest of the file still indexes."
+    source: "engine/crates/xerj-autoindex/src/extract/mod.rs"
 links_out:
   - "search-json-and-jsonl-logs"
   - "search-gzip-logs-without-zgrep"
@@ -42,7 +45,7 @@ faq:
   - q: "Did the aggregation agree with the hits in this run?"
     a: "Yes. The terms aggregation on the same request reported 6 documents per file, the same as the hits. Compare both before you publish a count."
   - q: "What if I convert the logs to JSONL first?"
-    a: "Keep every line under 4,096 characters. A captured reproduction indexed 30 documents at 4,095 characters per line and 0 documents at 4,096."
+    a: "A line at or above 16 MB is skipped and counted as junk. The cap is `MAX_LINE` (`16 << 20`) in `engine/crates/xerj-autoindex/src/extract/mod.rs`. The rest of the file still indexes."
   - q: "Where do these results come from?"
     a: "All results come from run RUN-B, captured on 2026-08-21 on a 16-core AMD EPYC 9645 host."
 ---
@@ -85,7 +88,7 @@ All 3 files were detected as `txt-prose` in the `autoindex-catalog`. The `logs` 
 
 Plan for that. The line text is searchable through `body`, so a full-text query for `level=error` finds the lines that hold that string. No typed level filter and no date range query exist on this index.
 
-If you want typed fields, convert the lines to JSON or JSONL before you index them. Keep every JSONL line under 4,096 characters. A captured reproduction indexed 30 documents at 4,095 characters per line and 0 at 4,096, with the family flipping from `jsonl` to `json`.
+If you want typed fields, convert the lines to JSON or JSONL before you index them. A JSONL line at or above 16 MB is skipped and counted as junk (`MAX_LINE`, `16 << 20`, in `engine/crates/xerj-autoindex/src/extract/mod.rs`). The rest of the file still indexes.
 
 ## What XERJ is not doing here
 

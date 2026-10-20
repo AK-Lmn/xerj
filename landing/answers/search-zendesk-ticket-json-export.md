@@ -2,13 +2,13 @@
 ---
 title: "Search a JSON export of support tickets"
 canonical: "https://xerj.org/answers/search-zendesk-ticket-json-export"
-updated: "2026-10-19"
+updated: "2026-10-20"
 source: "content/answers/search-zendesk-ticket-json-export.md"
 ---
 
 # I have a JSON export of Jira issues (or Zendesk tickets). How do I search it like a help-center search?
 
-**Short answer** (updated 2026-10-19): I have a JSON export of support tickets; how do I search it like a real help-center search? Index the exported JSON on local disk with one xerj autoindex run. In a captured run a description phrase returned 36 hits with per-ticket locators such as tickets:e4, and a status aggregation returned 6 buckets of exactly 30.
+**Short answer** (updated 2026-10-20): I have a JSON export of support tickets; how do I search it like a real help-center search? Index the exported JSON on local disk with one xerj autoindex run. In a captured run a description phrase returned 36 hits with per-ticket locators such as tickets:e4, and a status aggregation returned 6 buckets of exactly 30.
 
 **Key number:** A `status` terms aggregation returned 6 buckets of exactly 30 tickets each. (as of 2026-08-21; source: the captured run documented on this page)
 
@@ -122,7 +122,7 @@ The `date` typing is what makes a range query over `created_at` work straight af
 
 XERJ has no Zendesk connector, no API token flow and no sync job. The node observed 0 distinct non-loopback peers across 185 samples over its whole life. Request the export from Zendesk yourself, save it to disk, then index the folder.
 
-If you flatten the export to JSONL, keep every line under 4,096 characters. A captured reproduction indexed 30 documents at 4,095 characters per line and 0 documents at 4,096, with the family flipping from `jsonl` to `json`.
+If you flatten the export to JSONL, a line at or above 16 MB is skipped and counted as junk (`MAX_LINE`, `16 << 20`, in `engine/crates/xerj-autoindex/src/extract/mod.rs`). The rest of the file still indexes.
 
 XERJ runs single-node here, with no replication and no failover. Every number above comes from RUN-B, captured on 2026-08-21. The binary was a `ci-test` profile build, so no wall-clock figure from this run is published as a performance number.
 
@@ -155,6 +155,10 @@ XERJ typed `tags` as a multi-valued `keyword`, so a `terms` filter with the tag 
 ### Do ticket comments become searchable too?
 
 Yes. The captured run put `ticket_comments.json` into its own index, `zd-json-ticket-comments`, with 61 documents.
+
+## Evidence
+
+- JSONL line cap is 16 MB (MAX_LINE = 16 << 20). A line at or above that length is skipped; the rest of the file still indexes. — `engine/crates/xerj-autoindex/src/extract/mod.rs`
 
 ## Related
 
