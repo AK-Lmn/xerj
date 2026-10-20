@@ -349,15 +349,16 @@ STARS_JS = """<script>
           .catch(function(){btn.disabled=false})});
     }).catch(function(){});
   });
-  // hub-star counts on the wall; hubStarMark() is called again by WALL_JS for
-  // every chunk it appends, and skips tiles it has already marked
-  var counts=null,wall=document.querySelector('.wall[data-stars]');
+  // hub-star counts in the people table's Hub ★ column (shown only when the
+  // hub-stars API is on); hubStarMark() is called again by TABLE_JS for every
+  // batch of rows it renders, and skips rows it has already marked
+  var counts=null,wall=document.querySelector('[data-stars]');
   window.hubStarMark=function(root){if(!counts||!root)return;
-    root.querySelectorAll('[data-id]').forEach(function(a){var s=a.querySelector('.hs');if(!s||!s.hidden)return;
-      s.textContent=' · hub ★ '+fmt(counts[a.dataset.id]||0);s.hidden=false})};
+    root.querySelectorAll('[data-id]').forEach(function(a){var s=a.querySelector('.hs');if(!s||s.dataset.done)return;
+      s.dataset.done='1';s.textContent=fmt(counts[a.dataset.id]||0)})};
   if(wall)fetch(API+'?kind='+wall.dataset.stars).then(function(r){return r.json()}).then(function(r){
     if(!r||!r.ok||!r.enabled)return;
-    counts=r.counts||{};window.hubStarMark(wall);
+    counts=r.counts||{};wall.classList.add('hubon');window.hubStarMark(wall);
   }).catch(function(){});
 })();
 </script>"""
@@ -483,7 +484,7 @@ def stars_targets(people, registry):
             "pages": {l.lower(): l for l in sorted(people) if l != l.lower()}}
 
 
-CHUNK = 500            # list rows per JSON chunk / plain-HTML page
+CHUNK = 500            # table rows per JSON chunk / plain-HTML page
 
 
 def wall_order(people, vols):
@@ -491,93 +492,312 @@ def wall_order(people, vols):
     return sorted(people, key=lambda l: (-vols[l]["gh_stars"], l.lower()))
 
 
-def wall_tile(l, pp, v, esc):
-    return (f'<a href="{esc(l)}.html" data-id="{esc(l.lower())}"><img src="https://github.com/{esc(l)}.png?size=88" alt="" loading="lazy" width="44" height="44">'
-            f'<div><b>{esc(pp["name"] or l)}</b><span>@{esc(l)} · {v["corpora"]} corp{"us" if v["corpora"] == 1 else "ora"}'
-            f'{" · " + _n(v["lines"]) + " lines" if v["lines"] else ""} · GitHub ★ {_n(v["gh_stars"])}<span class="hs" hidden></span></span></div></a>')
-
-
 def wall_row(l, pp, v):
-    """One list row in list.<n>.json; WALL_JS renders it exactly like wall_tile()."""
-    return [l, pp["name"] if pp["name"] and pp["name"] != l else "", v["corpora"], v["lines"] or 0, v["gh_stars"]]
+    """One people row in list.<n>.json:
+    [login, name ("" if same as login), corpora, lines, GitHub stars, repos, signed up (YYYY-MM-DD or "")].
+    TABLE_JS renders it exactly like people_tr()."""
+    return [l, pp["name"] if pp["name"] and pp["name"] != l else "", v["corpora"], v["lines"] or 0,
+            v["gh_stars"], v["repos"], (v["since"] or "")[:10]]
 
 
-def pager(n_pages, current):
-    links = " ".join(f'<a href="{"index.html" if i == 1 else f"list.{i}.html"}"{" aria-current=page" if i == current else ""}>{i}</a>'
+def repo_index(people, pages=()):
+    """Distinct pinned repositories that have a recorded star count, most
+    stars first: [{"repo", "url", "stars", "owner", "owner_page", "corpus",
+    "by"}]. owner_page is the owner's contributor-page login or "" (then
+    the owner links to GitHub); corpus is a slug with a hub page or "";
+    by is the contributor whose work brought the repo in."""
+    seen = {}
+    for login, pp in people.items():
+        for w in pp["work"].values():
+            if not (isinstance(w.get("repo_stars"), int) and w.get("repo_url")):
+                continue
+            key = w["repo_url"].rstrip("/").lower()
+            e = seen.get(key)
+            if e is None:
+                repo = w["repo"] or key.split("github.com/")[-1]
+                e = seen[key] = {"repo": repo, "url": w["repo_url"], "stars": w["repo_stars"],
+                                 "owner": repo.split("/")[0], "corpus": "", "by": login}
+            if not e["corpus"]:
+                e["corpus"] = next((c for c in w["corpora"] if c in pages), "")
+    by_low = {l.lower(): l for l in people}
+    out = sorted(seen.values(), key=lambda e: (-e["stars"], e["repo"].lower()))
+    for e in out:
+        e["owner_page"] = by_low.get(e["owner"].lower(), "")
+    return out
+
+
+def repo_row(e):
+    """One repos row in repos.<n>.json: [repo, url, stars, owner, owner page login or "", corpus slug or ""]."""
+    return [e["repo"], e["url"], e["stars"], e["owner"], e["owner_page"], e["corpus"]]
+
+
+def _av(login, esc, px=28):
+    return (f'<img src="https://github.com/{esc(login)}.png?size={px * 2}" alt="" loading="lazy" decoding="async" '
+            f'width="{px}" height="{px}">')
+
+
+def people_tr(rank, l, pp, v, esc):
+    nm = pp["name"] if pp["name"] and pp["name"] != l else ""
+    return (f'<tr data-id="{esc(l.lower())}"><td class="n">{rank:,}</td><td class="who"><a href="{esc(l)}.html">{_av(l, esc)}'
+            f'<span><b>{esc(nm or l)}</b>{"<small>@" + esc(l) + "</small>" if nm else ""}</span></a></td>'
+            f'<td class="num">{_n(v["gh_stars"])}</td><td class="num o1 hub hs"></td><td class="num o1">{v["repos"]:,}</td><td class="num o1">{v["corpora"]:,}</td>'
+            f'<td class="num o2">{_n(v["lines"]) if v["lines"] else "—"}</td><td class="o2 d">{esc((v["since"] or "")[:10]) or "—"}</td></tr>')
+
+
+def repo_tr(rank, e, esc, rel=""):
+    own = (f'<a href="{rel}{esc(e["owner_page"])}.html">' if e["owner_page"] else f'<a href="https://github.com/{esc(e["owner"])}">')
+    corp = (f'<a href="{rel}../corpus/{esc(e["corpus"])}.html">{esc(e["corpus"])}</a>' if e["corpus"] else "—")
+    return (f'<tr><td class="n">{rank:,}</td><td class="repo"><a href="{esc(e["url"])}">{esc(e["repo"])}</a></td>'
+            f'<td class="who">{own}{_av(e["owner"], esc)}<span><b>{esc(e["owner"])}</b></span></a></td>'
+            f'<td class="num">{_n(e["stars"])}</td><td class="o1 corp">{corp}</td></tr>')
+
+
+PEOPLE_COLS = (("#", "rank", ""), ("Contributor", "who", ""), ("GitHub ★", "stars", "num"), ("Hub ★", "hub", "num o1 hub"), ("Repos", "repos", "num o1"),
+               ("Corpora", "corpora", "num o1"), ("Lines", "lines", "num o2"), ("Signed up", "since", "o2"))
+REPO_COLS = (("#", "rank", ""), ("Repository", "repo", ""), ("Owner", "owner", ""), ("GitHub ★", "stars", "num"),
+             ("Corpus", "corpus", "o1"))
+
+
+def thead(cols, sortable=True):
+    ths = []
+    for label, key, cls in cols:
+        aria = ' aria-sort="ascending"' if key == "rank" else ""
+        inner = f'<button type="button" data-k="{key}">{label}</button>' if sortable and key != "hub" else label
+        ths.append(f'<th scope="col" class="{cls}"{aria}>{inner}</th>')
+    return f'<thead><tr>{"".join(ths)}</tr></thead>'
+
+
+def pager(n_pages, current, kind="people"):
+    stem, first, label = (("list", "index.html", "All contributors, page by page") if kind == "people"
+                          else ("repos", "repos.1.html", "All repositories, page by page"))
+    links = " ".join(f'<a href="{first if i == 1 else f"{stem}.{i}.html"}"{" aria-current=page" if i == current else ""}>{i}</a>'
                      for i in range(1, n_pages + 1))
-    return f'<nav class="pager" aria-label="All contributors, page by page"><b>Pages</b> {links}</nav>'
+    return f'<nav class="pager" data-kind="{kind}" aria-label="{label}"><b>{"Pages" if kind == "people" else "Repository pages"}</b> {links}</nav>'
 
 
-# Infinite scroll for the wall: the first CHUNK rows are in the HTML; the rest
-# come from list.<n>.json as the "Showing" line nears the viewport (or on the
-# button). The plain pager (list.<n>.html) stays in the HTML for crawlers and
-# no-JS readers; this script hides it, and shows it again if a chunk fails.
-WALL_JS = """<script>
+TABLE_STYLE = """
+/* contributors: view switches + sortable table (borderless, light tints) */
+.vbar{display:flex;flex-wrap:wrap;gap:var(--sp-3);align-items:center;margin:var(--sp-8) 0 0}
+.vbar[hidden]{display:none}
+.seg{display:inline-flex;gap:3px;padding:3px;background:#eeebe3;border-radius:999px}
+.seg button{font-family:var(--font-data);font-size:var(--fs-13);font-weight:600;color:var(--z-ink);background:transparent;border:0;
+border-radius:999px;padding:0 18px;min-height:40px;cursor:pointer}
+.seg button:hover{background:#fff}
+.seg button[aria-pressed=true]{background:var(--z-ink);color:#fff}
+.seg button:focus-visible,.ctab button:focus-visible,.tfilter button:focus-visible{outline:3px solid var(--z-focus);outline-offset:2px}
+.cview[hidden],.ctab[hidden],.tfilter[hidden],.tsort[hidden]{display:none}
+.tablewrap{container-type:inline-size}
+.ctab{width:100%;border-collapse:separate;border-spacing:0 2px;font-family:var(--font-data);font-size:var(--fs-16);margin-top:var(--sp-4)}
+.ctab th{text-align:left;font-size:var(--fs-13);font-weight:600;color:var(--z-mute);padding:0 var(--sp-3) var(--sp-2);white-space:nowrap}
+.ctab th button{font:inherit;color:inherit;background:none;border:0;padding:6px 0;cursor:pointer;text-decoration:underline;text-decoration-color:var(--z-line);text-underline-offset:4px}
+.ctab th[aria-sort=ascending] button::after{content:" ↑"}.ctab th[aria-sort=descending] button::after{content:" ↓"}
+.ctab th[aria-sort] button{color:var(--z-ink);text-decoration-color:var(--z-ink)}
+.ctab td{padding:8px var(--sp-3);background:#f3f1ea;vertical-align:middle}
+.ctab tr:nth-child(6n+1) td{background:#fff1c7}.ctab tr:nth-child(6n+2) td{background:#ebe4f7}.ctab tr:nth-child(6n+3) td{background:#dfebf5}
+.ctab tr:nth-child(6n+4) td{background:#e2f0e4}.ctab tr:nth-child(6n+5) td{background:#f7e6de}.ctab tr:nth-child(6n) td{background:#eeebe3}
+.ctab td.n{color:var(--z-mute);font-size:var(--fs-13);width:3.5em}
+.ctab .num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.ctab td.d{white-space:nowrap;color:var(--z-mute);font-size:var(--fs-13)}
+.ctab .who a{display:flex;gap:var(--sp-3);align-items:center;text-decoration:none;color:var(--z-ink);min-width:0}
+.ctab .who img{width:28px;height:28px;border-radius:50%;flex:none;background:#fff}
+.ctab .who span{min-width:0}.ctab .who b{display:block;font-weight:600;overflow-wrap:anywhere}
+.ctab .who small{display:block;font-size:var(--fs-13);color:var(--z-mute);overflow-wrap:anywhere}
+.ctab .who a:hover b{text-decoration:underline}
+.ctab td.repo a,.ctab td.corp a{color:var(--z-ink);font-family:var(--font-mono);font-size:var(--fs-13);overflow-wrap:anywhere}
+.tfilter{display:flex;flex-wrap:wrap;gap:var(--sp-3);align-items:center;background:#e7e5de;padding:var(--sp-3) var(--sp-4);margin:var(--sp-4) 0 0;font-family:var(--font-data)}
+.tfilter button,.tsort select{font-family:var(--font-data);font-size:var(--fs-13);font-weight:600;color:var(--z-ink);background:#fff;border:0;padding:.5em 1em;min-height:40px;cursor:pointer}
+.tsort{display:none;gap:var(--sp-2);align-items:center;font-family:var(--font-data);font-size:var(--fs-13);margin-top:var(--sp-4);color:var(--z-mute)}
+.ctab .hub{display:none}.ctab.hubon .hub{display:table-cell}
+@container (max-width:760px){.ctab .o2{display:none}}
+@container (max-width:520px){.ctab .o1,.ctab.hubon .o1{display:none}.ctab{font-size:var(--fs-13)}.ctab td{padding:8px}.ctab th{padding:0 8px 8px}
+.tsort:not([hidden]){display:flex}.ctab td.n{width:2.5em}}
+"""
+
+STYLE += TABLE_STYLE
+
+# One script for the switches, the "N others" tile and the sortable table.
+# Without JS the page is the People map, the first CHUNK table rows and the
+# plain pagers (list.<n>.html, repos.<n>.html). With JS: [People | Repos]
+# [Treemap | Table] switches (state in the URL hash), header-click sorting,
+# rank filters from the "N others" tile, and rows appended CHUNK at a time
+# as the "Showing" line nears the viewport. Sorting and filtering need every
+# row, so the first of those fetches all chunks (list.<n>.json / repos.<n>.json).
+TABLE_JS = """<script>
 (function(){
-  var wall=document.querySelector('.wall[data-chunks]');if(!wall)return;
-  var next=2,last=+wall.dataset.chunks,total=+wall.dataset.total,busy=false,io=null;
-  var more=document.getElementById('wallmore'),btn=more.querySelector('button'),st=more.querySelector('[data-st]');
-  var pg=document.querySelector('nav.pager');if(pg&&last>1)pg.hidden=true;
+  var bar=document.getElementById('vbar');if(!bar)return;bar.hidden=false;
+  function $(s,r){return (r||document).querySelector(s)}
   function fmt(n){return Number(n).toLocaleString('en-US')}
   function el(t,a,txt){var e=document.createElement(t);for(var k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e}
-  function tile(r){var l=r[0],a=el('a',{href:l+'.html','data-id':l.toLowerCase()});
-    a.appendChild(el('img',{src:'https://github.com/'+encodeURIComponent(l)+'.png?size=88',alt:'',loading:'lazy',width:'44',height:'44'}));
-    var d=el('div');d.appendChild(el('b',{},r[1]||l));
-    var s=el('span',{},'@'+l+' · '+r[2]+' corp'+(r[2]===1?'us':'ora')+(r[3]?' · '+fmt(r[3])+' lines':'')+' · GitHub ★ '+fmt(r[4]));
-    var hs=el('span',{'class':'hs'});hs.hidden=true;s.appendChild(hs);d.appendChild(s);a.appendChild(d);return a}
-  function done(){st.textContent='Showing '+fmt(wall.children.length)+' of '+fmt(total)+'.';
-    if(next>last){btn.hidden=true;if(io)io.disconnect();return}
-    if(io&&more.getBoundingClientRect().top<innerHeight+800)setTimeout(load,50)}
-  function load(){if(busy||next>last)return;busy=true;btn.disabled=true;
-    fetch('/contributors/list.'+next+'.json').then(function(r){if(!r.ok)throw r.status;return r.json()}).then(function(rows){
-      var f=document.createDocumentFragment();rows.forEach(function(r){f.appendChild(tile(r))});wall.appendChild(f);next++;
-      if(window.hubStarMark)window.hubStarMark(wall);busy=false;btn.disabled=false;done()
-    }).catch(function(){busy=false;btn.disabled=false;if(pg)pg.hidden=false;st.textContent='Could not load more here; use the pages below.'})}
-  if(last<2){done();return}
-  btn.hidden=false;btn.addEventListener('click',load);
-  if('IntersectionObserver' in window){io=new IntersectionObserver(function(e){if(e[0].isIntersecting)load()},{rootMargin:'0px 0px 800px 0px'});io.observe(more)}
-  done();
+  var tw=$('#table'),more=$('#wallmore'),btn=more.querySelector('button'),st=more.querySelector('[data-st]'),
+      flt=$('#tfilter'),sel=$('#tsort select'),io=null;
+  document.querySelectorAll('nav.pager').forEach(function(p){p.hidden=true});
+  var M={people:{t:$('table.ctab[data-mode=people]'),chunks:+tw.dataset.pchunks,total:+tw.dataset.ptotal,url:'/contributors/list.',
+          keys:['rank','who','stars','repos','corpora','lines','since'],idx:{rank:7,who:0,stars:4,repos:5,corpora:2,lines:3,since:6},
+          head:'All '+fmt(+tw.dataset.ptotal)+' contributors',rows:null},
+         repos:{t:$('table.ctab[data-mode=repos]'),chunks:+tw.dataset.rchunks,total:+tw.dataset.rtotal,url:'/contributors/repos.',
+          keys:['rank','repo','owner','stars','corpus'],idx:{rank:6,repo:0,owner:3,stars:2,corpus:5},
+          head:'All '+fmt(+tw.dataset.rtotal)+' repositories',rows:null}};
+  var S={mode:'people',view:'map',key:'rank',dir:1,from:0,list:null,shown:0,busy:false};
+  function av(l){return el('img',{src:'https://github.com/'+encodeURIComponent(l)+'.png?size=56',alt:'',loading:'lazy',decoding:'async',width:'28',height:'28'})}
+  function td(c,txt){return el('td',c?{'class':c}:{},txt)}
+  function ptr(r){var tr=el('tr',{'data-id':r[0].toLowerCase()});tr.appendChild(td('n',fmt(r[7])));
+    var c=td('who'),a=el('a',{href:r[0]+'.html'}),s=el('span');a.appendChild(av(r[0]));s.appendChild(el('b',{},r[1]||r[0]));
+    if(r[1])s.appendChild(el('small',{},'@'+r[0]));
+    a.appendChild(s);c.appendChild(a);tr.appendChild(c);
+    tr.appendChild(td('num',fmt(r[4])));tr.appendChild(td('num o1 hub hs',''));tr.appendChild(td('num o1',fmt(r[5])));tr.appendChild(td('num o1',fmt(r[2])));
+    tr.appendChild(td('num o2',r[3]?fmt(r[3]):'—'));tr.appendChild(td('o2 d',r[6]||'—'));return tr}
+  function rtr(r){var tr=el('tr');tr.appendChild(td('n',fmt(r[6])));
+    var c=td('repo');c.appendChild(el('a',{href:r[1]},r[0]));tr.appendChild(c);
+    c=td('who');var a=el('a',{href:r[4]?r[4]+'.html':'https://github.com/'+r[3]}),s=el('span');a.appendChild(av(r[3]));
+    s.appendChild(el('b',{},r[3]));a.appendChild(s);c.appendChild(a);tr.appendChild(c);
+    tr.appendChild(td('num',fmt(r[2])));c=td('o1 corp');
+    if(r[5])c.appendChild(el('a',{href:'../corpus/'+r[5]+'.html'},r[5]));else c.textContent='—';tr.appendChild(c);return tr}
+  function load(m){var d=M[m];if(d.rows)return Promise.resolve(d.rows);if(d.p)return d.p;
+    var ps=[];for(var i=1;i<=d.chunks;i++)ps.push(fetch(d.url+i+'.json').then(function(r){if(!r.ok)throw r.status;return r.json()}));
+    return d.p=Promise.all(ps).then(function(parts){var rows=[].concat.apply([],parts);
+      rows.forEach(function(r,i){r.push(i+1)});return d.rows=rows}).catch(function(e){d.p=null;throw e})}
+  function cmp(i,dir){return function(a,b){var x=a[i],y=b[i];
+    if(typeof x==='string'){x=x.toLowerCase();y=y.toLowerCase();if(x===y)return a[a.length-1]-b[b.length-1];
+      if(x==='')return 1;if(y==='')return -1;return x<y?-dir:dir}
+    return x===y?a[a.length-1]-b[b.length-1]:(x-y)*dir}}
+  function build(){var d=M[S.mode],rows=d.rows,rk=rows.length?rows[0].length-1:0;
+    var l=S.from?rows.filter(function(r){return r[rk]>=S.from}):rows.slice();
+    var i=d.idx[S.key];if(S.key==='who')i=0;
+    l.sort(cmp(S.key==='who'?(S.mode==='people'?0:0):i,S.dir));
+    if(S.mode==='people'&&S.key==='who')l.sort(function(a,b){var x=(a[1]||a[0]).toLowerCase(),y=(b[1]||b[0]).toLowerCase();return x===y?0:(x<y?-S.dir:S.dir)});
+    S.list=l;S.shown=0;var tb=d.t.tBodies[0];tb.textContent='';append()}
+  function append(){var d=M[S.mode],tb=d.t.tBodies[0],f=document.createDocumentFragment(),end=Math.min(S.list.length,S.shown+%(chunk)d);
+    for(var i=S.shown;i<end;i++)f.appendChild((S.mode==='people'?ptr:rtr)(S.list[i]));tb.appendChild(f);S.shown=end;
+    if(S.mode==='people'&&window.hubStarMark)window.hubStarMark(tb);status()}
+  function status(){var d=M[S.mode],n=S.list?S.list.length:d.total,sh=S.list?S.shown:d.t.tBodies[0].rows.length;
+    st.textContent='Showing '+fmt(sh)+' of '+fmt(n)+(S.from?' (ranks '+fmt(S.from)+'+)':'')+'.';btn.hidden=sh>=n;
+    if(!btn.hidden&&S.view==='table'&&more.getBoundingClientRect().top<innerHeight+800)setTimeout(next,50)}
+  function next(){if(S.busy)return;var d=M[S.mode];
+    if(S.list){if(S.shown<S.list.length)append();return}
+    S.busy=true;btn.disabled=true;load(S.mode).then(function(){S.busy=false;btn.disabled=false;
+      var keep=d.t.tBodies[0].rows.length;build();while(S.shown<=keep&&S.shown<S.list.length)append()}).catch(fail)}
+  function fail(){S.busy=false;btn.disabled=false;document.querySelectorAll('nav.pager[data-kind='+S.mode+']').forEach(function(p){p.hidden=false});
+    st.textContent='Could not load the rest here; use the pages below.'}
+  function marks(){M[S.mode].t.querySelectorAll('th').forEach(function(th){var b=th.querySelector('button');if(!b)return;
+      if(b.dataset.k===S.key)th.setAttribute('aria-sort',S.dir>0?'ascending':'descending');else th.removeAttribute('aria-sort')});
+    if(sel)sel.value=S.key+':'+S.dir}
+  function refresh(){marks();var d=M[S.mode];flt.hidden=!S.from;
+    if(S.from)flt.querySelector('[data-t]').textContent='Ranks '+fmt(S.from)+'–'+fmt(d.total)+': the “others” from the map.';
+    if(d.rows||S.from||S.key!=='rank'||S.dir!==1||S.mode==='repos'){st.textContent='Loading…';
+      S.busy=true;load(S.mode).then(function(){S.busy=false;build()}).catch(fail)}else{S.list=null;status()}}
+  function opts(){if(!sel)return;sel.textContent='';var d=M[S.mode];
+    d.t.querySelectorAll('th button').forEach(function(b){[1,-1].forEach(function(dir){
+      sel.appendChild(el('option',{value:b.dataset.k+':'+dir},b.textContent+(dir>0?' ↑':' ↓')))})})}
+  function show(){var mp=S.view==='map';
+    document.querySelectorAll('.tmwrap[data-mode]').forEach(function(w){w.hidden=!(mp&&w.dataset.mode===S.mode)});
+    tw.hidden=mp;M.people.t.hidden=S.mode!=='people';M.repos.t.hidden=S.mode!=='repos';$('#tableh').textContent=M[S.mode].head;
+    bar.querySelectorAll('button[data-mode]').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.mode===S.mode)});
+    bar.querySelectorAll('button[data-view]').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.view===S.view)});
+    var h=(S.mode==='repos'?'repos':'')+(S.view==='table'?(S.mode==='repos'?'-table':'table'):'');
+    try{history.replaceState(null,'',h?'#'+h:location.pathname+location.search)}catch(e){}
+    if(!mp){opts();refresh()}}
+  bar.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+    if(b.dataset.mode&&b.dataset.mode!==S.mode){S.mode=b.dataset.mode;S.from=0;S.key='rank';S.dir=1;S.list=null}
+    if(b.dataset.view)S.view=b.dataset.view;show()});
+  tw.addEventListener('click',function(e){var b=e.target.closest('th button');if(!b)return;var k=b.dataset.k;
+    if(S.key===k)S.dir=-S.dir;else{S.key=k;S.dir=(k==='stars'||k==='repos'||k==='corpora'||k==='lines')?-1:1}refresh()});
+  if(sel)sel.addEventListener('change',function(){var v=sel.value.split(':');S.key=v[0];S.dir=+v[1];refresh()});
+  flt.querySelector('button').addEventListener('click',function(){S.from=0;refresh()});
+  document.querySelectorAll('a.tmo').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();
+    var w=a.closest('.tmwrap').getBoundingClientRect().width,k=w>=1040?'l':(w>=680?'m':'s');
+    S.mode=a.dataset.mode;S.view='table';S.key='rank';S.dir=1;S.from=+a.dataset['from'+k.toUpperCase()]||+a.getAttribute('data-from-'+k);
+    S.list=null;show();tw.scrollIntoView({block:'start'})})});
+  btn.addEventListener('click',next);
+  if('IntersectionObserver' in window){io=new IntersectionObserver(function(e){if(e[0].isIntersecting&&S.view==='table'&&!btn.hidden)next()},{rootMargin:'0px 0px 800px 0px'});io.observe(more)}
+  var h=location.hash.slice(1);
+  if(h==='repos'||h==='repos-table'){S.mode='repos'}
+  if(h==='table'||h==='repos-table'||h==='list')S.view='table';
+  show();if(S.view==='map')status();
 })();
-</script>"""
+</script>""" % {"chunk": CHUNK}
 
 
-def wall_body(people, esc, live_slugs=()):
+def _map_items(order, people, vols):
+    return [{"names": ([people[l]["name"], l] if people[l]["name"] and people[l]["name"] != l else [l]),
+             "stars": vols[l]["gh_stars"], "stars_txt": "★ " + _n(vols[l]["gh_stars"]), "href": f"{l}.html", "avatar": l,
+             "title": f'{people[l]["name"] or l} (@{l}) · GitHub ★ {_n(vols[l]["gh_stars"])} across {vols[l]["repos"]} repo{"" if vols[l]["repos"] == 1 else "s"}'}
+            for l in order]
+
+
+def _repo_items(repos):
+    return [{"names": [e["repo"], e["repo"].split("/", 1)[-1]], "stars": e["stars"], "stars_txt": "★ " + _n(e["stars"]),
+             "href": (f'../corpus/{e["corpus"]}.html' if e["corpus"] else f'{e["owner_page"] or e["by"]}.html'),
+             "avatar": e["owner"], "title": f'{e["repo"]} · GitHub ★ {_n(e["stars"])}' + (f' · corpus {e["corpus"]}' if e["corpus"] else "")}
+            for e in repos]
+
+
+def _cap(what, unit):
+    def cap(info):
+        names = {"l": "this width", "m": "this width", "s": "this width"}
+        parts = "".join(f'<span class="on-{k}" hidden>The map at {names[k]} shows {v[1]:,} {what}: the top {v[0]} squarified (area proportional to {unit}), '
+                        f'then rows where every tile is wide enough for its name and the rest of each row is shared out by stars. '
+                        f'The last tile holds the other {v[2]:,} and opens them in the table.</span>' for k, v in info.items())
+        return f'<p class="tmcap">{parts}</p>'
+    return cap
+
+
+def wall_body(people, esc, live_slugs=(), pages=()):
     vols = {l: volume(pp, live_slugs) for l, pp in people.items()}
     order = wall_order(people, vols)
+    repos = repo_index(people, pages)
     n_pages = max(1, -(-len(order) // CHUNK))
-    first = "".join(wall_tile(l, people[l], vols[l], esc) for l in order[:CHUNK])
-    items = [{"login": l, "name": people[l]["name"] or l, "stars": vols[l]["gh_stars"],
-              "stars_txt": "★ " + _n(vols[l]["gh_stars"])} for l in order]
-    cap = lambda k: (f'<p class="tmcap">Each tile\'s area is proportional to the GitHub stars on that contributor\'s repositories '
-                     f'(the figure the list is sorted by). The top {k} are on the map; all {len(order):,} are in <a href="#list">the list below</a>.</p>')
-    tm, _ = treemap.render(items, esc, lambda l: f"{l}.html", cap)
-    repos = len({w["repo_url"].lower() for pp in people.values() for w in pp["work"].values()})
+    r_pages = max(1, -(-len(repos) // CHUNK))
+    first = "".join(people_tr(i + 1, l, people[l], vols[l], esc) for i, l in enumerate(order[:CHUNK]))
+    pmap, _ = treemap.render(_map_items(order, people, vols), esc, "people", _cap("contributors", "the GitHub stars on their repositories"), len(order))
+    rmap, _ = treemap.render(_repo_items(repos), esc, "repos", _cap("repositories", "each repository's GitHub stars"), len(repos))
+    n_repos = len({w["repo_url"].lower() for pp in people.values() for w in pp["work"].values()})
     corpora = len({c for pp in people.values() for c in pp["corpora"]})
+    sort_opts = '<label class="tsort" id="tsort">Sort by <select></select></label>'
     return f"""<main class="cwrap"><section class="whead"><h1>The people behind the hub</h1>
-<p>{len(people):,} developers agreed to let AI agents learn from their work: {repos:,} repositories across {corpora:,} corpora, each included with the author's permission,
-under its own licence, with attribution. Sorted by GitHub stars on their repositories; hub stars are the ones visitors give here. Every source is still in licence review; none is live yet unless its card says so.</p>
+<p>{len(people):,} developers agreed to let AI agents learn from their work: {n_repos:,} repositories across {corpora:,} corpora, each included with the author's permission,
+under its own licence, with attribution. Ranked by GitHub stars on their repositories; hub stars are the ones visitors give here. Every source is still in licence review; none is live yet unless its card says so.</p>
 <a class="cta" href="../contribute.html">Add yours</a></section>
-<section class="tmwrap" aria-labelledby="tmh"><h2 id="tmh" class="wallh">Top contributors by GitHub stars</h2>{tm}</section>
-<h2 id="list" class="wallh">All {len(order):,} contributors</h2>
-<div class="wall" data-stars="contributor" data-chunks="{n_pages}" data-total="{len(order)}">{first}</div>
+<div class="vbar" id="vbar" hidden><div class="seg" role="group" aria-label="Map tiles"><button type="button" data-mode="people" aria-pressed="true">People</button><button type="button" data-mode="repos" aria-pressed="false">Repos</button></div>
+<div class="seg" role="group" aria-label="View"><button type="button" data-view="map" aria-pressed="true">Treemap</button><button type="button" data-view="table" aria-pressed="false">Table</button></div></div>
+<section class="tmwrap" data-mode="people" aria-labelledby="tmh"><h2 id="tmh" class="wallh">Contributors by GitHub stars</h2>{pmap}</section>
+<section class="tmwrap" data-mode="repos" aria-labelledby="tmr" hidden><h2 id="tmr" class="wallh">Repositories by GitHub stars</h2>{rmap}</section>
+<section class="cview tablewrap" id="table" data-pchunks="{n_pages}" data-ptotal="{len(order)}" data-rchunks="{r_pages}" data-rtotal="{len(repos)}">
+<h2 id="tableh" class="wallh">All {len(order):,} contributors</h2>
+<p class="tfilter" id="tfilter" hidden><span data-t></span><button type="button">Show everyone</button></p>{sort_opts}
+<table class="ctab" data-mode="people" data-stars="contributor">{thead(PEOPLE_COLS)}<tbody>{first}</tbody></table>
+<table class="ctab" data-mode="repos" hidden>{thead(REPO_COLS)}<tbody></tbody></table>
 <p class="wallmore" id="wallmore" aria-live="polite"><span data-st>Showing {min(CHUNK, len(order)):,} of {len(order):,}.</span><button type="button" hidden>Load more</button></p>
-{pager(n_pages, 1)}</main>{STARS_JS}{WALL_JS}"""
+{pager(n_pages, 1)}{pager(r_pages, 0, "repos")}</section></main>{STARS_JS}{TABLE_JS}"""
 
 
-def wall_chunks(people, esc, live_slugs=()):
-    """[(n, rows, html_body)] for n = 2.. : list.<n>.json and list.<n>.html."""
+def wall_chunks(people, esc, live_slugs=(), pages=()):
+    """[(file stem, rows, html_body)]: list.<n> for n = 1.. (list.1.html is
+    not written: index.html is page 1) and repos.<n> for n = 1..; each
+    .json feeds TABLE_JS, each .html is the plain no-JS table page."""
     vols = {l: volume(pp, live_slugs) for l, pp in people.items()}
     order = wall_order(people, vols)
+    repos = repo_index(people, pages)
     n_pages = max(1, -(-len(order) // CHUNK))
+    r_pages = max(1, -(-len(repos) // CHUNK))
     out = []
-    for n in range(2, n_pages + 1):
+    for n in range(1, n_pages + 1):
         part = order[(n - 1) * CHUNK:n * CHUNK]
-        tiles = "".join(wall_tile(l, people[l], vols[l], esc) for l in part)
-        body = (f'<main class="cwrap"><p><a class="backlink" href="index.html">&larr; the star map and the full list</a></p>'
+        trs = "".join(people_tr((n - 1) * CHUNK + i + 1, l, people[l], vols[l], esc) for i, l in enumerate(part))
+        body = (f'<main class="cwrap"><p><a class="backlink" href="index.html">&larr; the star map and the full table</a></p>'
                 f'<section class="whead"><h1>Contributors, page {n} of {n_pages}</h1>'
-                f'<p>Contributors {(n - 1) * CHUNK + 1:,} to {(n - 1) * CHUNK + len(part):,} of {len(order):,}, sorted by GitHub stars on their repositories.</p></section>'
-                f'<div class="wall" data-stars="contributor">{tiles}</div>{pager(n_pages, n)}</main>{STARS_JS}')
-        out.append((n, [wall_row(l, people[l], vols[l]) for l in part], body))
+                f'<p>Contributors {(n - 1) * CHUNK + 1:,} to {(n - 1) * CHUNK + len(part):,} of {len(order):,}, ranked by GitHub stars on their repositories.</p></section>'
+                f'<div class="tablewrap"><table class="ctab" data-stars="contributor">{thead(PEOPLE_COLS, False)}<tbody>{trs}</tbody></table></div>'
+                f'{pager(n_pages, n)}{pager(r_pages, 0, "repos")}</main>{STARS_JS}')
+        out.append((f"list.{n}", [wall_row(l, people[l], vols[l]) for l in part], body if n > 1 else None))
+    for n in range(1, r_pages + 1):
+        part = repos[(n - 1) * CHUNK:n * CHUNK]
+        trs = "".join(repo_tr((n - 1) * CHUNK + i + 1, e, esc) for i, e in enumerate(part))
+        body = (f'<main class="cwrap"><p><a class="backlink" href="index.html#repos">&larr; the repository map and the full table</a></p>'
+                f'<section class="whead"><h1>Repositories, page {n} of {r_pages}</h1>'
+                f'<p>Repositories {(n - 1) * CHUNK + 1:,} to {(n - 1) * CHUNK + len(part):,} of {len(repos):,} pinned repositories with a recorded GitHub star count, most stars first.</p></section>'
+                f'<div class="tablewrap"><table class="ctab">{thead(REPO_COLS, False)}<tbody>{trs}</tbody></table></div>'
+                f'{pager(r_pages, n, "repos")}{pager(n_pages, 0)}</main>')
+        out.append((f"repos.{n}", [repo_row(e) for e in part], body))
     return out
 
 
@@ -782,12 +1002,16 @@ def generate(out, hub_dir, page, esc, live_slugs, registry=None, people=None, up
                     candidate_body(slug, e, esc, people), rel="../")
         (pathlib.Path(out) / "corpus" / f"{slug}.html").write_text(html)
     (d / "stars-targets.json").write_text(json.dumps(stars_targets(people, registry), separators=(",", ":")))
-    html = page("Contributors: XERJ Corpus Hub", "The developers whose work AI agents retrieve from the XERJ Corpus Hub", wall_body(people, esc, live_slugs), rel="../")
+    html = page("Contributors: XERJ Corpus Hub", "The developers whose work AI agents retrieve from the XERJ Corpus Hub", wall_body(people, esc, live_slugs, pages), rel="../")
     (d / "index.html").write_text(og(html, "The people behind the XERJ Corpus Hub", "Developers who agreed to let AI agents learn from their work",
                                      f"{SITE}/contributors/", "https://github.com/xerj-org.png"))
-    for n, rows, body in wall_chunks(people, esc, live_slugs):
-        (d / f"list.{n}.json").write_text(json.dumps(rows, separators=(",", ":"), ensure_ascii=False))
-        html = page(f"Contributors, page {n}: XERJ Corpus Hub", "The developers whose work AI agents retrieve from the XERJ Corpus Hub", body, rel="../")
-        (d / f"list.{n}.html").write_text(og(html, f"Contributors, page {n}: XERJ Corpus Hub", "Developers who agreed to let AI agents learn from their work",
-                                             f"{SITE}/contributors/list.{n}.html", "https://github.com/xerj-org.png"))
+    for stem, rows, body in wall_chunks(people, esc, live_slugs, pages):
+        (d / f"{stem}.json").write_text(json.dumps(rows, separators=(",", ":"), ensure_ascii=False))
+        if body is None:
+            continue
+        what = "Contributors" if stem.startswith("list.") else "Repositories"
+        n = stem.split(".")[1]
+        html = page(f"{what}, page {n}: XERJ Corpus Hub", "The developers whose work AI agents retrieve from the XERJ Corpus Hub", body, rel="../")
+        (d / f"{stem}.html").write_text(og(html, f"{what}, page {n}: XERJ Corpus Hub", "Developers who agreed to let AI agents learn from their work",
+                                           f"{SITE}/contributors/{stem}.html", "https://github.com/xerj-org.png"))
     return len(people)

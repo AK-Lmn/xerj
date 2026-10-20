@@ -340,8 +340,11 @@ class TreemapTest(unittest.TestCase):
     """The /contributors/ star treemap (treemap.py)."""
 
     def _items(self, stars):
-        return [{"login": f"user{i}", "name": f"User Number {i}", "stars": s, "stars_txt": f"★ {s:,}"}
-                for i, s in enumerate(stars)]
+        return [{"names": [f"User Number {i}", f"user{i}"], "stars": s, "stars_txt": f"★ {s:,}", "href": f"user{i}.html",
+                 "avatar": f"user{i}", "title": f"user{i}"} for i, s in enumerate(stars)]
+
+    # long tail like the real data: a few huge, a long run of small ones
+    TAIL = [400000, 300000] + [50000 - 900 * i for i in range(50)] + [5000 - 4 * i for i in range(300)] + [300] * 300 + [3] * 400 + [0] * 5
 
     def test_squarify_areas_are_proportional_and_fill_the_box(self):
         import treemap
@@ -357,20 +360,48 @@ class TreemapTest(unittest.TestCase):
                 self.assertLessEqual(y + h, 720 + 1e-6)
             self.assertAlmostEqual(sum(w * h for _, _, w, h in rects), 1040 * 720, places=3)
 
-    def test_every_tile_fits_a_14px_one_line_name(self):
+    def test_every_top_tile_fits_a_14px_one_line_name(self):
         import treemap
-        # long tail like the real data: one huge, many tiny
-        items = self._items([400000, 300000] + [50000 - 900 * i for i in range(50)] + [3] * 400 + [0] * 5)
-        for key, W, H, aspect, _ in treemap.LAYOUTS:
+        items = self._items(self.TAIL)
+        for key, W, H, aspect, _, _ in treemap.LAYOUTS:
             tiles = treemap.fit(items, W, H, aspect)
             self.assertTrue(tiles, key)
-            self.assertLess(len(tiles), len(items))        # the tail is cut, not squeezed
-            self.assertEqual([t[0]["login"] for t in tiles], [i["login"] for i in items[:len(tiles)]])
+            self.assertLess(len(tiles), len(items))        # the rest goes to the flow tail, not squeezed
+            self.assertEqual([t[0]["href"] for t in tiles], [i["href"] for i in items[:len(tiles)]])
             for it, (x, y, w, h), lab in tiles:
                 self.assertGreaterEqual(lab["fs"], 14)
                 self.assertGreaterEqual(h - treemap.GAP, treemap.MIN_H)
                 self.assertLessEqual(treemap.text_w(lab["text"], lab["fs"]), w - treemap.GAP)
-                self.assertIn(lab["text"], (it["name"], it["login"]))
+                self.assertIn(lab["text"], it["names"])
+
+    def test_render_shows_up_to_the_cap_then_one_others_tile(self):
+        # owner request: ~800 readable tiles, then one "N others" tile opening the table
+        import treemap
+        items = self._items(self.TAIL)
+        html, info = treemap.render(items, gen.esc, "people", total=len(items))
+        self.assertEqual(set(info), {"l", "m", "s"})
+        pos = sum(1 for s in self.TAIL if s > 0)
+        for key, _, _, _, cap, _ in treemap.LAYOUTS:
+            top, shown, others = info[key]
+            self.assertEqual(shown, min(cap, pos))
+            self.assertEqual(others, len(items) - shown)
+            self.assertIn(f'data-from-{key}="{shown + 1}"', html)
+            self.assertIn(f"{others:,} others", html)
+        self.assertEqual(html.count('class="tmo"'), 1)
+        # each rank is drawn once per layout: band 0 or the tail (tail tiles hidden where band 0 has them)
+        l_top, l_shown, _ = info["l"]
+        tail = re.findall(r'<li class="([^"]*)" style="flex-grow', html)
+        self.assertEqual(sum(1 for c in tail if "tmx-l" not in c), l_shown - l_top)
+        self.assertNotIn("<script", html)
+        self.assertIn('loading="lazy"', html)
+
+    def test_tail_tiles_are_never_narrower_than_their_label(self):
+        import treemap
+        css = treemap.STYLE
+        self.assertIn("flex-basis:auto", css)                  # a flex item is at least its content wide...
+        self.assertIn("white-space:nowrap", css)               # ...and the label never wraps
+        self.assertIn(f"font-size:{treemap.XS_FONT}px", css)
+        self.assertGreaterEqual(treemap.XS_FONT, 12)
 
     def test_tiles_have_no_borders_or_shadows(self):
         # owner review of #1955: tiles are separated by a gap of page background only
@@ -378,23 +409,19 @@ class TreemapTest(unittest.TestCase):
         self.assertEqual(treemap.BORDER, 0)
         self.assertGreaterEqual(treemap.GAP, 2)
         css = treemap.STYLE
-        self.assertIn(".tmap li{position:absolute;overflow:hidden;border:0}", css)
+        self.assertIn(".tmap li{position:absolute;overflow:hidden;border:0;", css)
+        import contributors
         for bad in ("box-shadow", "gradient", "solid rgba"):
             self.assertNotIn(bad, css)
+            self.assertNotIn(bad, contributors.TABLE_STYLE)
 
-    def test_tile_colours_are_aaa(self):
+    def test_tile_and_table_colours_are_aaa(self):
         import treemap
-        for bg in treemap.TINTS:
+        import contributors
+        tints = set(treemap.TINTS) | {treemap.OTHER_TINT} | set(re.findall(r"background:(#[0-9a-f]{6})", contributors.TABLE_STYLE))
+        for bg in tints:
             self.assertGreaterEqual(_contrast(treemap.INK, bg), 7.0, bg)
             self.assertGreaterEqual(_contrast(treemap.MUTE, bg), 7.0, bg)
-
-    def test_render_links_profiles_and_lazy_avatars(self):
-        import treemap
-        html, shown = treemap.render(self._items([900, 500, 300, 100]), gen.esc, lambda l: f"{l}.html")
-        self.assertEqual(set(shown), {"l", "m", "s"})
-        self.assertIn('href="user0.html"', html)
-        self.assertIn('loading="lazy"', html)
-        self.assertNotIn("<script", html)
 
 
 class SiteLinksTest(unittest.TestCase):
@@ -457,19 +484,55 @@ class SiteLinksTest(unittest.TestCase):
         import contributors
         d = self.out / "contributors"
         html = (d / "index.html").read_text()
-        first = re.findall(r'<a href="([^"]+)\.html" data-id=', html.split('class="wall"', 1)[1])
+        people = html.split('<table class="ctab" data-mode="people"', 1)[1].split("</table>", 1)[0]
+        first = re.findall(r'<td class="who"><a href="([^"]+)\.html">', people)
         self.assertEqual(len(first), contributors.CHUNK)
-        rest = []
+        logins = []
         for f in sorted(d.glob("list.*.json"), key=lambda p: int(p.name.split(".")[1])):
             rows = json.loads(f.read_text())
             self.assertLessEqual(len(rows), contributors.CHUNK)
-            rest += [r[0] for r in rows]
-            self.assertTrue((d / f.name.replace(".json", ".html")).is_file())   # crawlable twin
-        logins = first + rest
+            self.assertTrue(all(len(r) == 7 for r in rows))
+            logins += [r[0] for r in rows]
+            if f.name != "list.1.json":                                     # index.html is page 1
+                self.assertTrue((d / f.name.replace(".json", ".html")).is_file())   # crawlable twin
+        self.assertEqual(logins[:contributors.CHUNK], first)
         self.assertEqual(len(logins), len(set(logins)))
         self.assertTrue(all((d / f"{l}.html").is_file() for l in logins))
+        stars = [r[4] for r in json.loads((d / "list.1.json").read_text())]
+        self.assertEqual(stars, sorted(stars, reverse=True))
         self.assertIn('class="pager"', html)                                   # plain links without JS
-        self.assertIn('class="tmap"', html)
+        self.assertIn('class="tmap tm tm-l"', html)
+        # hub stars sit in their own Hub ★ column, filled by STARS_JS, not as a '· hub ★ n' line under the name
+        self.assertIn('<th scope="col" class="num o1 hub">Hub ★</th>', html)
+        self.assertEqual(people.count('<td class="num o1 hub hs"></td>'), contributors.CHUNK)
+        self.assertNotIn("· hub ★", contributors.STARS_JS + contributors.TABLE_JS)
+
+    def test_repos_mode_map_and_table_cover_every_starred_repo_once(self):
+        # owner request: People | Repos switch; Repos = one tile / row per distinct indexed repo
+        import contributors
+        d = self.out / "contributors"
+        html = (d / "index.html").read_text()
+        for needle in ('data-mode="people" aria-pressed="true"', 'data-mode="repos"', 'data-view="map"', 'data-view="table"',
+                       '<section class="tmwrap" data-mode="repos"', '<table class="ctab" data-mode="repos"', 'th scope="col"'):
+            self.assertIn(needle, html)
+        rows = []
+        for f in sorted(d.glob("repos.*.json"), key=lambda p: int(p.name.split(".")[1])):
+            rows += json.loads(f.read_text())
+            self.assertTrue((d / f.name.replace(".json", ".html")).is_file())
+        urls = [r[1].rstrip("/").lower() for r in rows]
+        self.assertEqual(len(urls), len(set(urls)))
+        total, n = contributors.pinned_repo_stars(contributors.load(gen.HUB, gen.load_registry()))
+        self.assertEqual(len(rows), n)
+        self.assertEqual(sum(r[2] for r in rows), total)
+        self.assertEqual([r[2] for r in rows], sorted((r[2] for r in rows), reverse=True))
+        for r in rows:
+            if r[5]:
+                self.assertTrue((self.out / "corpus" / f"{r[5]}.html").is_file(), r)
+            if r[4]:
+                self.assertTrue((d / f"{r[4]}.html").is_file(), r)
+        repos_map = html.split('<section class="tmwrap" data-mode="repos"', 1)[1].split("</section>", 1)[0]
+        self.assertIn('class="tmo"', repos_map)
+        self.assertIn("others", repos_map)
 
     def test_home_stats_are_stars_and_contributors(self):
         # owner request: "registry rows" / "live corpora" replaced by real numbers
