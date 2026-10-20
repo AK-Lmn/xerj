@@ -86,6 +86,11 @@ pub const EXIT_NEEDS_DECISION: i32 = 4;
 /// A pull was refused because this build has no hub public key: not a pack that
 /// failed verification ([`EXIT_UNVERIFIED`]) but one that cannot be judged at all.
 pub const EXIT_NO_KEY: i32 = 5;
+/// The hub catalogue could not be loaded (the hub is unreachable, serves no signed
+/// catalogue, or `--offline` has no cached one). Not [`EXIT_NO_ANSWER`]: that one
+/// says "the hub has nothing for this question", which an agent reads as an answer
+/// about the corpus, while this one is about the hub itself and is worth a retry.
+pub const EXIT_HUB_UNAVAILABLE: i32 = 6;
 
 /// Printed (stderr) when the router finds nothing credible.
 pub const NO_CORPUS_MESSAGE: &str = "no hub corpus matches; see xerj.org/llms.txt";
@@ -273,9 +278,10 @@ pub struct AskDeps<'a> {
 // ── step 1: mode ─────────────────────────────────────────────────────────────
 
 /// Decide the answer mode and the symbol (for `Def`). `--def` / `--how` /
-/// `--files` win; otherwise a question that is one identifier, or that matches
-/// `what is the (exact )?value of (\w+)`, is a definition lookup, and anything
-/// else is a how-does-it-work question.
+/// `--files` win; otherwise a question that is one identifier, that matches
+/// `what is the (exact )?value of (\w+)`, or that asks `what is <SYMBOL>` /
+/// `what's <SYMBOL>` about a code-shaped name ([`looks_like_code_symbol`]), is a
+/// definition lookup, and anything else is a how-does-it-work question.
 pub fn detect_mode(question: &str, requested: &ModeRequest) -> (AnswerMode, Option<String>) {
     match requested {
         ModeRequest::Def(sym) => (AnswerMode::Def, Some(sym.clone())),
@@ -307,6 +313,7 @@ fn is_identifier(s: &str) -> bool {
 /// The symbol in `what is the (exact )?value of (\w+)`, matched anywhere in the
 /// question and case-insensitively on the fixed words (a sentence starts with a
 /// capital); the symbol keeps its own case.
+/// Failing that, the code-shaped symbol in `what is <SYMBOL>` / `what's <SYMBOL>`.
 fn value_of_symbol(q: &str) -> Option<String> {
     // ASCII lowercasing keeps every byte offset, so `pos` indexes `q` too.
     let lower = q.to_ascii_lowercase();
@@ -321,7 +328,36 @@ fn value_of_symbol(q: &str) -> Option<String> {
             }
         }
     }
+    // `what is LZ4_VERSION_RELEASE in lz4?` — the plain form, but only for a
+    // name that is visibly code: `what is compression` stays a how question.
+    for lead in ["what is ", "what's "] {
+        if let Some(pos) = lower.find(lead) {
+            let sym: String = q[pos + lead.len()..]
+                .chars()
+                .skip_while(|c| *c == '`')
+                .take_while(|c| c.is_alphanumeric() || *c == '_')
+                .collect();
+            if looks_like_code_symbol(&sym) {
+                return Some(sym);
+            }
+        }
+    }
     None
+}
+
+/// A word that can only be a code identifier, not prose: an identifier with an
+/// underscore (`LZ4_VERSION_RELEASE`, `max_len`), or mixed case past its first
+/// letter (`HashMap`, `readFile`). `LZ4`, `Snappy` and `compression` are not —
+/// they read as names or words, and a def lookup on them would miss.
+fn looks_like_code_symbol(s: &str) -> bool {
+    if !is_identifier(s) {
+        return false;
+    }
+    let has_word_char = s.chars().any(|c| c.is_ascii_alphanumeric());
+    let underscored = s.contains('_') && has_word_char;
+    let mixed_case = s.chars().any(|c| c.is_ascii_lowercase())
+        && s.chars().skip(1).any(|c| c.is_ascii_uppercase());
+    underscored || mixed_case
 }
 
 // ── step 4/5: the pull policy ────────────────────────────────────────────────
@@ -575,12 +611,13 @@ pub fn ask(args: &AskArgs, deps: &AskDeps<'_>) -> AskOutcome {
     };
     // The pull policy is decided FIRST, before anything about how this run was asked
     // to behave. Whether a pack may be pulled at all does not depend on `--offline`
-    // or `--no-fetch`; and what is printed below must never be a command that
-    // `xerj hub pull` refuses — or, for an excluded licence class, a way round
-    // "never pulled". (The offline branch used to run before the policy and print
-    // `run: xerj hub pull <slug>` for an excluded corpus; `hub pull` itself had no
-    // licence check, so an agent that followed the hint pulled it.) An excluded
-    // corpus and an oversize pack get a plain no.
+    // or `--no-fetch`. An EXCLUDED corpus is never pulled, so no command is printed
+    // for it — a `run: xerj hub pull <slug>` would be a way round "never pulled"
+    // (the offline branch used to run before the policy and print exactly that; the
+    // pull had no licence check, so an agent that followed the hint pulled it). An
+    // OVERSIZE pack is different: a question does not drag it down automatically,
+    // but `xerj hub pull <slug>` fetches it explicitly, so its message names that
+    // command — the same hint an allowed pack gets.
     match pull_policy(entry) {
         PullPolicy::Excluded => {
             out.stderr.push(format!(
@@ -593,8 +630,9 @@ pub fn ask(args: &AskArgs, deps: &AskDeps<'_>) -> AskOutcome {
         }
         PullPolicy::TooLarge => {
             out.stderr.push(format!(
-                "'{shown}' is {} MB, over the {} MB limit for pulling a pack, so it is not \
-                 downloaded; no hosted answer is available",
+                "'{shown}' is {} MB, over the {} MB auto-pull cap, so a question does not \
+                 download it automatically and no hosted answer is available; run \
+                 `xerj hub pull {shown}` to fetch it once, then ask again",
                 megabytes(entry.pack_bytes),
                 megabytes(AUTO_PULL_MAX_BYTES)
             ));
@@ -883,12 +921,14 @@ fn finish_hosted(
                     }
                 }
             }
-            // No command to run for these: `xerj hub pull` refuses both.
+            // An oversize pack is not auto-pulled, but `xerj hub pull` fetches it
+            // explicitly, so the note names that command; an excluded one it refuses.
             PullPolicy::TooLarge => notes.push(format!(
-                "the pack is {} MB, over the {} MB limit for pulling a pack: this answer is \
-                 from the hosted hub only",
+                "the pack is {} MB, over the {} MB auto-pull cap, so this answer is from the \
+                 hosted hub; run `xerj hub pull {}` to fetch it for local answers",
                 megabytes(e.pack_bytes),
-                megabytes(AUTO_PULL_MAX_BYTES)
+                megabytes(AUTO_PULL_MAX_BYTES),
+                printable(&e.slug)
             )),
             PullPolicy::Excluded => notes.push(format!(
                 "excluded licence ({}): this corpus is never pulled",
@@ -1471,8 +1511,11 @@ impl Backend for RealBackend {
         // Everything that can refuse this pull — the licence policy, the size cap, a
         // malformed slug or pin, no key to verify with — is decided BEFORE a node is
         // started for it. A pull that is going to be refused must not first boot a
-        // whole node.
-        let plan = cli::plan_pull_entry(entry).map_err(|e| PullFailure {
+        // whole node. This is the AUTOMATIC path (a question triggered it), so the
+        // ceiling is the 50 MiB auto-pull cap, not the disk budget an explicit
+        // `xerj hub pull` uses: `pull_policy` already kept a larger pack off this
+        // path, and the cap here is the backstop that keeps it off.
+        let plan = cli::plan_pull_entry(entry, AUTO_PULL_MAX_BYTES).map_err(|e| PullFailure {
             code: e.code,
             message: format!("pull of '{}' failed: {}", printable(&entry.slug), e.message),
         })?;
@@ -1585,8 +1628,13 @@ pub fn run_ask_with(
             Ok(c) => c,
             Err(e) => {
                 return AskOutcome::fail(
-                    EXIT_NO_ANSWER,
-                    format!("cannot load the hub catalogue: {e:#}"),
+                    EXIT_HUB_UNAVAILABLE,
+                    format!(
+                        "cannot load the hub catalogue: {e:#}\n\
+                         (exit {EXIT_HUB_UNAVAILABLE}: the hub itself is unavailable; this says nothing about \
+                         whether a corpus holds the answer. Retry later, point XERJ_HUB_URL at a working hub, \
+                         or ask with --offline once a catalogue is cached.)"
+                    ),
                 )
             }
         }
@@ -2050,6 +2098,36 @@ mod tests {
         }
     }
 
+    /// FTX shell-less trial (2026-10-17): an agent asked `What is
+    /// LZ4_VERSION_RELEASE in lz4?` — a definition question in the plain form —
+    /// and got a how-mode search. A code-shaped name after `what is` / `what's` is
+    /// a definition lookup; a word or a product name is not.
+    #[test]
+    fn mode_is_def_for_what_is_a_code_shaped_symbol() {
+        let auto = ModeRequest::Auto;
+        for (q, sym) in [
+            ("What is LZ4_VERSION_RELEASE in lz4?", "LZ4_VERSION_RELEASE"),
+            ("what is ZSTD_CLEVEL_DEFAULT", "ZSTD_CLEVEL_DEFAULT"),
+            ("what's `max_len` in quinn?", "max_len"),
+            ("In std, what is HashMap?", "HashMap"),
+        ] {
+            assert_eq!(
+                detect_mode(q, &auto),
+                (AnswerMode::Def, Some(sym.to_string())),
+                "{q}"
+            );
+        }
+        for q in [
+            "what is compression",
+            "What is LZ4?",
+            "what is Snappy's framing format",
+            "what is the difference between lz4 and zstd",
+            "what is _",
+        ] {
+            assert_eq!(detect_mode(q, &auto), (AnswerMode::How, None), "{q:?}");
+        }
+    }
+
     #[test]
     fn mode_is_how_for_prose_and_flags_force_the_rest() {
         let auto = ModeRequest::Auto;
@@ -2259,7 +2337,7 @@ mod tests {
     }
 
     #[test]
-    fn a_pack_over_the_limit_is_not_pulled_and_the_message_names_its_size() {
+    fn a_pack_over_the_limit_is_not_auto_pulled_but_the_note_names_the_explicit_pull() {
         let rig = Rig::new();
         let sixty_mib = 60 * 1024 * 1024;
         let cat = catalogue(vec![lz4(sixty_mib, LicenceClass::AdaptWithAttribution)]);
@@ -2271,21 +2349,21 @@ mod tests {
             &backend,
         );
         assert_eq!(out.exit, EXIT_OK);
+        // A question still does not AUTO-pull an oversize pack ...
         assert!(!backend.called("pull_"), "{:?}", backend.calls());
-        // The note names the size, and is in the structured answer too ...
+        // ... the note names the size and says the answer is from the hosted hub ...
         assert!(out.stdout.contains("60.0 MB"), "{}", out.stdout);
         let ans = out.answer.unwrap();
         assert!(
             ans.warnings
                 .iter()
-                .any(|w| w.contains("60.0 MB") && w.contains("hosted hub only")),
+                .any(|w| w.contains("60.0 MB") && w.contains("hosted hub")),
             "{:?}",
             ans.warnings
         );
-        // ... but it is not a command: `xerj hub pull` refuses an oversize pack, so
-        // a `run:` line would send the reader to a command that fails.
-        assert!(!out.stdout.contains("xerj hub pull"), "{}", out.stdout);
-        assert!(!out.stdout.contains("run:"), "{}", out.stdout);
+        // ... and, now that an explicit pull fetches an oversize pack, it names
+        // `xerj hub pull` so the reader can get local answers.
+        assert!(out.stdout.contains("xerj hub pull lz4"), "{}", out.stdout);
     }
 
     #[test]
@@ -2441,7 +2519,8 @@ mod tests {
     #[test]
     fn the_policy_also_binds_the_synchronous_pull() {
         let rig = Rig::new();
-        // Over the limit: no pull, the message names the size and the command.
+        // Over the cap: no AUTOMATIC pull, but the message names the size and the
+        // explicit command that does fetch it.
         let cat = catalogue(vec![lz4(
             80 * 1024 * 1024,
             LicenceClass::AdaptWithAttribution,
@@ -2452,8 +2531,8 @@ mod tests {
         assert!(!backend.called("pull_now"), "{:?}", backend.calls());
         assert!(out.stderr[0].contains("80.0 MB"), "{:?}", out.stderr);
         assert!(
-            !out.stderr[0].contains("xerj hub pull") && !out.stderr[0].contains("run:"),
-            "no command for a pack `hub pull` refuses: {:?}",
+            out.stderr[0].contains("xerj hub pull lz4"),
+            "names the explicit pull for an over-cap pack: {:?}",
             out.stderr
         );
 
@@ -2523,7 +2602,10 @@ mod tests {
     }
 
     #[test]
-    fn offline_never_hints_a_pull_for_a_pack_over_the_limit() {
+    fn offline_names_the_explicit_pull_for_a_pack_over_the_cap() {
+        // An oversize pack is not auto-pulled, but `xerj hub pull` fetches it
+        // explicitly — so, like any pullable pack, the offline/no-fetch message
+        // names that command (it is the thing to run once back online).
         let rig = Rig::new();
         let cat = catalogue(vec![lz4(
             80 * 1024 * 1024,
@@ -2540,8 +2622,16 @@ mod tests {
             let out = rig.run(&a, &cat, None, &backend);
             assert_eq!(out.exit, EXIT_NO_ANSWER);
             assert!(out.stderr[0].contains("80.0 MB"), "{:?}", out.stderr);
-            no_pull_command(&out);
-            assert_eq!(backend.calls(), ["ready:lz4"]);
+            assert!(
+                out.stderr[0].contains("xerj hub pull lz4"),
+                "names the explicit pull: {:?}",
+                out.stderr
+            );
+            assert!(
+                !backend.called("pull_"),
+                "not auto-pulled: {:?}",
+                backend.calls()
+            );
         }
     }
 
@@ -2829,6 +2919,69 @@ mod tests {
             with_symbol_evidence(Routing::NoCorpus, &[]),
             Routing::NoCorpus
         );
+    }
+
+    /// FTX shell-less trial (2026-10-17): `xerj_hub_ask` with no `corpus` refused
+    /// "What is LZ4_VERSION_RELEASE in lz4?" and "How does snappy's decompressor
+    /// …?" with "no hub corpus matches" — while listing the very corpus the
+    /// question named as the closest. Neighbouring compression corpora share the
+    /// question's words (zstd's sources even mention lz4), so the sketch alone was
+    /// never decisive. The corpus the question names is.
+    #[test]
+    fn a_question_that_names_its_corpus_is_answered_from_it() {
+        let rig = Rig::new();
+        let shared = &[
+            "lz4",
+            "snappy",
+            "decompressor",
+            "literal",
+            "copy",
+            "element",
+        ];
+        let cat = catalogue(vec![
+            entry("lz4", 1024, LicenceClass::AdaptWithAttribution, shared),
+            entry("snappy", 1024, LicenceClass::AdaptWithAttribution, shared),
+            entry("zstd", 1024, LicenceClass::AdaptWithAttribution, shared),
+        ]);
+        for (q, slug, mode) in [
+            (
+                "What is LZ4_VERSION_RELEASE in lz4?",
+                "lz4",
+                AnswerMode::Def,
+            ),
+            (
+                "How does snappy's decompressor tell a literal element from a copy element?",
+                "snappy",
+                AnswerMode::How,
+            ),
+        ] {
+            let backend = FakeBackend::new(true);
+            let out = rig.run(&args(q, None), &cat, None, &backend);
+            assert_eq!(out.exit, EXIT_OK, "{q}: {:?}", out.stderr);
+            let ans = out.answer.expect("an answer");
+            assert_eq!(ans.corpus, slug, "{q}");
+            assert_eq!(ans.mode, mode, "{q}");
+            assert_eq!(
+                backend.calls(),
+                [format!("ready:{slug}"), format!("answer_local:{slug}")],
+                "{q}"
+            );
+        }
+
+        // Two corpora named: the asker picks, exactly as with two sketch matches.
+        let out = rig.run(
+            &args("is lz4 or zstd faster at decompressing?", None),
+            &cat,
+            None,
+            &FakeBackend::new(true),
+        );
+        assert_eq!(out.exit, EXIT_NEEDS_DECISION, "{out:?}");
+        assert!(
+            out.stdout.contains("lz4") && out.stdout.contains("zstd"),
+            "{}",
+            out.stdout
+        );
+        assert!(!out.stdout.contains("snappy"), "{}", out.stdout);
     }
 
     #[test]
