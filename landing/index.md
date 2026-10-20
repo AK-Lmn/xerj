@@ -61,7 +61,7 @@ real 0m0.022s
 
 ## Corpus Hub
 
-https://hub.xerj.org: 513 live corpora in 11 domains (fetched 2026-10-19), each pinned to one commit, licence-reviewed and signed. `xerj ask` routes over the 14 in the signed catalogue. Catalogue for agents: https://hub.xerj.org/llms.txt
+https://hub.xerj.org: 513 live corpora in 11 domains (fetched 2026-10-19), each pinned to one commit, licence-reviewed and signed. `xerj ask` routes over the 324 in the signed catalogue (2026-10-20). Catalogue for agents: https://hub.xerj.org/llms.txt
 
 ## Use cases
 
