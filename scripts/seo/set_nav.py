@@ -73,8 +73,8 @@ def main() -> int:
         if not m:
             print(f"skip  {rel}: no <nav class=\"nav\">", file=sys.stderr)
             continue
-        t = TAG_RE.search(m.group(0))
-        tag = t.group(1) if t else "latest"
+        t = TAG_RE.search(m.group(0)) or TAG_RE.search((LANDING / "index.html").read_text())
+        tag = t.group(1) if t else "latest"   # pages without a tag take the home page's
         new = src[:m.start()] + render(rel, tag) + src[m.end():]
         if new != src:
             stale += 1
