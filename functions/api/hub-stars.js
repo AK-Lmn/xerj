@@ -1,7 +1,7 @@
 // /api/hub-stars — hub-native stars for contributors and corpora on hub.xerj.org.
 //
-// A visitor of the Corpus Hub can star a contributor (/contributors/<login>.html)
-// or a corpus (/corpus/<slug>.html). These are HUB stars: separate from, and never
+// A visitor of the Corpus Hub can star a contributor (/contributors/<login>)
+// or a corpus (/corpus/<slug>). These are HUB stars: separate from, and never
 // mixed with, the GitHub star counts the pages also show.
 //
 // Built like functions/api/field-report.js (main): R2 storage, per-IP-hash rate

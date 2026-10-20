@@ -67,7 +67,7 @@ USAGE_JS = """<script>
     var top=(r.top||[]).filter(function(t){return t.d30>0}).slice(0,5);
     if(!top.length){m.textContent='No usage recorded yet: no agent has asked the hosted hub about any corpus in the last 30 days.';return}
     m.hidden=true;var ol=mu.querySelector('ol');ol.hidden=false;
-    top.forEach(function(t){var li=el('li'),a=el('a',t.corpus);a.href='corpus/'+encodeURIComponent(t.corpus)+'.html';li.appendChild(a);
+    top.forEach(function(t){var li=el('li'),a=el('a',t.corpus);a.href='corpus/'+encodeURIComponent(t.corpus);li.appendChild(a);
       li.appendChild(document.createTextNode(' \\u00b7 '+fmt(t.d30)+' requests in 30 days ('+fmt(t.d7)+' in 7)'));ol.appendChild(li)});
   }).catch(function(){});
   var tr=document.querySelector('.traffic[data-traffic]');

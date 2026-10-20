@@ -51,7 +51,7 @@ export async function onRequestGet({ request, env }) {
     stars.sort((a, b) => (a.starred_at < b.starred_at ? 1 : -1));
     const logins = await pages(env, request);
     for (const s of stars) {
-      s.href = s.kind === 'corpus' ? `/corpus/${s.id}.html` : `/contributors/${logins[s.id] || s.id}.html`;
+      s.href = s.kind === 'corpus' ? `/corpus/${s.id}` : `/contributors/${logins[s.id] || s.id}`;
     }
     await Promise.all(stars.map(async (s, i) => {
       const c = await bucket.get(`stars/${s.kind}/${s.id}`).catch(() => null);

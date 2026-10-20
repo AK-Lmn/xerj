@@ -15,6 +15,7 @@ import json
 import os
 import pathlib
 import re
+import struct
 import sys
 import urllib.parse
 import tempfile
@@ -132,7 +133,7 @@ class ContributorVolumeTest(unittest.TestCase):
         self.assertEqual(idx["themed"], ["Ann", "cat"])
         self.assertEqual(idx["live-one"], ["Ann"])
         html = contributors.corpus_section(idx["themed"], gen.esc, people)
-        self.assertIn('href="../contributors/Ann.html"', html)
+        self.assertIn('href="../contributors/Ann"', html)
         self.assertEqual(contributors.corpus_section([], gen.esc, people), "")
 
     def test_pinned_repo_stars_are_distinct_and_never_estimated(self):
@@ -462,7 +463,7 @@ class SiteLinksTest(unittest.TestCase):
         bad, lonely = [], []
         for f in pages:
             hrefs = self.HREF.findall(f.read_text())
-            people = [h for h in hrefs if "contributors/" in h and not h.endswith("contributors/index.html")]
+            people = [h for h in hrefs if re.search(r"contributors/[^/?#]", h)]
             if not people:
                 lonely.append(f.name)
             bad += [(f.name, h) for h in hrefs if not self._resolves(f, h)]
@@ -485,7 +486,7 @@ class SiteLinksTest(unittest.TestCase):
         d = self.out / "contributors"
         html = (d / "index.html").read_text()
         people = html.split('<table class="ctab" data-mode="people"', 1)[1].split("</table>", 1)[0]
-        first = re.findall(r'<td class="who"><a href="([^"]+)\.html">', people)
+        first = re.findall(r'<td class="who"><a href="([^"]+)">', people)
         self.assertEqual(len(first), contributors.CHUNK)
         logins = []
         for f in sorted(d.glob("list.*.json"), key=lambda p: int(p.name.split(".")[1])):
@@ -557,6 +558,163 @@ class SiteLinksTest(unittest.TestCase):
         for f in self.out.rglob("*.html"):
             bad += [(str(f.relative_to(self.out)), h) for h in self.HREF.findall(f.read_text()) if not self._resolves(f, h)]
         self.assertEqual(bad, [])
+
+
+def _ihdr(path):
+    data = pathlib.Path(path).read_bytes()
+    if data[:8] != b"\x89PNG\r\n\x1a\n":
+        raise AssertionError(f"{path} is not a PNG")
+    return struct.unpack(">II", data[16:24])
+
+
+class DiscoverabilityTest(unittest.TestCase):
+    """Search and AI engines can see the hub: canonical origin, social tags,
+    JSON-LD, sitemap, robots, favicon, analytics. Internal links are the URL
+    Cloudflare Pages serves, so they do not 308."""
+
+    HOME_DESC = ("Pinned, licence-checked, measured corpora an agent downloads "
+                 "per task and searches instead of guessing.")
+
+    def _ld(self, html):
+        blocks = re.findall(r'<script type="application/ld\+json">\n(.*?)\n</script>', html, re.S)
+        self.assertGreaterEqual(len(blocks), 3, "Organization, WebSite, and a page type")
+        return [json.loads(b) for b in blocks]
+
+    def test_href_strips_html_the_way_pages_serves_it(self):
+        self.assertEqual(gen.href("index.html"), "./")
+        self.assertEqual(gen.href("/index.html"), "/")
+        self.assertEqual(gen.href("../index.html"), "../")
+        self.assertEqual(gen.href("contributors/index.html"), "contributors/")
+        self.assertEqual(gen.href("../contributors/index.html"), "../contributors/")
+        self.assertEqual(gen.href("corpus/lz4.html"), "corpus/lz4")
+        self.assertEqual(gen.href("contribute.html"), "contribute")
+        self.assertEqual(gen.href("index.html#repos"), "./#repos")
+        self.assertEqual(gen.file_url("index.html"), "https://hub.xerj.org/")
+        self.assertEqual(gen.file_url("whats-this/index.html"), "https://hub.xerj.org/whats-this/")
+        self.assertEqual(gen.file_url("corpus/lz4.html"), "https://hub.xerj.org/corpus/lz4")
+        self.assertEqual(gen.file_url("contributors/list.2.html"), "https://hub.xerj.org/contributors/list.2")
+
+    def test_page_head_has_canonical_social_jsonld_favicon_and_ga4(self):
+        html = gen.page("T", "D.", "<main></main>", rel="../", path="/corpus/lz4")
+        self.assertEqual(html.count('<link rel="canonical"'), 1)
+        self.assertIn('<link rel="canonical" href="https://hub.xerj.org/corpus/lz4">', html)
+        self.assertNotIn("pages.dev", html.split("<body>", 1)[0].split("location.hostname")[0])
+        self.assertIn('property="og:title"', html)
+        self.assertIn('property="og:description" content="D."', html)
+        self.assertIn('property="og:url" content="https://hub.xerj.org/corpus/lz4"', html)
+        self.assertIn('property="og:image" content="https://hub.xerj.org/assets/og.png"', html)
+        self.assertIn(f'property="og:image:width" content="{gen.OG_W}"', html)
+        self.assertIn(f'property="og:image:height" content="{gen.OG_H}"', html)
+        self.assertIn('name="twitter:card" content="summary_large_image"', html)
+        self.assertIn('rel="icon" href="../favicon.png"', html)
+        self.assertIn(f'src="https://www.googletagmanager.com/gtag/js?id={gen.GA_ID}"', html)
+        self.assertIn("<script async src=", html)
+        self.assertIn(f"gtag('config','{gen.GA_ID}')", html)
+        self.assertIn('location.hostname==="xerj-hub.pages.dev"', html)
+        self.assertIn('location.replace("https://hub.xerj.org"+location.pathname', html)
+        types = {b["@type"] for b in self._ld(html)}
+        self.assertEqual(types, {"Organization", "WebSite", "WebPage"})
+        self.assertIn('href="../"', html)          # CORPORA, extensionless
+        self.assertIn('href="../contributors/"', html)
+        self.assertNotIn('href="../index.html"', html)
+        self.assertNotIn('href="../contribute.html"', html)
+
+    def test_collection_pages_are_collection_pages_and_home_description_ends(self):
+        home = gen.page("XERJ Corpus Hub: reference memory for AI agents", self.HOME_DESC,
+                        "<main></main>", path="/", kind="CollectionPage")
+        self.assertIn(f'<meta name="description" content="{self.HOME_DESC}">', home)
+        self.assertIn('"@type": "CollectionPage"', home)
+        cat = gen.page("SEC: t", "d", "<main></main>", path="/category/SEC", kind="CollectionPage")
+        self.assertIn('"@type": "CollectionPage"', cat)
+        self.assertIn('<link rel="canonical" href="https://hub.xerj.org/category/SEC">', cat)
+
+    def test_robots_allows_every_crawler_and_names_the_sitemap(self):
+        text = gen.ROBOTS
+        self.assertIn("User-agent: *\n", text)
+        self.assertIn("Allow: /", text)
+        self.assertIn("Content-Signal: search=yes, ai-input=yes, ai-train=yes", text)
+        self.assertIn("User-agent: GPTBot\nAllow: /", text)
+        self.assertIn("User-agent: ClaudeBot\nAllow: /", text)
+        self.assertIn("User-agent: Google-Extended\nAllow: /", text)
+        self.assertIn("User-agent: PerplexityBot\nAllow: /", text)
+        self.assertIn("Sitemap: https://hub.xerj.org/sitemap.xml\n", text)
+        self.assertNotIn("Disallow", text)
+
+    def test_og_card_is_the_light_wordmark_on_the_hub_background(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as d:
+            gen.write_brand_assets(d)
+            root = pathlib.Path(d)
+            self.assertEqual(_ihdr(root / "favicon.png"), (128, 128))
+            self.assertEqual(_ihdr(root / "assets" / "hub-logo.png"), (512, 512))
+            self.assertEqual(_ihdr(root / "assets" / "og.png"), (gen.OG_W, gen.OG_H))
+            _w, _h, rows = gen.read_png(root / "assets" / "og.png")
+            # corner is the page background; the wordmark sits in the middle
+            self.assertEqual(tuple(rows[0][:4]), (0xFA, 0xFA, 0xF7, 255))
+            mid = rows[_h // 2]
+            self.assertEqual(tuple(mid[(_w // 2) * 4:(_w // 2) * 4 + 4]), (255, 255, 255, 255))
+
+
+class BuiltSiteDiscoverabilityTest(SiteLinksTest):
+    """The real registry build: every indexable canonical is in the sitemap,
+    and no internal link still asks for a .html URL."""
+
+    def test_sitemap_matches_canonicals_and_skips_noindex(self):
+        sm = (self.out / "sitemap.xml").read_text()
+        self.assertTrue(sm.startswith('<?xml version="1.0" encoding="UTF-8"?>'))
+        self.assertNotIn("<lastmod>", sm)
+        self.assertNotIn("<priority>", sm)
+        self.assertNotIn("<changefreq>", sm)
+        locs = re.findall(r"<loc>([^<]+)</loc>", sm)
+        self.assertEqual(locs, sorted(locs))
+        self.assertGreater(len(locs), 500)
+        seen = set()
+        for f in self.out.rglob("*.html"):
+            rel = f.relative_to(self.out).as_posix()
+            html = f.read_text()
+            canon = re.findall(r'<link rel="canonical" href="([^"]+)">', html)
+            self.assertEqual(canon, [gen.file_url(rel)], rel)
+            self.assertNotIn("xerj-hub.pages.dev/", canon[0])
+            self.assertIn(f"gtag('config','{gen.GA_ID}')", html)
+            types = {json.loads(b)["@type"] for b in re.findall(
+                r'<script type="application/ld\+json">\n(.*?)\n</script>', html, re.S)}
+            self.assertTrue({"Organization", "WebSite"} <= types, rel)
+            noindex = 'name="robots"' in html.split("</head>", 1)[0] and "noindex" in html.split("</head>", 1)[0]
+            if rel == "404.html" or noindex:
+                self.assertNotIn(canon[0], locs, rel)
+            else:
+                self.assertIn(canon[0], locs, rel)
+                seen.add(canon[0])
+            if rel in ("index.html", "category/SEC.html", "contributors/index.html"):
+                self.assertIn("CollectionPage", types, rel)
+            elif rel.startswith("corpus/"):
+                self.assertIn("WebPage", types, rel)
+        self.assertEqual(set(locs), seen)
+        self.assertIn("https://hub.xerj.org/", locs)
+        self.assertIn("https://hub.xerj.org/whats-this/", locs)
+        self.assertNotIn("https://hub.xerj.org/404", locs)
+
+    def test_home_description_ends_with_a_period_and_nothing_else_was_rewritten(self):
+        html = (self.out / "index.html").read_text()
+        self.assertIn(f'<meta name="description" content="{DiscoverabilityTest.HOME_DESC}">', html)
+        self.assertIn(f'<meta property="og:description" content="{DiscoverabilityTest.HOME_DESC}">', html)
+
+    def test_no_internal_html_links(self):
+        bad = []
+        for f in self.out.rglob("*.html"):
+            for h in self.HREF.findall(f.read_text()):
+                u = urllib.parse.urlsplit(h)
+                if u.scheme in ("http", "https") and u.netloc != "hub.xerj.org":
+                    continue
+                if u.path.endswith(".html"):
+                    bad.append((str(f.relative_to(self.out)), h))
+        self.assertEqual(bad, [])
+
+    def test_robots_favicon_and_card_are_written(self):
+        self.assertEqual((self.out / "robots.txt").read_text(), gen.ROBOTS)
+        self.assertEqual(_ihdr(self.out / "favicon.png"), (128, 128))
+        self.assertEqual(_ihdr(self.out / "assets" / "og.png"), (gen.OG_W, gen.OG_H))
+        self.assertIn("/favicon.ico /favicon.png 200", (self.out / "_redirects").read_text())
 
 
 if __name__ == "__main__":
