@@ -101,7 +101,7 @@ test('signed in: one star per account across networks; listed under my stars wit
   [s, b] = await mine(env, ann);
   assert.equal(s, 200);
   assert.deepEqual(b.stars.map((x) => [x.kind, x.id, x.href, x.count]).sort(),
-    [['contributor', 'ann', '/contributors/Ann.html', 1], ['corpus', 'aider', '/corpus/aider.html', 1]]);
+    [['contributor', 'ann', '/contributors/Ann', 1], ['corpus', 'aider', '/corpus/aider', 1]]);
   const today = new Date().toISOString().slice(0, 10);
   assert.deepEqual(b.stars.find((x) => x.kind === 'corpus').history, [[today, 1]]);
   for (const k of env.HUB_STARS.m.keys())

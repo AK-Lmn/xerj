@@ -266,7 +266,7 @@ def person_body(pp, esc, live_slugs, pages=()):
     work = sorted(pp["work"].values(), key=lambda w: (-(w.get("repo_stars") or 0), w["repo"].lower()))
     name = pp["name"] or login
     v = volume(pp, live_slugs)
-    url = f"{SITE}/contributors/{login}.html"
+    url = f"{SITE}/contributors/{login}"
     repos = ", ".join(w["repo"] for w in work[:2])
     tweet = f"My work in {repos} was selected for the XERJ Corpus Hub: AI coding agents retrieve it as a worked reference instead of guessing. {url}"
     cards = []
@@ -285,7 +285,7 @@ def person_body(pp, esc, live_slugs, pages=()):
         size = " · ".join(x for x in [f'{w["files"]} files' if w.get("files") else "", f'{_n(w.get("lines"))} lines' if w.get("lines") else "",
                                          ", ".join(w["langs"])] if x)
         chips = "".join(f'<span class="chip">{esc(t)}</span>' for t in w["topics"][:6])
-        corp = "".join(f'<a class="chip" href="../corpus/{esc(c)}.html">corpus {esc(c)}</a>' if c in pages
+        corp = "".join(f'<a class="chip" href="../corpus/{esc(c)}">corpus {esc(c)}</a>' if c in pages
                        else f'<span class="chip">corpus {esc(c)}</span>' for c in w["corpora"])
         gh = f'<span class="stars" title="GitHub stars on the repository">GitHub ★ {_n(w.get("repo_stars"))}</span>' if isinstance(w.get("repo_stars"), int) else ""
         cards.append(f"""<div class="contrib">{gh}
@@ -297,7 +297,7 @@ def person_body(pp, esc, live_slugs, pages=()):
     other = sorted(c for c in pp["corpora"] if not any(c in w["corpora"] for w in work))
     also = ""
     if other:
-        links = ", ".join(f'<a href="../corpus/{esc(c)}.html">{esc(c)}</a>' if c in pages else esc(c) for c in other)
+        links = ", ".join(f'<a href="../corpus/{esc(c)}">{esc(c)}</a>' if c in pages else esc(c) for c in other)
         also = f'<p class="note">Their repositories are also pinned in: {links}.</p>'
     md = f"[![XERJ Corpus Hub contributor]({SITE}/contributors/{login}/badge.svg)]({url})"
     kpi = lambda val, label: f'<div class="kpi"><b>{val}</b><span>{label}</span></div>'
@@ -406,7 +406,7 @@ MORE_JS = """<script>
       add(me,el('p',{},'You are signed in as @'+c.login+'. '+c.work.length+' of your commits are selected; '+live+' corpus entr'+(live===1?'y is':'ies are')+' live and '+review+' '+(review===1?'is':'are')+' still in licence review. Each card below shows where your work is and its last pack build.'));
       var a=add(me,el('p',{}));
       add(a,link('https://github.com/xerj-org/xerj/issues/new?title='+encodeURIComponent('Corpus Hub: change or remove my work (@'+c.login+')'),'Ask for a change or removal'));
-      a.appendChild(document.createTextNode(' · '));add(a,link('/me.html','Your hub stars'));
+      a.appendChild(document.createTextNode(' · '));add(a,link('/me','Your hub stars'));
     }
     add(body,el('h2',{},'Every selected commit'));
     c.work.forEach(function(w){
@@ -421,7 +421,7 @@ MORE_JS = """<script>
         ['agreed',w.agreed]].filter(function(x){return x[1]});
       add(d,table(['',''],rows));
       if(w.corpora&&w.corpora.length)add(d,table(['corpus','status','manifest','last pack build'],w.corpora.map(function(x){
-        return [x.page?link('/corpus/'+x.slug+'.html',x.slug):x.slug,x.status||'candidate',x.manifest||'',build(x.last_build)]})));
+        return [x.page?link('/corpus/'+x.slug,x.slug):x.slug,x.status||'candidate',x.manifest||'',build(x.last_build)]})));
     });
     var also=Object.keys(c.also_pinned_in||{});
     if(also.length)add(body,el('p',{'class':'note'},'Repositories of yours are also pinned in: '+also.join(', ')+'.'));
@@ -538,15 +538,15 @@ def _av(login, esc, px=28):
 
 def people_tr(rank, l, pp, v, esc):
     nm = pp["name"] if pp["name"] and pp["name"] != l else ""
-    return (f'<tr data-id="{esc(l.lower())}"><td class="n">{rank:,}</td><td class="who"><a href="{esc(l)}.html">{_av(l, esc)}'
+    return (f'<tr data-id="{esc(l.lower())}"><td class="n">{rank:,}</td><td class="who"><a href="{esc(l)}">{_av(l, esc)}'
             f'<span><b>{esc(nm or l)}</b>{"<small>@" + esc(l) + "</small>" if nm else ""}</span></a></td>'
             f'<td class="num">{_n(v["gh_stars"])}</td><td class="num o1 hub hs"></td><td class="num o1">{v["repos"]:,}</td><td class="num o1">{v["corpora"]:,}</td>'
             f'<td class="num o2">{_n(v["lines"]) if v["lines"] else "—"}</td><td class="o2 d">{esc((v["since"] or "")[:10]) or "—"}</td></tr>')
 
 
 def repo_tr(rank, e, esc, rel=""):
-    own = (f'<a href="{rel}{esc(e["owner_page"])}.html">' if e["owner_page"] else f'<a href="https://github.com/{esc(e["owner"])}">')
-    corp = (f'<a href="{rel}../corpus/{esc(e["corpus"])}.html">{esc(e["corpus"])}</a>' if e["corpus"] else "—")
+    own = (f'<a href="{rel}{esc(e["owner_page"])}">' if e["owner_page"] else f'<a href="https://github.com/{esc(e["owner"])}">')
+    corp = (f'<a href="{rel}../corpus/{esc(e["corpus"])}">{esc(e["corpus"])}</a>' if e["corpus"] else "—")
     return (f'<tr><td class="n">{rank:,}</td><td class="repo"><a href="{esc(e["url"])}">{esc(e["repo"])}</a></td>'
             f'<td class="who">{own}{_av(e["owner"], esc)}<span><b>{esc(e["owner"])}</b></span></a></td>'
             f'<td class="num">{_n(e["stars"])}</td><td class="o1 corp">{corp}</td></tr>')
@@ -568,9 +568,9 @@ def thead(cols, sortable=True):
 
 
 def pager(n_pages, current, kind="people"):
-    stem, first, label = (("list", "index.html", "All contributors, page by page") if kind == "people"
-                          else ("repos", "repos.1.html", "All repositories, page by page"))
-    links = " ".join(f'<a href="{first if i == 1 else f"{stem}.{i}.html"}"{" aria-current=page" if i == current else ""}>{i}</a>'
+    stem, first, label = (("list", "./", "All contributors, page by page") if kind == "people"
+                          else ("repos", "repos.1", "All repositories, page by page"))
+    links = " ".join(f'<a href="{first if i == 1 else f"{stem}.{i}"}"{" aria-current=page" if i == current else ""}>{i}</a>'
                      for i in range(1, n_pages + 1))
     return f'<nav class="pager" data-kind="{kind}" aria-label="{label}"><b>{"Pages" if kind == "people" else "Repository pages"}</b> {links}</nav>'
 
@@ -641,17 +641,17 @@ TABLE_JS = """<script>
   function av(l){return el('img',{src:'https://github.com/'+encodeURIComponent(l)+'.png?size=56',alt:'',loading:'lazy',decoding:'async',width:'28',height:'28'})}
   function td(c,txt){return el('td',c?{'class':c}:{},txt)}
   function ptr(r){var tr=el('tr',{'data-id':r[0].toLowerCase()});tr.appendChild(td('n',fmt(r[7])));
-    var c=td('who'),a=el('a',{href:r[0]+'.html'}),s=el('span');a.appendChild(av(r[0]));s.appendChild(el('b',{},r[1]||r[0]));
+    var c=td('who'),a=el('a',{href:r[0]}),s=el('span');a.appendChild(av(r[0]));s.appendChild(el('b',{},r[1]||r[0]));
     if(r[1])s.appendChild(el('small',{},'@'+r[0]));
     a.appendChild(s);c.appendChild(a);tr.appendChild(c);
     tr.appendChild(td('num',fmt(r[4])));tr.appendChild(td('num o1 hub hs',''));tr.appendChild(td('num o1',fmt(r[5])));tr.appendChild(td('num o1',fmt(r[2])));
     tr.appendChild(td('num o2',r[3]?fmt(r[3]):'—'));tr.appendChild(td('o2 d',r[6]||'—'));return tr}
   function rtr(r){var tr=el('tr');tr.appendChild(td('n',fmt(r[6])));
     var c=td('repo');c.appendChild(el('a',{href:r[1]},r[0]));tr.appendChild(c);
-    c=td('who');var a=el('a',{href:r[4]?r[4]+'.html':'https://github.com/'+r[3]}),s=el('span');a.appendChild(av(r[3]));
+    c=td('who');var a=el('a',{href:r[4]?r[4]:'https://github.com/'+r[3]}),s=el('span');a.appendChild(av(r[3]));
     s.appendChild(el('b',{},r[3]));a.appendChild(s);c.appendChild(a);tr.appendChild(c);
     tr.appendChild(td('num',fmt(r[2])));c=td('o1 corp');
-    if(r[5])c.appendChild(el('a',{href:'../corpus/'+r[5]+'.html'},r[5]));else c.textContent='—';tr.appendChild(c);return tr}
+    if(r[5])c.appendChild(el('a',{href:'../corpus/'+r[5]},r[5]));else c.textContent='—';tr.appendChild(c);return tr}
   function load(m){var d=M[m];if(d.rows)return Promise.resolve(d.rows);if(d.p)return d.p;
     var ps=[];for(var i=1;i<=d.chunks;i++)ps.push(fetch(d.url+i+'.json').then(function(r){if(!r.ok)throw r.status;return r.json()}));
     return d.p=Promise.all(ps).then(function(parts){var rows=[].concat.apply([],parts);
@@ -719,14 +719,14 @@ TABLE_JS = """<script>
 
 def _map_items(order, people, vols):
     return [{"names": ([people[l]["name"], l] if people[l]["name"] and people[l]["name"] != l else [l]),
-             "stars": vols[l]["gh_stars"], "stars_txt": "★ " + _n(vols[l]["gh_stars"]), "href": f"{l}.html", "avatar": l,
+             "stars": vols[l]["gh_stars"], "stars_txt": "★ " + _n(vols[l]["gh_stars"]), "href": l, "avatar": l,
              "title": f'{people[l]["name"] or l} (@{l}) · GitHub ★ {_n(vols[l]["gh_stars"])} across {vols[l]["repos"]} repo{"" if vols[l]["repos"] == 1 else "s"}'}
             for l in order]
 
 
 def _repo_items(repos):
     return [{"names": [e["repo"], e["repo"].split("/", 1)[-1]], "stars": e["stars"], "stars_txt": "★ " + _n(e["stars"]),
-             "href": (f'../corpus/{e["corpus"]}.html' if e["corpus"] else f'{e["owner_page"] or e["by"]}.html'),
+             "href": (f'../corpus/{e["corpus"]}' if e["corpus"] else f'{e["owner_page"] or e["by"]}'),
              "avatar": e["owner"], "title": f'{e["repo"]} · GitHub ★ {_n(e["stars"])}' + (f' · corpus {e["corpus"]}' if e["corpus"] else "")}
             for e in repos]
 
@@ -756,7 +756,7 @@ def wall_body(people, esc, live_slugs=(), pages=()):
     return f"""<main class="cwrap"><section class="whead"><h1>The people behind the hub</h1>
 <p>{len(people):,} developers agreed to let AI agents learn from their work: {n_repos:,} repositories across {corpora:,} corpora, each included with the author's permission,
 under its own licence, with attribution. Ranked by GitHub stars on their repositories; hub stars are the ones visitors give here. Every source is still in licence review; none is live yet unless its card says so.</p>
-<a class="cta" href="../contribute.html">Add yours</a></section>
+<a class="cta" href="../contribute">Add yours</a></section>
 <div class="vbar" id="vbar" hidden><div class="seg" role="group" aria-label="Map tiles"><button type="button" data-mode="people" aria-pressed="true">People</button><button type="button" data-mode="repos" aria-pressed="false">Repos</button></div>
 <div class="seg" role="group" aria-label="View"><button type="button" data-view="map" aria-pressed="true">Treemap</button><button type="button" data-view="table" aria-pressed="false">Table</button></div></div>
 <section class="tmwrap" data-mode="people" aria-labelledby="tmh"><h2 id="tmh" class="wallh">Contributors by GitHub stars</h2>{pmap}</section>
@@ -783,7 +783,7 @@ def wall_chunks(people, esc, live_slugs=(), pages=()):
     for n in range(1, n_pages + 1):
         part = order[(n - 1) * CHUNK:n * CHUNK]
         trs = "".join(people_tr((n - 1) * CHUNK + i + 1, l, people[l], vols[l], esc) for i, l in enumerate(part))
-        body = (f'<main class="cwrap"><p><a class="backlink" href="index.html">&larr; the star map and the full table</a></p>'
+        body = (f'<main class="cwrap"><p><a class="backlink" href="./">&larr; the star map and the full table</a></p>'
                 f'<section class="whead"><h1>Contributors, page {n} of {n_pages}</h1>'
                 f'<p>Contributors {(n - 1) * CHUNK + 1:,} to {(n - 1) * CHUNK + len(part):,} of {len(order):,}, ranked by GitHub stars on their repositories.</p></section>'
                 f'<div class="tablewrap"><table class="ctab" data-stars="contributor">{thead(PEOPLE_COLS, False)}<tbody>{trs}</tbody></table></div>'
@@ -792,20 +792,13 @@ def wall_chunks(people, esc, live_slugs=(), pages=()):
     for n in range(1, r_pages + 1):
         part = repos[(n - 1) * CHUNK:n * CHUNK]
         trs = "".join(repo_tr((n - 1) * CHUNK + i + 1, e, esc) for i, e in enumerate(part))
-        body = (f'<main class="cwrap"><p><a class="backlink" href="index.html#repos">&larr; the repository map and the full table</a></p>'
+        body = (f'<main class="cwrap"><p><a class="backlink" href="./#repos">&larr; the repository map and the full table</a></p>'
                 f'<section class="whead"><h1>Repositories, page {n} of {r_pages}</h1>'
                 f'<p>Repositories {(n - 1) * CHUNK + 1:,} to {(n - 1) * CHUNK + len(part):,} of {len(repos):,} pinned repositories with a recorded GitHub star count, most stars first.</p></section>'
                 f'<div class="tablewrap"><table class="ctab">{thead(REPO_COLS, False)}<tbody>{trs}</tbody></table></div>'
                 f'{pager(r_pages, n, "repos")}{pager(n_pages, 0)}</main>')
         out.append((f"repos.{n}", [repo_row(e) for e in part], body))
     return out
-
-
-def og(html, title, desc, url, image):
-    tags = (f'<meta property="og:title" content="{title}"><meta property="og:description" content="{desc}">'
-            f'<meta property="og:url" content="{url}"><meta property="og:image" content="{image}">'
-            f'<meta name="twitter:card" content="summary"><link rel="canonical" href="{url}">')
-    return html.replace("</head>", tags + "</head>", 1)
 
 
 def by_corpus(people):
@@ -866,7 +859,7 @@ def credits(registry, people):
 
 
 def _person_tile(login, label, sub, esc, rel):
-    return (f'<a href="{rel}contributors/{esc(login)}.html"><img src="https://github.com/{esc(login)}.png?size=88" alt="" loading="lazy" width="44" height="44">'
+    return (f'<a href="{rel}contributors/{esc(login)}"><img src="https://github.com/{esc(login)}.png?size=88" alt="" loading="lazy" width="44" height="44">'
             f'<div><b>{esc(label)}</b><span>{esc(sub)}</span></div></a>')
 
 
@@ -894,15 +887,15 @@ def corpus_section(logins, esc, people, upstream=(), curator=False, aggregate=0,
         parts.append(f'<h3>Curated by</h3><p class="note">The hub maintainers {why}</p>'
                      f'<div class="wall">{_person_tile(CURATOR, "XERJ Corpus Hub maintainers", "@" + CURATOR + " · curator", esc, rel)}</div>')
     return (f'<section class="detail people" id="contributors"><h2>People behind this corpus</h2>{"".join(parts)}'
-            f'<p class="note"><a href="{rel}contributors/index.html">All contributors</a>.</p></section>')
+            f'<p class="note"><a href="{rel}contributors/">All contributors</a>.</p></section>')
 
 
 def upstream_body(u, esc, pages):
     login = u["login"]
     cur = login.lower() == CURATOR.lower()
-    rows = "".join(f'<li><a href="{esc(url)}">{esc(repo)}</a> in <a href="../corpus/{esc(slug)}.html">corpus {esc(slug)}</a></li>'
+    rows = "".join(f'<li><a href="{esc(url)}">{esc(repo)}</a> in <a href="../corpus/{esc(slug)}">corpus {esc(slug)}</a></li>'
                    for slug, repo, url in sorted(u["repos"], key=lambda r: (r[0], r[1])) if slug in pages)
-    cura = "".join(f'<li><a href="../corpus/{esc(slug)}.html">{esc(slug)}</a></li>' for slug in sorted(u["curates"]) if slug in pages)
+    cura = "".join(f'<li><a href="../corpus/{esc(slug)}">{esc(slug)}</a></li>' for slug in sorted(u["curates"]) if slug in pages)
     n = len({r[0] for r in u["repos"]} | set(u["curates"]))
     if cur:
         who = ("The XERJ Corpus Hub maintainers. Besides their own repositories, they curate the registry entries whose sources "
@@ -913,7 +906,7 @@ def upstream_body(u, esc, pages):
                f"repository's own licence. This is an attribution page: @{esc(login)} has not signed up as a Corpus Hub contributor, "
                f"and nothing here says they endorse the hub.")
         issue = urllib.parse.quote(f"Corpus Hub: attribution for @{login}")
-        claim = (f'<p class="note">Is this you? <a href="../contribute.html">Add your work</a>, or '
+        claim = (f'<p class="note">Is this you? <a href="../contribute">Add your work</a>, or '
                  f'<a href="https://github.com/xerj-org/xerj/issues/new?title={issue}">ask for a change</a>.</p>')
     sec_rows = f"<h2>Pinned repositories</h2><ul>{rows}</ul>" if rows else ""
     sec_cura = f"<h2>Curated corpora</h2><ul>{cura}</ul>" if cura else ""
@@ -922,7 +915,7 @@ def upstream_body(u, esc, pages):
             f'<div><h1>{esc(login)}</h1><div class="login"><a href="https://github.com/{esc(login)}">@{esc(login)}</a></div>'
             f'<div class="chips"><span class="chip up">{role}</span><span class="chip">{n} corp{"us" if n == 1 else "ora"}</span></div>'
             f'<p>{who}</p>{claim}</div></section>{sec_rows}{sec_cura}'
-            f'<p class="note"><a href="index.html">All contributors</a></p></main>')
+            f'<p class="note"><a href="./">All contributors</a></p></main>')
 
 
 def candidates(people, registry_slugs, hub_dir):
@@ -952,13 +945,13 @@ def candidate_body(slug, e, esc, people):
     rows = []
     for l, w in sorted(e["works"], key=lambda x: (x[1]["repo"].lower(), x[0].lower())):
         commit = (f'<a href="{esc(w["commit_url"])}">{esc(w["commit"][:10])}</a> {esc(w["title"])}' if w["commit"] else "")
-        rows.append(f'<tr><td class="mono"><a href="{esc(w["repo_url"])}">{esc(w["repo"])}</a></td><td><a href="../contributors/{esc(l)}.html">@{esc(l)}</a></td>'
+        rows.append(f'<tr><td class="mono"><a href="{esc(w["repo_url"])}">{esc(w["repo"])}</a></td><td><a href="../contributors/{esc(l)}">@{esc(l)}</a></td>'
                     f'<td class="mono">{commit}</td><td>{esc(w["spdx"] or "?")}</td></tr>')
     pinned = "".join(f'<tr><td class="mono"><a href="{esc(r.get("url", ""))}">{esc(r.get("repo", ""))}</a></td><td class="mono">{esc((r.get("sha") or "")[:12])}</td>'
                      f'<td>{esc((r.get("review") or {}).get("spdx") or r.get("licence") or "?")}</td></tr>' for r in e["repos"])
     pins = (f'<section class="detail"><h2>Pinned sources ({len(e["repos"])})</h2><table><tr><th>source</th><th>pin</th><th>licence</th></tr>{pinned}</table></section>'
             if pinned else "")
-    return (f'<main><p><a class="backlink" href="../contributors/index.html">&larr; all contributors</a></p>'
+    return (f'<main><p><a class="backlink" href="../contributors/">&larr; all contributors</a></p>'
             f'<h1 class="slug">{esc(slug)}</h1>'
             f'<p class="note">{esc(e["kind"])} · status <b>selected · in licence review</b> · not in the hub registry yet</p>'
             f'<div class="kbox"><b>Not installable yet</b><br>This corpus is a candidate: it is not in the hub registry until its licence review passes, '
@@ -983,8 +976,9 @@ def generate(out, hub_dir, page, esc, live_slugs, registry=None, people=None, up
         first = sorted(pp["work"].values(), key=lambda w: -(w.get("repo_stars") or 0))[0]
         title = f"{name} (@{login}): XERJ Corpus Hub contributor"
         desc = f"{name}'s work in {first['repo']} is in the XERJ Corpus Hub, the reference memory AI coding agents search before writing code."
-        html = page(title, desc, person_body(pp, esc, live_slugs, pages), rel="../")
-        (d / f"{login}.html").write_text(og(html, esc(title), esc(desc), f"{SITE}/contributors/{login}.html", f"https://github.com/{login}.png?size=400"))
+        html = page(title, desc, person_body(pp, esc, live_slugs, pages), rel="../",
+                    path=f"/contributors/{login}", image=f"https://github.com/{login}.png?size=400")
+        (d / f"{login}.html").write_text(html)
         (d / login).mkdir(exist_ok=True)
         (d / login / "badge.svg").write_text(badge_svg())
     # upstream owners and the curator: attribution pages, kept out of search indexes
@@ -993,25 +987,30 @@ def generate(out, hub_dir, page, esc, live_slugs, registry=None, people=None, up
     for u in upstream.values():
         title = f"{u['login']}: credited on the XERJ Corpus Hub"
         desc = f"Corpora on the XERJ Corpus Hub that pin repositories by {u['login']}"
-        html = page(title, desc, upstream_body(u, esc, pages), rel="../")
-        html = html.replace("</head>", '<meta name="robots" content="noindex,follow"></head>', 1)
-        (d / f"{u['login']}.html").write_text(og(html, esc(title), esc(desc), f"{SITE}/contributors/{u['login']}.html", f"https://github.com/{u['login']}.png?size=400"))
+        html = page(title, desc, upstream_body(u, esc, pages), rel="../",
+                    path=f"/contributors/{u['login']}", noindex=True,
+                    image=f"https://github.com/{u['login']}.png?size=400")
+        (d / f"{u['login']}.html").write_text(html)
     # candidate corpora: one page each, so every contributor's corpus chip links somewhere
     for slug, e in cands.items():
         html = page(f"{slug}: candidate corpus, XERJ Corpus Hub", f"Candidate corpus {slug}: selected work in licence review",
-                    candidate_body(slug, e, esc, people), rel="../")
+                    candidate_body(slug, e, esc, people), rel="../", path=f"/corpus/{slug}")
         (pathlib.Path(out) / "corpus" / f"{slug}.html").write_text(html)
     (d / "stars-targets.json").write_text(json.dumps(stars_targets(people, registry), separators=(",", ":")))
-    html = page("Contributors: XERJ Corpus Hub", "The developers whose work AI agents retrieve from the XERJ Corpus Hub", wall_body(people, esc, live_slugs, pages), rel="../")
-    (d / "index.html").write_text(og(html, "The people behind the XERJ Corpus Hub", "Developers who agreed to let AI agents learn from their work",
-                                     f"{SITE}/contributors/", "https://github.com/xerj-org.png"))
+    html = page("Contributors: XERJ Corpus Hub", "The developers whose work AI agents retrieve from the XERJ Corpus Hub",
+                wall_body(people, esc, live_slugs, pages), rel="../", path="/contributors/", kind="CollectionPage",
+                og_title="The people behind the XERJ Corpus Hub",
+                og_desc="Developers who agreed to let AI agents learn from their work")
+    (d / "index.html").write_text(html)
     for stem, rows, body in wall_chunks(people, esc, live_slugs, pages):
         (d / f"{stem}.json").write_text(json.dumps(rows, separators=(",", ":"), ensure_ascii=False))
         if body is None:
             continue
         what = "Contributors" if stem.startswith("list.") else "Repositories"
         n = stem.split(".")[1]
-        html = page(f"{what}, page {n}: XERJ Corpus Hub", "The developers whose work AI agents retrieve from the XERJ Corpus Hub", body, rel="../")
-        (d / f"{stem}.html").write_text(og(html, f"{what}, page {n}: XERJ Corpus Hub", "Developers who agreed to let AI agents learn from their work",
-                                           f"{SITE}/contributors/{stem}.html", "https://github.com/xerj-org.png"))
+        html = page(f"{what}, page {n}: XERJ Corpus Hub", "The developers whose work AI agents retrieve from the XERJ Corpus Hub", body, rel="../",
+                    path=f"/contributors/{stem}", kind="CollectionPage",
+                    og_title=f"{what}, page {n}: XERJ Corpus Hub",
+                    og_desc="Developers who agreed to let AI agents learn from their work")
+        (d / f"{stem}.html").write_text(html)
     return len(people)
