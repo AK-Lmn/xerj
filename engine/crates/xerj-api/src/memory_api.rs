@@ -1356,7 +1356,11 @@ pub async fn list(
 /// `PUT /{index}/_doc/{id}`, `POST /{index}/_search`) land here when an agent
 /// copies them onto `/_memory`. An empty `405` costs a round trip; the body
 /// names the four calls this API actually has.
-fn memory_method_not_allowed(namespace: &str) -> Response {
+///
+/// `allow` is the `Allow` header for the path that was hit: `DELETE` on
+/// `/_memory/{namespace}/{id}` (forget), empty on `/_memory/{namespace}/_doc/{id}`,
+/// where no method is served.
+fn memory_method_not_allowed(namespace: &str, allow: &'static str) -> Response {
     let reason = format!(
         "/_memory/{namespace} is the agent-memory API, not the document API. \
          Store with POST /_memory/{namespace} and a JSON body {{\"text\":\"...\"}}. \
@@ -1366,7 +1370,7 @@ fn memory_method_not_allowed(namespace: &str) -> Response {
     );
     (
         StatusCode::METHOD_NOT_ALLOWED,
-        [(header::ALLOW, HeaderValue::from_static("DELETE"))],
+        [(header::ALLOW, HeaderValue::from_static(allow))],
         Json(json!({
             "error": { "type": "memory_error", "reason": reason },
             "status": 405,
@@ -1377,13 +1381,13 @@ fn memory_method_not_allowed(namespace: &str) -> Response {
 
 /// `GET`/`POST`/`PUT /_memory/{namespace}/{id}` — that path only forgets.
 pub async fn unsupported_memory_verb(Path((namespace, _id)): Path<(String, String)>) -> Response {
-    memory_method_not_allowed(&namespace)
+    memory_method_not_allowed(&namespace, "DELETE")
 }
 
 /// `PUT`/`POST`/`GET`/`DELETE /_memory/{namespace}/_doc/{id}` — the document
 /// route with an id. No memory id lives at this path.
 pub async fn unsupported_memory_doc_id(Path((namespace, _id)): Path<(String, String)>) -> Response {
-    memory_method_not_allowed(&namespace)
+    memory_method_not_allowed(&namespace, "")
 }
 
 /// `DELETE /_memory/{namespace}/{id}` — forget a single memory entry.
@@ -2378,11 +2382,19 @@ mod tests {
                 StatusCode::METHOD_NOT_ALLOWED,
                 "{method} {uri}"
             );
+            // `/_memory/{ns}/{id}` serves DELETE (forget); the `_doc/{id}`
+            // spelling serves nothing, so its `Allow` is empty.
+            let expected_allow = if uri.starts_with("/_memory/notes/_doc/") {
+                ""
+            } else {
+                "DELETE"
+            };
             assert_eq!(
                 resp.headers()
                     .get(header::ALLOW)
                     .and_then(|v| v.to_str().ok()),
-                Some("DELETE")
+                Some(expected_allow),
+                "{method} {uri}"
             );
             let bytes = axum::body::to_bytes(resp.into_body(), usize::MAX)
                 .await
