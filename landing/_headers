@@ -68,3 +68,7 @@
   Content-Type: text/markdown; charset=utf-8
 /compare/*.md
   Content-Type: text/markdown; charset=utf-8
+/index.md
+  Content-Type: text/markdown; charset=utf-8
+/docs/ask.md
+  Content-Type: text/markdown; charset=utf-8
