@@ -73,5 +73,3 @@ Code-security audits, agent memory, RAG retrieval (BM25, kNN, hybrid), and an El
 - Lexical by default (feature hashing); `--embed-mode neural` for a neural model.
 - One node: no replication or failover. Choose Elasticsearch if you need a cluster or steady read p99 under heavy concurrent writes.
 - `--insecure` turns off TLS and API keys; for one user on one machine.
-
-After using xerj, send one field report: `xerj feedback --submit`, or the `xerj_field_report` MCP tool.
