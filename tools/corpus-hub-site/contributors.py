@@ -9,11 +9,16 @@ page is read from those files; a number we do not have is left off the page,
 never estimated. There is no per-author retrieval counter yet (nothing here is
 live), so the pages show no retrieval figure at all rather than a placeholder.
 
-  out/contributors/index.html          the wall
-  out/contributors/<login>.html        one author
+  out/contributors/index.html          the wall: star treemap + first chunk of the list
+  out/contributors/list.<n>.json       the rest of the list, CHUNK rows a file (infinite scroll)
+  out/contributors/list.<n>.html       the same chunks as plain HTML pages (crawlable fallback)
+  out/contributors/<login>.html        one author (or one upstream owner, see upstream())
   out/contributors/<login>/badge.svg   "XERJ Corpus Hub | contributor" badge
+  out/corpus/<slug>.html               candidate corpora (author / themed) that have no
+                                       registry page yet, so every contributor's corpus links
 """
 import json, pathlib, re, urllib.parse, collections
+import treemap
 
 LOGIN_RE = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$")   # GitHub's login alphabet: safe as a file name
 SITE = "https://hub.xerj.org"
@@ -51,7 +56,8 @@ letter-spacing:var(--track-ui);text-decoration:none;color:var(--z-ink);border:1p
 .badgebox pre{font-family:var(--font-mono);font-size:var(--fs-13);white-space:pre-wrap;word-break:break-all;margin:var(--sp-3) 0 0}
 .wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:var(--sp-3);margin-top:var(--sp-6)}
 .wall a{display:flex;gap:var(--sp-3);align-items:center;border:1px solid var(--z-line);background:#fff;padding:var(--sp-3);text-decoration:none}
-.wall img{width:44px;height:44px;border-radius:50%}
+.wall img{width:44px;height:44px;border-radius:50%;flex:none}
+.wall div{min-width:0}.wall b,.wall span{overflow-wrap:anywhere}
 .wall b{display:block;font-family:var(--font-data);font-size:var(--fs-13)}
 .wall span{font-family:var(--font-mono);font-size:var(--fs-11);color:var(--z-mute)}
 .whead h1{font-family:var(--font-display);font-weight:900;font-size:var(--fs-96);line-height:.95;margin:0}
@@ -71,8 +77,18 @@ letter-spacing:var(--track-ui);border:1px solid var(--z-accent);color:var(--z-ac
 .hubstar button[disabled]{opacity:.6;cursor:default}
 .hubstar.inline{display:inline-flex;gap:var(--sp-3);align-items:center;border:1px solid var(--z-line);background:#fff;padding:var(--sp-2) var(--sp-4);margin:var(--sp-3) 0}
 .hubstar.inline b{font-family:var(--font-data)}.hubstar.inline button{margin:0}
+.whead h2,.wallh{font-family:var(--font-display);font-weight:800;font-size:var(--fs-32);line-height:1.1;margin:var(--sp-10) 0 0}
+.wallmore{margin:var(--sp-6) 0;color:var(--z-mute);font-size:var(--fs-13)}
+.wallmore button,.pager a{font-family:var(--font-data);font-size:var(--fs-13);font-weight:600;text-decoration:none;color:var(--z-ink);
+border:1px solid var(--z-ink);background:#fff;padding:.5em 1em;cursor:pointer;margin-left:var(--sp-3)}
+.wallmore button[hidden],.pager[hidden]{display:none}
+.pager{display:flex;flex-wrap:wrap;gap:var(--sp-2);align-items:center;margin:var(--sp-6) 0}
+.pager a{margin:0;min-width:44px;text-align:center}.pager a[aria-current]{background:var(--z-ink);color:#fff}
+.people h3{font-family:var(--font-data);font-size:var(--fs-20);margin:var(--sp-6) 0 var(--sp-2)}
+.chip.up{color:var(--z-cmp);border-color:var(--z-cmp)}
 @media (max-width:820px){.prof{grid-template-columns:1fr}.prof .av{width:140px;height:140px}.kpi{flex-basis:40%}.whead h1{font-size:var(--fs-56)}}
-"""
+@media (max-width:420px){.whead h1{font-size:44px}.wall{grid-template-columns:1fr}}
+""" + treemap.STYLE
 
 COPY_BADGE_JS = """<script>
 document.querySelectorAll('[data-copy]').forEach(function(b){b.addEventListener('click',function(){
@@ -207,6 +223,28 @@ def volume(pp, live_slugs=()):
     }
 
 
+def pinned_repo_stars(people):
+    """(total, repos): GitHub stars summed over DISTINCT pinned repositories that
+    have a recorded star count. The only star figures the generator has are the
+    outreach ledger's repo_stars (CONTRIBUTORS.jsonl, one per contributor repo,
+    each pinned at a commit); registry manifests carry none, so those repos
+    are left out rather than estimated. Same figures the treemap uses."""
+    by_repo = {}
+    for pp in people.values():
+        for w in pp["work"].values():
+            if isinstance(w.get("repo_stars"), int) and w.get("repo_url"):
+                by_repo[w["repo_url"].rstrip("/").lower()] = w["repo_stars"]
+    return sum(by_repo.values()), len(by_repo)
+
+
+def compact(n):
+    """12,400,000 -> '12.4M', 5,501,659 -> '5.5M', 48,200 -> '48.2K', 950 -> '950'."""
+    for div, suf in ((1_000_000_000, "B"), (1_000_000, "M"), (1_000, "K")):
+        if n >= div:
+            return f"{n / div:.1f}".rstrip("0").rstrip(".") + suf
+    return f"{n:,}"
+
+
 def badge_svg(label="XERJ Corpus Hub", value="contributor"):
     # shields-style flat badge; widths from a fixed 6.6 px/char estimate for 11px Verdana
     lw, vw = int(len(label) * 6.6) + 14, int(len(value) * 6.6) + 14
@@ -311,11 +349,15 @@ STARS_JS = """<script>
           .catch(function(){btn.disabled=false})});
     }).catch(function(){});
   });
-  var wall=document.querySelector('.wall[data-stars]');
+  // hub-star counts on the wall; hubStarMark() is called again by WALL_JS for
+  // every chunk it appends, and skips tiles it has already marked
+  var counts=null,wall=document.querySelector('.wall[data-stars]');
+  window.hubStarMark=function(root){if(!counts||!root)return;
+    root.querySelectorAll('[data-id]').forEach(function(a){var s=a.querySelector('.hs');if(!s||!s.hidden)return;
+      s.textContent=' · hub ★ '+fmt(counts[a.dataset.id]||0);s.hidden=false})};
   if(wall)fetch(API+'?kind='+wall.dataset.stars).then(function(r){return r.json()}).then(function(r){
     if(!r||!r.ok||!r.enabled)return;
-    wall.querySelectorAll('[data-id]').forEach(function(a){var n=r.counts[a.dataset.id]||0,s=a.querySelector('.hs');
-      s.textContent=' · hub ★ '+fmt(n);s.hidden=false});
+    counts=r.counts||{};window.hubStarMark(wall);
   }).catch(function(){});
 })();
 </script>"""
@@ -441,19 +483,102 @@ def stars_targets(people, registry):
             "pages": {l.lower(): l for l in sorted(people) if l != l.lower()}}
 
 
+CHUNK = 500            # list rows per JSON chunk / plain-HTML page
+
+
+def wall_order(people, vols):
+    """The wall's order: GitHub stars on the contributor's repos, then login."""
+    return sorted(people, key=lambda l: (-vols[l]["gh_stars"], l.lower()))
+
+
+def wall_tile(l, pp, v, esc):
+    return (f'<a href="{esc(l)}.html" data-id="{esc(l.lower())}"><img src="https://github.com/{esc(l)}.png?size=88" alt="" loading="lazy" width="44" height="44">'
+            f'<div><b>{esc(pp["name"] or l)}</b><span>@{esc(l)} · {v["corpora"]} corp{"us" if v["corpora"] == 1 else "ora"}'
+            f'{" · " + _n(v["lines"]) + " lines" if v["lines"] else ""} · GitHub ★ {_n(v["gh_stars"])}<span class="hs" hidden></span></span></div></a>')
+
+
+def wall_row(l, pp, v):
+    """One list row in list.<n>.json; WALL_JS renders it exactly like wall_tile()."""
+    return [l, pp["name"] if pp["name"] and pp["name"] != l else "", v["corpora"], v["lines"] or 0, v["gh_stars"]]
+
+
+def pager(n_pages, current):
+    links = " ".join(f'<a href="{"index.html" if i == 1 else f"list.{i}.html"}"{" aria-current=page" if i == current else ""}>{i}</a>'
+                     for i in range(1, n_pages + 1))
+    return f'<nav class="pager" aria-label="All contributors, page by page"><b>Pages</b> {links}</nav>'
+
+
+# Infinite scroll for the wall: the first CHUNK rows are in the HTML; the rest
+# come from list.<n>.json as the "Showing" line nears the viewport (or on the
+# button). The plain pager (list.<n>.html) stays in the HTML for crawlers and
+# no-JS readers; this script hides it, and shows it again if a chunk fails.
+WALL_JS = """<script>
+(function(){
+  var wall=document.querySelector('.wall[data-chunks]');if(!wall)return;
+  var next=2,last=+wall.dataset.chunks,total=+wall.dataset.total,busy=false,io=null;
+  var more=document.getElementById('wallmore'),btn=more.querySelector('button'),st=more.querySelector('[data-st]');
+  var pg=document.querySelector('nav.pager');if(pg&&last>1)pg.hidden=true;
+  function fmt(n){return Number(n).toLocaleString('en-US')}
+  function el(t,a,txt){var e=document.createElement(t);for(var k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e}
+  function tile(r){var l=r[0],a=el('a',{href:l+'.html','data-id':l.toLowerCase()});
+    a.appendChild(el('img',{src:'https://github.com/'+encodeURIComponent(l)+'.png?size=88',alt:'',loading:'lazy',width:'44',height:'44'}));
+    var d=el('div');d.appendChild(el('b',{},r[1]||l));
+    var s=el('span',{},'@'+l+' · '+r[2]+' corp'+(r[2]===1?'us':'ora')+(r[3]?' · '+fmt(r[3])+' lines':'')+' · GitHub ★ '+fmt(r[4]));
+    var hs=el('span',{'class':'hs'});hs.hidden=true;s.appendChild(hs);d.appendChild(s);a.appendChild(d);return a}
+  function done(){st.textContent='Showing '+fmt(wall.children.length)+' of '+fmt(total)+'.';
+    if(next>last){btn.hidden=true;if(io)io.disconnect();return}
+    if(io&&more.getBoundingClientRect().top<innerHeight+800)setTimeout(load,50)}
+  function load(){if(busy||next>last)return;busy=true;btn.disabled=true;
+    fetch('/contributors/list.'+next+'.json').then(function(r){if(!r.ok)throw r.status;return r.json()}).then(function(rows){
+      var f=document.createDocumentFragment();rows.forEach(function(r){f.appendChild(tile(r))});wall.appendChild(f);next++;
+      if(window.hubStarMark)window.hubStarMark(wall);busy=false;btn.disabled=false;done()
+    }).catch(function(){busy=false;btn.disabled=false;if(pg)pg.hidden=false;st.textContent='Could not load more here; use the pages below.'})}
+  if(last<2){done();return}
+  btn.hidden=false;btn.addEventListener('click',load);
+  if('IntersectionObserver' in window){io=new IntersectionObserver(function(e){if(e[0].isIntersecting)load()},{rootMargin:'0px 0px 800px 0px'});io.observe(more)}
+  done();
+})();
+</script>"""
+
+
 def wall_body(people, esc, live_slugs=()):
     vols = {l: volume(pp, live_slugs) for l, pp in people.items()}
-    order = sorted(people, key=lambda l: (-vols[l]["gh_stars"], l.lower()))
-    tiles = "".join(f'<a href="{esc(l)}.html" data-id="{esc(l.lower())}"><img src="https://github.com/{esc(l)}.png?size=88" alt="" loading="lazy">'
-                    f'<div><b>{esc(people[l]["name"] or l)}</b><span>@{esc(l)} · {vols[l]["corpora"]} corp{"us" if vols[l]["corpora"] == 1 else "ora"}'
-                    f'{" · " + _n(vols[l]["lines"]) + " lines" if vols[l]["lines"] else ""} · GitHub ★ {_n(vols[l]["gh_stars"])}<span class="hs" hidden></span></span></div></a>'
-                    for l in order)
+    order = wall_order(people, vols)
+    n_pages = max(1, -(-len(order) // CHUNK))
+    first = "".join(wall_tile(l, people[l], vols[l], esc) for l in order[:CHUNK])
+    items = [{"login": l, "name": people[l]["name"] or l, "stars": vols[l]["gh_stars"],
+              "stars_txt": "★ " + _n(vols[l]["gh_stars"])} for l in order]
+    cap = lambda k: (f'<p class="tmcap">Each tile\'s area is proportional to the GitHub stars on that contributor\'s repositories '
+                     f'(the figure the list is sorted by). The top {k} are on the map; all {len(order):,} are in <a href="#list">the list below</a>.</p>')
+    tm, _ = treemap.render(items, esc, lambda l: f"{l}.html", cap)
     repos = len({w["repo_url"].lower() for pp in people.values() for w in pp["work"].values()})
     corpora = len({c for pp in people.values() for c in pp["corpora"]})
     return f"""<main class="cwrap"><section class="whead"><h1>The people behind the hub</h1>
 <p>{len(people):,} developers agreed to let AI agents learn from their work: {repos:,} repositories across {corpora:,} corpora, each included with the author's permission,
 under its own licence, with attribution. Sorted by GitHub stars on their repositories; hub stars are the ones visitors give here. Every source is still in licence review; none is live yet unless its card says so.</p>
-<a class="cta" href="../contribute.html">Add yours</a></section><div class="wall" data-stars="contributor">{tiles}</div></main>{STARS_JS}"""
+<a class="cta" href="../contribute.html">Add yours</a></section>
+<section class="tmwrap" aria-labelledby="tmh"><h2 id="tmh" class="wallh">Top contributors by GitHub stars</h2>{tm}</section>
+<h2 id="list" class="wallh">All {len(order):,} contributors</h2>
+<div class="wall" data-stars="contributor" data-chunks="{n_pages}" data-total="{len(order)}">{first}</div>
+<p class="wallmore" id="wallmore" aria-live="polite"><span data-st>Showing {min(CHUNK, len(order)):,} of {len(order):,}.</span><button type="button" hidden>Load more</button></p>
+{pager(n_pages, 1)}</main>{STARS_JS}{WALL_JS}"""
+
+
+def wall_chunks(people, esc, live_slugs=()):
+    """[(n, rows, html_body)] for n = 2.. : list.<n>.json and list.<n>.html."""
+    vols = {l: volume(pp, live_slugs) for l, pp in people.items()}
+    order = wall_order(people, vols)
+    n_pages = max(1, -(-len(order) // CHUNK))
+    out = []
+    for n in range(2, n_pages + 1):
+        part = order[(n - 1) * CHUNK:n * CHUNK]
+        tiles = "".join(wall_tile(l, people[l], vols[l], esc) for l in part)
+        body = (f'<main class="cwrap"><p><a class="backlink" href="index.html">&larr; the star map and the full list</a></p>'
+                f'<section class="whead"><h1>Contributors, page {n} of {n_pages}</h1>'
+                f'<p>Contributors {(n - 1) * CHUNK + 1:,} to {(n - 1) * CHUNK + len(part):,} of {len(order):,}, sorted by GitHub stars on their repositories.</p></section>'
+                f'<div class="wall" data-stars="contributor">{tiles}</div>{pager(n_pages, n)}</main>{STARS_JS}')
+        out.append((n, [wall_row(l, people[l], vols[l]) for l in part], body))
+    return out
 
 
 def og(html, title, desc, url, image):
@@ -472,25 +597,167 @@ def by_corpus(people):
     return {k: sorted(v, key=str.lower) for k, v in out.items()}
 
 
-def corpus_section(logins, esc, people):
-    """The Contributors block on /corpus/<slug>.html (empty when nobody is listed)."""
-    if not logins:
+# Corpus pages credit people in three tiers, each linking /contributors/<login>:
+#   contributors  signed up (CONTRIBUTORS.jsonl / themed table); work included with permission
+#   upstream      the GitHub owner of each pinned repository who has not signed up:
+#                 credited under the repository's licence on an attribution page
+#   curator       CURATOR, for a corpus with no GitHub-hosted source (or an aggregate
+#                 of more than AGGREGATE owners, whose owners are credited per row
+#                 under Sources and pins rather than one page each)
+CURATOR = "xerj-org"
+AGGREGATE = 50
+OWNER_URL = re.compile(r"^https?://github\.com/([A-Za-z0-9-]+)/", re.I)
+
+
+def _owners(c):
+    seen = {}
+    for src in list(c.get("repos") or []) + list(c.get("sources") or []):
+        m = OWNER_URL.match(src.get("url", "") or "")
+        if m and LOGIN_RE.match(m.group(1)):
+            seen.setdefault(m.group(1).lower(), (m.group(1), src.get("repo") or src.get("slug") or src.get("url", ""), src.get("url", "")))
+    return seen
+
+
+def credits(registry, people):
+    """(per_corpus, upstream). per_corpus: slug -> {"contributors", "upstream",
+    "curator", "aggregate"}; upstream: lower login -> {"login", "repos": [(slug,
+    repo, url)], "curates": [slug]} for every upstream page to generate."""
+    lower = {l.lower(): l for l in people}
+    inc = by_corpus(people)
+    per, up = {}, {}
+    for c in registry or []:
+        own = _owners(c)
+        agg = len(own) if len(own) > AGGREGATE else 0
+        ups = []
+        if not agg:
+            for key, (login, repo, url) in own.items():
+                if key in lower:
+                    continue
+                u = up.setdefault(key, {"login": login, "repos": [], "curates": []})
+                u["repos"].append((c["slug"], repo, url))
+                ups.append(u["login"])
+        contrib = inc.get(c["slug"], [])
+        cur = bool(agg) or not (contrib or ups)
+        if cur:
+            up.setdefault(CURATOR.lower(), {"login": CURATOR, "repos": [], "curates": []})["curates"].append(c["slug"])
+        per[c["slug"]] = {"contributors": contrib, "upstream": sorted(set(ups), key=str.lower),
+                          "curator": cur, "aggregate": agg}
+    return per, up
+
+
+def _person_tile(login, label, sub, esc, rel):
+    return (f'<a href="{rel}contributors/{esc(login)}.html"><img src="https://github.com/{esc(login)}.png?size=88" alt="" loading="lazy" width="44" height="44">'
+            f'<div><b>{esc(label)}</b><span>{esc(sub)}</span></div></a>')
+
+
+def corpus_section(logins, esc, people, upstream=(), curator=False, aggregate=0, rel="../"):
+    """The people block on /corpus/<slug>.html (empty when nobody is listed).
+    Every tile is avatar + name linking to /contributors/<login>."""
+    if not (logins or upstream or curator):
         return ""
-    tiles = "".join(f'<a href="../contributors/{esc(l)}.html"><img src="https://github.com/{esc(l)}.png?size=88" alt="" loading="lazy">'
-                    f'<div><b>{esc(people[l]["name"] or l)}</b><span>@{esc(l)}</span></div></a>' for l in logins)
-    return (f'<section class="detail" id="contributors"><h2>Contributors ({len(logins)})</h2>'
-            f'<p class="note">People whose work this corpus selects or pins, each with their permission. '
-            f'<a href="../contributors/index.html">All contributors</a>.</p><div class="wall">{tiles}</div></section>')
+    parts = []
+    if logins:
+        tiles = "".join(_person_tile(l, people[l]["name"] or l, "@" + l, esc, rel) for l in logins)
+        parts.append(f'<h3>Contributors ({len(logins)})</h3><p class="note">People whose work this corpus selects or pins, each with their permission.</p>'
+                     f'<div class="wall">{tiles}</div>')
+    if upstream:
+        tiles = "".join(_person_tile(l, l, "@" + l + " · upstream", esc, rel) for l in upstream)
+        parts.append(f'<h3>Upstream authors ({len(upstream)})</h3><p class="note">Owners of the pinned repositories, credited under each '
+                     f'repository\'s licence. They have not signed up here; their pages are attribution.</p><div class="wall">{tiles}</div>')
+    if aggregate:
+        parts.append(f'<p class="note">This corpus pins repositories from {aggregate:,} upstream authors; each one is credited with its '
+                     f'repository under Sources and pins above.</p>')
+    if curator:
+        why = ("assembled it from those repositories and reviewed each licence." if aggregate else
+               "maintain this registry entry; its sources are not GitHub repositories with an owner to credit, so the "
+               "original publishers are the ones listed under Sources and pins.")
+        parts.append(f'<h3>Curated by</h3><p class="note">The hub maintainers {why}</p>'
+                     f'<div class="wall">{_person_tile(CURATOR, "XERJ Corpus Hub maintainers", "@" + CURATOR + " · curator", esc, rel)}</div>')
+    return (f'<section class="detail people" id="contributors"><h2>People behind this corpus</h2>{"".join(parts)}'
+            f'<p class="note"><a href="{rel}contributors/index.html">All contributors</a>.</p></section>')
 
 
-def generate(out, hub_dir, page, esc, live_slugs, registry=None, people=None):
+def upstream_body(u, esc, pages):
+    login = u["login"]
+    cur = login.lower() == CURATOR.lower()
+    rows = "".join(f'<li><a href="{esc(url)}">{esc(repo)}</a> in <a href="../corpus/{esc(slug)}.html">corpus {esc(slug)}</a></li>'
+                   for slug, repo, url in sorted(u["repos"], key=lambda r: (r[0], r[1])) if slug in pages)
+    cura = "".join(f'<li><a href="../corpus/{esc(slug)}.html">{esc(slug)}</a></li>' for slug in sorted(u["curates"]) if slug in pages)
+    n = len({r[0] for r in u["repos"]} | set(u["curates"]))
+    if cur:
+        who = ("The XERJ Corpus Hub maintainers. Besides their own repositories, they curate the registry entries whose sources "
+               "have no GitHub owner to credit, and the large aggregate corpora.")
+        claim = ""
+    else:
+        who = (f"@{esc(login)} is credited here because their public repositories are pinned in the corpora below, under each "
+               f"repository's own licence. This is an attribution page: @{esc(login)} has not signed up as a Corpus Hub contributor, "
+               f"and nothing here says they endorse the hub.")
+        issue = urllib.parse.quote(f"Corpus Hub: attribution for @{login}")
+        claim = (f'<p class="note">Is this you? <a href="../contribute.html">Add your work</a>, or '
+                 f'<a href="https://github.com/xerj-org/xerj/issues/new?title={issue}">ask for a change</a>.</p>')
+    sec_rows = f"<h2>Pinned repositories</h2><ul>{rows}</ul>" if rows else ""
+    sec_cura = f"<h2>Curated corpora</h2><ul>{cura}</ul>" if cura else ""
+    role = "curator" if cur else "upstream author"
+    return (f'<main class="cwrap"><section class="prof"><img class="av" src="https://github.com/{esc(login)}.png?size=480" alt="{esc(login)}">'
+            f'<div><h1>{esc(login)}</h1><div class="login"><a href="https://github.com/{esc(login)}">@{esc(login)}</a></div>'
+            f'<div class="chips"><span class="chip up">{role}</span><span class="chip">{n} corp{"us" if n == 1 else "ora"}</span></div>'
+            f'<p>{who}</p>{claim}</div></section>{sec_rows}{sec_cura}'
+            f'<p class="note"><a href="index.html">All contributors</a></p></main>')
+
+
+def candidates(people, registry_slugs, hub_dir):
+    """Corpora a contributor appears in that have no registry page (author
+    corpora and themed candidate corpora, all in licence review):
+    slug -> {"kind", "works": [(login, work)], "repos": manifest repos or []}."""
+    out = {}
+    for login, pp in people.items():
+        for w in pp["work"].values():
+            for slug in w["corpora"]:
+                if slug in registry_slugs or not re.match(r"^[A-Za-z0-9][A-Za-z0-9._-]*$", slug):
+                    continue
+                e = out.setdefault(slug, {"kind": pp["corpora"].get(slug, "candidate corpus"), "works": [], "repos": []})
+                e["works"].append((login, w))
+    for slug, e in out.items():
+        m = pathlib.Path(hub_dir) / "candidates" / f"{slug}.json"
+        if m.exists():
+            try:
+                e["repos"] = json.loads(m.read_text()).get("repos") or []
+            except ValueError:
+                pass
+    return out
+
+
+def candidate_body(slug, e, esc, people):
+    logins = sorted({l for l, _ in e["works"]}, key=str.lower)
+    rows = []
+    for l, w in sorted(e["works"], key=lambda x: (x[1]["repo"].lower(), x[0].lower())):
+        commit = (f'<a href="{esc(w["commit_url"])}">{esc(w["commit"][:10])}</a> {esc(w["title"])}' if w["commit"] else "")
+        rows.append(f'<tr><td class="mono"><a href="{esc(w["repo_url"])}">{esc(w["repo"])}</a></td><td><a href="../contributors/{esc(l)}.html">@{esc(l)}</a></td>'
+                    f'<td class="mono">{commit}</td><td>{esc(w["spdx"] or "?")}</td></tr>')
+    pinned = "".join(f'<tr><td class="mono"><a href="{esc(r.get("url", ""))}">{esc(r.get("repo", ""))}</a></td><td class="mono">{esc((r.get("sha") or "")[:12])}</td>'
+                     f'<td>{esc((r.get("review") or {}).get("spdx") or r.get("licence") or "?")}</td></tr>' for r in e["repos"])
+    pins = (f'<section class="detail"><h2>Pinned sources ({len(e["repos"])})</h2><table><tr><th>source</th><th>pin</th><th>licence</th></tr>{pinned}</table></section>'
+            if pinned else "")
+    return (f'<main><p><a class="backlink" href="../contributors/index.html">&larr; all contributors</a></p>'
+            f'<h1 class="slug">{esc(slug)}</h1>'
+            f'<p class="note">{esc(e["kind"])} · status <b>selected · in licence review</b> · not in the hub registry yet</p>'
+            f'<div class="kbox"><b>Not installable yet</b><br>This corpus is a candidate: it is not in the hub registry until its licence review passes, '
+            f'so <code>xerj corpus add</code> and <code>xerj ask</code> cannot fetch it. The corpus is each whole repository at its pinned commit.</div>'
+            f'<section class="detail"><h2>Selected work ({len(rows)})</h2><table><tr><th>repository</th><th>contributor</th><th>selected commit</th><th>licence</th></tr>'
+            f'{"".join(rows)}</table></section>{pins}{corpus_section(logins, esc, people)}</main>')
+
+
+def generate(out, hub_dir, page, esc, live_slugs, registry=None, people=None, upstream=None):
     if people is None:
         people = load(hub_dir, registry)
     if not people:
         return 0
-    pages = {c["slug"] for c in registry or []}
+    reg_slugs = {c["slug"] for c in registry or []}
+    cands = candidates(people, reg_slugs, hub_dir)
+    pages = reg_slugs | set(cands)
     d = pathlib.Path(out) / "contributors"
     d.mkdir(exist_ok=True)
+    (pathlib.Path(out) / "corpus").mkdir(exist_ok=True)
     for login, pp in people.items():
         name = pp["name"] or login
         first = sorted(pp["work"].values(), key=lambda w: -(w.get("repo_stars") or 0))[0]
@@ -500,8 +767,27 @@ def generate(out, hub_dir, page, esc, live_slugs, registry=None, people=None):
         (d / f"{login}.html").write_text(og(html, esc(title), esc(desc), f"{SITE}/contributors/{login}.html", f"https://github.com/{login}.png?size=400"))
         (d / login).mkdir(exist_ok=True)
         (d / login / "badge.svg").write_text(badge_svg())
+    # upstream owners and the curator: attribution pages, kept out of search indexes
+    if upstream is None:
+        upstream = credits(registry, people)[1]
+    for u in upstream.values():
+        title = f"{u['login']}: credited on the XERJ Corpus Hub"
+        desc = f"Corpora on the XERJ Corpus Hub that pin repositories by {u['login']}"
+        html = page(title, desc, upstream_body(u, esc, pages), rel="../")
+        html = html.replace("</head>", '<meta name="robots" content="noindex,follow"></head>', 1)
+        (d / f"{u['login']}.html").write_text(og(html, esc(title), esc(desc), f"{SITE}/contributors/{u['login']}.html", f"https://github.com/{u['login']}.png?size=400"))
+    # candidate corpora: one page each, so every contributor's corpus chip links somewhere
+    for slug, e in cands.items():
+        html = page(f"{slug}: candidate corpus, XERJ Corpus Hub", f"Candidate corpus {slug}: selected work in licence review",
+                    candidate_body(slug, e, esc, people), rel="../")
+        (pathlib.Path(out) / "corpus" / f"{slug}.html").write_text(html)
     (d / "stars-targets.json").write_text(json.dumps(stars_targets(people, registry), separators=(",", ":")))
     html = page("Contributors: XERJ Corpus Hub", "The developers whose work AI agents retrieve from the XERJ Corpus Hub", wall_body(people, esc, live_slugs), rel="../")
     (d / "index.html").write_text(og(html, "The people behind the XERJ Corpus Hub", "Developers who agreed to let AI agents learn from their work",
                                      f"{SITE}/contributors/", "https://github.com/xerj-org.png"))
+    for n, rows, body in wall_chunks(people, esc, live_slugs):
+        (d / f"list.{n}.json").write_text(json.dumps(rows, separators=(",", ":"), ensure_ascii=False))
+        html = page(f"Contributors, page {n}: XERJ Corpus Hub", "The developers whose work AI agents retrieve from the XERJ Corpus Hub", body, rel="../")
+        (d / f"list.{n}.html").write_text(og(html, f"Contributors, page {n}: XERJ Corpus Hub", "Developers who agreed to let AI agents learn from their work",
+                                             f"{SITE}/contributors/list.{n}.html", "https://github.com/xerj-org.png"))
     return len(people)
