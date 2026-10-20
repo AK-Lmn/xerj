@@ -6,7 +6,7 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 
 ## Current state
 
-273 corpora attempted: 228 published at their latest attempt, 45 not.
+300 corpora attempted: 254 published at their latest attempt, 46 not.
 
 ### Latest attempt did not publish (fix or delist on purpose)
 
@@ -47,7 +47,7 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 | `cassandra` | `ec2c276b` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `exploit-pocs-2023` | `af9e194d` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2023` | `af9e194d` |  |  | cancelled at `build` | [FAIL] django-security-advisory-3.2.16: git fetch 4ac74feb7ad380decf41d37cf796b410262b64fd failed; continuing |
 | `exploit-pocs-2024` | `7855e58f` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
 | `exploit-pocs-2025` | `374cf8f1` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
 | `exploit-pocs-2026` | `160f470e` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
@@ -56,9 +56,55 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 | `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `ipsum-blocklist` | `444b4802` | 26583768 | 0 | failed at `e2e` | no question from ask_for (reputation |
+| `ipsum-blocklist` | `444b4802` | 26449698 | 0 | failed at `e2e` | no question from ask_for (reputation |
+| `kyverno-policies` | `ec478cb5` | 1761907 | 0 | failed at `e2e` | release not found |
 
 ## Runs (newest first)
+
+### Run [39419437459](https://github.com/xerj-org/xerj/actions/runs/39419437459), 2026-10-20: 26 of 40 published
+
+| slug | pin8 | bytes | defs | result | error |
+|---|---|---:|---:|---|---|
+| `cassandra` | `ec2c276b` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `exploit-pocs-2023` | `af9e194d` |  |  | cancelled at `build` | [FAIL] django-security-advisory-3.2.16: git fetch 4ac74feb7ad380decf41d37cf796b410262b64fd failed; continuing |
+| `exploit-pocs-2024` | `7855e58f` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2025` | `374cf8f1` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2026` | `160f470e` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploitdb-src` | `12879ca7` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `fluent-bit` | `3b6ce5cf` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ipsum-blocklist` | `444b4802` | 26449698 | 0 | failed at `e2e` | no question from ask_for (reputation |
+| `kyverno-policies` | `ec478cb5` | 1761907 | 0 | failed at `e2e` | release not found |
+| `joblint` | `3b3fbb4e` | 297118 | 301 | published `pack-joblint-3b3fbb4e` |  |
+| `jose-js` | `2a3a5259` | 5586921 | 704 | published `pack-jose-js-2a3a5259` |  |
+| `jsdom` | `a78f9c22` | 34917196 | 2768 | published `pack-jsdom-a78f9c22` |  |
+| `json-api-spec` | `bde79ceb` | 5621859 | 253 | published `pack-json-api-spec-bde79ceb` |  |
+| `json-schema-spec` | `4f56a990` | 3032450 | 8 | published `pack-json-schema-spec-4f56a990` |  |
+| `json-schema-test-suite` | `8568bcc4` | 4244252 | 0 | published `pack-json-schema-test-suite-8568bcc4` |  |
+| `jsonformer` | `bfad0318` | 924048 | 23 | published `pack-jsonformer-bfad0318` |  |
+| `jsonwebtoken-rust` | `11f83ab5` | 1011440 | 420 | published `pack-jsonwebtoken-rust-11f83ab5` |  |
+| `jwx` | `c4774435` | 12454487 | 3851 | published `pack-jwx-c4774435` |  |
+| `kafka-protocol` | `94ac9e02` | 6206844 | 0 | published `pack-kafka-protocol-94ac9e02` |  |
+| `kafka-src` | `d12941eb` | 190172568 | 107799 | published `pack-kafka-src-d12941eb` |  |
+| `karma` | `38fd3a9f` | 16101745 | 1733 | published `pack-karma-38fd3a9f` |  |
+| `karpenter` | `a4432485` | 23951803 | 4110 | published `pack-karpenter-a4432485` |  |
+| `keda` | `59815e11` | 26368495 | 11825 | published `pack-keda-59815e11` |  |
+| `keep-a-changelog` | `08d0df5a` | 3503911 | 288 | published `pack-keep-a-changelog-08d0df5a` |  |
+| `keywhiz` | `52e77fd9` | 7751429 | 4349 | published `pack-keywhiz-52e77fd9` |  |
+| `kics` | `bbb3c148` | 90263370 | 3867 | published `pack-kics-bbb3c148` |  |
+| `knox` | `61dd5823` | 1892732 | 848 | published `pack-knox-61dd5823` |  |
+| `kotaemon` | `9ad3e4e4` | 5614362 | 2158 | published `pack-kotaemon-9ad3e4e4` |  |
+| `kratix` | `2ed71d24` | 14161248 | 2268 | published `pack-kratix-2ed71d24` |  |
+| `kryptology` | `eef70332` | 4517679 | 4240 | published `pack-kryptology-eef70332` |  |
+| `kube-bench` | `e278a591` | 8509449 | 306 | published `pack-kube-bench-e278a591` |  |
+| `kube-hunter` | `bc47f08e` | 1565146 | 741 | published `pack-kube-hunter-bc47f08e` |  |
+| `kubernetes-community` | `585a4ac6` | 63482596 | 170 | published `pack-kubernetes-community-585a4ac6` |  |
+| `kubescape-regolibrary` | `5d5fd8fc` | 13187671 | 382 | published `pack-kubescape-regolibrary-5d5fd8fc` |  |
+| `lambdaworks` | `3a87850d` | 9444212 | 9088 | published `pack-lambdaworks-3a87850d` |  |
 
 ### Run [39335555740](https://github.com/xerj-org/xerj/actions/runs/39335555740), 2026-10-19: 27 of 40 published
 
