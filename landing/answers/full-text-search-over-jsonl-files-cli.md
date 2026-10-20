@@ -2,13 +2,13 @@
 ---
 title: "Full-text search over JSONL and CSV files from the CLI"
 canonical: "https://xerj.org/answers/full-text-search-over-jsonl-files-cli"
-updated: "2026-10-19"
+updated: "2026-10-20"
 source: "content/answers/full-text-search-over-jsonl-files-cli.md"
 ---
 
 # Full-text search over JSONL files from the CLI: index a folder and query it with BM25
 
-**TL;DR** — For full-text search over JSONL files from the CLI, run `xerj autoindex` on the folder and query it with BM25. No schema or mapping is needed; CSV works the same way. On 2026-10-19 a folder of 2,902 JSONL and CSV rows indexed in 12.4 s, and field queries returned ranked hits in 1 to 3 ms.
+**TL;DR** — For full-text search over JSONL files from the CLI, run `xerj autoindex` on the folder and query it with BM25. No schema or mapping is needed; CSV works the same way. On 2026-10-19 a folder of 2,902 JSONL and CSV rows indexed in 12.4 s, and the field queries returned ranked hits in 1 ms.
 
 ## Commands
 
@@ -77,7 +77,7 @@ curl -s 'localhost:9200/scr-jsonl/_search' -H 'content-type: application/json' \
 ```
 
 ```json
-{"took":3,"total":57,"hits":[
+{"took":1,"total":57,"hits":[
  {"score":19.358475,"number":1801,"title":"[feature]: Batch queries (many IDs or questions per call, per-item answer or abstain)"},
  {"score":10.939819,"number":1788,"title":"[feature]: Field-aware BM25 plus exact ID matching in `xerj code`"},
  {"score":10.761112,"number":1244,"title":"xerj code over JSON corpora: one shard's synthesized empty text defeats the own-field fallback (cve-records G7 0/7)"}]}
@@ -90,7 +90,7 @@ curl -s 'localhost:9200/scr-jsonl/_search' -H 'content-type: application/json' \
 | Input | 3 files, 6.4 MB: 517 + 1,385 JSON lines, 1,000 CSV rows |
 | Index time | 12.4 s, 2,902 documents |
 | CSV query "bm25 jsonl folder" | 79 hits, took 1 ms, row 480 first |
-| JSONL query "batch CVE GHSA lookup" | 57 hits, took 3 ms, issue #1801 first |
+| JSONL query "batch CVE GHSA lookup" | 57 hits, took 1 ms, issue #1801 first |
 | `rg -c -i "bm25 jsonl folder"` on the CSV | 0 lines |
 | `rg -c -i bm25` on the CSV | 41 lines, unranked |
 
@@ -119,7 +119,7 @@ Run `xerj autoindex` on the folder, then query the node with curl or `xerj searc
 
 ### Can I index a folder of JSONL files and query it with BM25?
 
-Yes. Our folder held 517 and 1,385 JSONL records plus a 1,000-row CSV; autoindex built three indices in 12.4 s, and a field-scoped `match` returned ranked hits in 1 to 3 ms.
+Yes. Our folder held 517 and 1,385 JSONL records plus a 1,000-row CSV; autoindex built three indices in 12.4 s, and the field queries returned ranked hits in 1 ms.
 
 ### Is there an MCP server to search local CSV files?
 
@@ -141,7 +141,7 @@ Yes, but check the label. Our 1,385-record file was detected as format `json` ra
 
 - autoindex: done in 12.4s (12.4 s), 2902 documents, 3 datasets — `benchmarks/agent-intents-2026-10-19/03-autoindex-jsonl-csv.txt`
 - CSV match: took 1 ms, 79 hits, id 480 first — `benchmarks/agent-intents-2026-10-19/03-csv-match.json`
-- JSONL multi_match: took 3 ms, 57 hits, #1801 first — `benchmarks/agent-intents-2026-10-19/03-jsonl-multi-match.json`
+- JSONL multi_match: took 1 ms, 57 hits, #1801 first — `benchmarks/agent-intents-2026-10-19/03-jsonl-multi-match.json`
 - xerj search cites two documents as xerj-prs.jsonl:1 — `benchmarks/agent-intents-2026-10-19/03-xerj-search-cli.txt`
 - Folder size 6,444,108 bytes (6.4 MB); rg counts 0 and 41 — `benchmarks/agent-intents-2026-10-19/README.md`
 

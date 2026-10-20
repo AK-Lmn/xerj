@@ -2,7 +2,7 @@
 ---
 title: "Local code search MCP that uses fewer tokens than grep"
 canonical: "https://xerj.org/answers/local-code-search-mcp-fewer-tokens-than-grep"
-updated: "2026-10-19"
+updated: "2026-10-20"
 source: "content/answers/local-code-search-mcp-fewer-tokens-than-grep.md"
 ---
 

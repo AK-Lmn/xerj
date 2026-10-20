@@ -98,8 +98,12 @@
       "canonical_url": "https://xerj.org/answers/ask-questions-about-a-github-repo-without-cloning",
       "markdown_url": "https://xerj.org/answers/ask-questions-about-a-github-repo-without-cloning.md",
       "cluster": "Answers for coding agents",
-      "updated": "2026-10-19",
-      "summary": "xerj ask answers from a signed, pre-indexed pack of a pinned repo, with file:line, the commit and the licence. First answer 2.4 s with the download, then 30-40 ms."
+      "updated": "2026-10-20",
+      "summary": "xerj ask answers from a signed, pre-indexed pack of a pinned repo, with file:line, the commit and the licence. First answer 2.4 s with the download, then 30-40 ms.",
+      "queries": [
+        "ask questions about a GitHub repo without cloning it",
+        "ask a GitHub repo without cloning"
+      ]
     },
     {
       "title": "Batch lookup of CVE and GHSA IDs offline, with sources",
@@ -107,8 +111,12 @@
       "canonical_url": "https://xerj.org/answers/batch-lookup-cve-ghsa-ids-offline",
       "markdown_url": "https://xerj.org/answers/batch-lookup-cve-ghsa-ids-offline.md",
       "cluster": "Answers for coding agents",
-      "updated": "2026-10-19",
-      "summary": "Load a signed advisory pack into xerj and resolve many CVE, GHSA and RUSTSEC IDs in one offline query, with the source file per answer. 6 IDs: 15 ms, 2 abstained."
+      "updated": "2026-10-20",
+      "summary": "Load a signed advisory pack into xerj and resolve many CVE, GHSA and RUSTSEC IDs in one offline query, with the source file per answer. 6 IDs: 15 ms, 2 abstained.",
+      "queries": [
+        "batch lookup CVE and GHSA IDs offline",
+        "batch lookup CVE IDs and GHSA IDs without GitHub API rate limits"
+      ]
     },
     {
       "title": "Full-text search over JSONL and CSV files from the CLI",
@@ -116,8 +124,12 @@
       "canonical_url": "https://xerj.org/answers/full-text-search-over-jsonl-files-cli",
       "markdown_url": "https://xerj.org/answers/full-text-search-over-jsonl-files-cli.md",
       "cluster": "Answers for coding agents",
-      "updated": "2026-10-19",
-      "summary": "xerj autoindex reads a folder of JSONL and CSV with no schema, then answers BM25 queries per field from the CLI or MCP. 2,902 rows indexed in 12.4 s; queries 1-3 ms."
+      "updated": "2026-10-20",
+      "summary": "xerj autoindex reads JSONL and CSV with no schema, then answers BM25 queries per field from the CLI or MCP. 2,902 rows indexed in 12.4 s; queries took 1 ms.",
+      "queries": [
+        "full-text search over JSONL files from the CLI",
+        "index a folder of JSONL files and query it with BM25"
+      ]
     },
     {
       "title": "Local code search MCP that uses fewer tokens than grep",
@@ -125,8 +137,12 @@
       "canonical_url": "https://xerj.org/answers/local-code-search-mcp-fewer-tokens-than-grep",
       "markdown_url": "https://xerj.org/answers/local-code-search-mcp-fewer-tokens-than-grep.md",
       "cluster": "Answers for coding agents",
-      "updated": "2026-10-19",
-      "summary": "xerj indexes a repo once and returns ranked passages with file:line through a CLI and an MCP server. On psf/requests one answer was 1,303 bytes; rg printed 25,150."
+      "updated": "2026-10-20",
+      "summary": "xerj indexes a repo once and returns ranked passages with file:line through a CLI and an MCP server. On psf/requests one answer was 1,303 bytes; rg printed 25,150.",
+      "queries": [
+        "local code search MCP for Claude Code that uses fewer tokens than grep",
+        "local code search MCP fewer tokens than grep"
+      ]
     },
     {
       "title": "Retrieval that cites file:line and says not found",
@@ -134,8 +150,12 @@
       "canonical_url": "https://xerj.org/answers/retrieval-that-says-not-found-with-file-line-citations",
       "markdown_url": "https://xerj.org/answers/retrieval-that-says-not-found-with-file-line-citations.md",
       "cluster": "Answers for coding agents",
-      "updated": "2026-10-19",
-      "summary": "xerj answers with file:line and exits 1 with no match when a symbol or corpus is missing. Free-text questions still return passages; confidence is issue #1786."
+      "updated": "2026-10-20",
+      "summary": "xerj answers with file:line and exits 1 with no match when a symbol or corpus is missing. Free-text questions still return passages; confidence is issue #1786.",
+      "queries": [
+        "retrieval that says not found and cites file and line",
+        "retrieval tool that abstains when unsure and cites file:line"
+      ]
     },
     {
       "title": "Does XERJ support S3, alerting or custom plugins?",

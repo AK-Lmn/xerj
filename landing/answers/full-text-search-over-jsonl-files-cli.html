@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Full-text search over JSONL and CSV files from the CLI</title>
-<meta name="description" content="xerj autoindex reads a folder of JSONL and CSV with no schema, then answers BM25 queries per field from the CLI or MCP. 2,902 rows indexed in 12.4 s; queries 1-3 ms.">
+<meta name="description" content="xerj autoindex reads JSONL and CSV with no schema, then answers BM25 queries per field from the CLI or MCP. 2,902 rows indexed in 12.4 s; queries took 1 ms.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;700;800;900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@
 <meta property="og:site_name" content="XERJ.ai">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Full-text search over JSONL and CSV files from the CLI">
-<meta property="og:description" content="xerj autoindex reads a folder of JSONL and CSV with no schema, then answers BM25 queries per field from the CLI or MCP. 2,902 rows indexed in 12.4 s; queries 1-3 ms.">
+<meta property="og:description" content="xerj autoindex reads JSONL and CSV with no schema, then answers BM25 queries per field from the CLI or MCP. 2,902 rows indexed in 12.4 s; queries took 1 ms.">
 <meta property="og:url" content="https://xerj.org/answers/full-text-search-over-jsonl-files-cli">
 <meta property="og:image" content="https://xerj.org/og/answers-full-text-search-over-jsonl-files-cli.png">
 <meta property="og:image:width" content="1200">
@@ -26,7 +26,7 @@
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Full-text search over JSONL and CSV files from the CLI">
-<meta name="twitter:description" content="xerj autoindex reads a folder of JSONL and CSV with no schema, then answers BM25 queries per field from the CLI or MCP. 2,902 rows indexed in 12.4 s; queries 1-3 ms.">
+<meta name="twitter:description" content="xerj autoindex reads JSONL and CSV with no schema, then answers BM25 queries per field from the CLI or MCP. 2,902 rows indexed in 12.4 s; queries took 1 ms.">
 <meta name="twitter:image" content="https://xerj.org/og/answers-full-text-search-over-jsonl-files-cli.png">
 <script type="application/ld+json">
 {
@@ -60,12 +60,12 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "Full-text search over JSONL and CSV files from the CLI",
-  "description": "xerj autoindex reads a folder of JSONL and CSV with no schema, then answers BM25 queries per field from the CLI or MCP. 2,902 rows indexed in 12.4 s; queries 1-3 ms.",
+  "description": "xerj autoindex reads JSONL and CSV with no schema, then answers BM25 queries per field from the CLI or MCP. 2,902 rows indexed in 12.4 s; queries took 1 ms.",
   "url": "https://xerj.org/answers/full-text-search-over-jsonl-files-cli",
   "image": "https://xerj.org/og/answers-full-text-search-over-jsonl-files-cli.png",
   "inLanguage": "en",
   "datePublished": "2026-10-19",
-  "dateModified": "2026-10-19",
+  "dateModified": "2026-10-20",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -144,8 +144,8 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>FULL-TEXT SEARCH OVER JSONL FILES FROM THE CLI: INDEX A FOLDER AND QUERY IT WITH BM25</div>
   <div class="kicker"><span>ANSWERS · ANSWERS FOR CODING AGENTS</span></div>
   <h1 class="h1-long">Full-text search over JSONL files from the CLI: index a folder and query it with BM25</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-10-19 · UPDATED · 2026-10-19</div>
-  <p><strong>TL;DR</strong> — For full-text search over JSONL files from the CLI, run <code class="inline">xerj autoindex</code> on the folder and query it with BM25. No schema or mapping is needed; CSV works the same way. On 2026-10-19 a folder of 2,902 JSONL and CSV rows indexed in 12.4 s, and field queries returned ranked hits in 1 to 3 ms.</p>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-10-19 · UPDATED · 2026-10-20</div>
+  <p><strong>TL;DR</strong> — For full-text search over JSONL files from the CLI, run <code class="inline">xerj autoindex</code> on the folder and query it with BM25. No schema or mapping is needed; CSV works the same way. On 2026-10-19 a folder of 2,902 JSONL and CSV rows indexed in 12.4 s, and the field queries returned ranked hits in 1 ms.</p>
   <div class="prompt-card">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj --insecure --data-dir ./xerj-data</code>
@@ -189,7 +189,7 @@ indexed: 2902 documents live; this run submitted 2902 source records from 3 file
   <pre class="code"><code class="language-sh">curl -s 'localhost:9200/scr-jsonl/_search' -H 'content-type: application/json' \
   -d '{"size":3,"_source":["number","title"],"query":{"multi_match":{"query":"batch CVE GHSA lookup","fields":["title^2","body"]}}}'
 </code></pre>
-  <pre class="code"><code class="language-json">{"took":3,"total":57,"hits":[
+  <pre class="code"><code class="language-json">{"took":1,"total":57,"hits":[
  {"score":19.358475,"number":1801,"title":"[feature]: Batch queries (many IDs or questions per call, per-item answer or abstain)"},
  {"score":10.939819,"number":1788,"title":"[feature]: Field-aware BM25 plus exact ID matching in `xerj code`"},
  {"score":10.761112,"number":1244,"title":"xerj code over JSON corpora: one shard's synthesized empty text defeats the own-field fallback (cve-records G7 0/7)"}]}
@@ -201,7 +201,7 @@ indexed: 2902 documents live; this run submitted 2902 source records from 3 file
       <tr><td>Input</td><td>3 files, 6.4 MB: 517 + 1,385 JSON lines, 1,000 CSV rows</td></tr>
       <tr><td>Index time</td><td>12.4 s, 2,902 documents</td></tr>
       <tr><td>CSV query "bm25 jsonl folder"</td><td>79 hits, took 1 ms, row 480 first</td></tr>
-      <tr><td>JSONL query "batch CVE GHSA lookup"</td><td>57 hits, took 3 ms, issue #1801 first</td></tr>
+      <tr><td>JSONL query "batch CVE GHSA lookup"</td><td>57 hits, took 1 ms, issue #1801 first</td></tr>
       <tr><td><code class="inline">rg -c -i "bm25 jsonl folder"</code> on the CSV</td><td>0 lines</td></tr>
       <tr><td><code class="inline">rg -c -i bm25</code> on the CSV</td><td>41 lines, unranked</td></tr>
     </tbody>
@@ -228,7 +228,7 @@ indexed: 2902 documents live; this run submitted 2902 source records from 3 file
   <h3>How do I run full-text search over JSONL files from the CLI?</h3>
   <p>Run <code class="inline">xerj autoindex</code> on the folder, then query the node with curl or <code class="inline">xerj search</code>. No mapping is needed: each record becomes a document with its own fields.</p>
   <h3>Can I index a folder of JSONL files and query it with BM25?</h3>
-  <p>Yes. Our folder held 517 and 1,385 JSONL records plus a 1,000-row CSV; autoindex built three indices in 12.4 s, and a field-scoped <code class="inline">match</code> returned ranked hits in 1 to 3 ms.</p>
+  <p>Yes. Our folder held 517 and 1,385 JSONL records plus a 1,000-row CSV; autoindex built three indices in 12.4 s, and the field queries returned ranked hits in 1 ms.</p>
   <h3>Is there an MCP server to search local CSV files?</h3>
   <p>Yes. <code class="inline">xerj mcp</code> exposes <code class="inline">xerj_search</code>, which takes the same index and query body as the curl call on this page. Register it with <code class="inline">xerj init</code>.</p>
   <h3>Why use this instead of grep or jq?</h3>
@@ -241,7 +241,7 @@ indexed: 2902 documents live; this run submitted 2902 source records from 3 file
   <ul>
     <li>autoindex: done in 12.4s (12.4 s), 2902 documents, 3 datasets — <code>benchmarks/agent-intents-2026-10-19/03-autoindex-jsonl-csv.txt</code></li>
     <li>CSV match: took 1 ms, 79 hits, id 480 first — <code>benchmarks/agent-intents-2026-10-19/03-csv-match.json</code></li>
-    <li>JSONL multi_match: took 3 ms, 57 hits, #1801 first — <code>benchmarks/agent-intents-2026-10-19/03-jsonl-multi-match.json</code></li>
+    <li>JSONL multi_match: took 1 ms, 57 hits, #1801 first — <code>benchmarks/agent-intents-2026-10-19/03-jsonl-multi-match.json</code></li>
     <li>xerj search cites two documents as xerj-prs.jsonl:1 — <code>benchmarks/agent-intents-2026-10-19/03-xerj-search-cli.txt</code></li>
     <li>Folder size 6,444,108 bytes (6.4 MB); rg counts 0 and 41 — <code>benchmarks/agent-intents-2026-10-19/README.md</code></li>
   </ul>

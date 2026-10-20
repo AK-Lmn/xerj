@@ -2,7 +2,7 @@
 ---
 title: "Retrieval that cites file:line and says not found"
 canonical: "https://xerj.org/answers/retrieval-that-says-not-found-with-file-line-citations"
-updated: "2026-10-19"
+updated: "2026-10-20"
 source: "content/answers/retrieval-that-says-not-found-with-file-line-citations.md"
 ---
 

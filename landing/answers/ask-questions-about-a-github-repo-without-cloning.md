@@ -2,7 +2,7 @@
 ---
 title: "Ask questions about a GitHub repo without cloning it"
 canonical: "https://xerj.org/answers/ask-questions-about-a-github-repo-without-cloning"
-updated: "2026-10-19"
+updated: "2026-10-20"
 source: "content/answers/ask-questions-about-a-github-repo-without-cloning.md"
 ---
 
