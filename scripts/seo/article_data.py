@@ -23,7 +23,39 @@ TOP_FIELDS = frozenset({
     "title", "h1", "description", "slug", "cluster", "question", "intent",
     "published", "updated", "author", "reviewer", "schema_type", "links_out",
     "evidence", "faq", "noindex", "agent_prompt", "commands",
+    # GEO fields (2026-10-19) — all optional, see GEO_FIELDS below.
+    "answer", "key_fact", "key_fact_source", "key_fact_date", "intent_group",
+    "queries", "howto", "og_image", "og_image_alt", "last_checked", "items",
 })
+# GEO (generative-engine optimisation) fields, added 2026-10-19. All optional;
+# an article without them renders exactly as before.
+#
+#   answer           40-60 words, answer-first, restating the question. Rendered
+#                    in a "Short answer" card directly under the H1, the span an
+#                    answer engine lifts verbatim.
+#   key_fact         one sentence carrying one number (must contain a digit)...
+#   key_fact_source  ...and where it can be checked: https URL, site path, or a
+#                    repo path that exists on disk (rendered as a GitHub link),
+#                    or the literal "capture" when the number comes from the
+#                    run this page itself documents (rendered without a link)...
+#   key_fact_date    ...and the ISO date it was measured or last checked.
+#   intent_group     the agent-intent cluster (the task column of the owner's
+#                    agent-query research) that groups the llms.txt tree and the
+#                    automatic "related by intent" links.
+#   queries          literal agent search strings the page is written to answer.
+#                    Published in <section>/index.json, never rendered as copy.
+#   howto            true emits HowTo JSON-LD whose steps are the `commands`
+#                    cards visible on the page. Needs at least 2 commands.
+#   og_image(_alt)   a per-page social card under landing/ (best-of covers).
+#   last_checked     ISO date the third-party facts on the page were checked.
+#   items            the tools a best-of page compares; emits ItemList JSON-LD.
+GEO_FIELDS = frozenset({
+    "answer", "key_fact", "key_fact_source", "key_fact_date", "intent_group",
+    "queries", "howto", "og_image", "og_image_alt", "last_checked", "items",
+})
+CAPTURE_SOURCE = "capture"
+ANSWER_MIN_WORDS = 40
+ANSWER_MAX_WORDS = 60
 # ``evidence`` is optional.  The block existed to point at capture files that
 # are no longer part of the repository, so an article without one is normal and
 # renders no provenance section at all.  It stays in TOP_FIELDS and keeps its
@@ -44,13 +76,16 @@ REQUIRED_FIELDS = frozenset({
 STRING_FIELDS = frozenset({
     "title", "h1", "description", "slug", "cluster", "question", "intent",
     "author", "reviewer", "schema_type", "agent_prompt",
+    "answer", "key_fact", "key_fact_source", "intent_group", "og_image",
+    "og_image_alt",
 })
-LIST_FIELDS = frozenset({"links_out", "evidence", "faq", "commands"})
-MAP_FIELDS = frozenset({"evidence", "faq", "commands"})
+LIST_FIELDS = frozenset({"links_out", "evidence", "faq", "commands", "queries", "items"})
+MAP_FIELDS = frozenset({"evidence", "faq", "commands", "items"})
 MAP_KEYS = {
     "evidence": frozenset({"claim", "source"}),
     "faq": frozenset({"q", "a"}),
     "commands": frozenset({"cmd", "note"}),
+    "items": frozenset({"name", "url", "license", "install"}),
 }
 
 TOP_KEY_RE = re.compile(r"^([A-Za-z][A-Za-z0-9_]*)\s*:\s*(.*?)\s*$")
@@ -111,6 +146,17 @@ class Article:
     commands: tuple[dict[str, str], ...]
     body: str
     body_start_line: int
+    answer: str | None = None
+    key_fact: str | None = None
+    key_fact_source: str | None = None
+    key_fact_date: str | None = None
+    intent_group: str | None = None
+    queries: tuple[str, ...] = ()
+    howto: bool = False
+    og_image: str | None = None
+    og_image_alt: str | None = None
+    last_checked: str | None = None
+    items: tuple[dict[str, str], ...] = ()
 
     @property
     def output_rel(self) -> str:
@@ -135,6 +181,20 @@ class Article:
         }
         if self.updated:
             out["updated"] = self.updated
+        if self.og_image:
+            out["og_image"] = self.og_image
+        if self.og_image_alt:
+            out["og_image_alt"] = self.og_image_alt
+        # Structured data that mirrors what the page visibly renders (the FAQ
+        # section, the command cards, the compared-tools table). seo_head
+        # turns these into FAQPage / HowTo / ItemList blocks.
+        out["faq"] = [dict(item) for item in self.faq]
+        if self.howto:
+            out["howto_steps"] = [dict(item) for item in self.commands]
+            out["howto_name"] = self.h1
+        if self.items:
+            out["items"] = [dict(item) for item in self.items]
+            out["items_name"] = self.h1
         return out
 
 
@@ -415,6 +475,8 @@ def _validate(path: pathlib.Path, values: dict[str, Any], line_map: dict[str, in
     # with a bare KeyError instead of a clean schema decision (found by
     # test_article_schema.py's minimal fixture, #974).
     values.setdefault("commands", [])
+    values.setdefault("queries", [])
+    values.setdefault("items", [])
     for key in LIST_FIELDS:
         value = values[key]
         if not isinstance(value, list):
@@ -484,12 +546,86 @@ def _validate(path: pathlib.Path, values: dict[str, Any], line_map: dict[str, in
             _validate_command(command, path, cmd_line)
             if "```" in command or "```" in note:
                 raise _error(path, cmd_line, "commands values must not contain a Markdown fence")
+    _validate_geo(path, values, line_map)
     values["noindex"] = values.get("noindex", False)
     values["agent_prompt"] = values.get("agent_prompt")
     values["commands"] = values.get("commands", [])
     values["published"] = published
     values["updated"] = updated
     return values
+
+
+def _repo_root_for(path: pathlib.Path) -> pathlib.Path | None:
+    for parent in path.resolve().parents:
+        if (parent / "content").is_dir() and (parent / "landing").is_dir():
+            return parent
+    return None
+
+
+def source_exists(source: str, path: pathlib.Path) -> bool:
+    """True when a key-fact source resolves: https URL, or a site path / repo
+    path that exists in this checkout."""
+    if source.startswith("https://"):
+        return True
+    root = _repo_root_for(path)
+    if root is None:
+        return False
+    if source.startswith("/"):
+        rel = source.lstrip("/").split("#", 1)[0]
+        landing = root / "landing"
+        candidates = [landing / rel, landing / (rel.rstrip("/") + ".html"),
+                      landing / rel / "index.html"]
+        return any(c.exists() for c in candidates)
+    return (root / source.split(":", 1)[0]).exists()
+
+
+def _validate_geo(path: pathlib.Path, values: dict[str, Any],
+                  line_map: dict[str, int]) -> None:
+    def line(key: str) -> int:
+        return line_map.get(key, 1)
+
+    if "answer" in values:
+        answer = _single_line(values["answer"], path, line("answer"), "answer")
+        words = len(answer.split())
+        if not ANSWER_MIN_WORDS <= words <= ANSWER_MAX_WORDS:
+            raise _error(path, line("answer"),
+                         f"answer is {words} words; it must be "
+                         f"{ANSWER_MIN_WORDS}-{ANSWER_MAX_WORDS} (the answer-first span)")
+    fact_keys = ("key_fact", "key_fact_source", "key_fact_date")
+    present = [k for k in fact_keys if k in values]
+    if present and len(present) != 3:
+        raise _error(path, line(present[0]),
+                     "key_fact, key_fact_source and key_fact_date go together")
+    if present:
+        fact = _single_line(values["key_fact"], path, line("key_fact"), "key_fact")
+        if not re.search(r"\d", fact):
+            raise _error(path, line("key_fact"), "key_fact must carry a number")
+        source = values["key_fact_source"].strip()
+        if source != CAPTURE_SOURCE and not source_exists(source, path):
+            raise _error(path, line("key_fact_source"),
+                         f"key_fact_source {source!r} is not an https URL or a path "
+                         "that exists in this checkout")
+        values["key_fact_date"] = _date_value(values, "key_fact_date", path, line_map, True)
+    if "last_checked" in values:
+        values["last_checked"] = _date_value(values, "last_checked", path, line_map, True)
+    for key in ("howto",):
+        if key in values and not isinstance(values[key], bool):
+            raise _error(path, line(key), f"{key} must be true or false")
+    if values.get("howto") and len(values.get("commands", [])) < 2:
+        raise _error(path, line("howto"), "howto: true needs at least 2 commands (the steps)")
+    for i, query in enumerate(values.get("queries", [])):
+        if not isinstance(query, str) or not query.strip():
+            raise _error(path, line("queries"), f"queries item {i + 1} must be a non-empty string")
+    if "og_image" in values:
+        image = values["og_image"]
+        root = _repo_root_for(path)
+        if image.startswith("/") or image.startswith("http"):
+            raise _error(path, line("og_image"), "og_image is a landing-relative path like og/x.png")
+        if root is not None and not (root / "landing" / image).is_file():
+            raise _error(path, line("og_image"), f"og_image landing/{image} does not exist")
+    for item in values.get("items", []):
+        if not item["url"].startswith("https://"):
+            raise _error(path, line("items"), f"items.url must be https: {item['url']!r}")
 
 
 def load(path: pathlib.Path, category: str | None = None) -> Article:
@@ -534,6 +670,17 @@ def load(path: pathlib.Path, category: str | None = None) -> Article:
         commands=tuple(dict(item) for item in values["commands"]),
         body=body,
         body_start_line=body_start_line,
+        answer=values.get("answer"),
+        key_fact=values.get("key_fact"),
+        key_fact_source=values.get("key_fact_source"),
+        key_fact_date=values.get("key_fact_date"),
+        intent_group=values.get("intent_group"),
+        queries=tuple(values.get("queries", [])),
+        howto=bool(values.get("howto", False)),
+        og_image=values.get("og_image"),
+        og_image_alt=values.get("og_image_alt"),
+        last_checked=values.get("last_checked"),
+        items=tuple(dict(item) for item in values.get("items", [])),
     )
 
 

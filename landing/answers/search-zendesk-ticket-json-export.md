@@ -2,11 +2,15 @@
 ---
 title: "Search a JSON export of support tickets"
 canonical: "https://xerj.org/answers/search-zendesk-ticket-json-export"
-updated: "2026-08-21"
+updated: "2026-10-19"
 source: "content/answers/search-zendesk-ticket-json-export.md"
 ---
 
 # I have a JSON export of Jira issues (or Zendesk tickets). How do I search it like a help-center search?
+
+**Short answer** (updated 2026-10-19): I have a JSON export of support tickets; how do I search it like a real help-center search? Index the exported JSON on local disk with one xerj autoindex run. In a captured run a description phrase returned 36 hits with per-ticket locators such as tickets:e4, and a status aggregation returned 6 buckets of exactly 30.
+
+**Key number:** A `status` terms aggregation returned 6 buckets of exactly 30 tickets each. (as of 2026-08-21; source: the captured run documented on this page)
 
 **TL;DR** — XERJ answers a Zendesk ticket search from the exported JSON on local disk, with 1 `xerj autoindex` run. In a captured run, a phrase from a ticket description returned 36 hits with per-ticket locators such as `tickets:e4`. A `status` aggregation returned 6 buckets of exactly 30.
 
@@ -157,3 +161,6 @@ Yes. The captured run put `ticket_comments.json` into its own index, `zd-json-ti
 - [What's the easiest way to search JSON logs plus some old gzip text logs in the same folder?](/answers/search-json-and-jsonl-logs)
 - [How should an agent figure out what's in a messy data folder before searching?](/answers/catalog-files-with-autoindex-map)
 - [Can ChatGPT search a folder on my laptop, or do I need something else?](/answers/give-chatgpt-claude-local-file-access)
+- [I want to point something at a folder and then ask questions about what's in it. What should I use?](/answers/how-xerj-autoindexes-a-folder) (same intent: JSONL and data files)
+- [I have a directory of CSV exports. How do I query them without opening each one in Excel?](/answers/index-multiple-csv-files) (same intent: JSONL and data files)
+- [How do I index a CSV with many columns?](/answers/index-csv-with-many-columns) (same intent: JSONL and data files)

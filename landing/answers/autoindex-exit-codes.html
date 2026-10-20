@@ -65,7 +65,7 @@
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-08-22",
-  "dateModified": "2026-09-20",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,79 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://xerj.org/answers/autoindex-exit-codes#faq",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does indexer exit code 3 mean?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It means the run completed and recorded junk. xerj autoindex --help states it as 3 completed-with-junk (junk recorded, never fatal). Treat it as a success with a refusal list to read."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "The indexer exited 3 (or 4). Did it fail?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "3 did not fail. 4 did not fail either, and it did not index anything: it is a decision request waiting for --approve. Only 1 and 2 are failures."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why did folder indexing stop and ask me to approve?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The measured phase-A estimate for the indexing phase was longer than --max-minutes (default 10). With no --approve or --yes, nothing is indexed, a JSON decision request goes to stdout and the process exits 4."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I tell a failed index from a completed one with junk files?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Read the exit code, not the log volume. 0 and 3 are both finished runs; 3 additionally refused at least one file, or a whole dataset whose mapping the server answered HTTP 400 to, in which case the xerj-done line carries datasets_refused and files_refused. 1 is an endpoint or journal failure and nothing about it is a junk report."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is exit 1 the code for any error?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No, and that shorthand is wrong. --help scopes 1 to an endpoint or journal failure, a refused corpus removal, or a refused unsafe state transition. A bad command line is 2. On the --no-graph path, an exit 1 whose terminal line reads reason=server-backpressure means the node rejected every write for the whole 600 s a bulk waits; the line carries ops_applied and ops_remaining."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does exit 0 always mean the folder was indexed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Answering the decision gate with --approve cancel also exits 0, and that run indexes nothing on purpose. Read the terminal line or the journal before you report a corpus as searchable."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why did my run print no terminal line at all?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Either --quiet or --progress none was in force, which prints no terminal line, or the process was killed by a signal. A missing terminal line after the process is gone means it died, not that it finished."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which codes should an agent retry?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Retry nothing on 0 or 3. Re-run with --approve on 4. Fix the command line on 2. Investigate the endpoint and the journal on 1, because a blind retry repeats the same refusal. The one exit 1 to rerun unchanged is reason=server-backpressure, once the node accepts writes again: it resumes with the operations that remain."
+      }
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -246,7 +319,12 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>THE INDEXER EXITED 3 (OR 4). DID IT FAIL?</div>
   <div class="kicker"><span>ANSWERS · OPERATIONS: EXIT CODES</span></div>
   <h1>The indexer exited 3 (or 4). Did it fail?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-22 · UPDATED · 2026-09-20</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-22 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>What does indexer exit code 3 mean for xerj autoindex? It means success: the run completed and recorded some junk files. Exit 0 is a clean completion, 4 means the estimate exceeded --max-minutes and nothing was indexed, 2 is a usage error, and 1 is an endpoint or journal failure. Only exit 4 asks you a question.</p>
+    <p class="key-fact"><strong>Key number:</strong> The decision gate that produces exit 4 defaults to 10 minutes of estimated work (<code class="inline">DEFAULT_MAX_MINUTES</code>). <span class="mute">(as of 2026-10-19 · source: <a href="https://github.com/xerj-org/xerj/blob/main/engine/crates/xerj-autoindex/src/gate.rs">engine/crates/xerj-autoindex/src/gate.rs</a>)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — Exit 3 is a success. <code class="inline">xerj autoindex</code> exits 0 when the run completed, and 3 when it completed and recorded junk. Exit 4 means the estimate exceeded <code class="inline">--max-minutes</code> and nothing was indexed. Exit 2 is a usage error, and exit 1 is an endpoint or journal failure. Only 4 is a question.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
@@ -391,6 +469,9 @@ error: prepared bulk contained 1 rejected items: {"type":"engine_exception","rea
     <li><a href="/answers/why-autoindex-skipped-files">Why would a folder search miss files that I can see on disk?</a></li>
     <li><a href="/answers/autoindex-dataset-refused-by-server">One dataset was REFUSED by the server. Did I lose the whole index?</a></li>
     <li><a href="/answers/autoindex-server-back-pressure-429">The server pushed back with HTTP 429. Did xerj autoindex lose the run?</a></li>
+    <li><a href="/answers/autoindex-says-extract-the-archive-first">xerj autoindex recorded my Takeout .zip as junk and said to extract it first. Why?</a> <span class="mute">· same intent: operating autoindex</span></li>
+    <li><a href="/answers/keep-index-current-as-files-change">How do I keep a search index up to date as files change, without re-indexing everything?</a> <span class="mute">· same intent: operating autoindex</span></li>
+    <li><a href="/answers/keep-s3-bucket-index-current">How do I keep an index current when the files live in an object store?</a> <span class="mute">· same intent: operating autoindex</span></li>
   </ul>
 </main>
 </div>

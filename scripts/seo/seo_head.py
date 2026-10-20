@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import html
 import json
+import re
 from typing import Any
 
 import pagedata
@@ -179,6 +180,95 @@ def breadcrumbs(rel: str, meta: dict[str, Any]) -> dict[str, Any] | None:
     }
 
 
+_MD_LINK = re.compile(r"\[([^\]]+)\]\([^)]+\)")
+
+
+def plain(md: str) -> str:
+    """The visible text of an inline-Markdown string (FAQ q/a, command notes),
+    so structured data carries exactly what a reader sees on the page."""
+    text = _MD_LINK.sub(r"\1", md)
+    text = text.replace("**", "").replace("`", "")
+    return " ".join(text.split())
+
+
+def faq_page(url: str, faq: list[dict[str, str]]) -> dict[str, Any] | None:
+    """FAQPage mirroring the page's visible FAQ section, question for question.
+
+    Google stopped showing FAQ rich results for most sites in 2026, but answer
+    engines (Bing/Copilot, Perplexity, ChatGPT search) still read the block as
+    the page's question-answer pairs. seo_lint rule 46 only allows it when every
+    Question is visibly on the page, which is the line between structured data
+    and spam."""
+    if not faq:
+        return None
+    return {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "@id": f"{url}#faq",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": plain(item["q"]),
+            "acceptedAnswer": {"@type": "Answer", "text": plain(item["a"])},
+        } for item in faq],
+    }
+
+
+def how_to(url: str, name: str, steps: list[dict[str, str]]) -> dict[str, Any]:
+    """HowTo whose steps are the command cards rendered on the page."""
+    return {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "@id": f"{url}#howto",
+        "name": plain(name),
+        "step": [{
+            "@type": "HowToStep",
+            "position": i,
+            "name": plain(step["note"]),
+            "text": step["cmd"],
+            "url": f"{url}#step-{i}",
+        } for i, step in enumerate(steps, start=1)],
+    }
+
+
+def item_list(url: str, name: str, items: list[dict[str, str]]) -> dict[str, Any]:
+    """ItemList of the tools a best-of page compares, in the page's order."""
+    return {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "@id": f"{url}#tools",
+        "name": plain(name),
+        "numberOfItems": len(items),
+        "itemListOrder": "https://schema.org/ItemListUnordered",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": i,
+            "item": {
+                "@type": "SoftwareApplication",
+                "name": item["name"],
+                "url": item["url"],
+                "applicationCategory": "DeveloperApplication",
+                "license": item["license"],
+                "installUrl": item["url"],
+            },
+        } for i, item in enumerate(items, start=1)],
+    }
+
+
+def geo_blocks(url: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
+    """Extra JSON-LD for generated articles: FAQPage, HowTo, ItemList."""
+    out: list[dict[str, Any]] = []
+    faq = faq_page(url, meta.get("faq") or [])
+    if faq:
+        out.append(faq)
+    if meta.get("howto_steps"):
+        out.append(how_to(url, meta.get("howto_name") or meta.get("title", ""),
+                          meta["howto_steps"]))
+    if meta.get("items"):
+        out.append(item_list(url, meta.get("items_name") or meta.get("title", ""),
+                             meta["items"]))
+    return out
+
+
 def build_block(rel: str, title: str, desc: str, published: str,
                 modified: str, meta: dict[str, Any] | None = None) -> str:
     """Emit the exact SEO block used by ``fix_heads.py``."""
@@ -210,6 +300,7 @@ def build_block(rel: str, title: str, desc: str, published: str,
         ld(website()),
         ld(page_body(rel, meta, url, title, desc, published, modified)),
     ]
+    lines += [ld(block) for block in geo_blocks(url, meta)]
     crumbs = breadcrumbs(rel, meta)
     if crumbs is not None:
         lines.append(ld(crumbs))

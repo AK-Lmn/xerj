@@ -65,7 +65,7 @@
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-08-21",
-  "dateModified": "2026-08-23",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,71 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://xerj.org/answers/reindex-taking-forever#faq",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Reindexing my files is taking forever. What usually causes that?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Corpus size, document size, host load and mapping complexity set the wall time. A _reindex call blocks and answers only at the end, so read a _count of the destination before you call it stuck."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why is my local search index rebuild so slow?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Corpus size, document size, host load and mapping complexity all change the time. The measured run used a fixed 100,000-document corpus at 1-minute load average 2.63."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What should I measure when folder reindex never finishes?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For a _reindex, read took, batches, created, version_conflicts, retries and failures, and count the destination while the call runs. For a folder re-run, read xerj autoindex status, which reports files done, records and the journal state."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is PDF extraction the thing that makes reindex hang?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not measured here. This page captures a _reindex of a fixed document corpus, not a per-format split, so it cannot blame PDF extraction. A folder run does bound each PDF with a size cap, a page cap and a worker timeout, and refuses a file past a cap instead of hanging on it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long does a XERJ reindex take?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "One measured run copied 100,000 documents in 20,836 ms on a single node. That is one run on one shared host, not a rate you can extrapolate."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does XERJ reindex across nodes?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. XERJ is single-node, so _reindex is a local copy. There is no cross-node parallelism to add and no failover if the node stops."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does reindexing use more memory as it runs?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. XERJ has an open defect that retains heap per indexed document, so a large reindex grows resident memory. Do not plan corpora beyond a few million documents."
+      }
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -246,7 +311,12 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>REINDEXING MY FILES IS TAKING FOREVER. WHAT USUALLY CAUSES THAT?</div>
   <div class="kicker"><span>ANSWERS · OPERATIONS: REINDEX</span></div>
   <h1>Reindexing my files is taking forever. What usually causes that?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-08-23</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>Reindexing my files is taking forever; what usually causes it? Usually batch size and write cost, and sometimes a stalled call. Read created against a _count of the destination index to tell slow progress from none. A measured XERJ _reindex of 100,000 documents took 20,836 ms in 100 batches with 0 failures on one node.</p>
+    <p class="key-fact"><strong>Key number:</strong> A single-node <code class="inline">_reindex</code> of 100,000 documents reported took 20,836 ms, 100 batches and 0 failures. <span class="mute">(as of 2026-08-23 · source: the captured run documented on this page)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — A XERJ <code class="inline">_reindex</code> of a fixed 100,000-document corpus reported <code class="inline">"took": 20836</code> milliseconds, 100 batches and 0 failures on one node. Read <code class="inline">created</code> against a <code class="inline">_count</code> of the destination index to separate slow progress from a stalled call. XERJ is single-node, so <code class="inline">_reindex</code> is a local copy.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
@@ -333,6 +403,9 @@
     <li><a href="/docs/migration-from-es">Migrate from Elasticsearch</a></li>
     <li><a href="/answers/cheap-low-volume-log-search">What can I use for low-volume log search?</a></li>
     <li><a href="/answers/resume-interrupted-autoindex-run">The indexer died overnight. Do I have to start over?</a></li>
+    <li><a href="/answers/why-autoindex-skipped-files">Why would a folder search miss files that I can see on disk?</a> <span class="mute">· same intent: operating autoindex</span></li>
+    <li><a href="/answers/search-files-in-an-s3-bucket">How do I search files that live in an S3 bucket?</a> <span class="mute">· same intent: operating autoindex</span></li>
+    <li><a href="/answers/autoindex-dataset-refused-by-server">One dataset was REFUSED by the server. Did I lose the whole index?</a> <span class="mute">· same intent: operating autoindex</span></li>
   </ul>
 </main>
 </div>

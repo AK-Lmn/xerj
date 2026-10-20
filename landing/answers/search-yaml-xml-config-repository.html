@@ -65,7 +65,7 @@
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-08-21",
-  "dateModified": "2026-08-21",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,102 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://xerj.org/answers/search-yaml-xml-config-repository#faq",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I find every place a config key is set across YAML and XML in a repo?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Index the tree, then search the key name inside body. Every hit carries ax_path and ax_format, so the answer is the list of files that mention the key."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I search YAML and XML config across a big repo?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Run xerj autoindex on the repo and send one bool query over the index pattern. In our capture that returned 2 hits, 1 xml document and 1 yaml document."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I find a Helm value that is overridden in three files?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Search the key name and read ax_path on each hit; the hits name every file that carries it. XERJ does not merge or resolve overrides, so ranking the files by precedence is your job."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does XERJ create one field per YAML key?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The captured cfg-docs mapping held body, title and 7 provenance fields, and no key-derived field. Search the key name inside body instead."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which fields can I query on a config index?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Query body for the file text, title for its name, and the 7 ax_* provenance fields for path, format, dataset and run. The captured cfg-docs mapping held exactly those 9 fields."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does XERJ read TOML and INI files?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "TOML and INI have no dedicated extractor. Both fall through to the text path, so the text stays searchable but no key becomes a field."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How large a config file can XERJ index?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The whole-file cap is 64 MiB and the longest line is 16 MiB. One document holds at most 512 fields, and one dataset holds at most 512 fields."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "@id": "https://xerj.org/answers/search-yaml-xml-config-repository#howto",
+  "name": "How do I find every place a config key is set across YAML and XML in a repo?",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Index a folder of YAML and XML config files.",
+      "text": "xerj autoindex ./config --url http://127.0.0.1:9410 --prefix cfg --state-dir ./state-cfg --progress plain --disable-feedback",
+      "url": "https://xerj.org/answers/search-yaml-xml-config-repository#step-1"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Read every field XERJ mapped for the config files.",
+      "text": "curl -s -XGET 'http://127.0.0.1:9410/cfg-*/_mapping'",
+      "url": "https://xerj.org/answers/search-yaml-xml-config-repository#step-2"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Match the YAML file and the XML file with one bool query.",
+      "text": "curl -s -XPOST 'http://127.0.0.1:9410/cfg-*/_search' -H 'content-type: application/json' -d '{\"query\":{\"bool\":{\"should\":[{\"match\":{\"body\":\"Bandicoot\"}},{\"query_string\":{\"query\":\"tls_enabled OR tlsEnabled\"}}],\"minimum_should_match\":1}},\"size\":10,\"_source\":[\"ax_dataset\",\"ax_format\",\"ax_path\"],\"track_total_hits\":true}'",
+      "url": "https://xerj.org/answers/search-yaml-xml-config-repository#step-3"
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -246,26 +342,31 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>HOW DO I FIND EVERY PLACE A CONFIG KEY IS SET ACROSS YAML AND XML IN A REPO?</div>
   <div class="kicker"><span>ANSWERS · FILES AND FORMATS</span></div>
   <h1>How do I find every place a config key is set across YAML and XML in a repo?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-08-21</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>How do I find every place a config key is set across YAML and XML in a repo? Run xerj autoindex on the folder; it needs no schema file. In our capture 1 cluster.yaml and 1 service.xml became 4 documents in one cfg-docs index, and one bool query returned 2 hits, one from each format.</p>
+    <p class="key-fact"><strong>Key number:</strong> The captured run mapped 9 fields, including body and title, across 4 documents from 2 config files. <span class="mute">(as of 2026-08-21 · source: the captured run documented on this page)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — XERJ <code class="inline">autoindex</code> indexes a folder of YAML and XML config files with no schema file. In our capture 1 <code class="inline">cluster.yaml</code> and 1 <code class="inline">service.xml</code> became 4 documents in one <code class="inline">cfg-docs</code> index. One bool query returned 2 hits, one from each format.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
     <code>Act as a coding agent. Read https://xerj.org/llms.txt, start a XERJ node with --insecure on a scratch data directory, run xerj autoindex ./config --prefix cfg, read GET /cfg-*/_mapping to learn the real field names, then send one bool query over cfg-*/_search that matches both the YAML file and the XML file, and report ax_path and ax_format for every hit.</code>
     <button type="button" class="prompt-copy" data-copy="Act as a coding agent. Read https://xerj.org/llms.txt, start a XERJ node with --insecure on a scratch data directory, run xerj autoindex ./config --prefix cfg, read GET /cfg-*/_mapping to learn the real field names, then send one bool query over cfg-*/_search that matches both the YAML file and the XML file, and report ax_path and ax_format for every hit.">COPY THE PROMPT</button>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-1">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj autoindex ./config --url http://127.0.0.1:9410 --prefix cfg --state-dir ./state-cfg --progress plain --disable-feedback</code>
     <button type="button" class="prompt-copy" data-copy="xerj autoindex ./config --url http://127.0.0.1:9410 --prefix cfg --state-dir ./state-cfg --progress plain --disable-feedback">COPY COMMAND</button>
     <span class="hero-proof">Index a folder of YAML and XML config files.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-2">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XGET 'http://127.0.0.1:9410/cfg-*/_mapping'</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XGET &#x27;http://127.0.0.1:9410/cfg-*/_mapping&#x27;">COPY COMMAND</button>
     <span class="hero-proof">Read every field XERJ mapped for the config files.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-3">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XPOST 'http://127.0.0.1:9410/cfg-*/_search' -H 'content-type: application/json' -d '{"query":{"bool":{"should":[{"match":{"body":"Bandicoot"}},{"query_string":{"query":"tls_enabled OR tlsEnabled"}}],"minimum_should_match":1}},"size":10,"_source":["ax_dataset","ax_format","ax_path"],"track_total_hits":true}'</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XPOST &#x27;http://127.0.0.1:9410/cfg-*/_search&#x27; -H &#x27;content-type: application/json&#x27; -d &#x27;{&quot;query&quot;:{&quot;bool&quot;:{&quot;should&quot;:[{&quot;match&quot;:{&quot;body&quot;:&quot;Bandicoot&quot;}},{&quot;query_string&quot;:{&quot;query&quot;:&quot;tls_enabled OR tlsEnabled&quot;}}],&quot;minimum_should_match&quot;:1}},&quot;size&quot;:10,&quot;_source&quot;:[&quot;ax_dataset&quot;,&quot;ax_format&quot;,&quot;ax_path&quot;],&quot;track_total_hits&quot;:true}&#x27;">COPY COMMAND</button>
@@ -331,6 +432,9 @@
     <li><a href="/answers/index-markdown-into-elasticsearch-api">How do I index Markdown into the Elasticsearch API?</a></li>
     <li><a href="/answers/syntax-aware-code-search-refactoring">How do I run syntax-aware code search?</a></li>
     <li><a href="/answers/search-openapi-spec-for-agent">My agent needs to look up endpoints in a big OpenAPI spec and the SDK markdown. What's the right way?</a></li>
+    <li><a href="/answers/index-monorepo-for-agent">How do I stop my agent from reading the whole repo into context?</a> <span class="mute">· same intent: code search for agents</span></li>
+    <li><a href="/answers/audit-php-codebase-with-an-index">How do I audit a PHP codebase with an index instead of grepping 1,400 files?</a> <span class="mute">· same intent: code search for agents</span></li>
+    <li><a href="/answers/index-reference-library-for-coding-agent">How do I set up reference coding so the agent retrieves a mechanism before writing code?</a> <span class="mute">· same intent: code search for agents</span></li>
   </ul>
 </main>
 </div>

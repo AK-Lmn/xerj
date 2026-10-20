@@ -741,6 +741,39 @@ class Lint:
                 self.gate("fonts.display_swap", rel,
                           "Google Fonts URL lacks display=swap (rule 57)")
 
+    def _check_visible_structured(self, rel: str, page: audit_mod.Page,
+                                  node: dict, t: str, line: int) -> None:
+        def norm(value: str) -> str:
+            # Whitespace-free comparison: the parser joins inline runs (a
+            # <code> span before a full stop) with a space the reader never sees.
+            return "".join(str(value).split()).casefold()
+
+        visible = norm(" ".join(page.text_chunks))
+        headings = {norm(h[1]) for h in page.headings}
+        if t == "FAQPage":
+            entities = node.get("mainEntity") or []
+            if not entities:
+                self.gate("jsonld.faq_empty", rel,
+                          f"line {line}: FAQPage with no Question (rule 46)")
+            for q in entities:
+                name = norm(q.get("name", ""))
+                answer = norm((q.get("acceptedAnswer") or {}).get("text", ""))
+                if name not in headings:
+                    self.gate("jsonld.faq_invisible", rel,
+                              f"line {line}: FAQPage question {q.get('name')!r} is not a "
+                              f"visible heading on the page (rule 46)")
+                elif answer and answer[:60] not in visible:
+                    self.gate("jsonld.faq_invisible", rel,
+                              f"line {line}: FAQPage answer for {q.get('name')!r} is not "
+                              f"visible on the page (rule 46)")
+        else:
+            for step in node.get("step") or []:
+                text = norm(step.get("text", ""))
+                if not text or text not in visible:
+                    self.gate("jsonld.howto_invisible", rel,
+                              f"line {line}: HowTo step {step.get('position')} is not "
+                              f"visible on the page (rule 46)")
+
     def _check_jsonld(self, rel: str, page: audit_mod.Page, url: str,
                       title: str, desc: str) -> None:
         if not page.jsonld:
@@ -773,9 +806,13 @@ class Lint:
                     continue
                 types.add(t)
                 if t in ("FAQPage", "HowTo"):
-                    self.gate("jsonld.deprecated_type", rel,
-                              f"line {line}: {t} — FAQ rich results end 7 May 2026 "
-                              f"and HowTo was removed outright (rule 46)")
+                    # rule 46, revised 2026-10-19. These types no longer earn a
+                    # Google rich result, but answer engines still read them as
+                    # the page's Q&A pairs and steps. What stays forbidden is
+                    # structured data the reader cannot see: every Question
+                    # name must be a visible heading and every HowTo step text
+                    # must be visible on the page.
+                    self._check_visible_structured(rel, page, node, t, line)
                 if "aggregateRating" in node or "review" in node:
                     self.gate("jsonld.fabricated_rating", rel,
                               f"line {line}: aggregateRating/review without a real "

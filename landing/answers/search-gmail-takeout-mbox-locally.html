@@ -65,7 +65,7 @@
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-09-18",
-  "dateModified": "2026-09-26",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,124 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://xerj.org/answers/search-gmail-takeout-mbox-locally#faq",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I search a Google Takeout mbox file locally?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Unzip the download, start a local XERJ node, and run xerj autoindex <folder> --prefix mail. The mbox is detected by content and streamed. Then query mail-* over HTTP: filter on email_from_address, email_thread_id or attachment_name, and use match or match_phrase on body."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does a term filter on email_from find nothing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "email_from holds the header as a person reads it, such as Alice Anders <alice@example.org>, and it is a keyword, so only the whole string matches. Filter on email_from_address (or email_to_address, email_cc_address) with the bare, lower-case address."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "The mbox is 8 GB. Does it get loaded into memory?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not by autoindex. The splitter streams the file, and the client peaked at 296 MiB on a 1 GB mailbox. The node was the limit before #1002 (v1.0.0-rc.76, 2026-09): a 1 GB mailbox needed 66.9 GiB with its cap lifted and aborted under the default 16 GiB cap, and a 300 MB mailbox peaked at 18–20 GiB against a laptop's 8 GiB cap. Since #1002 closed #948, the 1 GB mailbox completes under the default 16 GiB cap in 407.7 s, and the 300 MB mailbox fits the 8 GiB cap at 7,963.6 MiB. The peak still crosses the cap — 21,405.3 MiB on the fixed 1 GB run — because per-segment caches grow until a merge retires their segment; that is open as #1032."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can it search inside the PDFs people attached?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. A PDF attachment goes through the PDF extractor and becomes one record per page, titled with the attachment's name and carrying the parent's email_message_id, email_subject and email_from_address. An attachment_of edge points back to the message."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it keep the Gmail threads?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Gmail's X-GM-THRID is stored as email_thread_id in lower-case hex, the form the Gmail web interface uses. The export writes it in decimal, so convert with printf '%x\\n' <decimal> before you filter. In-Reply-To and References become replies_to edges in the brain, so a whole thread is one term filter and a reply chain is a graph walk."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does my mail leave my machine?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not with the default configuration. The default embedder is lexical (feature hashing, not neural) and runs inside the node, and autoindex talks only to the node URL you give it. --embed-mode proxy would send body text to the endpoint you configure. A field report filed with xerj feedback is public and auto-fills the indexed folder's path, so for private mail pass --pointed-at \"a private mailbox\". --insecure means no authentication for anyone on the same machine."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I have to unzip the Takeout download?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. autoindex does not open archives. An unextracted .zip or .tgz is recorded as junk, the run prints it under its summary with the exact command to run, and the run continues."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Has this been tested on a real Takeout export?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The mbox splitter and the message extractor are tested against a generated mailbox that reproduces the hard cases real exports contain. The Takeout folder layout rules have only seen that synthetic tree. Treat them as unverified on a real export until someone runs one."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "@id": "https://xerj.org/answers/search-gmail-takeout-mbox-locally#howto",
+  "name": "I exported my Gmail with Google Takeout. How do I search that mbox file locally?",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Extract the download first. An unextracted .zip is named in the run's output with the exact command to run.",
+      "text": "bash -c 'unzip takeout-20260101T000000Z-001.zip -d ~/mail-export'",
+      "url": "https://xerj.org/answers/search-gmail-takeout-mbox-locally#step-1"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Start a local node with no authentication on 127.0.0.1. Keep the data dir outside the folder you index. On a shared machine, drop --insecure and use the admin key.",
+      "text": "xerj --insecure --data-dir ~/xerj-data",
+      "url": "https://xerj.org/answers/search-gmail-takeout-mbox-locally#step-2"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Index the export. The mbox is detected by content and streamed, and the progress bar moves inside the file.",
+      "text": "xerj autoindex ~/mail-export --url http://127.0.0.1:9200 --prefix mail --progress plain",
+      "url": "https://xerj.org/answers/search-gmail-takeout-mbox-locally#step-3"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "name": "Ask the mailbox a question, scoped to one sender by bare address.",
+      "text": "curl -s -XPOST http://127.0.0.1:9200/mail-*/_search -H 'content-type: application/json' -d '{\"query\":{\"bool\":{\"filter\":[{\"term\":{\"email_from_address\":\"alice@example.org\"}}],\"must\":[{\"match_phrase\":{\"body\":\"signed lease\"}}]}},\"_source\":[\"email_subject\",\"email_date\",\"ax_locator\"]}'",
+      "url": "https://xerj.org/answers/search-gmail-takeout-mbox-locally#step-4"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 5,
+      "name": "Find the page of an attached PDF that mentions something, and the mail it came with.",
+      "text": "curl -s -XPOST http://127.0.0.1:9200/mail-*/_search -H 'content-type: application/json' -d '{\"query\":{\"bool\":{\"filter\":[{\"term\":{\"attachment_content_type\":\"application/pdf\"}}],\"must\":[{\"match_phrase\":{\"body\":\"INV-2024-0117\"}}]}},\"_source\":[\"attachment_name\",\"email_subject\",\"ax_locator\"]}'",
+      "url": "https://xerj.org/answers/search-gmail-takeout-mbox-locally#step-5"
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -246,38 +364,43 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>I EXPORTED MY GMAIL WITH GOOGLE TAKEOUT. HOW DO I SEARCH THAT MBOX FILE LOCALLY?</div>
   <div class="kicker"><span>ANSWERS · FOLDER INDEXING</span></div>
   <h1>I exported my Gmail with Google Takeout. How do I search that mbox file locally?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-09-18 · UPDATED · 2026-09-26</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-09-18 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>How do I search a Google Takeout mbox file locally? Unzip the Takeout download, run xerj autoindex on the folder with its own --prefix, then search the mailbox over HTTP. The mbox is recognised by content and streamed one message at a time, attached PDFs become per-page documents, and with the default embedder no message text leaves your machine.</p>
+    <p class="key-fact"><strong>Key number:</strong> On a 1 GB synthetic mailbox the client peaked at 296 MiB and finished in 279 s, and all 2,530 planted needles were found. <span class="mute">(as of 2026-10-19 · source: <a href="https://github.com/xerj-org/xerj/blob/main/benchmarks/mbox-ingest/results/after-mixed-1G-runC-verify-every-needle.json">benchmarks/mbox-ingest/results/after-mixed-1G-runC-verify-every-needle.json</a>)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — Unzip the Takeout download, run <code class="inline">xerj autoindex</code> on the folder with its own <code class="inline">--prefix</code>, then search the mailbox over HTTP. The mbox is recognised by its content and streamed one message at a time. Attached PDFs become per-page documents linked to their message. Senders are filterable by bare address, and Gmail thread ids and reply headers become filters and graph edges. With the default embedder, which is lexical (feature hashing, not neural), no message text leaves your machine. The node's ingest memory, which before #1002 (2026-09) pushed a 300 MB mailbox past a laptop's RAM, now finishes a 1 GB mailbox under the node's default 16 GiB cap in 407.7 s; the peak still crosses the cap (21,405.3 MiB on that run) because per-segment caches grow until a merge retires them, tracked as #1032.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
     <code>Act as a coding agent. Read https://xerj.org/llms.txt. The user has a Google Takeout download, which is private mail. Unzip it first (autoindex does not open archives), start a node with `xerj --insecure --data-dir ~/xerj-data` on the user's own machine, run `xerj autoindex &lt;unzipped folder&gt; --url http://127.0.0.1:9200 --prefix mail --progress plain`, and relay the xerj-bar line while it runs. Before indexing, tell the user the measured memory picture: since #1002 (v1.0.0-rc.76) a 1 GB mailbox completes under the node's default 16 GiB cap in 407.7 s and a 300 MB mailbox fits a laptop's 8 GiB cap (7,963.6 MiB peak), but the 1 GB run still peaked at 21,405.3 MiB, 1.3x that cap (per-segment caches, open as #1032), so warn about headroom on a multi-GB export. Answer questions with term filters on email_from_address / email_thread_id (hex) / attachment_name and match or match_phrase on body, which also holds the subject. Cite ax_locator and email_subject for every hit. If you file a field report, pass --pointed-at "a private mailbox" so the folder path is not published.</code>
     <button type="button" class="prompt-copy" data-copy="Act as a coding agent. Read https://xerj.org/llms.txt. The user has a Google Takeout download, which is private mail. Unzip it first (autoindex does not open archives), start a node with `xerj --insecure --data-dir ~/xerj-data` on the user&#x27;s own machine, run `xerj autoindex &lt;unzipped folder&gt; --url http://127.0.0.1:9200 --prefix mail --progress plain`, and relay the xerj-bar line while it runs. Before indexing, tell the user the measured memory picture: since #1002 (v1.0.0-rc.76) a 1 GB mailbox completes under the node&#x27;s default 16 GiB cap in 407.7 s and a 300 MB mailbox fits a laptop&#x27;s 8 GiB cap (7,963.6 MiB peak), but the 1 GB run still peaked at 21,405.3 MiB, 1.3x that cap (per-segment caches, open as #1032), so warn about headroom on a multi-GB export. Answer questions with term filters on email_from_address / email_thread_id (hex) / attachment_name and match or match_phrase on body, which also holds the subject. Cite ax_locator and email_subject for every hit. If you file a field report, pass --pointed-at &quot;a private mailbox&quot; so the folder path is not published.">COPY THE PROMPT</button>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-1">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>bash -c 'unzip takeout-20260101T000000Z-001.zip -d ~/mail-export'</code>
     <button type="button" class="prompt-copy" data-copy="bash -c &#x27;unzip takeout-20260101T000000Z-001.zip -d ~/mail-export&#x27;">COPY COMMAND</button>
     <span class="hero-proof">Extract the download first. An unextracted .zip is named in the run's output with the exact command to run.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-2">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj --insecure --data-dir ~/xerj-data</code>
     <button type="button" class="prompt-copy" data-copy="xerj --insecure --data-dir ~/xerj-data">COPY COMMAND</button>
     <span class="hero-proof">Start a local node with no authentication on 127.0.0.1. Keep the data dir outside the folder you index. On a shared machine, drop --insecure and use the admin key.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-3">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj autoindex ~/mail-export --url http://127.0.0.1:9200 --prefix mail --progress plain</code>
     <button type="button" class="prompt-copy" data-copy="xerj autoindex ~/mail-export --url http://127.0.0.1:9200 --prefix mail --progress plain">COPY COMMAND</button>
     <span class="hero-proof">Index the export. The mbox is detected by content and streamed, and the progress bar moves inside the file.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-4">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XPOST http://127.0.0.1:9200/mail-*/_search -H 'content-type: application/json' -d '{"query":{"bool":{"filter":[{"term":{"email_from_address":"alice@example.org"}}],"must":[{"match_phrase":{"body":"signed lease"}}]}},"_source":["email_subject","email_date","ax_locator"]}'</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XPOST http://127.0.0.1:9200/mail-*/_search -H &#x27;content-type: application/json&#x27; -d &#x27;{&quot;query&quot;:{&quot;bool&quot;:{&quot;filter&quot;:[{&quot;term&quot;:{&quot;email_from_address&quot;:&quot;alice@example.org&quot;}}],&quot;must&quot;:[{&quot;match_phrase&quot;:{&quot;body&quot;:&quot;signed lease&quot;}}]}},&quot;_source&quot;:[&quot;email_subject&quot;,&quot;email_date&quot;,&quot;ax_locator&quot;]}&#x27;">COPY COMMAND</button>
     <span class="hero-proof">Ask the mailbox a question, scoped to one sender by bare address.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-5">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XPOST http://127.0.0.1:9200/mail-*/_search -H 'content-type: application/json' -d '{"query":{"bool":{"filter":[{"term":{"attachment_content_type":"application/pdf"}}],"must":[{"match_phrase":{"body":"INV-2024-0117"}}]}},"_source":["attachment_name","email_subject","ax_locator"]}'</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XPOST http://127.0.0.1:9200/mail-*/_search -H &#x27;content-type: application/json&#x27; -d &#x27;{&quot;query&quot;:{&quot;bool&quot;:{&quot;filter&quot;:[{&quot;term&quot;:{&quot;attachment_content_type&quot;:&quot;application/pdf&quot;}}],&quot;must&quot;:[{&quot;match_phrase&quot;:{&quot;body&quot;:&quot;INV-2024-0117&quot;}}]}},&quot;_source&quot;:[&quot;attachment_name&quot;,&quot;email_subject&quot;,&quot;ax_locator&quot;]}&#x27;">COPY COMMAND</button>
@@ -380,6 +503,9 @@ xerj autoindex ~/mail-export --url http://127.0.0.1:9200 --prefix mail --progres
     <li><a href="/answers/resume-interrupted-autoindex-run">The indexer died overnight. Do I have to start over?</a></li>
     <li><a href="/answers/why-autoindex-skipped-files">Why would a folder search miss files that I can see on disk?</a></li>
     <li><a href="/docs/recipes/zero-config-autoindex">Zero-config autoindex</a></li>
+    <li><a href="/answers/search-gzip-logs-without-zgrep">How do I search gzipped logs without decompressing the whole file — including when JSONL sits next to them?</a> <span class="mute">· same intent: logs and docs</span></li>
+    <li><a href="/answers/cheap-low-volume-log-search">What can I use for low-volume log search?</a> <span class="mute">· same intent: logs and docs</span></li>
+    <li><a href="/answers/search-all-pdfs-in-a-folder">I downloaded a bunch of papers as PDFs. How do I search across them?</a> <span class="mute">· same intent: logs and docs</span></li>
   </ul>
 </main>
 </div>

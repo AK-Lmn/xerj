@@ -65,7 +65,7 @@
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-08-22",
-  "dateModified": "2026-08-23",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,79 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://xerj.org/answers/audit-php-codebase-with-an-index#faq",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I search a large PHP repo for dangerous sinks without reading every file?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Compile the shape you are hunting into indexed facts, then query for the shape. The published audit filtered on a request source, a SQL sink and no sanitizer in one function, and got 4 functions back out of 11,990."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What's a cheaper way than loading WordPress core into context?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Do not load it. The published accounting is about 26,000 tokens for the whole audit against an estimated 5,200,000 to read the code once, because the index decides what is worth reading."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can an agent audit a codebase from an index?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It can triage from an index. It still has to read the survivors, and the published limitations say so: XERJ stores and queries the candidates, and the AST model is what produces them."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I audit a PHP codebase with an index instead of grepping 1,400 files?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Index once, query the bug shape, read only the survivors. Real WordPress core is 1,492 PHP files, and the published run indexed it as queryable facts in about 3.6 s."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Did the audit find a WordPress 0-day?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No, and that is the published result. Core came back hardened: 0 missing-capability IDOR across 226 handlers and 0 auto-triggered deserialization gadgets. The clean negative is the finding."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "So what was the one real weakness?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "wp_http_validate_url does not block 169.254.169.254, the cloud-metadata address, and it is reachable unauthenticated through pingback_ping. The write-up states it as a known-class limitation core punts to a filter, not a novel 0-day."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why can't grep express this?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Grep is file-scoped. 'A request source and a SQL sink in the same function with no sanitizer between them' is not a literal string, so grep answers with 51 whole files where the indexed query answers with 4 functions."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where does grep still win?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "On recall. Grep's literal recall is perfect and the model's is not: a source at file scope, or laundered through $GLOBALS, is invisible to the extracted facts. The trade is recall for precision and tokens, and the counter-examples are published."
+      }
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -246,7 +319,12 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>HOW DO I AUDIT A PHP CODEBASE WITH AN INDEX INSTEAD OF GREPPING 1,400 FILES?</div>
   <div class="kicker"><span>ANSWERS · CODE SECURITY</span></div>
   <h1>How do I audit a PHP codebase with an index instead of grepping 1,400 files?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-22 · UPDATED · 2026-08-23</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-22 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>How do you search a large PHP repo for dangerous sinks without reading every file? Index it as queryable facts, ask for the bug shape, and read only what comes back. The published WordPress core audit spent about 26,000 tokens against an estimated 5,200,000 to read the code once, and found core hardened.</p>
+    <p class="key-fact"><strong>Key number:</strong> The WordPress core audit covered 1,492 PHP files and about 619k lines, indexed as 11,990 functions. <span class="mute">(as of 2026-10-19 · source: <a href="https://github.com/xerj-org/xerj/blob/main/docs/case-studies/wordpress-security-audit/README.md">docs/case-studies/wordpress-security-audit/README.md</a>)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — Index the codebase as queryable facts, ask for the bug shape, and read only what comes back. The published WordPress core audit spent about 26,000 tokens. Reading the code once is estimated at about 5,200,000. The headline finding is that core is hardened.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
@@ -361,6 +439,9 @@
     <li><a href="/answers/code-search-mcp-for-claude-code">I need my agent to find a passage and cite the file, not dump the whole tree. How?</a></li>
     <li><a href="/answers/check-codebase-index-is-complete">My codebase indexer says indexed but I don't see my code. How do I check it actually finished?</a></li>
     <li><a href="/case-studies/wordpress-security-audit">WordPress security audit</a></li>
+    <li><a href="/compare/xerj-vs-ripgrep-for-code-agents">Is ripgrep enough for a coding agent, or do I need a code index?</a> <span class="mute">· same intent: code search for agents</span></li>
+    <li><a href="/compare/xerj-vs-ast-grep">ast-grep vs a code index for an agent?</a> <span class="mute">· same intent: code search for agents</span></li>
+    <li><a href="/answers/index-reference-library-for-coding-agent">How do I set up reference coding so the agent retrieves a mechanism before writing code?</a> <span class="mute">· same intent: code search for agents</span></li>
   </ul>
 </main>
 </div>

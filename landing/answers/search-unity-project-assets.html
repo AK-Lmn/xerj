@@ -65,7 +65,7 @@
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-08-21",
-  "dateModified": "2026-08-21",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,102 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://xerj.org/answers/search-unity-project-assets#faq",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I search a Unity project's assets?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Run xerj autoindex on the project folder. XERJ detects .unity scenes and .meta files as their own families and extracts typed fields from both."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I search Unity scenes and the C# in the same project?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Run one autoindex over the project root. Scene and .meta files get the Unity families and .cs files are parsed as source code, so both land under one index prefix."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Unity YAML is unreadable. How do I search it?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The scene is split into one index per Unity class with typed fields instead of raw YAML. A term on m_Name matched QuokkaSpawner and returned unity_class, unity_class_id, file_id and m_TagString."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I find every prefab that references a script?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "XERJ indexes the guid field on the .meta document, and it does not resolve a GUID reference to the asset it names. Our capture joined an asset to its own .meta record by path and did not verify a prefab-to-script lookup."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What indices does a Unity scene create?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "One per Unity class in the scene. Our 1-scene fixture created unity-assets-scenes-gameobject and unity-assets-scenes-occlusioncullingsettings."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I join an asset to its .meta file?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The .meta document carries asset_path, and the asset document carries the same value in ax_path. One bool should query returns both."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the unity family produce a body field?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The scene indices carry typed Unity fields such as m_Name and unity_class, so a match query on body returns 0 hits against them."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "@id": "https://xerj.org/answers/search-unity-project-assets#howto",
+  "name": "How do I search Unity YAML scenes and the C# that references them as one project?",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Index the Unity project folder into unity-* indices.",
+      "text": "xerj autoindex ./unity --url http://127.0.0.1:9480 --prefix unity --state-dir ./state-unity --progress plain --disable-feedback",
+      "url": "https://xerj.org/answers/search-unity-project-assets#step-1"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Read the fields XERJ extracted before you write a query against them.",
+      "text": "curl -s -XGET 'http://127.0.0.1:9480/unity-*/_mapping'",
+      "url": "https://xerj.org/answers/search-unity-project-assets#step-2"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Find one scene object by the name Unity wrote into the scene file.",
+      "text": "curl -s -XPOST 'http://127.0.0.1:9480/unity-*/_search' -H 'content-type: application/json' -d '{\"query\":{\"term\":{\"m_Name\":\"QuokkaSpawner\"}},\"size\":5,\"track_total_hits\":true}'",
+      "url": "https://xerj.org/answers/search-unity-project-assets#step-3"
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -246,26 +342,31 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>HOW DO I SEARCH UNITY YAML SCENES AND THE C# THAT REFERENCES THEM AS ONE PROJECT?</div>
   <div class="kicker"><span>ANSWERS · FILES AND FORMATS</span></div>
   <h1>How do I search Unity YAML scenes and the C# that references them as one project?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-08-21</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>How do I search a Unity project's assets? Run xerj autoindex on the project folder. XERJ detects the unity and unity-meta families and extracts m_Name, unity_class and guid, splitting a scene into one index per Unity class. One bool query joined an asset to its .meta record and returned 3 documents across 2 families.</p>
+    <p class="key-fact"><strong>Key number:</strong> One <code class="inline">bool</code> query joined an asset to its <code class="inline">.meta</code> record by path and returned 3 documents across 2 families. <span class="mute">(as of 2026-08-21 · source: the captured run documented on this page)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — Run <code class="inline">xerj autoindex</code> on the project folder. XERJ detects the <code class="inline">unity</code> and <code class="inline">unity-meta</code> families and extracts <code class="inline">m_Name</code>, <code class="inline">unity_class</code> and <code class="inline">guid</code>. One <code class="inline">bool</code> query joined an asset to its <code class="inline">.meta</code> document and returned 3 documents across 2 families.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
     <code>Act as a coding agent. Read https://xerj.org/llms.txt, install the latest XERJ and start a node, run xerj autoindex on a Unity project folder with --prefix unity, list the indices it created, then find one GameObject by m_Name and join one asset to its .meta record with a bool should query on asset_path and ax_path.</code>
     <button type="button" class="prompt-copy" data-copy="Act as a coding agent. Read https://xerj.org/llms.txt, install the latest XERJ and start a node, run xerj autoindex on a Unity project folder with --prefix unity, list the indices it created, then find one GameObject by m_Name and join one asset to its .meta record with a bool should query on asset_path and ax_path.">COPY THE PROMPT</button>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-1">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj autoindex ./unity --url http://127.0.0.1:9480 --prefix unity --state-dir ./state-unity --progress plain --disable-feedback</code>
     <button type="button" class="prompt-copy" data-copy="xerj autoindex ./unity --url http://127.0.0.1:9480 --prefix unity --state-dir ./state-unity --progress plain --disable-feedback">COPY COMMAND</button>
     <span class="hero-proof">Index the Unity project folder into unity-* indices.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-2">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XGET 'http://127.0.0.1:9480/unity-*/_mapping'</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XGET &#x27;http://127.0.0.1:9480/unity-*/_mapping&#x27;">COPY COMMAND</button>
     <span class="hero-proof">Read the fields XERJ extracted before you write a query against them.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-3">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XPOST 'http://127.0.0.1:9480/unity-*/_search' -H 'content-type: application/json' -d '{"query":{"term":{"m_Name":"QuokkaSpawner"}},"size":5,"track_total_hits":true}'</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XPOST &#x27;http://127.0.0.1:9480/unity-*/_search&#x27; -H &#x27;content-type: application/json&#x27; -d &#x27;{&quot;query&quot;:{&quot;term&quot;:{&quot;m_Name&quot;:&quot;QuokkaSpawner&quot;}},&quot;size&quot;:5,&quot;track_total_hits&quot;:true}&#x27;">COPY COMMAND</button>
@@ -352,6 +453,9 @@ unity-docs
     <li><a href="/answers/search-yaml-xml-config-repository">How do I find every place a config key is set across YAML and XML in a repo?</a></li>
     <li><a href="/answers/index-monorepo-for-agent">How do I stop my agent from reading the whole repo into context?</a></li>
     <li><a href="/answers/catalog-files-with-autoindex-map">How should an agent figure out what's in a messy data folder before searching?</a></li>
+    <li><a href="/answers/search-jupyter-notebook-cells">I need to find a function I wrote in a notebook months ago. How do I search all .ipynb files and the .py next to them?</a> <span class="mute">· same intent: code search for agents</span></li>
+    <li><a href="/answers/audit-php-codebase-with-an-index">How do I audit a PHP codebase with an index instead of grepping 1,400 files?</a> <span class="mute">· same intent: code search for agents</span></li>
+    <li><a href="/answers/check-codebase-index-is-complete">My codebase indexer says indexed but I don't see my code. How do I check it actually finished?</a> <span class="mute">· same intent: code search for agents</span></li>
   </ul>
 </main>
 </div>

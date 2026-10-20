@@ -200,6 +200,14 @@ two spaces) or an inline `[a, b]`; nested map keys under a list item are
 | `noindex` | bool | `true` adds `robots: noindex` **and** removes the page from `sitemap.xml` (`urlmap.is_noindex` reads it) |
 | `agent_prompt` | string | one logical line, must contain `https://xerj.org/llms.txt`, must not contain a Markdown fence |
 | `commands` | list of `{cmd, note}` | `cmd` must shell-parse, and must start with `xerj` + a real subcommand (`autoindex mcp serve verify help version`) or a flag, or with an allowed shell primitive (`bash cd command curl env export git sh until wget`). No `<placeholders>` |
+| `answer` | string | **GEO.** 40–60 words, answer-first, restating the question; rendered in a "Short answer" card under the H1 and in the `.md` twin |
+| `key_fact` / `key_fact_source` / `key_fact_date` | strings, all three or none | **GEO.** One sentence with a number; source is an `https://` URL, a site path, a repo path that exists (rendered as a GitHub link), or the literal `capture` (the run this page documents); ISO date it was measured or checked |
+| `intent_group` | string | **GEO.** The agent-intent cluster (task column of the query research CSV); groups `llms.txt` and drives "same intent" related links |
+| `queries` | list of string | **GEO.** Literal queries from the research CSV the page targets (published in `index.json`); omit when none fits |
+| `howto` | bool | `true` emits `HowTo` JSON-LD from `commands:` (≥ 2 required); command cards get `id="step-N"` |
+| `og_image` / `og_image_alt` | string | a per-page card under `landing/` (must exist) instead of the site card |
+| `last_checked` | string | ISO date every third-party fact was re-read (best-of pages) |
+| `items` | list of `{name, url, license, install}` | best-of pages: emitted as `ItemList` of `SoftwareApplication`; `url` must be `https://` |
 
 ### 3.2 `links_out` resolution
 
@@ -676,16 +684,24 @@ content: a duplicate that Google must pick between, on a page that already told
 it which URL is canonical. `build_articles.assert_generated_contract` refuses to
 emit one and `seo_lint.check_markdown_twins` fails the build on one.
 
-### 6. Never emit `FAQPage`, `HowTo` or `aggregateRating` JSON-LD
+### 6. `FAQPage` / `HowTo` only for what the page shows; never `aggregateRating`
 
-Articles carry a `faq:` block and it renders as a normal FAQ section — but **no
-`FAQPage` structured data**. Google restricted FAQ rich results to government and
-health sites and they end entirely on 7 May 2026. `HowTo` and its documentation
-were removed outright. `aggregateRating`/`Review` would be invented — there is no
-review corpus — which is a manual-action risk under Google's structured-data spam
-policies. The emitted set is: `Organization` + `WebSite` sitewide, one page-body
-type (`SoftwareApplication` / `CollectionPage` / `TechArticle` / `Article` /
-`WebPage`), and `BreadcrumbList` below the root. That is all.
+Until 2026-10 this trap read "never emit FAQPage or HowTo", because Google
+restricted FAQ rich results to government and health sites (ending entirely on
+7 May 2026) and removed the HowTo rich result. The site owner reversed that for
+answer engines: generative engines and agents read FAQPage/HowTo as a
+machine-readable outline of the page whether or not Google draws a rich result.
+So articles now emit `FAQPage` (from `faq:`) and, when `howto: true`, `HowTo`
+(one step per `commands:` item), and `seo_lint` rule 46 makes the safe half
+mandatory: every FAQPage question must be a visible heading and its answer must
+be visible text; every HowTo step must be visible on the page. Structured data
+that says something the page does not is the spam case; this is not that.
+`aggregateRating`/`Review` stays forbidden — there is no review corpus — and
+`ItemList` is emitted only on best-of pages, from their `items:` list. The
+emitted set is: `Organization` + `WebSite` sitewide, one page-body type
+(`SoftwareApplication` / `CollectionPage` / `TechArticle` / `Article` /
+`WebPage`), `BreadcrumbList` below the root, plus `FAQPage` / `HowTo` /
+`ItemList` on articles that carry the matching frontmatter.
 
 ### 7. JSON-LD needs no CSP change
 

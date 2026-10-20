@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Search JSON logs and gzip logs in one folder</title>
+<title>Search JSON and JSONL logs plus gzip logs in one folder</title>
 <meta name="description" content="xerj autoindex detects JSON arrays, JSONL logs and gzipped logs in one folder, infers the date field and answers exact filters. One run returned 386 ERROR hits.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +16,7 @@
 <link rel="canonical" href="https://xerj.org/answers/search-json-and-jsonl-logs">
 <meta property="og:site_name" content="XERJ.ai">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Search JSON logs and gzip logs in one folder">
+<meta property="og:title" content="Search JSON and JSONL logs plus gzip logs in one folder">
 <meta property="og:description" content="xerj autoindex detects JSON arrays, JSONL logs and gzipped logs in one folder, infers the date field and answers exact filters. One run returned 386 ERROR hits.">
 <meta property="og:url" content="https://xerj.org/answers/search-json-and-jsonl-logs">
 <meta property="og:image" content="https://xerj.org/og/xerj-card.png">
@@ -25,7 +25,7 @@
 <meta property="og:image:alt" content="XERJ.ai — the search engine built for AI agents">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Search JSON logs and gzip logs in one folder">
+<meta name="twitter:title" content="Search JSON and JSONL logs plus gzip logs in one folder">
 <meta name="twitter:description" content="xerj autoindex detects JSON arrays, JSONL logs and gzipped logs in one folder, infers the date field and answers exact filters. One run returned 386 ERROR hits.">
 <meta name="twitter:image" content="https://xerj.org/og/xerj-card.png">
 <script type="application/ld+json">
@@ -59,13 +59,13 @@
 {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "Search JSON logs and gzip logs in one folder",
+  "headline": "Search JSON and JSONL logs plus gzip logs in one folder",
   "description": "xerj autoindex detects JSON arrays, JSONL logs and gzipped logs in one folder, infers the date field and answers exact filters. One run returned 386 ERROR hits.",
   "url": "https://xerj.org/answers/search-json-and-jsonl-logs",
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-08-21",
-  "dateModified": "2026-08-21",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,109 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://xerj.org/answers/search-json-and-jsonl-logs#faq",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What's the easiest way to search JSON logs plus some old gzip text logs in the same folder?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Index the folder once. Gzip is transparent to autoindex, so a .log.gz file is read like the plain file beside it, and one index pattern such as /jlog-*/_search queries both."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I search JSON or JSONL log files without grepping blindly?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Run xerj autoindex on the folder, then send a filtered _search request. XERJ maps each JSON key to a typed field, so a term filter on level works at once."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "I just want to search logs on my laptop. I don't want Elasticsearch in Docker.",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. XERJ is one native binary that serves the Elasticsearch-compatible port itself, so the log folder is indexed and queried on the host with no container runtime."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does XERJ handle JSONL as well as a JSON array?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. XERJ detects both from file content and gives each its own index. The captured run produced jlog-jsonl and jlog-json from one folder."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does XERJ find the timestamp field by itself?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The captured run inferred timestamp as a date in one file and ts as a date in the other, with no configuration."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are the error counts exact or estimated?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Exact. The captured filter returned 386 hits and the aggregations reported doc_count_error_upper_bound 0 and sum_other_doc_count 0."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do gzipped log files work the same way?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Gzip is transparent on every parsed family, so a .jsonl.gz file indexes like the plain file next to it and lands in the same query pattern."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "@id": "https://xerj.org/answers/search-json-and-jsonl-logs#howto",
+  "name": "What's the easiest way to search JSON logs plus some old gzip text logs in the same folder?",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Index a folder holding both JSON-array and JSONL log files.",
+      "text": "xerj autoindex ./json-logs --url http://127.0.0.1:9200 --prefix jlog --progress plain",
+      "url": "https://xerj.org/answers/search-json-and-jsonl-logs#step-1"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Read the inferred mapping, including the date field and the keyword fields.",
+      "text": "curl -s -XGET http://127.0.0.1:9200/jlog-*/_mapping",
+      "url": "https://xerj.org/answers/search-json-and-jsonl-logs#step-2"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Filter both log indices for errors and get an exact total.",
+      "text": "curl -s -XPOST http://127.0.0.1:9200/jlog-*/_search -H 'content-type: application/json' -d '{\"query\":{\"bool\":{\"filter\":[{\"term\":{\"level\":\"ERROR\"}}]}},\"size\":3,\"_source\":[\"level\",\"service\",\"message\",\"timestamp\",\"ts\"],\"track_total_hits\":true}'",
+      "url": "https://xerj.org/answers/search-json-and-jsonl-logs#step-3"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "name": "Count log lines per service and per level, exactly.",
+      "text": "curl -s -XPOST http://127.0.0.1:9200/jlog-*/_search -H 'content-type: application/json' -d '{\"size\":0,\"aggs\":{\"by_service\":{\"terms\":{\"field\":\"service\",\"size\":20}},\"by_level\":{\"terms\":{\"field\":\"level\",\"size\":20}}}}'",
+      "url": "https://xerj.org/answers/search-json-and-jsonl-logs#step-4"
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -246,32 +349,37 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>WHAT'S THE EASIEST WAY TO SEARCH JSON LOGS PLUS SOME OLD GZIP TEXT LOGS IN THE SAME FOLDER?</div>
   <div class="kicker"><span>ANSWERS · FILES AND FORMATS</span></div>
   <h1>What's the easiest way to search JSON logs plus some old gzip text logs in the same folder?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-08-21</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>What's the easiest way to search JSON logs plus some old gzip text logs in the same folder? Run xerj autoindex on it. It detects JSON-array and JSONL files by content and gives each its own index. In a captured 2-file run it inferred timestamp and ts as date fields, and level=ERROR returned exactly 386 hits.</p>
+    <p class="key-fact"><strong>Key number:</strong> One JSONL file yields at most 4,096 records per extraction window (<code class="inline">MAX_RECORDS_PER_FILE</code>). <span class="mute">(as of 2026-10-19 · source: <a href="https://github.com/xerj-org/xerj/blob/main/engine/crates/xerj-autoindex/src/extract/mod.rs">engine/crates/xerj-autoindex/src/extract/mod.rs</a>)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — <code class="inline">xerj autoindex</code> detects JSON-array and JSONL log files from their content and gives each its own index. In a captured run over 2 files, XERJ inferred <code class="inline">timestamp</code> and <code class="inline">ts</code> as date fields with no configuration. A filter for <code class="inline">level=ERROR</code> returned exactly 386 hits.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
     <code>Act as a coding agent. Read https://xerj.org/llms.txt, start a local XERJ node, run `xerj autoindex ./json-logs --url http://127.0.0.1:9200 --prefix jlog --progress plain`, GET /jlog-*/_mapping to find which field XERJ inferred as a date, then POST a filtered search for level=ERROR and a terms aggregation on service, and report the hit total and the bucket counts.</code>
     <button type="button" class="prompt-copy" data-copy="Act as a coding agent. Read https://xerj.org/llms.txt, start a local XERJ node, run `xerj autoindex ./json-logs --url http://127.0.0.1:9200 --prefix jlog --progress plain`, GET /jlog-*/_mapping to find which field XERJ inferred as a date, then POST a filtered search for level=ERROR and a terms aggregation on service, and report the hit total and the bucket counts.">COPY THE PROMPT</button>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-1">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj autoindex ./json-logs --url http://127.0.0.1:9200 --prefix jlog --progress plain</code>
     <button type="button" class="prompt-copy" data-copy="xerj autoindex ./json-logs --url http://127.0.0.1:9200 --prefix jlog --progress plain">COPY COMMAND</button>
     <span class="hero-proof">Index a folder holding both JSON-array and JSONL log files.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-2">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XGET http://127.0.0.1:9200/jlog-*/_mapping</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XGET http://127.0.0.1:9200/jlog-*/_mapping">COPY COMMAND</button>
     <span class="hero-proof">Read the inferred mapping, including the date field and the keyword fields.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-3">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XPOST http://127.0.0.1:9200/jlog-*/_search -H 'content-type: application/json' -d '{"query":{"bool":{"filter":[{"term":{"level":"ERROR"}}]}},"size":3,"_source":["level","service","message","timestamp","ts"],"track_total_hits":true}'</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XPOST http://127.0.0.1:9200/jlog-*/_search -H &#x27;content-type: application/json&#x27; -d &#x27;{&quot;query&quot;:{&quot;bool&quot;:{&quot;filter&quot;:[{&quot;term&quot;:{&quot;level&quot;:&quot;ERROR&quot;}}]}},&quot;size&quot;:3,&quot;_source&quot;:[&quot;level&quot;,&quot;service&quot;,&quot;message&quot;,&quot;timestamp&quot;,&quot;ts&quot;],&quot;track_total_hits&quot;:true}&#x27;">COPY COMMAND</button>
     <span class="hero-proof">Filter both log indices for errors and get an exact total.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-4">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XPOST http://127.0.0.1:9200/jlog-*/_search -H 'content-type: application/json' -d '{"size":0,"aggs":{"by_service":{"terms":{"field":"service","size":20}},"by_level":{"terms":{"field":"level","size":20}}}}'</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XPOST http://127.0.0.1:9200/jlog-*/_search -H &#x27;content-type: application/json&#x27; -d &#x27;{&quot;size&quot;:0,&quot;aggs&quot;:{&quot;by_service&quot;:{&quot;terms&quot;:{&quot;field&quot;:&quot;service&quot;,&quot;size&quot;:20}},&quot;by_level&quot;:{&quot;terms&quot;:{&quot;field&quot;:&quot;level&quot;,&quot;size&quot;:20}}}}&#x27;">COPY COMMAND</button>
@@ -341,6 +449,9 @@
     <li><a href="/answers/search-kubernetes-pod-logs-on-disk">How do I search Kubernetes pod logs?</a></li>
     <li><a href="/answers/cheap-low-volume-log-search">What can I use for low-volume log search?</a></li>
     <li><a href="/answers/search-engine-without-docker">Is there a single-binary local search engine I can just run?</a></li>
+    <li><a href="/answers/how-xerj-autoindexes-a-folder">I want to point something at a folder and then ask questions about what's in it. What should I use?</a> <span class="mute">· same intent: JSONL and data files</span></li>
+    <li><a href="/answers/index-multiple-csv-files">I have a directory of CSV exports. How do I query them without opening each one in Excel?</a> <span class="mute">· same intent: JSONL and data files</span></li>
+    <li><a href="/answers/catalog-files-with-autoindex-map">How should an agent figure out what's in a messy data folder before searching?</a> <span class="mute">· same intent: JSONL and data files</span></li>
   </ul>
 </main>
 </div>

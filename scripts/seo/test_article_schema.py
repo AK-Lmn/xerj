@@ -107,6 +107,118 @@ class UpdatedFieldTests(unittest.TestCase):
             self.assertIn("updated is not a valid ISO date", str(ctx.exception))
 
 
+GEO_ANSWER = ("What does the schema test article cover? It covers the GEO fields: a forty "
+              "to sixty word answer that restates the question, one dated and sourced number, "
+              "an intent group, the literal queries the page targets, and optional HowTo steps "
+              "taken from the commands. This sentence pads the answer past forty words.")
+
+
+def _geo(text: str = FRONTMATTER, **extra: str) -> str:
+    lines = [f'answer: "{GEO_ANSWER}"',
+             'key_fact: "The suite passes 1366 of 1369 cases."',
+             'key_fact_source: "https://github.com/xerj-org/xerj"',
+             'key_fact_date: "2026-10-19"',
+             'intent_group: "code search for agents"',
+             "queries:", '  - "local code search MCP"']
+    for key, value in extra.items():
+        lines = [line for line in lines if not line.startswith(key + ":")]
+        if value is not None:
+            lines.append(f"{key}: {value}")
+    return text.replace('schema_type: "TechArticle"\n',
+                        'schema_type: "TechArticle"\n' + "\n".join(lines) + "\n")
+
+
+class GeoFieldTests(unittest.TestCase):
+    def _load(self, text: str):
+        with tempfile.TemporaryDirectory() as tmp:
+            return load(_write(pathlib.Path(tmp), text))
+
+    def _rejects(self, text: str, needle: str) -> None:
+        with self.assertRaises(FrontmatterError) as ctx:
+            self._load(text)
+        self.assertIn(needle, str(ctx.exception))
+
+    def test_valid_geo_fields_load_and_reach_head_meta(self):
+        article = self._load(_geo())
+        self.assertEqual(article.intent_group, "code search for agents")
+        self.assertEqual(list(article.queries), ["local code search MCP"])
+        meta = article.head_meta()
+        self.assertEqual(len(meta["faq"]), 4)
+        self.assertNotIn("howto_steps", meta)
+
+    def test_short_answer_is_rejected(self):
+        self._rejects(_geo(answer='"Too short to restate anything."'), "answer")
+
+    def test_key_fact_needs_its_source_and_date(self):
+        self._rejects(_geo(key_fact_date=None), "go together")
+
+    def test_key_fact_needs_a_number(self):
+        self._rejects(_geo(key_fact='"No number here."'), "number")
+
+    def test_missing_repo_source_is_rejected(self):
+        self._rejects(_geo(key_fact_source='"docs/does-not-exist.md"'), "key_fact_source")
+
+    def test_capture_source_is_accepted(self):
+        article = self._load(_geo(key_fact_source='"capture"'))
+        self.assertEqual(article.key_fact_source, "capture")
+
+    def test_howto_needs_two_commands(self):
+        self._rejects(_geo(howto="true"), "at least 2 commands")
+
+
+class HeadBlockTests(unittest.TestCase):
+    def test_faq_and_howto_blocks(self):
+        import seo_head
+        meta = {"faq": [{"q": "Is it **local**?", "a": "Yes, see [docs](/docs)."}],
+                "howto_name": "Index a folder",
+                "howto_steps": [{"cmd": "xerj autoindex ./d", "note": "Index."},
+                                {"cmd": "xerj mcp", "note": "Serve."}]}
+        blocks = {b["@type"]: b for b in seo_head.geo_blocks("https://xerj.org/answers/x", meta)}
+        faq = blocks["FAQPage"]["mainEntity"][0]
+        self.assertEqual(faq["name"], "Is it local?")
+        self.assertEqual(faq["acceptedAnswer"]["text"], "Yes, see docs.")
+        steps = blocks["HowTo"]["step"]
+        self.assertEqual([s["text"] for s in steps], ["xerj autoindex ./d", "xerj mcp"])
+        self.assertEqual(steps[1]["url"], "https://xerj.org/answers/x#step-2")
+
+
+class VisibleStructuredDataTests(unittest.TestCase):
+    """seo_lint rule 46: FAQPage/HowTo only for what the page shows."""
+
+    def _issues(self, body: str, node: dict) -> list[str]:
+        import audit as audit_mod
+        import seo_lint
+        page = audit_mod.Page(path="x.html", abs_path=pathlib.Path("x.html"))
+        parser = audit_mod.PageParser(page)
+        parser.feed(f"<html><body>{body}</body></html>")
+        parser.close()
+        lint = object.__new__(seo_lint.Lint)
+        lint.issues = []
+        lint._check_visible_structured("x.html", page, node, node["@type"], 1)
+        return [issue.rule for issue in lint.issues]
+
+    FAQ = {"@type": "FAQPage", "mainEntity": [{
+        "@type": "Question", "name": "Does it run offline?",
+        "acceptedAnswer": {"@type": "Answer", "text": "Yes, with the default embedder."}}]}
+
+    def test_visible_faq_passes(self):
+        body = "<h3>Does it run offline?</h3><p>Yes, with the <code>default</code> embedder.</p>"
+        self.assertEqual(self._issues(body, self.FAQ), [])
+
+    def test_invisible_faq_question_is_a_gate(self):
+        self.assertEqual(self._issues("<h2>Other</h2><p>Text.</p>", self.FAQ),
+                         ["jsonld.faq_invisible"])
+
+    def test_invisible_faq_answer_is_a_gate(self):
+        body = "<h3>Does it run offline?</h3><p>Something else entirely.</p>"
+        self.assertEqual(self._issues(body, self.FAQ), ["jsonld.faq_invisible"])
+
+    def test_invisible_howto_step_is_a_gate(self):
+        node = {"@type": "HowTo", "step": [{"position": 1, "text": "xerj mcp"}]}
+        self.assertEqual(self._issues("<pre>xerj autoindex .</pre>", node),
+                         ["jsonld.howto_invisible"])
+
+
 class CommittedContentTests(unittest.TestCase):
     def test_every_committed_article_carries_updated(self):
         """No source may regress to the git-date fallback (#974's root cause).

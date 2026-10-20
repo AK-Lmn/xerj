@@ -65,7 +65,7 @@
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-09-18",
-  "dateModified": "2026-09-26",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,71 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://xerj.org/answers/rerank-search-results-calibrated-judge#faq",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I rerank search results in XERJ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Add a rerank object to the body of POST /{index}/_search. An empty object uses every default: the top 30 hits are judged and reordered by relevance probability."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does reranking send my documents to a third party?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. It is the only search-time feature that sends document text off the node. Proxy embeddings and the WAL tap also send text off the node when an operator configures them, and all three are off by default. The question and the text of up to window hits go to the provider. Only fields the response returns are sent."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens when the rerank provider is slow?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The search still answers with HTTP 200. You get the engine's order and scores, and the _rerank block says applied: false with the reason. A slow provider degrades; it does not fail the search."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens when the provider key is wrong or missing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The search fails loudly. A missing key is HTTP 503, a provider 401 is HTTP 502, both with type rerank_exception and no hits. XERJ does not hand back lexical order as if it had been reranked."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the ranking quality of the rerank model verified?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, since PR #975 (merged 2026-09-20). The real Jev reranker judged 1,271 BEIR queries ranking off a XERJ node: median nDCG@10 of 0.7410 on SciFact, 0.3312 on NFCorpus and 0.3638 on FiQA. The stage's own HTTP tests still use a test double; the benchmark runs carry the quality claim."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I combine rerank with sort or aggregations?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Aggregations work and still describe the full match set. sort, search_after, collapse, scroll and size: 0 are refused with an HTTP 400 that names the conflict."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can an AI agent ask for reranking through MCP?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The xerj_search and xerj_hybrid_search tools take an optional rerank argument. It only works when the operator has set a provider key on the node."
+      }
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -246,7 +311,12 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>HOW DO I RERANK SEARCH RESULTS WITH A RELEVANCE JUDGE?</div>
   <div class="kicker"><span>ANSWERS · HYBRID RETRIEVAL: RERANKING</span></div>
   <h1>How do I rerank search results with a relevance judge?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-09-18 · UPDATED · 2026-09-26</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-09-18 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>How do I rerank search results with a relevance judge? Add a rerank block to a XERJ _search body. The top 30 hits go to an external judge, which returns a 0 to 1 relevance probability that replaces _score. Order by it, but never threshold it with min_score: measured calibration error was 0.10 to 0.31.</p>
+    <p class="key-fact"><strong>Key number:</strong> The rerank stage defaults to a 30-hit window and allows at most 300. <span class="mute">(as of 2026-10-19 · source: <a href="https://github.com/xerj-org/xerj/blob/main/engine/crates/xerj-rerank/src/lib.rs">engine/crates/xerj-rerank/src/lib.rs</a>)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — Add <code class="inline">"rerank": {}</code> to a XERJ <code class="inline">_search</code> body. The top 30 hits go to an external judge, which returns a 0 to 1 relevance probability per document. That probability replaces <code class="inline">_score</code>. Order by it, never threshold it with <code class="inline">min_score</code> — the measured probabilities are not calibrated (ECE 0.10–0.31). It sends document text off the machine. Ranking quality is measured: <a href="https://github.com/xerj-org/xerj/pull/975">PR #975</a> scored median nDCG@10 of 0.7410 SciFact, 0.3312 NFCorpus and 0.3638 FiQA over 1,271 queries.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
@@ -366,6 +436,9 @@ endpoint = "https://api.typesafe.ai/v1/systemone"
     <li><a href="/answers/hybrid-search-quality-measured-ndcg">How much better is hybrid search than BM25? Measured nDCG numbers</a></li>
     <li><a href="/answers/how-xerj-combines-search">How does XERJ combine BM25 and kNN?</a></li>
     <li><a href="/docs/config">Config TOML</a></li>
+    <li><a href="/answers/classify-text-from-labelled-history-without-llm">Can I route tickets or filter spam from labelled history, without an LLM call?</a> <span class="mute">· same intent: retrieval research and eval</span></li>
+    <li><a href="/answers/do-search-embeddings-help">When should I turn on neural embeddings, and when is the lexical default enough?</a> <span class="mute">· same intent: retrieval research and eval</span></li>
+    <li><a href="/answers/improve-basic-faiss-rag-pipeline">How do I improve a basic FAISS RAG pipeline?</a> <span class="mute">· same intent: retrieval research and eval</span></li>
   </ul>
 </main>
 </div>

@@ -65,7 +65,7 @@
   "image": "https://xerj.org/og/xerj-card.png",
   "inLanguage": "en",
   "datePublished": "2026-08-21",
-  "dateModified": "2026-08-21",
+  "dateModified": "2026-10-19",
   "author": {
     "@type": "Person",
     "name": "XERJ documentation team"
@@ -84,6 +84,102 @@
     "@type": "Person",
     "name": "XERJ engineering team"
   }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://xerj.org/answers/search-bvh-motion-capture-files#faq",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I search BVH motion-capture files?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Run xerj autoindex on the folder. XERJ detects the bvh family and extracts frames, frame_time_s, duration_s, joint_count and a joints array."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which fields does the bvh family produce?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Six beyond provenance: title, frames, frame_time_s, duration_s, joint_count and joints. Our clip reported 60 frames over 1.999998 seconds."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I find a clip by joint name?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Send a terms query with a 1-element list on joints. That returned 1 hit in our capture."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does my match query on body return nothing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Because the bvh family produces no body field. Query the joints array instead, and read the mapping before you write anything else."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I filter clips by length?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. duration_s and frame_time_s are double and frames is long, so a range query over any of them works directly."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does XERJ index the per-frame channel data?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The extractor summarizes the clip. It writes the joint names and the frame counters, not the numeric motion rows underneath them."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is motion capture a priority format for XERJ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The coverage matrix rates BVH as curiosity value with negligible volume. The family works, and the demand behind it is small."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "@id": "https://xerj.org/answers/search-bvh-motion-capture-files#howto",
+  "name": "How do I search BVH motion-capture files?",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Index the folder of .bvh clips into bvh-* indices.",
+      "text": "xerj autoindex ./bvh --url http://127.0.0.1:9480 --prefix bvh --state-dir ./state-bvh --progress plain --disable-feedback",
+      "url": "https://xerj.org/answers/search-bvh-motion-capture-files#step-1"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Read the 6 extracted fields before you write a query, because the family has no body field.",
+      "text": "curl -s -XGET 'http://127.0.0.1:9480/bvh-*/_mapping'",
+      "url": "https://xerj.org/answers/search-bvh-motion-capture-files#step-2"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Find every clip that contains a named joint, and read its motion fields back.",
+      "text": "curl -s -XPOST 'http://127.0.0.1:9480/bvh-*/_search' -H 'content-type: application/json' -d '{\"query\":{\"terms\":{\"joints\":[\"LeftUpLeg\"]}},\"size\":10,\"_source\":[\"ax_path\",\"joints\",\"joint_count\",\"frames\",\"frame_time_s\",\"duration_s\"],\"track_total_hits\":true}'",
+      "url": "https://xerj.org/answers/search-bvh-motion-capture-files#step-3"
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -246,26 +342,31 @@
   <div class="breadcrumb"><a href="/">HOME</a><span class="sep">·</span><a href="/answers/">ANSWERS</a><span class="sep">·</span>HOW DO I SEARCH BVH MOTION-CAPTURE FILES?</div>
   <div class="kicker"><span>ANSWERS · FILES AND FORMATS</span></div>
   <h1>How do I search BVH motion-capture files?</h1>
-  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-08-21</div>
+  <div class="source-note">AUTHOR · XERJ documentation team · REVIEWED BY · XERJ engineering team · PUBLISHED · 2026-08-21 · UPDATED · 2026-10-19</div>
+  <div class="prompt-card answer-first" id="short-answer">
+    <span class="prompt-label">SHORT ANSWER · UPDATED 2026-10-19</span>
+    <p>How do I search motion-capture data in BVH files? Run xerj autoindex on the folder. XERJ detects the bvh family and writes frames, frame_time_s, duration_s, joint_count and a joints keyword array, with no body field. Our test clip reported 60 frames over 1.999998 seconds, and a terms query on joints returned it.</p>
+    <p class="key-fact"><strong>Key number:</strong> The captured BVH clip reported 60 frames over a duration_s of 1.999998. <span class="mute">(as of 2026-08-21 · source: the captured run documented on this page)</span></p>
+  </div>
   <p><strong>TL;DR</strong> — Run <code class="inline">xerj autoindex</code> on the folder. XERJ detects the <code class="inline">bvh</code> family and writes <code class="inline">frames</code>, <code class="inline">frame_time_s</code>, <code class="inline">duration_s</code>, <code class="inline">joint_count</code> and a <code class="inline">joints</code> array. Our clip reported 60 frames over 1.999998 seconds, and a <code class="inline">terms</code> query on <code class="inline">joints</code> returned it.</p>
   <div class="prompt-card">
     <span class="prompt-label">PASTE THIS TO YOUR AI AGENT — IT DOES THE REST</span>
     <code>Act as a coding agent. Read https://xerj.org/llms.txt, install the latest XERJ and start a node, run xerj autoindex on a folder of .bvh files with --prefix bvh, read GET /bvh-*/_mapping, then find a clip by joint name with a terms query on joints and report frames, frame_time_s and duration_s for every hit.</code>
     <button type="button" class="prompt-copy" data-copy="Act as a coding agent. Read https://xerj.org/llms.txt, install the latest XERJ and start a node, run xerj autoindex on a folder of .bvh files with --prefix bvh, read GET /bvh-*/_mapping, then find a clip by joint name with a terms query on joints and report frames, frame_time_s and duration_s for every hit.">COPY THE PROMPT</button>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-1">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>xerj autoindex ./bvh --url http://127.0.0.1:9480 --prefix bvh --state-dir ./state-bvh --progress plain --disable-feedback</code>
     <button type="button" class="prompt-copy" data-copy="xerj autoindex ./bvh --url http://127.0.0.1:9480 --prefix bvh --state-dir ./state-bvh --progress plain --disable-feedback">COPY COMMAND</button>
     <span class="hero-proof">Index the folder of .bvh clips into bvh-* indices.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-2">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XGET 'http://127.0.0.1:9480/bvh-*/_mapping'</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XGET &#x27;http://127.0.0.1:9480/bvh-*/_mapping&#x27;">COPY COMMAND</button>
     <span class="hero-proof">Read the 6 extracted fields before you write a query, because the family has no body field.</span>
   </div>
-  <div class="prompt-card">
+  <div class="prompt-card" id="step-3">
     <span class="prompt-label">RUN THIS XERJ COMMAND</span>
     <code>curl -s -XPOST 'http://127.0.0.1:9480/bvh-*/_search' -H 'content-type: application/json' -d '{"query":{"terms":{"joints":["LeftUpLeg"]}},"size":10,"_source":["ax_path","joints","joint_count","frames","frame_time_s","duration_s"],"track_total_hits":true}'</code>
     <button type="button" class="prompt-copy" data-copy="curl -s -XPOST &#x27;http://127.0.0.1:9480/bvh-*/_search&#x27; -H &#x27;content-type: application/json&#x27; -d &#x27;{&quot;query&quot;:{&quot;terms&quot;:{&quot;joints&quot;:[&quot;LeftUpLeg&quot;]}},&quot;size&quot;:10,&quot;_source&quot;:[&quot;ax_path&quot;,&quot;joints&quot;,&quot;joint_count&quot;,&quot;frames&quot;,&quot;frame_time_s&quot;,&quot;duration_s&quot;],&quot;track_total_hits&quot;:true}&#x27;">COPY COMMAND</button>
@@ -330,6 +431,9 @@
     <li><a href="/answers/search-unity-project-assets">How do I search Unity YAML scenes and the C# that references them as one project?</a></li>
     <li><a href="/answers/search-file-contents-in-a-folder">I have a folder of PDFs, Word docs, and markdown. How do I search all of them at once?</a></li>
     <li><a href="/answers/catalog-files-with-autoindex-map">How should an agent figure out what's in a messy data folder before searching?</a></li>
+    <li><a href="/answers/full-text-search-sqlite-database">How do I full-text search a SQLite database I just copied onto disk?</a> <span class="mute">· same intent: JSONL and data files</span></li>
+    <li><a href="/answers/how-xerj-autoindexes-a-folder">I want to point something at a folder and then ask questions about what's in it. What should I use?</a> <span class="mute">· same intent: JSONL and data files</span></li>
+    <li><a href="/answers/index-csv-with-many-columns">How do I index a CSV with many columns?</a> <span class="mute">· same intent: JSONL and data files</span></li>
   </ul>
 </main>
 </div>

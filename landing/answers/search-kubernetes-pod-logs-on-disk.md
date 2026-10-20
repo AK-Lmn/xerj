@@ -2,11 +2,15 @@
 ---
 title: "How do I search Kubernetes pod logs?"
 canonical: "https://xerj.org/answers/search-kubernetes-pod-logs-on-disk"
-updated: "2026-08-21"
+updated: "2026-10-19"
 source: "content/answers/search-kubernetes-pod-logs-on-disk.md"
 ---
 
 # How do I search Kubernetes pod logs?
+
+**Short answer** (updated 2026-10-19): How do I grep for specific text across logs from multiple Kubernetes pods? Collect the pod logs to local disk first, then run xerj autoindex on the folder. In a captured run, one match_phrase request returned 18 hits, 6 from each of 3 pod log files. XERJ is not a collector, and the CRI format reads as prose.
+
+**Key number:** One `match_phrase` request returned 18 hits, 6 per pod, across 3 collected pod logs. (as of 2026-08-21; source: the captured run documented on this page)
 
 **TL;DR** — Collect the pod logs to local disk first, then run `xerj autoindex` on the folder. In a captured run, 1 `match_phrase` request returned 18 hits spread 6, 6 and 6 across 3 pod log files. XERJ is not the collector, and the CRI format was read as prose text.
 
@@ -129,3 +133,6 @@ All results come from run RUN-B, captured on 2026-08-21 on a 16-core AMD EPYC 96
 - [What's the easiest way to search JSON logs plus some old gzip text logs in the same folder?](/answers/search-json-and-jsonl-logs)
 - [How do I search gzipped logs without decompressing the whole file — including when JSONL sits next to them?](/answers/search-gzip-logs-without-zgrep)
 - [What can I use for low-volume log search?](/answers/cheap-low-volume-log-search)
+- [I downloaded a bunch of papers as PDFs. How do I search across them?](/answers/search-all-pdfs-in-a-folder) (same intent: logs and docs)
+- [Is it efficient to index PDF files?](/answers/is-pdf-indexing-efficient) (same intent: logs and docs)
+- [I indexed a folder of email and PDFs. How do I actually read what it found?](/answers/read-indexed-email-and-pdf-folder) (same intent: logs and docs)

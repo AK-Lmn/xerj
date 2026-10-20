@@ -16,10 +16,12 @@ For every page it guarantees, in `<head>` and nowhere else:
     `urlmap.NOINDEX`;
   * `lang` on `<html>` and a viewport meta, if the page was missing them.
 
-Deliberately NOT emitted, per scripts' research doc §5:
-  * FAQPage — Google restricted FAQ rich results to government/health sites,
-    and they end entirely on 7 May 2026.
-  * HowTo — the rich result and its documentation were removed outright.
+Emitted only when the page shows the same content (seo_lint rule 46):
+  * FAQPage from an article's `faq:`, HowTo from `commands:` when `howto: true`,
+    ItemList from a best-of page's `items:`. Google no longer draws FAQ/HowTo
+    rich results; these are for answer engines (README trap 6).
+
+Deliberately NOT emitted:
   * aggregateRating / Review — we have no review corpus; inventing one is a
     manual-action risk under Google's structured-data spam policies.
 
