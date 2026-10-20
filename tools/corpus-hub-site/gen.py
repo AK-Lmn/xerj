@@ -511,7 +511,7 @@ gap:1px;background:var(--z-line);border:1px solid var(--z-line)}
 .stat{background:var(--z-bg);padding:var(--sp-4) var(--sp-5);min-height:88px;
 display:flex;flex-direction:column;justify-content:center;gap:4px}
 .stat.wide{grid-column:1 / -1}
-.stat a{display:block;text-decoration:none;color:inherit}.stat a:hover b{color:var(--z-accent)}
+.stat a{display:flex;flex-direction:column;gap:4px;text-decoration:none;color:inherit}.stat a:hover b{color:var(--z-accent)}
 .stat b{font-family:var(--font-display);font-weight:800;white-space:nowrap;
 font-size:var(--fs-32);line-height:1;color:var(--z-ink)}
 .stat span{font-family:var(--font-data);font-size:var(--fs-11);font-weight:500;
