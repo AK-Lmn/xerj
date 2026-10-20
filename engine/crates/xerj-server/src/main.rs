@@ -1321,32 +1321,64 @@ async fn serve(
 /// can never advertise a port another process owns — the failure mode that
 /// sent one user's contracts, invoices and bank export into a stranger's data
 /// directory under `ok=true exit=0` (issue #465).
-/// What a bare `xerj` prints when the default port is taken.
+/// The `[server]` config key that moves only this listener.
+fn listener_port_key(name: &str) -> &'static str {
+    match name {
+        "ES-compat" => "es_compat_port",
+        "native REST" => "rest_port",
+        "gRPC" => "grpc_port",
+        _ => "es_compat_port / rest_port / grpc_port",
+    }
+}
+
+/// What startup prints when a listener cannot be bound.
 ///
-/// The old context was `ES-compat: bind 127.0.0.1:9200` plus the OS error.
-/// A bare `xerj` starts the server. When that port is taken, the error did
-/// not mention `--port`, `--auto-port`, or that `--help` lists subcommands.
-fn addr_in_use_message(name: &str, addr: SocketAddr) -> String {
-    format!(
-        "{name}: {addr} is already in use. Pass --port <PORT> to pick a different one, or \
-         --auto-port to take the next free port. If you did not mean to start a server, \
-         `xerj --help` lists the subcommands."
-    )
+/// Always `{name}: bind {addr}: {OS error}` first — the listener, the address
+/// and the reason, which is what the #465 process test pins — then, for the
+/// two failures an operator fixes by moving the port, the flags that move it.
+///
+/// #1687 added a hint for `AddrInUse` only, and #1778 re-appended the OS
+/// reason after it. Two gaps remained. The hint told every listener to "pass
+/// --port <PORT> to pick a different one", but `--port` sets the ES-compat
+/// port and puts native REST on PORT+1 and gRPC on PORT+2, so for those two
+/// it read as if `--port` were their own port. And the Windows refusal from
+/// #1723 / #1738 (`os error 10013`, WSAEACCES — usually a port inside a
+/// Hyper-V/WinNAT excluded range) is `PermissionDenied`, not `AddrInUse`, so
+/// it still printed the bare `native REST: bind 127.0.0.1:8080` with no hint.
+fn bind_error_message(name: &str, addr: SocketAddr, err: &std::io::Error) -> String {
+    let key = listener_port_key(name);
+    let move_it = "--port <BASE> moves all three listeners together (ES-compat BASE, \
+         native REST BASE+1, gRPC BASE+2; e.g. --port 9300)";
+    let only_this =
+        format!("or set `{key}` under [server] in a --config file to move only this one");
+    let not_a_server =
+        "If you did not mean to start a server, `xerj --help` lists the subcommands.";
+    match err.kind() {
+        std::io::ErrorKind::AddrInUse => format!(
+            "{name}: bind {addr}: {err}. Another process is already listening there. \
+             {move_it}, --auto-port takes the next free ports, {only_this}. {not_a_server}"
+        ),
+        std::io::ErrorKind::PermissionDenied => {
+            // `--auto-port` only steps past ports that are in use, so it is
+            // not offered for a refused one.
+            let cause = if cfg!(windows) {
+                "Windows refused the port; it is often inside a range reserved by \
+                 Hyper-V or WinNAT (list them with \
+                 `netsh int ipv4 show excludedportrange protocol=tcp`)."
+            } else if addr.port() < 1024 {
+                "Ports below 1024 need elevated privileges."
+            } else {
+                "The operating system refused the port."
+            };
+            format!("{name}: bind {addr}: {err}. {cause} {move_it}, {only_this}. {not_a_server}")
+        }
+        _ => format!("{name}: bind {addr}: {err}"),
+    }
 }
 
 fn bind_listener(addr: SocketAddr, name: &str) -> Result<std::net::TcpListener> {
-    let listener = match std::net::TcpListener::bind(addr) {
-        Ok(listener) => listener,
-        Err(e) if e.kind() == std::io::ErrorKind::AddrInUse => {
-            // The hint first, then the OS reason and the `bind {addr}` wording
-            // the #465 process test (`taken_port_fails_startup`) relies on.
-            anyhow::bail!(
-                "{} ({name}: bind {addr}: {e})",
-                addr_in_use_message(name, addr)
-            );
-        }
-        Err(e) => return Err(e).with_context(|| format!("{name}: bind {addr}")),
-    };
+    let listener = std::net::TcpListener::bind(addr)
+        .map_err(|e| anyhow::anyhow!("{}", bind_error_message(name, addr, &e)))?;
     // Both axum's accept loop and axum-server's rustls acceptor drive this
     // listener from the reactor; a blocking fd would stall the runtime thread
     // on the first accept.
@@ -1358,7 +1390,9 @@ fn bind_listener(addr: SocketAddr, name: &str) -> Result<std::net::TcpListener> 
 
 #[cfg(test)]
 mod bind_listener_tests {
-    use super::{addr_in_use_message, bind_listener};
+    use super::{bind_error_message, bind_listener};
+    use std::io::{Error, ErrorKind};
+    use std::net::SocketAddr;
 
     #[test]
     fn a_taken_port_names_port_and_auto_port() {
@@ -1369,12 +1403,73 @@ mod bind_listener_tests {
         assert!(msg.contains("--port"), "{msg}");
         assert!(msg.contains("--auto-port"), "{msg}");
         assert!(msg.contains("xerj --help"), "{msg}");
-        assert!(msg.contains(&addr.to_string()), "{msg}");
+        // #465's contract: the listener, the address, and the OS reason.
+        assert!(msg.contains(&format!("ES-compat: bind {addr}: ")), "{msg}");
+        assert!(msg.contains("os error"), "the OS error is kept: {msg}");
+        assert!(msg.contains("`es_compat_port`"), "{msg}");
+    }
+
+    /// `--port` is the ES-compat port; the hint for the other two listeners
+    /// must say how it moves them and name the key that moves only them.
+    #[test]
+    fn each_listener_names_its_own_key_and_how_port_moves_it() {
+        let addr: SocketAddr = "127.0.0.1:8080".parse().unwrap();
+        let os = Error::from(ErrorKind::AddrInUse);
+        for (name, key) in [
+            ("ES-compat", "es_compat_port"),
+            ("native REST", "rest_port"),
+            ("gRPC", "grpc_port"),
+        ] {
+            let msg = bind_error_message(name, addr, &os);
+            assert!(msg.starts_with(&format!("{name}: bind {addr}: ")), "{msg}");
+            assert!(msg.contains(&format!("`{key}`")), "{msg}");
+            assert!(msg.contains("native REST BASE+1, gRPC BASE+2"), "{msg}");
+            assert!(msg.contains("--auto-port"), "{msg}");
+        }
+    }
+
+    /// #1723 / #1738: Windows' `os error 10013` is `PermissionDenied`, and it
+    /// printed no hint at all. `--auto-port` is not offered: it only steps
+    /// past ports that are in use.
+    #[test]
+    fn a_refused_port_gets_a_hint_without_auto_port() {
+        let os = Error::from(ErrorKind::PermissionDenied);
+        let high: SocketAddr = "127.0.0.1:8080".parse().unwrap();
+        let msg = bind_error_message("native REST", high, &os);
         assert!(
-            msg.starts_with(&addr_in_use_message("ES-compat", addr)),
+            msg.starts_with("native REST: bind 127.0.0.1:8080: "),
             "{msg}"
         );
-        assert!(msg.contains(&format!("bind {addr}")), "{msg}");
+        assert!(msg.contains("--port <BASE>"), "{msg}");
+        assert!(msg.contains("`rest_port`"), "{msg}");
+        assert!(!msg.contains("--auto-port"), "{msg}");
+        if cfg!(windows) {
+            assert!(msg.contains("excludedportrange"), "{msg}");
+        } else {
+            let low: SocketAddr = "127.0.0.1:80".parse().unwrap();
+            let msg = bind_error_message("native REST", low, &os);
+            assert!(msg.contains("below 1024"), "{msg}");
+        }
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn wsaeacces_is_classified_as_a_refused_port() {
+        // WSAEACCES, the code in both field reports.
+        let os = Error::from_raw_os_error(10013);
+        let addr: SocketAddr = "127.0.0.1:8080".parse().unwrap();
+        let msg = bind_error_message("native REST", addr, &os);
+        assert!(msg.contains("excludedportrange"), "{msg}");
+        assert!(msg.contains("os error 10013"), "{msg}");
+    }
+
+    /// Anything else keeps the plain `{name}: bind {addr}: {reason}`.
+    #[test]
+    fn other_bind_errors_are_not_given_a_port_hint() {
+        let os = Error::from(ErrorKind::AddrNotAvailable);
+        let addr: SocketAddr = "10.255.255.1:9200".parse().unwrap();
+        let msg = bind_error_message("ES-compat", addr, &os);
+        assert_eq!(msg, format!("ES-compat: bind {addr}: {os}"));
     }
 }
 
@@ -1463,7 +1558,7 @@ fn bind_listener_candidate(
                 return Ok((listener, candidate));
             }
             Err(e) if e.kind() == std::io::ErrorKind::AddrInUse => {}
-            Err(e) => return Err(anyhow::anyhow!("{name}: bind {addr}: {e}")),
+            Err(e) => return Err(anyhow::anyhow!("{}", bind_error_message(name, addr, &e))),
         }
     }
 
@@ -2243,7 +2338,33 @@ fn main() -> Result<()> {
         .filter(|&n| n > 0)
         .unwrap_or_else(|| (cores * 8).clamp(64, 512));
     let rt = build_runtime(worker_threads)?;
-    rt.block_on(async_main())
+    run_to_exit(rt, async_main())
+}
+
+/// How long exit waits for blocking jobs still running after `async_main`
+/// returns ("Goodbye" has been logged and the final flush is done).
+const RUNTIME_SHUTDOWN_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(5);
+
+/// Drive the server future to completion, then tear the runtime down without
+/// waiting more than [`RUNTIME_SHUTDOWN_TIMEOUT`] for blocking jobs.
+///
+/// Dropping a `Runtime` joins its blocking pool with no time limit. After
+/// SIGTERM the one job left there is usually a background merge, detached by
+/// `spawn_blocking` and parked in the merge pool, which can spend minutes
+/// compressing a large column at zstd 19 on a low-priority thread. The
+/// process then outlived "Goodbye" by however long that merge had left
+/// (90 s+ measured on macOS), and a supervisor's stop timeout killed it.
+///
+/// Walking away from that merge is safe: a merge publishes atomically through
+/// `apply_merge`, and an unfinished batch leaves its input segments untouched
+/// (the LOSS FIREWALL notes in `xerj-engine`'s `index.rs`). The final
+/// `flush_all_force` has completed before `async_main` returns, and leaving a
+/// job unfinished here is no different from the SIGKILL or power loss the
+/// engine is already built to recover from.
+fn run_to_exit<F: std::future::Future>(rt: tokio::runtime::Runtime, fut: F) -> F::Output {
+    let out = rt.block_on(fut);
+    rt.shutdown_timeout(RUNTIME_SHUTDOWN_TIMEOUT);
+    out
 }
 
 /// Explicit worker-thread stack size for the production Tokio runtime.
@@ -2881,9 +3002,87 @@ mod decide_flag_tests {
     }
 }
 
+/// Return every jemalloc arena's dirty pages to the OS (`arena.4096.purge`,
+/// 4096 being `MALLCTL_ARENAS_ALL`).
+///
+/// `arena.<i>.purge` is a void control: jemalloc rejects it with EPERM unless
+/// all four of `oldp`, `oldlenp`, `newp` and `newlen` are null/0
+/// (`NEITHER_READ_NOR_WRITE` in jemalloc's `ctl.c`). The earlier
+/// `tikv_jemalloc_ctl::raw::write(.., 0u64)` passed a value, so every purge
+/// failed and the error was discarded. On Linux `background_thread:true`
+/// hid it; on macOS there is no background thread, and the drain freed
+/// nothing back to the OS.
+#[cfg(not(target_env = "msvc"))]
+fn purge_all_jemalloc_arenas() -> Result<(), i32> {
+    // SAFETY: the name is a NUL-terminated literal naming a real ctl node,
+    // and a void control reads and writes nothing, so null pointers and a
+    // zero length are exactly what it requires.
+    let rc = unsafe {
+        tikv_jemalloc_sys::mallctl(
+            c"arena.4096.purge".as_ptr(),
+            std::ptr::null_mut(),
+            std::ptr::null_mut(),
+            std::ptr::null_mut(),
+            0,
+        )
+    };
+    if rc == 0 {
+        Ok(())
+    } else {
+        Err(rc)
+    }
+}
+
+#[cfg(all(test, not(target_env = "msvc")))]
+mod allocator_purge_tests {
+    use super::purge_all_jemalloc_arenas;
+
+    /// The memory drain's purge must actually run. `arena.<i>.purge` is a
+    /// void control: jemalloc answers EPERM to any call that passes a new
+    /// value (`ctl.c`, `NEITHER_READ_NOR_WRITE`), so a "write 0" purge is a
+    /// silent no-op and the drain returns nothing to the OS.
+    #[test]
+    fn arena_purge_succeeds() {
+        // Dirty some pages first so the purge has work to do.
+        let blocks: Vec<Vec<u8>> = (0..64).map(|i| vec![i as u8; 256 * 1024]).collect();
+        drop(std::hint::black_box(blocks));
+        assert_eq!(
+            purge_all_jemalloc_arenas(),
+            Ok(()),
+            "arena.4096.purge must return 0"
+        );
+    }
+}
+
 #[cfg(test)]
 mod runtime_tests {
-    use super::build_runtime;
+    use super::{build_runtime, run_to_exit};
+
+    /// SIGTERM → "Goodbye" → exit must not wait on a blocking job that is
+    /// still running (in production: a background merge compressing a large
+    /// column on a low-priority thread). Dropping a Runtime joins its blocking
+    /// pool with no timeout, so the process outlived "Goodbye" by as long as
+    /// the job had left.
+    #[test]
+    fn exit_does_not_wait_for_a_running_blocking_job() {
+        let rt = build_runtime(2).expect("prod runtime builds");
+        let started = std::time::Instant::now();
+        run_to_exit(rt, async {
+            let (tx, rx) = tokio::sync::oneshot::channel::<()>();
+            // Detached, like the merge task: nothing awaits it.
+            drop(tokio::task::spawn_blocking(move || {
+                let _ = tx.send(());
+                std::thread::sleep(std::time::Duration::from_secs(30));
+            }));
+            // Make sure the job is really running before the server returns.
+            rx.await.expect("blocking job started");
+        });
+        let waited = started.elapsed();
+        assert!(
+            waited < std::time::Duration::from_secs(10),
+            "exit waited {waited:?} for a detached blocking job"
+        );
+    }
 
     #[test]
     fn runtime_builds_and_boots() {
@@ -3705,11 +3904,14 @@ async fn async_main() -> Result<()> {
             // MALLCTL_ARENAS_ALL. Both are best-effort: a failing mallctl
             // must never propagate out of the drain path.
             let _ = tikv_jemalloc_ctl::epoch::advance();
-            // SAFETY: `arena.<i>.purge` with i = MALLCTL_ARENAS_ALL (4096)
-            // is a plain "purge every arena" action mallctl; the value is an
-            // unused unsigned scalar. The name is NUL-terminated and names a
-            // real jemalloc ctl node, so the write cannot read out of bounds.
-            let _ = unsafe { tikv_jemalloc_ctl::raw::write(b"arena.4096.purge\0", 0u64) };
+            // Best-effort as before, but no longer silent: a purge that
+            // fails is a drain that returns nothing to the OS. Warn once.
+            if let Err(rc) = purge_all_jemalloc_arenas() {
+                static WARNED: std::sync::Once = std::sync::Once::new();
+                WARNED.call_once(|| {
+                    warn!("jemalloc arena.4096.purge failed (mallctl returned {rc}); memory drains will not return pages to the OS");
+                });
+            }
         }));
         state.engine.spawn_resource_sampler();
     }
