@@ -2,11 +2,15 @@
 ---
 title: "How do I search a Slack JSON export?"
 canonical: "https://xerj.org/answers/search-slack-json-export"
-updated: "2026-08-21"
+updated: "2026-10-19"
 source: "content/answers/search-slack-json-export.md"
 ---
 
 # How do I search a Slack JSON export?
+
+**Short answer** (updated 2026-10-19): How do I search a Slack or Discord JSON export? Unzip the export to local disk and run xerj autoindex on the folder. In a captured run, a phrase inside a threaded reply returned 2 hits at incidents/2026-01-15.json with ax_locator e1, and the ts, thread_ts and user values all survived, as did Japanese text.
+
+**Key number:** Records keep up to 512 fields each (`MAX_FIELDS_PER_RECORD`), so nested Slack message fields map without a schema. (as of 2026-10-19; source: [engine/crates/xerj-autoindex/src/extract/mod.rs](https://github.com/xerj-org/xerj/blob/main/engine/crates/xerj-autoindex/src/extract/mod.rs))
 
 **TL;DR** — Unzip the Slack export to local disk, then run `xerj autoindex` on the folder. In a captured run, a phrase written inside a threaded reply returned 2 hits at `incidents/2026-01-15.json` with `ax_locator` `e1`. The `ts`, `thread_ts` and `user` values all survived.
 
@@ -161,3 +165,6 @@ Unzip it to local disk and run the same `xerj autoindex` command on the folder. 
 - [What's the easiest way to search JSON logs plus some old gzip text logs in the same folder?](/answers/search-json-and-jsonl-logs)
 - [Can ChatGPT search a folder on my laptop, or do I need something else?](/answers/give-chatgpt-claude-local-file-access)
 - [How should an agent figure out what's in a messy data folder before searching?](/answers/catalog-files-with-autoindex-map)
+- [I have a JSON export of Jira issues (or Zendesk tickets). How do I search it like a help-center search?](/answers/search-zendesk-ticket-json-export) (same intent: JSONL and data files)
+- [How do I full-text search a SQLite database I just copied onto disk?](/answers/full-text-search-sqlite-database) (same intent: JSONL and data files)
+- [I want to point something at a folder and then ask questions about what's in it. What should I use?](/answers/how-xerj-autoindexes-a-folder) (same intent: JSONL and data files)
