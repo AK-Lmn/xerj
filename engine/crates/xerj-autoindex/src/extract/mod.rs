@@ -34,6 +34,8 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
 use std::io::{BufRead, BufReader, Read};
 use std::path::Path;
+use std::sync::{Condvar, Mutex};
+use std::time::{Duration, Instant};
 
 /// Where a record's FIELD NAMES came from — the input to dataset clustering.
 ///
@@ -117,10 +119,9 @@ pub const MAX_RECORDS_PER_FILE: usize = 4 << 10; // 4096
 /// answer spanning a boundary stays retrievable from both sides.
 pub const SECTION_OVERLAP: usize = 200;
 
-/// How far a hard split may move back from `SECTION_CHARS` to land on
-/// whitespace. A run with no whitespace inside the window keeps the char
-/// boundary, so multi-byte scalars and unbroken tokens are never severed
-/// just to chase a word that is not there.
+/// How far the paragraph-overlap tail may move back to land on a word (see
+/// [`tail`]). A run with no whitespace inside the window snaps forward to the
+/// next word instead, or keeps the char boundary when there is none.
 const WORD_SNAP_BYTES: usize = 64;
 
 /// Open a (possibly gzipped) file as a buffered reader of DECODED-transparent
@@ -189,10 +190,7 @@ pub fn extract_as_document_with_name(
         .file_stem()
         .map(|s| s.to_string_lossy().to_string())
         .unwrap_or_else(|| "untitled".into());
-    let skipped = text.len() - text.trim_start().len();
-    let skipped_lines = text[..skipped].bytes().filter(|b| *b == b'\n').count() as u64;
-    emit_document_from(
-        skipped_lines,
+    emit_document(
         &title,
         &[],
         text.trim(),
@@ -553,7 +551,13 @@ pub fn sanitize_field_name(name: &str) -> String {
     }
 }
 
-/// Last `n` bytes of `s`, snapped back to a char boundary.
+/// Last `n` bytes of `s`, snapped back to a char boundary, then onto a word
+/// so the next section does not open in the middle of a token.
+///
+/// A raw 200-byte tail of the previous paragraph is what made a markdown
+/// section of `docs/contributing/pull-requests.md` begin `le to use in tests`
+/// (the tail landed inside `available`). This is the paragraph-overlap
+/// path only; the hard split still cuts on a char boundary.
 fn tail(s: &str, n: usize) -> String {
     if s.len() <= n {
         return s.to_string();
@@ -565,7 +569,50 @@ fn tail(s: &str, n: usize) -> String {
         .last()
         .map(|(i, _)| i)
         .unwrap_or(0);
+    let start = snap_overlap_start(s, start);
     s[start..].to_string()
+}
+
+/// If `start` falls inside a word, move to the nearest whitespace within
+/// [`WORD_SNAP_BYTES`] behind it (the whole word stays in the overlap), or
+/// forward to the next word when that lookbehind has no break.
+fn snap_overlap_start(s: &str, start: usize) -> usize {
+    if start == 0 || start >= s.len() {
+        return start.min(s.len());
+    }
+    let prev_is_word = s[..start]
+        .chars()
+        .next_back()
+        .is_some_and(|c| !c.is_whitespace());
+    let next_is_word = s[start..]
+        .chars()
+        .next()
+        .is_some_and(|c| !c.is_whitespace());
+    if !(prev_is_word && next_is_word) {
+        return start;
+    }
+    let look = floor_boundary(s, start.saturating_sub(WORD_SNAP_BYTES));
+    if let Some(rel) = s[look..start].rfind(char::is_whitespace) {
+        let at = look + rel;
+        let ws_len = s[at..].chars().next().map(|c| c.len_utf8()).unwrap_or(1);
+        let after = at + ws_len;
+        if after > 0 && after < s.len() {
+            return after;
+        }
+    }
+    let rest = &s[start..];
+    if let Some(rel) = rest.find(char::is_whitespace) {
+        let ws_len = rest[rel..]
+            .chars()
+            .next()
+            .map(|c| c.len_utf8())
+            .unwrap_or(1);
+        let after = start + rel + ws_len;
+        if after < s.len() {
+            return after;
+        }
+    }
+    start
 }
 
 /// Smallest char boundary of `s` that is `>= i` (`s.len()` if `i` is past the
@@ -592,34 +639,6 @@ fn floor_boundary(s: &str, i: usize) -> usize {
         i -= 1;
     }
     i
-}
-
-/// Cut `cur` near `target` bytes. Prefer the nearest whitespace at or before
-/// `target` within [`WORD_SNAP_BYTES`], and cut *after* that whitespace so
-/// the next section starts on a word. No whitespace in the window → the char
-/// boundary at `target`, which never splits a scalar.
-fn cut_on_word_or_char(cur: &str, target: usize) -> usize {
-    let boundary = ceil_boundary(cur, target.min(cur.len()));
-    if boundary == 0 || boundary >= cur.len() {
-        return boundary;
-    }
-    let look = floor_boundary(cur, boundary.saturating_sub(WORD_SNAP_BYTES));
-    let window = &cur[look..boundary];
-    if let Some(rel) = window.rfind(char::is_whitespace) {
-        let at = look + rel;
-        let ws_len = cur[at..].chars().next().map(|c| c.len_utf8()).unwrap_or(1);
-        let after = at + ws_len;
-        if after > 0 && after < cur.len() {
-            return after;
-        }
-    }
-    boundary
-}
-
-/// 1-based line number of `text` at byte offset `byte`.
-fn line_number_at(text: &str, byte: usize) -> u64 {
-    let byte = byte.min(text.len());
-    1 + text[..byte].bytes().filter(|b| *b == b'\n').count() as u64
 }
 
 /// Top up `cur` from the front of `rest` until it holds `want` bytes, moving
@@ -655,23 +674,13 @@ fn fill_window(cur: &mut String, rest: &mut &str, want: usize) {
 /// that never exceeds `2 * SECTION_CHARS + 4` bytes, and the paragraph itself
 /// stays borrowed from `text`.
 pub fn for_each_section(text: &str, emit: &mut dyn FnMut(String) -> bool) -> bool {
-    for_each_section_spans(text, &mut |_at, section| emit(section))
-}
-
-/// [`for_each_section`] that also reports the byte offset in `text` where each
-/// section begins. Paragraph overlap is included: a section that repeats the
-/// previous tail starts at that tail.
-fn for_each_section_spans(text: &str, emit: &mut dyn FnMut(usize, String) -> bool) -> bool {
     if text.len() <= SECTION_CHARS {
-        return emit(0, text.to_string());
+        return emit(text.to_string());
     }
     // One byte past the largest section the loop below will ever hold, so a
     // full window always trips the hard-split condition.
     let window = 2 * SECTION_CHARS + 1;
     let mut cur = String::new();
-    // Byte offset in `text` of `cur`'s first byte once `cur` is non-empty.
-    let mut origin = 0usize;
-    let mut pos = 0usize;
 
     for para in text.split("\n\n") {
         // `cur.len() > SECTION_OVERLAP`: a shorter section would be carried
@@ -681,20 +690,16 @@ fn for_each_section_spans(text: &str, emit: &mut dyn FnMut(usize, String) -> boo
         if !cur.is_empty() && cur.len() + para.len() > SECTION_CHARS && cur.len() > SECTION_OVERLAP
         {
             let done = std::mem::take(&mut cur);
-            let start = origin;
             let carry = tail(&done, SECTION_OVERLAP);
-            origin = start + done.len() - carry.len();
+            if !emit(done) {
+                return false;
+            }
             if !carry.is_empty() {
                 cur.push_str(&carry);
-            }
-            if !emit(start, done) {
-                return false;
             }
         }
         if !cur.is_empty() {
             cur.push_str("\n\n");
-        } else {
-            origin = pos;
         }
         // `rest` is the not-yet-buffered remainder of this paragraph, borrowed
         // from `text` — it is never copied wholesale into `cur`.
@@ -706,23 +711,16 @@ fn for_each_section_spans(text: &str, emit: &mut dyn FnMut(usize, String) -> boo
             if cur.len() + rest.len() <= 2 * SECTION_CHARS {
                 break;
             }
-            let cut = cut_on_word_or_char(&cur, SECTION_CHARS);
+            let cut = ceil_boundary(&cur, SECTION_CHARS);
             let section = cur[..cut].to_string();
-            let start = origin;
             cur.drain(..cut);
-            origin += cut;
-            if !emit(start, section) {
+            if !emit(section) {
                 return false;
             }
         }
-        pos += para.len();
-        if pos < text.len() {
-            // The `\n\n` separator `split` consumed.
-            pos += 2;
-        }
     }
     if !cur.trim().is_empty() {
-        return emit(origin, cur);
+        return emit(cur);
     }
     true
 }
@@ -744,7 +742,6 @@ fn section_record(
     i: usize,
     multi: bool,
     section: String,
-    start_line: u64,
 ) -> RawRecord {
     let mut fields = Map::new();
     fields.insert("title".into(), Value::String(title.to_string()));
@@ -758,13 +755,12 @@ fn section_record(
         fields.insert("section".into(), Value::Number((i as u64).into()));
     }
     fields.insert("body".into(), Value::String(section));
-    fields.insert("start_line".into(), Value::Number(start_line.into()));
     RawRecord {
         fields,
         locator: format!("s{i}"),
         group: None,
-        // title/headings/section/body/start_line are this function's vocabulary,
-        // and `headings`/`section` come and go — never a clustering key.
+        // title/headings/section/body are this function's vocabulary, and
+        // `headings`/`section` come and go — never a clustering key.
         origin: FieldOrigin::Extractor,
     }
 }
@@ -781,29 +777,13 @@ pub fn emit_document(
     sink: Sink,
     stats: &mut ExtractStats,
 ) -> bool {
-    emit_document_from(0, title, headings, body, max_records, sink, stats)
-}
-
-/// [`emit_document`] whose `start_line` values are shifted by `skipped_lines`.
-///
-/// Callers that strip leading whitespace before sectioning (prose) pass the
-/// number of newlines they removed, so `start_line` stays a file line.
-pub(crate) fn emit_document_from(
-    skipped_lines: u64,
-    title: &str,
-    headings: &[String],
-    body: &str,
-    max_records: usize,
-    sink: Sink,
-    stats: &mut ExtractStats,
-) -> bool {
     // One section of lookahead: the `section` field is only present when the
     // document actually splits, which is not known until a second one arrives.
-    let mut pending: Option<(usize, String)> = None;
+    let mut pending: Option<String> = None;
     let mut next: usize = 0;
     let mut alive = true;
-    for_each_section_spans(body, &mut |at, sec| {
-        let Some((prev_at, prev)) = pending.replace((at, sec)) else {
+    for_each_section(body, &mut |sec| {
+        let Some(prev) = pending.replace(sec) else {
             return true;
         };
         // #381: bound noise from a misclassified payload. Stopping the split
@@ -815,8 +795,7 @@ pub(crate) fn emit_document_from(
         let i = next;
         next += 1;
         stats.records += 1;
-        let line = skipped_lines + line_number_at(body, prev_at);
-        alive = sink(section_record(title, headings, i, true, prev, line));
+        alive = sink(section_record(title, headings, i, true, prev));
         alive
     });
     // A sink that stopped early (sampling) sets `alive = false`; the cap leaves
@@ -829,14 +808,13 @@ pub(crate) fn emit_document_from(
         return true;
     }
     match pending {
-        Some((at, last)) => {
+        Some(last) => {
             if next >= max_records {
                 stats.truncated = true;
                 return true;
             }
             stats.records += 1;
-            let line = skipped_lines + line_number_at(body, at);
-            sink(section_record(title, headings, next, next > 0, last, line))
+            sink(section_record(title, headings, next, next > 0, last))
         }
         None => true,
     }
@@ -859,9 +837,9 @@ pub(crate) fn emit_document_with_fields(
     // Collect sections first so we know whether to stamp a `section` field.
     // One past the cap is collected so that "exactly at the cap" and "over the
     // cap" are distinguishable: only the latter dropped anything (#381).
-    let mut secs: Vec<(usize, String)> = Vec::new();
-    for_each_section_spans(body, &mut |at, s| {
-        secs.push((at, s));
+    let mut secs: Vec<String> = Vec::new();
+    for_each_section(body, &mut |s| {
+        secs.push(s);
         secs.len() <= MAX_RECORDS_PER_FILE
     });
     if secs.len() > MAX_RECORDS_PER_FILE {
@@ -869,17 +847,13 @@ pub(crate) fn emit_document_with_fields(
         stats.truncated = true;
     }
     if secs.is_empty() {
-        secs.push((0, String::new()));
+        secs.push(String::new());
     }
     let multi = secs.len() > 1;
-    for (i, (at, sec)) in secs.into_iter().enumerate() {
+    for (i, sec) in secs.into_iter().enumerate() {
         let mut fields = base_fields.clone();
         fields.insert("title".into(), Value::String(title.to_string()));
         fields.insert("body".into(), Value::String(sec));
-        fields.insert(
-            "start_line".into(),
-            Value::Number(line_number_at(body, at).into()),
-        );
         if multi {
             fields.insert("section".into(), Value::Number((i as u64).into()));
         }
@@ -894,6 +868,57 @@ pub(crate) fn emit_document_with_fields(
         }
     }
     true
+}
+
+/// How often a full extract slot says it is still waiting. The wait is not
+/// failed: a legal PDF or mailbox parse can hold its slot for a long time.
+/// The line exists so a leaked permit is not a silent futex.
+pub(crate) const SLOT_HEARTBEAT: Duration = Duration::from_secs(15);
+
+pub(crate) fn slot_wait_line(kind: &str, in_use: usize, limit: usize, waited: Duration) -> String {
+    format!(
+        "autoindex: still waiting for a {kind} slot (in_use={in_use} limit={limit}) after {}s",
+        waited.as_secs()
+    )
+}
+
+/// Block until `full` is false. Each wait is sliced so a notify is rechecked
+/// and a stuck slot prints [`slot_wait_line`] on `heartbeat` cadence. The
+/// caller adds the permit after this returns; this function does not.
+pub(crate) fn wait_until_slot<'a, T>(
+    kind: &str,
+    lock: &'a Mutex<T>,
+    ready: &Condvar,
+    heartbeat: Duration,
+    full: impl Fn(&T) -> bool,
+    counts: impl Fn(&T) -> (usize, usize),
+    mut note: impl FnMut(&str),
+) -> std::sync::MutexGuard<'a, T> {
+    let heartbeat = heartbeat.max(Duration::from_millis(1));
+    let mut guard = lock.lock().expect("extract slot lock poisoned");
+    let started = Instant::now();
+    let mut next_note = started + heartbeat;
+    while full(&guard) {
+        let now = Instant::now();
+        if now >= next_note {
+            let (in_use, limit) = counts(&guard);
+            note(&slot_wait_line(
+                kind,
+                in_use,
+                limit,
+                now.duration_since(started),
+            ));
+            next_note = now + heartbeat;
+        }
+        let slice = next_note
+            .saturating_duration_since(Instant::now())
+            .min(Duration::from_secs(5));
+        let (next, _) = ready
+            .wait_timeout(guard, slice)
+            .expect("extract slot lock poisoned");
+        guard = next;
+    }
+    guard
 }
 
 #[cfg(test)]
@@ -1008,73 +1033,50 @@ mod section_tests {
         );
     }
 
-    /// A single spaced paragraph is cut after a word, and the pieces still
-    /// partition the input: nothing dropped, nothing repeated. A hard split
-    /// does not overlap (overlap is the paragraph-boundary path).
+    /// Paragraph overlap used to keep a raw 200-byte tail, so the next
+    /// section opened inside a word (`le to use` from `available`). The
+    /// overlap still repeats the boundary, and it starts on a word.
     #[test]
-    fn hard_split_of_spaced_prose_cuts_on_a_word_boundary() {
-        let text = "alpha ".repeat(SECTION_CHARS);
-        assert!(!text.contains('\n'));
-        let secs = split_sections(&text);
-        assert!(secs.len() > 2, "expected a hard split, got {}", secs.len());
-        let mut pos = 0usize;
-        for (i, section) in secs.iter().enumerate() {
-            assert_eq!(
-                &text[pos..pos + section.len()],
-                section.as_str(),
-                "section {i} dropped or duplicated content"
-            );
-            if i + 1 < secs.len() {
-                assert!(
-                    section.ends_with(' '),
-                    "section {i} ends mid-word: {:?}",
-                    &section[section.len().saturating_sub(24)..]
-                );
-                assert!(
-                    secs[i + 1].starts_with("alpha"),
-                    "section {} starts mid-word: {:?}",
-                    i + 1,
-                    &secs[i + 1][..secs[i + 1].len().min(24)]
-                );
-            }
-            pos += section.len();
-        }
-        assert_eq!(pos, text.len(), "sections did not cover the input");
-    }
+    fn paragraph_overlap_opens_on_a_word() {
+        let s = "utilities available to use in tests, no matter the crate";
+        // "utilities " is 10 bytes; index 13 is inside "available".
+        let opened = tail(s, s.len() - 13);
+        assert!(
+            opened.starts_with("available"),
+            "overlap opened mid-word: {opened}"
+        );
 
-    /// `start_line` is the file line of the section's first byte, not the
-    /// passage ordinal and not always 1.
-    #[test]
-    fn section_records_carry_the_source_line() {
-        let body = "word\n".repeat(SECTION_CHARS);
-        assert!(!body.contains("\n\n"));
-        let mut lines = Vec::new();
-        let mut stats = ExtractStats::default();
-        let mut sink = |r: RawRecord| {
-            lines.push(r.fields["start_line"].as_u64().unwrap());
-            true
-        };
-        assert!(emit_document(
-            "t",
-            &[],
-            &body,
-            MAX_RECORDS_PER_FILE,
-            &mut sink,
-            &mut stats
-        ));
-        let secs = split_sections(&body);
-        assert_eq!(lines.len(), secs.len());
-        assert!(secs.len() > 1);
-        let mut at = 0usize;
-        for (i, section) in secs.iter().enumerate() {
-            let expect = 1 + body[..at].bytes().filter(|b| *b == b'\n').count() as u64;
-            assert_eq!(lines[i], expect, "section {i}");
-            if i > 0 {
-                assert!(lines[i] > lines[i - 1]);
-            }
-            at += section.len();
+        // A token longer than the lookbehind has no whitespace behind the
+        // cut, so the overlap skips forward to the next word instead.
+        let long = "A".repeat(WORD_SNAP_BYTES + 8);
+        let big = format!("xx{long} tail of the paragraph");
+        let mid = 2 + 4; // inside the run of A's
+        let opened = tail(&big, big.len() - mid);
+        assert!(
+            opened.starts_with("tail"),
+            "long token should snap forward: {opened:?}"
+        );
+
+        let para = format!(
+            "{}utilities available to use in tests",
+            "pad ".repeat(SECTION_CHARS)
+        );
+        let text = format!(
+            "{para}\n\n{}",
+            "The next paragraph is long enough to force a new section. ".repeat(40)
+        );
+        let secs = split_sections(&text);
+        assert!(secs.len() >= 2, "{}", secs.len());
+        let next = &secs[1];
+        let at = text.find(next.as_str()).expect("overlap is a substring");
+        if at > 0 {
+            let prev = text[..at].chars().next_back().unwrap();
+            assert!(
+                prev.is_whitespace(),
+                "section opened mid-word ({prev:?}): {:?}",
+                &next[..next.len().min(48)]
+            );
         }
-        assert_eq!(lines[0], 1);
     }
 
     /// A single paragraph larger than two sections must still be bounded.
@@ -1133,11 +1135,9 @@ mod section_tests {
         out
     }
 
-    /// #239 rewrote the splitter for cost, not for behaviour: every input that
-    /// does not hard-split on whitespace must still produce byte-identical
-    /// sections. Multi-byte cases are the ones a hand-rolled boundary walk
-    /// gets wrong, so they are all in here. Spaced hard splits snap to a word
-    /// and are asserted separately.
+    /// #239 rewrote the splitter for cost, not for behaviour: every input must
+    /// still produce byte-identical sections. Multi-byte cases are the ones a
+    /// hand-rolled boundary walk gets wrong, so they are all in here.
     #[test]
     fn matches_the_pre_fix_implementation_byte_for_byte() {
         let mut cases: Vec<String> = vec![
@@ -1152,9 +1152,7 @@ mod section_tests {
             "z".repeat(10 * SECTION_CHARS),
             doc(200, 400),
             doc(60, 300),
-            // doc(3, 9000) hard-splits inside a spaced paragraph. Word snapping
-            // intentionally moves that cut; it is covered by
-            // `hard_split_of_spaced_prose_cuts_on_a_word_boundary` instead.
+            doc(3, 9000),
             // A short paragraph before ones too big to join it, at the
             // overlap boundary and one byte either side.
             format!("{}\n\n{}", "h".repeat(32), doc(4, 2100)),
@@ -1387,5 +1385,67 @@ mod section_tests {
         ));
         assert_eq!(over, total - 1, "N>cap must emit exactly the cap");
         assert!(stats2.truncated, "N>cap must set truncated");
+    }
+}
+
+#[cfg(test)]
+mod slot_tests {
+    use super::*;
+    use std::sync::Arc;
+    use std::thread;
+    use std::time::Duration;
+
+    #[test]
+    fn slot_wait_line_names_the_slot_and_how_long() {
+        let line = slot_wait_line("pdf worker", 4, 4, Duration::from_secs(45));
+        assert_eq!(
+            line,
+            "autoindex: still waiting for a pdf worker slot (in_use=4 limit=4) after 45s"
+        );
+    }
+
+    /// A full slot used to park on `Condvar::wait` with no timeout and no
+    /// line. The waiter must say so, then proceed when the holder releases.
+    #[test]
+    fn a_full_extract_slot_heartbeats_and_then_proceeds() {
+        let lock = Arc::new(Mutex::new((1usize, 1usize)));
+        let ready = Arc::new(Condvar::new());
+        let notes = Arc::new(Mutex::new(Vec::new()));
+        let lock2 = Arc::clone(&lock);
+        let ready2 = Arc::clone(&ready);
+        let notes2 = Arc::clone(&notes);
+        let waiter = thread::spawn(move || {
+            let guard = wait_until_slot(
+                "pdf worker",
+                &lock2,
+                &ready2,
+                Duration::from_millis(20),
+                |state| state.0 >= state.1,
+                |state| (state.0, state.1),
+                |line| notes2.lock().expect("notes").push(line.to_string()),
+            );
+            guard.0
+        });
+        let deadline = Instant::now() + Duration::from_secs(2);
+        while notes.lock().expect("notes").is_empty() {
+            assert!(
+                Instant::now() < deadline,
+                "a full slot must heartbeat before the holder releases it"
+            );
+            thread::sleep(Duration::from_millis(10));
+        }
+        {
+            let mut guard = lock.lock().expect("lock");
+            guard.0 = 0;
+            ready.notify_all();
+        }
+        assert_eq!(waiter.join().expect("waiter"), 0);
+        let lines = notes.lock().expect("notes");
+        assert!(
+            lines[0].contains("pdf worker")
+                && lines[0].contains("in_use=1")
+                && lines[0].contains("limit=1"),
+            "{lines:?}"
+        );
     }
 }
