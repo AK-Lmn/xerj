@@ -153,260 +153,13 @@ pub(crate) fn suggests_def(q: &str) -> bool {
             .all(|c| c.is_alphanumeric() || c == '_' || c == ':')
 }
 
-/// `name` / `code` / `defs` are the code-shaped legs (#916). A corpus that
-/// maps none of them — markdown, logs, anything autoindex accepted that is
-/// not source — must not be queried with those legs: autoindex indices are
-/// created `strict_unknown_fields`, and a `term` or `match_phrase` on a
-/// field no resolved index maps is HTTP 400 (#1601).
-const CODE_SYMBOL_FIELDS: &[&str] = &["name", "code", "defs"];
-
-/// Historical `xerj search` multi_match weights. Order is part of the
-/// code-corpus query: do not reorder.
-const SEARCH_MM_FIELDS: &[(&str, &str)] = &[
-    ("name", "name^4"),
-    ("code", "code^2"),
-    ("body", "body"),
-    ("defs", "defs^3"),
-    ("title", "title"),
-];
-
-/// Content fields a non-code autoindex maps (`text` on prose, `impl` on
-/// markdown sections, `message` on the log family). Joined only when the
-/// target maps none of [`CODE_SYMBOL_FIELDS`], so a code corpus keeps the
-/// #916 shape exactly.
-const PROSE_EXTRA_FIELDS: &[&str] = &["text", "impl", "message"];
-
-/// Every field `xerj search` might name in `multi_match`, `term`, or
-/// `match_phrase`. A numeric mapping of one of these on any index in the
-/// wildcard fails the whole request (`For input string`, #1284).
-const SEARCH_LOOKUP_FIELDS: &[&str] = &[
-    "name", "code", "body", "defs", "title", "text", "impl", "message",
-];
-
-/// Union of property names in a `GET /{pattern}/_mapping` body.
-///
-/// `None` when `mapping` is not that shape, so a transport failure keeps the
-/// historical code-shaped query. An empty object is a real answer (no
-/// indices) and comes back empty — callers treat an empty set like an
-/// unreadable mapping and do not drop clauses they cannot prove unmapped.
-pub(crate) fn mapped_property_names(mapping: &Value) -> Option<BTreeSet<String>> {
-    let obj = mapping.as_object()?;
-    if obj.is_empty() {
-        return Some(BTreeSet::new());
-    }
-    let mut names = BTreeSet::new();
-    let mut saw_mapping = false;
-    for body in obj.values() {
-        let Some(props) = body
-            .pointer("/mappings/properties")
-            .and_then(Value::as_object)
-        else {
-            continue;
-        };
-        saw_mapping = true;
-        names.extend(props.keys().cloned());
-    }
-    if !saw_mapping {
-        return None;
-    }
-    Some(names)
-}
-
-/// Types stored as `long` or `double`. A `multi_match`, `term`, or
-/// `match_phrase` that names one fails with `For input string: "<query>"`
-/// (#1284). `keyword` is not in this list: `name` stays an exact term.
-fn is_numeric_mapping_type(ty: &str) -> bool {
-    matches!(
-        ty,
-        "long"
-            | "integer"
-            | "short"
-            | "byte"
-            | "unsigned_long"
-            | "double"
-            | "float"
-            | "half_float"
-            | "scaled_float"
-    )
-}
-
-/// Field names any index in a `GET /{pattern}/_mapping` body maps as numeric.
-///
-/// One numeric mapping is enough to drop the field from a wildcard query:
-/// the request is refused for every index, the way `xerj code` drops a
-/// numeric field from its union (#1605). An unreadable body yields an empty
-/// set; callers ignore that unless [`mapped_property_names`] also succeeded.
-pub(crate) fn numeric_property_names(mapping: &Value) -> BTreeSet<String> {
-    let mut out = BTreeSet::new();
-    let Some(obj) = mapping.as_object() else {
-        return out;
-    };
-    for body in obj.values() {
-        let Some(props) = body
-            .pointer("/mappings/properties")
-            .and_then(Value::as_object)
-        else {
-            continue;
-        };
-        for (key, spec) in props {
-            if spec
-                .get("type")
-                .and_then(Value::as_str)
-                .is_some_and(is_numeric_mapping_type)
-            {
-                out.insert(key.clone());
-            }
-        }
-    }
-    out
-}
-
-/// A lookup clause may name `field` when it is mapped (or the mapping was
-/// unreadable) and no index maps it as numeric.
-pub(crate) fn field_lookup_ok(
-    mapped: Option<&BTreeSet<String>>,
-    numeric: Option<&BTreeSet<String>>,
-    field: &str,
-) -> bool {
-    field_mapped(mapped, field) && !numeric.is_some_and(|set| set.contains(field))
-}
-
-/// True when a numeric mapping removed a field this command would look up,
-/// so the historical query must not be restored — it would name that field
-/// again and the wildcard would fail.
-fn numeric_drops_a_lookup(numeric: Option<&BTreeSet<String>>, candidates: &[&str]) -> bool {
-    numeric.is_some_and(|set| candidates.iter().any(|name| set.contains(*name)))
-}
-
-/// Whether `field` may be named in a lookup clause.
-///
-/// An unreadable mapping (`None`) or an empty union keeps every historical
-/// clause: dropping them with no evidence would change the #916 ranking on
-/// a code corpus whose mapping we failed to read.
-pub(crate) fn field_mapped(mapped: Option<&BTreeSet<String>>, field: &str) -> bool {
-    match mapped {
-        None => true,
-        Some(set) if set.is_empty() => true,
-        Some(set) => set.contains(field),
-    }
-}
-
-/// True when the mapping was read and no index maps `name`, `code`, or `defs`.
-pub(crate) fn code_symbol_fields_absent(mapped: Option<&BTreeSet<String>>) -> bool {
-    match mapped {
-        Some(set) if !set.is_empty() => CODE_SYMBOL_FIELDS.iter().all(|f| !set.contains(*f)),
-        _ => false,
-    }
-}
-
-/// `preferred` entries whose base field is mapped, then `extras` (bare names).
-///
-/// `prose_beside_code`: also name `text` and `message` when a code field is
-/// mapped. A folded `docs` index stores changelog and config lines in `text`
-/// next to `name`/`code`/`defs`. Leaving `text` off made `xerj search` miss
-/// `tokio/CHANGELOG.md` (122 sections) while a direct `match_phrase` on
-/// `text` hit them. `impl` stays off in that case so a code corpus does not
-/// grow a second body leg (#916). A corpus with no code field still gets
-/// every extra it maps, including `impl`.
-pub(crate) fn weighted_query_fields(
-    preferred: &[(&str, &str)],
-    extras: &[&str],
-    mapped: Option<&BTreeSet<String>>,
-    numeric: Option<&BTreeSet<String>>,
-    prose_beside_code: bool,
-) -> Vec<String> {
-    let mut out: Vec<String> = preferred
-        .iter()
-        .filter(|(name, _)| field_lookup_ok(mapped, numeric, name))
-        .map(|(_, weighted)| (*weighted).to_string())
-        .collect();
-    let code_present = !code_symbol_fields_absent(mapped);
-    if let Some(set) = mapped.filter(|set| !set.is_empty()) {
-        for name in extras {
-            if code_present && (*name == "impl" || !prose_beside_code) {
-                continue;
-            }
-            if set.contains(*name)
-                && !numeric.is_some_and(|nums| nums.contains(*name))
-                && !out.iter().any(|f| f.split('^').next() == Some(*name))
-            {
-                out.push((*name).to_string());
-            }
-        }
-    }
-    out
-}
-
-/// Build the ES search request body used by `xerj search`.
-///
-/// `mapped` is the union of property names under the prefix. `None` (and an
-/// empty union) is the historical code-shaped query.
-pub fn search_query_body(query: &str, k: usize) -> Value {
-    search_query_body_for_mapping(query, k, None, None)
-}
-
-/// [`search_query_body`] with the target's mapped field names (#1601) and
-/// the names any index maps as numeric (#1284).
-pub fn search_query_body_for_mapping(
-    query: &str,
-    k: usize,
-    mapped: Option<&BTreeSet<String>>,
-    numeric: Option<&BTreeSet<String>>,
-) -> Value {
-    let built = build_search_query(query, k, mapped, numeric);
-    if should_clauses(&built).is_empty() {
-        if numeric_drops_a_lookup(numeric, SEARCH_LOOKUP_FIELDS) {
-            // Restoring the historical query would name the numeric field
-            // again. An empty `should` matches every document; match nothing.
-            let mut built = built;
-            built["query"] = json!({ "match_none": {} });
-            return built;
-        }
-        // Nothing we can name is mapped. The historical shape is what the
-        // server's 400 then explains, listing the searchable fields.
-        return build_search_query(query, k, None, None);
-    }
-    built
-}
-
-fn should_clauses(body: &Value) -> &[Value] {
-    body.pointer("/query/bool/should")
-        .and_then(Value::as_array)
-        .map(Vec::as_slice)
-        .unwrap_or(&[])
-}
-
-fn build_search_query(
-    query: &str,
-    k: usize,
-    mapped: Option<&BTreeSet<String>>,
-    numeric: Option<&BTreeSet<String>>,
-) -> Value {
-    let shaped = xerj_common::code_query::normalize_code_search_query(query);
-    let mut should = Vec::new();
-    let fields = weighted_query_fields(SEARCH_MM_FIELDS, PROSE_EXTRA_FIELDS, mapped, numeric, true);
-    if !fields.is_empty() {
-        should.push(json!({ "multi_match": {
-            "query": shaped,
-            "fields": fields,
-            "type": "most_fields"
-        }}));
-    }
-    if field_lookup_ok(mapped, numeric, "defs") {
-        should.push(json!({ "match_phrase": { "defs": { "query": shaped, "boost": 8 } } }));
-    }
-    if field_lookup_ok(mapped, numeric, "name") {
-        should.push(json!({ "term": { "name": { "value": query.trim(), "boost": 10 } } }));
-    }
-    json!({
-        "size": k,
-        "query": { "bool": { "should": should }},
-        // No `body` here: whole-file bodies are the token flood (measured ~9x
-        // the size of the matching passage). `_passage` carries the snippet.
-        "_source": ["ax_path", "line", "start_line", "language", "kind", "code", "title", "heading", "page", "cell"],
-        "fields": ["_passage"]
-    })
-}
+pub(crate) use xerj_common::code_query::{
+    field_lookup_ok, mapped_property_names, numeric_property_names, weighted_query_fields,
+};
+/// The mapping-aware query body is shared with the `xerj_search` MCP tool
+/// (#1961); the implementation lives in `xerj_common::code_query` so the two
+/// surfaces cannot drift again (#1601/#1602).
+pub use xerj_common::code_query::{search_query_body, search_query_body_for_mapping};
 
 /// Extract the 1-based starting line number from `fields._passage[0].ordinal`
 /// when `_passage` comes from a document body field (ignoring synthetic
@@ -458,10 +211,40 @@ pub(crate) fn hit_location(hit: &Value) -> String {
     if let Some(n) = src.get("cell").and_then(Value::as_u64).filter(|n| *n > 0) {
         return format!("{path} cell {n}");
     }
+    // A row of a JSONL/CSV/JSON/YAML/spreadsheet file is one record: the
+    // passage ordinal counts lines of that record's own text, not of the
+    // file, so `rows.jsonl:1` named a different row for every hit (#1934).
+    // Cite the record by its locator instead (a byte offset or a row number).
+    if let Some(loc) = record_locator(src) {
+        return format!("{path}#{loc}");
+    }
     match passage_line(hit) {
         Some(n) => xerj_common::xccode::passage::cite_path_line(path, n),
         None => path.to_string(),
     }
+}
+
+/// The `ax_locator` of a record that is one row or element of a data file,
+/// where a passage ordinal is not a file line: `b<byte offset>` (JSONL rows,
+/// log records, byte-addressed chunks), `r<N>` (CSV rows), `row<N>` (HTML
+/// table rows), `<sheet>!r<N>` (spreadsheet rows), `<key>:e<N>` (JSON array
+/// elements) and `d<N>` / `d<N>e<N>` (YAML documents). Whole files (`file`),
+/// code records and prose sections are left to the line logic.
+fn record_locator(src: &Value) -> Option<&str> {
+    let loc = src.get("ax_locator").and_then(Value::as_str)?;
+    let digits = |s: &str| !s.is_empty() && s.bytes().all(|b| b.is_ascii_digit());
+    let yaml = loc
+        .strip_prefix('d')
+        .is_some_and(|rest| match rest.split_once('e') {
+            Some((doc, elem)) => digits(doc) && digits(elem),
+            None => digits(rest),
+        });
+    let row = ["b", "r", "row"]
+        .iter()
+        .any(|p| loc.strip_prefix(p).is_some_and(digits));
+    let sheet_row = loc.rsplit_once("!r").is_some_and(|(_, n)| digits(n));
+    let element = loc.rsplit_once(":e").is_some_and(|(_, n)| digits(n));
+    (row || yaml || sheet_row || element).then_some(loc)
 }
 
 /// A line an agent can cite: `_source.line` / `start_line`, else a lexical
@@ -962,7 +745,7 @@ pub fn run_search_cli() -> i32 {
         }
     }
     println!(
-        "\n{} passage(s) from '{pattern}'. Cite ax_path:line for anything you rely on.",
+        "\n{} passage(s) from '{pattern}'. Cite ax_path:line (ax_path#locator for a data row) for anything you rely on.",
         hits.len()
     );
     0
@@ -1327,6 +1110,51 @@ mod tests {
         );
     }
 
+    /// #1934: two JSONL rows both printed as `xerj-prs.jsonl:1` because the
+    /// passage ordinal counts lines inside the row's own `body`. A data row
+    /// is cited by its locator; whole files, code and sections keep lines.
+    #[test]
+    fn a_data_row_is_cited_by_its_locator_not_a_passage_ordinal() {
+        let row = |loc: &str, ordinal: u64| {
+            json!({
+                "_source": { "ax_path": "xerj-prs.jsonl", "ax_locator": loc },
+                "fields": { "_passage": [{ "field": "body", "ordinal": ordinal }] }
+            })
+        };
+        assert_eq!(hit_location(&row("b0", 0)), "xerj-prs.jsonl#b0");
+        assert_eq!(hit_location(&row("b68801", 0)), "xerj-prs.jsonl#b68801");
+        assert_ne!(
+            hit_location(&row("b9229", 0)),
+            hit_location(&row("b68801", 0)),
+            "two rows never share a citation"
+        );
+        for (loc, want) in [
+            ("r17", "xerj-prs.jsonl#r17"),
+            ("row3", "xerj-prs.jsonl#row3"),
+            ("Sheet1!r5", "xerj-prs.jsonl#Sheet1!r5"),
+            ("items:e12", "xerj-prs.jsonl#items:e12"),
+            ("d0e4", "xerj-prs.jsonl#d0e4"),
+            ("d2", "xerj-prs.jsonl#d2"),
+        ] {
+            assert_eq!(hit_location(&row(loc, 3)), want);
+        }
+        // Lines still win where they are lines.
+        assert_eq!(hit_location(&row("file", 4)), "xerj-prs.jsonl:5");
+        assert_eq!(hit_location(&row("code", 4)), "xerj-prs.jsonl:5");
+        assert_eq!(hit_location(&row("s2", 4)), "xerj-prs.jsonl:5");
+        assert_eq!(hit_location(&row("bogus", 4)), "xerj-prs.jsonl:5");
+        let lined = json!({
+            "_source": { "ax_path": "a.jsonl", "ax_locator": "b40", "line": 3 }
+        });
+        assert_eq!(hit_location(&lined), "a.jsonl:3");
+        // No locator (an older index, or `xerj def`): unchanged.
+        let bare = json!({
+            "_source": { "ax_path": "a.rs" },
+            "fields": { "_passage": [{ "field": "body", "ordinal": 9 }] }
+        });
+        assert_eq!(hit_location(&bare), "a.rs:10");
+    }
+
     /// A PDF passage with ordinal 0 is page 4, not line 1. A notebook section
     /// heading is cell 19, not line 1. A symbol line still wins over a page.
     #[test]
@@ -1464,13 +1292,15 @@ mod tests {
         let mapped = names_of(&["body", "title", "text", "impl"]);
         let body = search_query_body_for_mapping("retention ceiling", 5, Some(&mapped), None);
         let should = body["query"]["bool"]["should"].as_array().unwrap();
-        assert_eq!(should.len(), 1, "{body}");
         assert!(should[0].get("match_phrase").is_none(), "{body}");
-        assert!(should[0].get("term").is_none(), "{body}");
+        assert!(should.iter().all(|c| c.get("term").is_none()), "{body}");
         assert_eq!(
             should[0]["multi_match"]["fields"],
             json!(["body", "title", "text", "impl"])
         );
+        // The exact-phrase legs name only mapped content fields; `title` is
+        // a keyword and gets none.
+        assert_eq!(phrase_fields(&body), vec!["body", "text", "impl"], "{body}");
         let rendered = body["query"].to_string();
         assert!(!rendered.contains("\"defs\""), "{rendered}");
         assert!(!rendered.contains("\"name\""), "{rendered}");
@@ -1484,8 +1314,72 @@ mod tests {
         let mapped = names_of(&["message", "ts", "host"]);
         let body = search_query_body_for_mapping("SIP 403 Forbidden", 3, Some(&mapped), None);
         let should = body["query"]["bool"]["should"].as_array().unwrap();
-        assert_eq!(should.len(), 1, "{body}");
+        assert_eq!(should.len(), 2, "{body}");
         assert_eq!(should[0]["multi_match"]["fields"], json!(["message"]));
+        assert_eq!(phrase_fields(&body), vec!["message"], "{body}");
+    }
+
+    /// Fields named by the exact-phrase legs, in order. The `defs` phrase
+    /// leg is the symbol clause, not one of these.
+    fn phrase_fields(body: &Value) -> Vec<String> {
+        body["query"]["bool"]["should"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter_map(|c| c.get("match_phrase").and_then(Value::as_object))
+            .flat_map(|m| m.keys().cloned())
+            .filter(|f| f != "defs")
+            .collect()
+    }
+
+    /// A pasted error message is matched as typed, glue words included:
+    /// the normalized `multi_match` text drops `the`/`must`, and a phrase
+    /// built from that would not occur in the file.
+    #[test]
+    fn exact_phrase_leg_matches_the_query_as_typed() {
+        let query = "  the boosted whole-value doc must rank first ";
+        let body = search_query_body(query, 5);
+        let should = body["query"]["bool"]["should"].as_array().unwrap();
+        let leg = should
+            .iter()
+            .find_map(|c| c.pointer("/match_phrase/body"))
+            .unwrap_or_else(|| panic!("no exact-phrase leg on body: {body}"));
+        assert_eq!(leg["query"], "the boosted whole-value doc must rank first");
+        assert_eq!(
+            leg["boost"],
+            json!(xerj_common::code_query::EXACT_PHRASE_BOOST)
+        );
+        assert_ne!(
+            should[0]["multi_match"]["query"], leg["query"],
+            "the multi_match keeps the normalized text"
+        );
+    }
+
+    /// One token is a lookup: no phrase leg, and the #916 clauses stay at
+    /// their historical positions for every query.
+    #[test]
+    fn single_token_query_gets_no_exact_phrase_leg() {
+        for query in ["normalize_code_search_query", "IOSIntfLine", "  flush  "] {
+            let body = search_query_body(query, 5);
+            assert!(phrase_fields(&body).is_empty(), "{body}");
+        }
+        let body = search_query_body("rotate the WAL segment", 5);
+        let should = body["query"]["bool"]["should"].as_array().unwrap();
+        assert!(should[0].get("multi_match").is_some(), "{body}");
+        assert!(should[1].pointer("/match_phrase/defs").is_some(), "{body}");
+        assert!(should[2].pointer("/term/name").is_some(), "{body}");
+        assert_eq!(phrase_fields(&body), vec!["body"], "{body}");
+    }
+
+    /// A content field some index maps as numeric is dropped from the
+    /// phrase legs too (#1284): naming it fails the whole wildcard request.
+    #[test]
+    fn exact_phrase_leg_skips_a_numeric_content_field() {
+        let mapped = names_of(&["name", "code", "body", "defs", "title", "message"]);
+        let numeric: BTreeSet<String> = ["message".to_string()].into_iter().collect();
+        let body =
+            search_query_body_for_mapping("SIP 403 Forbidden", 3, Some(&mapped), Some(&numeric));
+        assert_eq!(phrase_fields(&body), vec!["body"], "{body}");
     }
 
     /// A code corpus — and an unreadable mapping — keep the #916 shape,

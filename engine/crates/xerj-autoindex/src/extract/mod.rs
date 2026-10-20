@@ -34,6 +34,8 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
 use std::io::{BufRead, BufReader, Read};
 use std::path::Path;
+use std::sync::{Condvar, Mutex};
+use std::time::{Duration, Instant};
 
 /// Where a record's FIELD NAMES came from — the input to dataset clustering.
 ///
@@ -116,6 +118,11 @@ pub const MAX_RECORDS_PER_FILE: usize = 4 << 10; // 4096
 /// Characters of the previous section repeated at the start of the next, so an
 /// answer spanning a boundary stays retrievable from both sides.
 pub const SECTION_OVERLAP: usize = 200;
+
+/// How far the paragraph-overlap tail may move back to land on a word (see
+/// [`tail`]). A run with no whitespace inside the window snaps forward to the
+/// next word instead, or keeps the char boundary when there is none.
+const WORD_SNAP_BYTES: usize = 64;
 
 /// Open a (possibly gzipped) file as a buffered reader of DECODED-transparent
 /// bytes, optionally capped at `limit` decoded bytes (sampling).
@@ -544,7 +551,13 @@ pub fn sanitize_field_name(name: &str) -> String {
     }
 }
 
-/// Last `n` bytes of `s`, snapped back to a char boundary.
+/// Last `n` bytes of `s`, snapped back to a char boundary, then onto a word
+/// so the next section does not open in the middle of a token.
+///
+/// A raw 200-byte tail of the previous paragraph is what made a markdown
+/// section of `docs/contributing/pull-requests.md` begin `le to use in tests`
+/// (the tail landed inside `available`). This is the paragraph-overlap
+/// path only; the hard split still cuts on a char boundary.
 fn tail(s: &str, n: usize) -> String {
     if s.len() <= n {
         return s.to_string();
@@ -556,7 +569,50 @@ fn tail(s: &str, n: usize) -> String {
         .last()
         .map(|(i, _)| i)
         .unwrap_or(0);
+    let start = snap_overlap_start(s, start);
     s[start..].to_string()
+}
+
+/// If `start` falls inside a word, move to the nearest whitespace within
+/// [`WORD_SNAP_BYTES`] behind it (the whole word stays in the overlap), or
+/// forward to the next word when that lookbehind has no break.
+fn snap_overlap_start(s: &str, start: usize) -> usize {
+    if start == 0 || start >= s.len() {
+        return start.min(s.len());
+    }
+    let prev_is_word = s[..start]
+        .chars()
+        .next_back()
+        .is_some_and(|c| !c.is_whitespace());
+    let next_is_word = s[start..]
+        .chars()
+        .next()
+        .is_some_and(|c| !c.is_whitespace());
+    if !(prev_is_word && next_is_word) {
+        return start;
+    }
+    let look = floor_boundary(s, start.saturating_sub(WORD_SNAP_BYTES));
+    if let Some(rel) = s[look..start].rfind(char::is_whitespace) {
+        let at = look + rel;
+        let ws_len = s[at..].chars().next().map(|c| c.len_utf8()).unwrap_or(1);
+        let after = at + ws_len;
+        if after > 0 && after < s.len() {
+            return after;
+        }
+    }
+    let rest = &s[start..];
+    if let Some(rel) = rest.find(char::is_whitespace) {
+        let ws_len = rest[rel..]
+            .chars()
+            .next()
+            .map(|c| c.len_utf8())
+            .unwrap_or(1);
+        let after = start + rel + ws_len;
+        if after < s.len() {
+            return after;
+        }
+    }
+    start
 }
 
 /// Smallest char boundary of `s` that is `>= i` (`s.len()` if `i` is past the
@@ -814,6 +870,57 @@ pub(crate) fn emit_document_with_fields(
     true
 }
 
+/// How often a full extract slot says it is still waiting. The wait is not
+/// failed: a legal PDF or mailbox parse can hold its slot for a long time.
+/// The line exists so a leaked permit is not a silent futex.
+pub(crate) const SLOT_HEARTBEAT: Duration = Duration::from_secs(15);
+
+pub(crate) fn slot_wait_line(kind: &str, in_use: usize, limit: usize, waited: Duration) -> String {
+    format!(
+        "autoindex: still waiting for a {kind} slot (in_use={in_use} limit={limit}) after {}s",
+        waited.as_secs()
+    )
+}
+
+/// Block until `full` is false. Each wait is sliced so a notify is rechecked
+/// and a stuck slot prints [`slot_wait_line`] on `heartbeat` cadence. The
+/// caller adds the permit after this returns; this function does not.
+pub(crate) fn wait_until_slot<'a, T>(
+    kind: &str,
+    lock: &'a Mutex<T>,
+    ready: &Condvar,
+    heartbeat: Duration,
+    full: impl Fn(&T) -> bool,
+    counts: impl Fn(&T) -> (usize, usize),
+    mut note: impl FnMut(&str),
+) -> std::sync::MutexGuard<'a, T> {
+    let heartbeat = heartbeat.max(Duration::from_millis(1));
+    let mut guard = lock.lock().expect("extract slot lock poisoned");
+    let started = Instant::now();
+    let mut next_note = started + heartbeat;
+    while full(&guard) {
+        let now = Instant::now();
+        if now >= next_note {
+            let (in_use, limit) = counts(&guard);
+            note(&slot_wait_line(
+                kind,
+                in_use,
+                limit,
+                now.duration_since(started),
+            ));
+            next_note = now + heartbeat;
+        }
+        let slice = next_note
+            .saturating_duration_since(Instant::now())
+            .min(Duration::from_secs(5));
+        let (next, _) = ready
+            .wait_timeout(guard, slice)
+            .expect("extract slot lock poisoned");
+        guard = next;
+    }
+    guard
+}
+
 #[cfg(test)]
 mod section_tests {
     use super::*;
@@ -924,6 +1031,52 @@ mod section_tests {
                 .contains("CHAPTER 26."),
             "a short LAST paragraph is still emitted"
         );
+    }
+
+    /// Paragraph overlap used to keep a raw 200-byte tail, so the next
+    /// section opened inside a word (`le to use` from `available`). The
+    /// overlap still repeats the boundary, and it starts on a word.
+    #[test]
+    fn paragraph_overlap_opens_on_a_word() {
+        let s = "utilities available to use in tests, no matter the crate";
+        // "utilities " is 10 bytes; index 13 is inside "available".
+        let opened = tail(s, s.len() - 13);
+        assert!(
+            opened.starts_with("available"),
+            "overlap opened mid-word: {opened}"
+        );
+
+        // A token longer than the lookbehind has no whitespace behind the
+        // cut, so the overlap skips forward to the next word instead.
+        let long = "A".repeat(WORD_SNAP_BYTES + 8);
+        let big = format!("xx{long} tail of the paragraph");
+        let mid = 2 + 4; // inside the run of A's
+        let opened = tail(&big, big.len() - mid);
+        assert!(
+            opened.starts_with("tail"),
+            "long token should snap forward: {opened:?}"
+        );
+
+        let para = format!(
+            "{}utilities available to use in tests",
+            "pad ".repeat(SECTION_CHARS)
+        );
+        let text = format!(
+            "{para}\n\n{}",
+            "The next paragraph is long enough to force a new section. ".repeat(40)
+        );
+        let secs = split_sections(&text);
+        assert!(secs.len() >= 2, "{}", secs.len());
+        let next = &secs[1];
+        let at = text.find(next.as_str()).expect("overlap is a substring");
+        if at > 0 {
+            let prev = text[..at].chars().next_back().unwrap();
+            assert!(
+                prev.is_whitespace(),
+                "section opened mid-word ({prev:?}): {:?}",
+                &next[..next.len().min(48)]
+            );
+        }
     }
 
     /// A single paragraph larger than two sections must still be bounded.
@@ -1232,5 +1385,67 @@ mod section_tests {
         ));
         assert_eq!(over, total - 1, "N>cap must emit exactly the cap");
         assert!(stats2.truncated, "N>cap must set truncated");
+    }
+}
+
+#[cfg(test)]
+mod slot_tests {
+    use super::*;
+    use std::sync::Arc;
+    use std::thread;
+    use std::time::Duration;
+
+    #[test]
+    fn slot_wait_line_names_the_slot_and_how_long() {
+        let line = slot_wait_line("pdf worker", 4, 4, Duration::from_secs(45));
+        assert_eq!(
+            line,
+            "autoindex: still waiting for a pdf worker slot (in_use=4 limit=4) after 45s"
+        );
+    }
+
+    /// A full slot used to park on `Condvar::wait` with no timeout and no
+    /// line. The waiter must say so, then proceed when the holder releases.
+    #[test]
+    fn a_full_extract_slot_heartbeats_and_then_proceeds() {
+        let lock = Arc::new(Mutex::new((1usize, 1usize)));
+        let ready = Arc::new(Condvar::new());
+        let notes = Arc::new(Mutex::new(Vec::new()));
+        let lock2 = Arc::clone(&lock);
+        let ready2 = Arc::clone(&ready);
+        let notes2 = Arc::clone(&notes);
+        let waiter = thread::spawn(move || {
+            let guard = wait_until_slot(
+                "pdf worker",
+                &lock2,
+                &ready2,
+                Duration::from_millis(20),
+                |state| state.0 >= state.1,
+                |state| (state.0, state.1),
+                |line| notes2.lock().expect("notes").push(line.to_string()),
+            );
+            guard.0
+        });
+        let deadline = Instant::now() + Duration::from_secs(2);
+        while notes.lock().expect("notes").is_empty() {
+            assert!(
+                Instant::now() < deadline,
+                "a full slot must heartbeat before the holder releases it"
+            );
+            thread::sleep(Duration::from_millis(10));
+        }
+        {
+            let mut guard = lock.lock().expect("lock");
+            guard.0 = 0;
+            ready.notify_all();
+        }
+        assert_eq!(waiter.join().expect("waiter"), 0);
+        let lines = notes.lock().expect("notes");
+        assert!(
+            lines[0].contains("pdf worker")
+                && lines[0].contains("in_use=1")
+                && lines[0].contains("limit=1"),
+            "{lines:?}"
+        );
     }
 }
