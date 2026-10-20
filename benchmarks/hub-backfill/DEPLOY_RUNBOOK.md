@@ -11,6 +11,17 @@ is operational notes, not a claim that the deploy has run — it has **not**.
 the workflow files themselves — `.github/workflows/hub-packs.yml` and
 `.github/workflows/deploy-hub-pages.yml` — win over this prose.
 
+> **Status update 2026-10-20 (Xerj Merger): the first publish has happened.**
+> The term-sketch cap landed on `corpus-hub` in #1862 (`a2fa942a`,
+> `MAX_TERMS = 1500`, 16 bits/term), the repo variable
+> `HUB_CATALOGUE_DEPLOY` is `true`, and
+> `https://hub.xerj.org/api/v1/catalogue.json` serves JSON
+> (`format_version` 1, 324 corpora, 1,219,384 bytes, under the 2 MiB gate).
+> The §0 blocker and the "unset / HTML" rows in §1 are kept below as a
+> record of the 2026-10-19 state. For later publishes, skip
+> `first_catalogue=true` (§4) and keep the §6 invariant: never unset the
+> variable.
+
 ---
 
 ## 0. TL;DR — the deploy, once the blocker below clears
