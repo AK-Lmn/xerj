@@ -27,7 +27,7 @@ html[data-theme='day'] {
   --z-brand:    #ffc400;  /* XERJ yellow — fills, underlines, highlights only */
   --z-on-brand: #1a1a1a;  /* text on --z-brand — 10.9:1 */
   --z-brand-deep: #8a5a00; /* borders and focus ring — 5.7:1 (>=3:1 non-text) */
-  --z-highlight: #fff1b8; /* soft yellow wash behind dark text — ink 15.5:1 */
+  --z-highlight: #fff1b8; /* soft yellow wash behind dark text — ink 15.3:1 */
   --z-link:   #6b4400;  /* links: underlined, 8.2:1 */
   --z-focus:  #8a5a00;  /* focus ring */
   --z-code-bg:   #f3f4f6; /* code surface — ink 15.8:1, mute 8.1:1, accent 7.7:1 */
@@ -72,7 +72,7 @@ html[data-theme='night'] {
   color-scheme: dark;
   --z-bg:     #0b0b0d;
   --z-ink:    #f4f2ec;
-  --z-mute:   #a8a49d;  /* was #8a8680 (5.4:1); now 8.0:1 */
+  --z-mute:   #a8a49d;  /* was #8a8680 (5.4:1); now 7.9:1 */
   --z-faint:  #2b2a28;
   --z-line:   #3a3836;
   --z-accent: #ffc400;
@@ -225,7 +225,7 @@ button { font: inherit; }
   color: var(--z-mute);
   margin-bottom: var(--sp-4);
 }
-.kicker .dash { opacity: 0.4; margin: 0 6px; }
+.kicker .dash { margin: 0 6px; }
 
 h1.hero {
   font-family: var(--font-display);
@@ -783,7 +783,7 @@ section.section-split p.wide { max-width: none; }
 .uc-showcase .uc-num {
   font-family: var(--font-mono);
   font-size: var(--fs-11);
-  color: var(--z-faint);
+  color: var(--z-mute);  /* was --z-faint (1.2:1) */
   margin-bottom: var(--sp-2);
 }
 .uc-showcase .uc-title {
@@ -1194,6 +1194,9 @@ section.section-split p.wide { max-width: none; }
 }
 .flowband-svg { color: var(--z-ink); }
 .flowband-labels { gap: var(--sp-2); }
+/* the band above encodes share with opacity; the text labels under it must
+   not inherit that fade (it put the smallest segment's value at 3.7:1) */
+.flowband-labels .fb-seg[style*="opacity"] { opacity: 1 !important; }
 .flowband-labels .fb-seg {
   overflow: hidden;
   padding-right: var(--sp-2);
@@ -1212,7 +1215,7 @@ section.section-split p.wide { max-width: none; }
 }
 .flowband-labels .fb-value {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-11);
   color: var(--z-mute);
   margin-top: 2px;
   white-space: nowrap;
@@ -1252,7 +1255,7 @@ html:not([data-theme='night']) .lead-capture {
   margin-bottom: var(--sp-4);
   color: var(--z-accent);
 }
-.lead-capture .kicker .dash { color: var(--z-accent); opacity: 0.5; }
+.lead-capture .kicker .dash { color: var(--z-accent); }
 .lead-capture h3 {
   font-family: var(--font-display);
   font-weight: 900;
@@ -1577,7 +1580,7 @@ html:not([data-theme='night']) .lead-capture {
 .docs-toc .key { color: var(--z-mute); margin-right: var(--sp-3); }
 .docs-toc a    { color: var(--z-mute); }
 .docs-toc a:hover { color: var(--z-ink); }
-.docs-toc .num { color: var(--z-faint); margin-right: 4px; }
+.docs-toc .num { color: var(--z-mute); margin-right: 4px; }
 
 /* Every doc section gets an anchor ID + a small kicker number. */
 section.doc-section {
@@ -2027,7 +2030,7 @@ pre.tree .c { color: var(--z-mute); }
 .docs-nav .group a .eyebrow {
   display: inline-block;
   width: 22px;
-  color: var(--z-faint);
+  color: var(--z-mute);  /* was --z-faint (1.2:1) */
   font-family: var(--font-mono);
   font-size: var(--fs-11);
   margin-right: 4px;
@@ -2099,7 +2102,7 @@ pre.tree .c { color: var(--z-mute); }
 }
 .docs-content .breadcrumb a { color: var(--z-mute); }
 .docs-content .breadcrumb a:hover { color: var(--z-ink); }
-.docs-content .breadcrumb .sep { margin: 0 6px; opacity: 0.5; }
+.docs-content .breadcrumb .sep { margin: 0 6px; }
 
 .docs-content .source-note {
   font-family: var(--font-data);
@@ -2159,7 +2162,7 @@ pre.tree .c { color: var(--z-mute); }
 .recipes .recipe .num {
   font-family: var(--font-mono);
   font-size: var(--fs-11);
-  color: var(--z-faint);
+  color: var(--z-mute);  /* was --z-faint (1.2:1) */
   letter-spacing: var(--track-ui);
 }
 .recipes .recipe .title {
