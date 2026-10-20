@@ -170,15 +170,18 @@ let enrollmentSession = null;
     if (enrollmentSession.email) $email.value = enrollmentSession.email;
   } catch (e) {
     const msg = String((e && e.message) || e);
-    // A bootstrap link lasts 30 minutes and is single-use. The banner on
-    // boot says to restart the node for a fresh one, and that is only true
-    // while nobody has claimed the owner account. An existing owner signs
-    // in at the login page. Other redeem failures keep the raw reason.
+    // Links are single-use. The node's bootstrap link lasts 30 minutes and
+    // a restart prints a fresh one only while nobody has claimed the owner
+    // account. An admin's invite (also served by this page) lasts 72 hours
+    // and only that admin can issue a new one. An existing account signs in
+    // at the login page. Other redeem failures keep the raw reason.
     if (/invalid or expired/i.test(msg)) {
       showError(
-        'This link is invalid or expired. A bootstrap link lasts 30 minutes and works once. ' +
-        'If nobody has claimed the owner account, restart the node: a new link is printed on boot. ' +
-        'If an owner already exists, sign in at /_xerj-console/login.'
+        'This link is invalid or expired. Setup links work once. ' +
+        'If it was an invite, ask the admin who sent it for a new one (invites last 72 hours). ' +
+        'If it was the setup link the node printed (it lasts 30 minutes) and nobody has claimed the owner account, ' +
+        'restart the node: a new link is printed on boot. ' +
+        'If you already have an account, sign in at /_xerj-console/login.'
       );
     } else {
       showError('Could not redeem link: ' + msg);

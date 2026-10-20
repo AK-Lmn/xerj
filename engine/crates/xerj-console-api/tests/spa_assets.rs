@@ -69,6 +69,10 @@ async fn setup_html_is_bundled_and_served() {
         body.contains("/_xerj-console/login"),
         "an expired link must point an existing owner at login"
     );
+    assert!(
+        body.contains("ask the admin who sent it for a new one"),
+        "an expired invite must not be told to restart the node: an invitee cannot"
+    );
 }
 
 #[tokio::test]
