@@ -14,7 +14,8 @@ use std::path::{Path, PathBuf};
 #[derive(Debug, Clone)]
 pub struct FileEntry {
     pub path: PathBuf,
-    /// Root-relative path with forward slashes — the stable `ax_path` value.
+    /// Root-relative `ax_path`. On Windows `\` is the separator and is written
+    /// as `/`. On Unix `\` is a filename character and is kept.
     pub rel: String,
     /// Reversible platform-native identity; unlike `rel`, never lossy.
     pub rel_id: String,
@@ -366,6 +367,7 @@ fn walk_impl(
         // without descending does not have. `cp -al`, `rsync --link-dest` and
         // hard-linked package stores all produce that shape without an attacker.
         if entry.depth() > 0 && is_hidden_name(entry.file_name()) {
+            stack.note_hidden_reinclude(entry.path(), is_dir);
             stack.record_hidden(is_dir);
             if is_dir {
                 it.skip_current_dir();
@@ -485,6 +487,12 @@ fn walk_impl(
             continue;
         }
         if !entry.file_type().is_file() {
+            // Unfollowed symlinks are not files to walkdir. Skipping them
+            // with no report made a tree of links look empty: neither the
+            // file list nor the ignore summary mentioned them.
+            if !follow_symlinks && entry.path_is_symlink() {
+                stack.record_symlink_not_followed();
+            }
             continue;
         }
         if stack.skip_file(entry.path()).is_some() {
@@ -507,11 +515,7 @@ fn walk_impl(
             Err(_) => continue,
         };
         let p = entry.path().to_path_buf();
-        let rel = p
-            .strip_prefix(&root_canon)
-            .unwrap_or(&p)
-            .to_string_lossy()
-            .replace('\\', "/");
+        let rel = portable_rel(p.strip_prefix(&root_canon).unwrap_or(&p));
         let rel_id = stable_path_id(p.strip_prefix(&root_canon).unwrap_or(&p));
         out.push(FileEntry {
             path: resolved.unwrap_or(p),
@@ -527,6 +531,21 @@ fn walk_impl(
     // Deterministic order for clustering / naming.
     out.sort_by(|a, b| a.rel.cmp(&b.rel));
     Ok((out, stack.report))
+}
+
+/// `ax_path` text for one root-relative path.
+///
+/// Windows uses `\` as a separator, so the stored path uses `/`. Everywhere
+/// else `\` is part of the name: rewriting it invents a directory
+/// (`src/utils/win\name.rs` became `src/utils/win/name.rs`, which is not on
+/// disk) and collides with a real `win/name.rs`.
+pub(crate) fn portable_rel(rel: &Path) -> String {
+    let text = rel.to_string_lossy();
+    if cfg!(windows) {
+        text.replace('\\', "/")
+    } else {
+        text.into_owned()
+    }
 }
 
 #[cfg(unix)]
@@ -735,6 +754,60 @@ mod hidden_skip_tests {
             "{rels:?}"
         );
         assert_eq!(off.dirs_pruned, 0, "{off:?}");
+    }
+
+    /// #1844: `!.openfox/` in a `.xerjignore` had no effect on the dotfile
+    /// prune and nothing said so. The hidden directory stays out (the rule is
+    /// what keeps `.env` and `.ssh` out), but the run now names the pattern
+    /// that tried and the named-root command that works; a `.gitignore`
+    /// negation of a dotfile (`!.env.example`) is git's business and stays
+    /// silent.
+    #[test]
+    fn a_xerjignore_re_include_of_a_hidden_dir_is_refused_out_loud() {
+        use super::walk_reporting;
+        use crate::ignore_rules::{IgnoreOptions, HIDDEN_RULE};
+
+        let dir = tempfile::TempDir::new().unwrap();
+        let root = dir.path();
+        fs::write(root.join(".xerjignore"), "!.openfox/\n").unwrap();
+        fs::write(root.join(".gitignore"), ".env*\n!.env.example\n").unwrap();
+        fs::write(root.join(".env.example"), "KEY=").unwrap();
+        fs::write(root.join("top.md"), "# top").unwrap();
+        fs::create_dir_all(root.join(".openfox/workflows")).unwrap();
+        fs::write(root.join(".openfox/workflows/w.md"), "# wf").unwrap();
+
+        let (files, report) = walk_reporting(root, false, IgnoreOptions::default()).unwrap();
+        let rels: Vec<String> = files.into_iter().map(|e| e.rel).collect();
+        assert_eq!(rels, vec!["top.md".to_string()], "{rels:?}");
+        assert_eq!(report.by_rule[HIDDEN_RULE].dirs, 1, "{report:?}");
+
+        let warned: Vec<&String> = report
+            .warnings
+            .iter()
+            .filter(|w| w.contains("re-includes the hidden"))
+            .collect();
+        assert_eq!(warned.len(), 1, "{:?}", report.warnings);
+        let warning = warned[0];
+        assert!(warning.contains(".xerjignore:!.openfox/"), "{warning}");
+        assert!(warning.contains("directory .openfox"), "{warning}");
+        assert!(warning.contains("never indexed"), "{warning}");
+        assert!(warning.contains("xerj autoindex "), "{warning}");
+        assert!(warning.contains(".openfox --prefix <name>"), "{warning}");
+        assert!(
+            report
+                .summary_lines()
+                .iter()
+                .any(|l| l.starts_with("ignore rules: ") && l.contains("re-includes the hidden")),
+            "the warning must reach the printed report"
+        );
+
+        // --no-ignore reads no ignore file, so there is no pattern to answer.
+        let (_, off) = walk_reporting(root, false, IgnoreOptions::off()).unwrap();
+        assert!(
+            off.warnings.iter().all(|w| !w.contains("re-includes")),
+            "{:?}",
+            off.warnings
+        );
     }
 
     /// Create a real checkout at `path`. Returns false when the `git` binary
@@ -1171,5 +1244,109 @@ mod takeout_noise_tests {
                 "{kept}: {rels:?}"
             );
         }
+    }
+}
+
+#[cfg(all(test, unix))]
+mod unfollowed_symlink_tests {
+    use super::walk_reporting;
+    use crate::ignore_rules::{IgnoreOptions, NOT_FOLLOWED_RULE};
+    use std::fs;
+    use std::os::unix::fs::symlink;
+
+    /// Default walk: links are omitted from the file list and named on the
+    /// report, once. `--follow-symlinks` indexes a target inside the folder
+    /// under the link's path and still refuses a target outside it.
+    #[test]
+    fn an_unfollowed_symlink_is_named_and_an_inside_target_is_indexed() {
+        let dir = tempfile::tempdir().unwrap();
+        let root = dir.path().join("proj");
+        fs::create_dir_all(root.join("src")).unwrap();
+        fs::write(root.join("src/lib.rs"), "fn alpha() {}\n").unwrap();
+        symlink("src/lib.rs", root.join("link-inside.rs")).unwrap();
+        let outside = dir.path().join("secret.txt");
+        fs::write(&outside, "secret").unwrap();
+        symlink(&outside, root.join("link-out.txt")).unwrap();
+
+        let (files, report) = walk_reporting(&root, false, IgnoreOptions::default()).unwrap();
+        let rels: Vec<&str> = files.iter().map(|e| e.rel.as_str()).collect();
+        assert!(rels.contains(&"src/lib.rs"), "{rels:?}");
+        assert!(
+            !rels.iter().any(|r| r.starts_with("link-")),
+            "unfollowed links must not be indexed: {rels:?}"
+        );
+        assert_eq!(
+            report.by_rule.get(NOT_FOLLOWED_RULE).map(|c| c.files),
+            Some(2),
+            "{report:?}"
+        );
+        let lines = report.summary_lines().join("\n");
+        assert_eq!(lines.matches("--follow-symlinks").count(), 1, "{lines}");
+        assert!(lines.contains(NOT_FOLLOWED_RULE), "{lines}");
+
+        let (followed, followed_report) =
+            walk_reporting(&root, true, IgnoreOptions::default()).unwrap();
+        let frels: Vec<&str> = followed.iter().map(|e| e.rel.as_str()).collect();
+        assert!(
+            frels.contains(&"link-inside.rs"),
+            "an inside target is indexed under the link path: {frels:?}"
+        );
+        assert!(
+            !frels.contains(&"link-out.txt"),
+            "a target outside the folder stays refused: {frels:?}"
+        );
+        assert!(
+            !followed_report.by_rule.contains_key(NOT_FOLLOWED_RULE),
+            "{followed_report:?}"
+        );
+        assert!(
+            followed_report
+                .summary_lines()
+                .iter()
+                .any(|l| l.contains("symlink:outside-root")),
+            "{followed_report:?}"
+        );
+    }
+}
+
+#[cfg(test)]
+mod portable_rel_tests {
+    use super::{portable_rel, walk_reporting};
+    use crate::ignore_rules::IgnoreOptions;
+    use std::path::Path;
+
+    #[test]
+    fn portable_rel_keeps_a_unix_backslash_and_rewrites_windows_separators() {
+        #[cfg(not(windows))]
+        {
+            let rel = portable_rel(Path::new("src/utils/win\\name.rs"));
+            assert_eq!(rel, "src/utils/win\\name.rs");
+            assert!(!rel.contains("win/name.rs"), "{rel}");
+        }
+        #[cfg(windows)]
+        {
+            let rel = portable_rel(Path::new("src\\utils\\name.rs"));
+            assert_eq!(rel, "src/utils/name.rs");
+        }
+    }
+
+    /// The string helper is not the walk. A real file whose name contains
+    /// `\` must come back with that character still in `FileEntry.rel`.
+    #[cfg(not(windows))]
+    #[test]
+    fn a_walk_keeps_a_backslash_that_is_part_of_the_filename() {
+        let dir = tempfile::tempdir().unwrap();
+        let utils = dir.path().join("src").join("utils");
+        std::fs::create_dir_all(&utils).unwrap();
+        std::fs::write(utils.join("win\\name.rs"), "fn weird() {}\n").unwrap();
+        std::fs::write(utils.join("paths.rs"), "fn open_path() {}\n").unwrap();
+        let (files, _) = walk_reporting(dir.path(), false, IgnoreOptions::default()).unwrap();
+        let rels: Vec<&str> = files.iter().map(|f| f.rel.as_str()).collect();
+        assert!(rels.contains(&"src/utils/win\\name.rs"), "{rels:?}");
+        assert!(
+            rels.iter().all(|rel| !rel.contains("win/name.rs")),
+            "{rels:?}"
+        );
+        assert!(rels.contains(&"src/utils/paths.rs"), "{rels:?}");
     }
 }

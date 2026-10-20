@@ -74,6 +74,36 @@ const PREPARED_RECORDS_IDENTITY: &str = "prepared-records-v1";
 const DOCUMENT_IDS_IDENTITY: &str = "document-ids-v1";
 const DETECTOR_DISABLED_IDENTITY: &str = "disabled";
 
+/// Ingest throughput for the summary line and the run document.
+///
+/// The numerator is documents this run submitted, not the live catalog
+/// count. A no-op resume of tokio left 11246 documents live and submitted
+/// 0, and `live / wall` printed 66096.3 docs/sec for a run that sent
+/// nothing. `wall == 0` (a sub-millisecond no-op) stays 0 rather than `inf`.
+pub(crate) fn ingest_docs_per_sec(submitted_this_run: u64, wall_secs: f64) -> f64 {
+    if wall_secs > 0.0 && submitted_this_run > 0 {
+        submitted_this_run as f64 / wall_secs
+    } else {
+        0.0
+    }
+}
+
+/// The indexed-vs-submitted line (#195).
+///
+/// A no-op resume prints `submitted 0 source records from 0 files` next to
+/// a large live count, which reads as "nothing is indexed". When the corpus
+/// is already live and this run sent nothing, say so. A first run
+/// (`submitted > 0`) and an empty corpus (`live == 0`) keep the bare line.
+pub(crate) fn indexed_vs_submitted_line(live: u64, submitted: u64, files: u64) -> String {
+    let mut line = format!(
+        "indexed: {live} documents live; this run submitted {submitted} source records from {files} files"
+    );
+    if live > 0 && submitted == 0 && files == 0 {
+        line.push_str(" (already indexed; nothing new to send)");
+    }
+    line
+}
+
 /// Render the `next:` guidance printed after a successful index run.
 ///
 /// The run's own credential and URL are carried into the printed commands.
@@ -104,10 +134,10 @@ pub fn next_hint(
     key_file: Option<&std::path::Path>,
 ) -> String {
     let Some(key) = api_key else {
-        return format!(
+        return with_field_report(format!(
             "\nnext: `xerj autoindex map --url {url}` for the data map; \
-             search via `curl '{url}/{prefix}-*/_search'`"
-        );
+             search via `xerj search --url {url} --prefix {prefix} \"<what you need>\"`"
+        ));
     };
     // A shell *expression* in every arm, so all renderings quote identically.
     let key_expr = if env_key == Some(key) {
@@ -118,29 +148,66 @@ pub fn next_hint(
     } else {
         key.to_string()
     };
-    format!(
+    with_field_report(format!(
         "\nnext: `xerj autoindex map --url {url} --api-key \"{key_expr}\"` for the data map;\n\
-         \x20     search via `curl -H \"Authorization: ApiKey {key_expr}\" \
-         '{url}/{prefix}-*/_search'`"
-    )
+         \x20     search via `xerj search --url {url} --prefix {prefix} --api-key \"{key_expr}\" \
+         \"<what you need>\"`"
+    ))
+}
+
+fn with_field_report(hint: String) -> String {
+    with_field_report_if(hint, xerj_common::feedback::enabled())
+}
+
+/// The footer honours the same opt-out as every other surface
+/// (`--disable-feedback` anywhere on the command line, or
+/// `XERJ_DISABLE_FEEDBACK=true`). It used not to, so `xerj corpus index`, which
+/// prints this footer from the autoindex run it drives, kept inviting a field
+/// report after the operator had switched the invitation off (issue #1903).
+fn with_field_report_if(hint: String, enabled: bool) -> String {
+    if enabled {
+        format!("{hint}\n{}", xerj_common::feedback::AUTO_SEND_LINE)
+    } else {
+        hint
+    }
 }
 
 /// The code-aware search hint that follows `next_hint` whenever source code
 /// was indexed. One copy, shared by BOTH success printers — the interactive
 /// run summary and the generated-run (`--no-graph`/brain) summary — because
-/// #1103 was exactly this text existing in one printer and not the other:
-/// a `--no-graph` run taught the user nothing while a graph run taught the
-/// `_passage` projection. The blind-usability rationale is in the comment
-/// at the interactive call site.
+/// #1103 was exactly this text existing in one printer and not the other.
+/// It names `xerj search` and `xerj def`: those commands already request
+/// `_passage`. A raw `_search` curl is what a blind run copied, and that
+/// path returns a whole file unless the caller knows the projection.
 pub(crate) fn code_search_hint(prefix: &str) -> String {
     format!(
-        "      code was indexed — for a function/class instead of a whole file:\n\
-         \x20       curl -s $URL/{prefix}-*/_search -H 'Content-Type: application/json' \\\n\
-         \x20         -d '{{\"query\":{{\"bool\":{{\"should\":[{{\"multi_match\":{{\"query\":\"<symbol or phrase>\",\
-         \"fields\":[\"body\",\"defs\"],\"type\":\"most_fields\"}}}},{{\"match_phrase\":{{\"defs\":{{\"query\":\"<symbol or phrase>\",\"boost\":4}}}}}}]}}}},\
-         \"_source\":[\"ax_path\",\"title\"],\"fields\":[\"_passage\"]}}'\n\
-         \x20       (the `match_phrase` clause ranks the file that DEFINES a symbol above files that merely call it; `_passage` returns \
-         the enclosing block, not the file)",
+        "      code was indexed — `xerj search` and `xerj def` ask for the matching\n\
+         \x20       passage, so the header is a path and a line when the index has one:\n\
+         \x20       xerj search --prefix {prefix} \"<what you need>\"\n\
+         \x20       xerj def --prefix {prefix} <symbol>\n\
+         \x20       (add the same --url and --api-key the map line above used)"
+    )
+}
+
+/// What to print when a run indexed both code and prose.
+///
+/// The previous text pasted a `match` on `body` only. Line files (a
+/// changelog is `txt-lines`) are stored in `text`, so that fragment misses
+/// them and teaches a query that cannot see half the corpus. Name the
+/// `ax_format` values this run actually wrote, and say which field holds
+/// which side.
+pub(crate) fn mixed_corpus_hint(formats: &[&str]) -> String {
+    let listed = if formats.is_empty() {
+        "none recorded".to_string()
+    } else {
+        formats.join(", ")
+    };
+    format!(
+        "      this corpus mixes code and prose — code volume can swamp prose on\n\
+         \x20     shared words. Scope one side with a filter on `ax_format`\n\
+         \x20     (values in this run: {listed}).\n\
+         \x20     Prose sections are stored in `body`; line files such as changelogs\n\
+         \x20     are stored in `text`, so a match on `body` alone misses them."
     )
 }
 
@@ -1333,6 +1400,50 @@ fn generated_exit_code(summary: &Value) -> i32 {
     }
 }
 
+/// The FIRST line of a finished run's human summary on stdout (#1843).
+///
+/// Exit 3 is success, but an agent that sees a non-zero exit reads failure
+/// unless something it reads first says otherwise. The `xerj-done` line on
+/// stderr already carries `ok=true`, yet it is the LAST line of a long progress
+/// stream and the summary on stdout opened with a timing line that never
+/// mentioned the exit code at all. So every finished run now leads with one
+/// line that starts `ok:` and names the exit code in words; exit 3 also says
+/// what was recorded and where to look, so junk stays visible.
+pub(crate) fn outcome_headline(
+    code: i32,
+    junk_files: u64,
+    junk_records: u64,
+    alias_sweep_failed: bool,
+) -> String {
+    if code != 3 {
+        return format!("ok: indexed and searchable (exit {code}, completed)");
+    }
+    if alias_sweep_failed {
+        return format!(
+            "ok: indexed and searchable — exit 3 ({ALIAS_SWEEP_FAILED_REASON}) is SUCCESS, not \
+             an error: the corpus is indexed and the journal committed; only the catalog's \
+             duplicate-alias cleanup could not run, so rerun the same command once the server \
+             condition clears"
+        );
+    }
+    let mut recorded = Vec::new();
+    if junk_files > 0 {
+        recorded.push(estimate::count_phrase(junk_files, "file", "files"));
+    }
+    if junk_records > 0 {
+        recorded.push(estimate::count_phrase(junk_records, "record", "records"));
+    }
+    let recorded = if recorded.is_empty() {
+        "some input".to_string()
+    } else {
+        recorded.join(" and ")
+    };
+    format!(
+        "ok: indexed and searchable — exit 3 (completed-with-junk) is SUCCESS, not an error: \
+         {recorded} recorded as junk (skipped, never fatal; `xerj autoindex map` lists them)"
+    )
+}
+
 /// Terminal progress line for a run that ends on the generated `--no-graph`
 /// path.
 ///
@@ -1427,6 +1538,22 @@ fn begin_non_graph_generation(
         .context("generation cutover has no committed base")?
         .clone();
     let tx_id = format!("{}-g{}", journal.run_id, base.generation + 1);
+    // #1723: derive the content groups and check the plan's projection onto
+    // them BEFORE sealing. Both depend only on the plan, the inventory and the
+    // base; only the counts need the snapshot (`bind_prepared_counts` below).
+    // A plan that cannot be accepted used to be refused only after the whole
+    // corpus was sealed — ~25 minutes per attempt on the report's corpus.
+    let mut groups = desired_content_groups(&base.groups, &plan, inventory)?;
+    sync::preflight_plan_projection(&plan, &groups).with_context(|| {
+        format!(
+            "autoindex refused generation {} before sealing any file: the plan built from this \
+             walk does not project onto its own content groups, so every run over this input \
+             fails the same way, --fresh included. No snapshot was written and no remote data \
+             was changed. This is an autoindex defect for this corpus; please report it with \
+             this message",
+            base.generation + 1
+        )
+    })?;
     let preparation_contract = preparation_contract_digest(cfg, &plan)?;
     // #971: the prior committed generation's snapshot is the reuse source for
     // sealing. A file whose content digest and preparation identity match its
@@ -1507,6 +1634,61 @@ fn begin_non_graph_generation(
         }
     };
 
+    sync_executor::bind_prepared_counts(&mut groups, &snapshot, &inventory.keys)?;
+    let (schema_identity, index_identity) = generation_contract_identities(&plan)?;
+    let desired = sync::GenerationManifest {
+        generation: base.generation + 1,
+        execution: Some(sync::ExecutionIdentity {
+            version: sync::EXECUTION_IDENTITY_VERSION,
+            root_identity: root_identity.to_owned(),
+            url: cfg.url.clone(),
+            prefix: cfg.prefix.clone(),
+            follow_symlinks: cfg.follow_symlinks,
+            chunker_identity,
+            embedding_identity_sha256: identity.identity_sha256,
+            embedding_backend: identity.backend,
+            embedding_dimension: identity.dimensions,
+            embedding_semantic_contract: identity.semantic_contract,
+            embedding_resumable: identity.resumable,
+            graph_enabled: false,
+            brain: "disabled".into(),
+            detector_identity: DETECTOR_DISABLED_IDENTITY.into(),
+            schema_identity,
+            index_identity,
+            source_policy: sync::SourceExecutionPolicy::DurableSnapshot {
+                reference: format!("sync-snapshots/{tx_id}"),
+                snapshot_digest: snapshot.snapshot_digest,
+            },
+        }),
+        plan,
+        groups,
+    };
+    // A failure here is the generation machinery contradicting itself about
+    // durable state, and the invariant text alone gives the user nothing to
+    // act on (#283). Name the recovery route; the invariant stays attached as
+    // the cause so the report keeps its diagnostic value.
+    let pending = sync::PendingSync::new(tx_id, &base, desired).with_context(|| {
+        format!(
+            "autoindex could not derive generation {} from committed generation {}; the durable \
+             generation state in {} is not internally consistent, and re-running will not repair \
+             it. No remote data was changed. Rebuild with a new --state-dir and a new --prefix",
+            base.generation + 1,
+            base.generation,
+            state_dir.display()
+        )
+    })?;
+    journal.sync_begin(&pending)
+}
+
+/// The desired content groups for a generation: one per planned content
+/// file, canonical path first, then its aliases, reconciled against the
+/// committed base. Counts are zero until [`sync_executor::bind_prepared_counts`]
+/// fills them from the sealed snapshot.
+fn desired_content_groups(
+    base_groups: &[sync::ManifestGroup],
+    plan: &Plan,
+    inventory: &content::Inventory,
+) -> Result<Vec<sync::ManifestGroup>> {
     let aliases_by_content = plan.duplicate_files.iter().fold(
         HashMap::<&str, Vec<sync::ManifestPath>>::new(),
         |mut aliases, alias| {
@@ -1561,51 +1743,7 @@ fn begin_non_graph_generation(
             expected_records_by_dataset: BTreeMap::new(),
         });
     }
-    let mut groups = sync::reconcile_groups(&base.groups, candidates)?;
-    sync_executor::bind_prepared_counts(&mut groups, &snapshot, &inventory.keys)?;
-    let (schema_identity, index_identity) = generation_contract_identities(&plan)?;
-    let desired = sync::GenerationManifest {
-        generation: base.generation + 1,
-        execution: Some(sync::ExecutionIdentity {
-            version: sync::EXECUTION_IDENTITY_VERSION,
-            root_identity: root_identity.to_owned(),
-            url: cfg.url.clone(),
-            prefix: cfg.prefix.clone(),
-            follow_symlinks: cfg.follow_symlinks,
-            chunker_identity,
-            embedding_identity_sha256: identity.identity_sha256,
-            embedding_backend: identity.backend,
-            embedding_dimension: identity.dimensions,
-            embedding_semantic_contract: identity.semantic_contract,
-            embedding_resumable: identity.resumable,
-            graph_enabled: false,
-            brain: "disabled".into(),
-            detector_identity: DETECTOR_DISABLED_IDENTITY.into(),
-            schema_identity,
-            index_identity,
-            source_policy: sync::SourceExecutionPolicy::DurableSnapshot {
-                reference: format!("sync-snapshots/{tx_id}"),
-                snapshot_digest: snapshot.snapshot_digest,
-            },
-        }),
-        plan,
-        groups,
-    };
-    // A failure here is the generation machinery contradicting itself about
-    // durable state, and the invariant text alone gives the user nothing to
-    // act on (#283). Name the recovery route; the invariant stays attached as
-    // the cause so the report keeps its diagnostic value.
-    let pending = sync::PendingSync::new(tx_id, &base, desired).with_context(|| {
-        format!(
-            "autoindex could not derive generation {} from committed generation {}; the durable \
-             generation state in {} is not internally consistent, and re-running will not repair \
-             it. No remote data was changed. Rebuild with a new --state-dir and a new --prefix",
-            base.generation + 1,
-            base.generation,
-            state_dir.display()
-        )
-    })?;
-    journal.sync_begin(&pending)
+    sync::reconcile_groups(base_groups, candidates)
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -1708,6 +1846,106 @@ fn without_excluded_rels(
         .collect();
     let dropped = before - kept.len();
     (kept, dropped)
+}
+
+#[cfg(test)]
+mod generation_preflight_tests {
+    use super::*;
+
+    /// A temp corpus holding two byte-identical files, resolved the way a run
+    /// resolves it: one content file (`a.txt`) and one alias (`b.txt`).
+    fn duplicate_inventory(dir: &Path) -> content::Inventory {
+        std::fs::write(dir.join("a.txt"), "same bytes").unwrap();
+        std::fs::write(dir.join("b.txt"), "same bytes").unwrap();
+        let files = walk::walk(dir, false).unwrap();
+        let inventory = content::resolve_reporting(files, &|_| {}).unwrap();
+        assert_eq!(inventory.files.len(), 1);
+        assert_eq!(inventory.duplicates.len(), 1);
+        inventory
+    }
+
+    /// The plan a run builds from `inventory`: every content file assigned to
+    /// one dataset, its duplicates recorded as aliases.
+    fn plan_for(inventory: &content::Inventory) -> Plan {
+        let files: HashMap<String, FileAssignment> = inventory
+            .files
+            .iter()
+            .enumerate()
+            .map(|(i, file)| {
+                (
+                    inventory.keys[i].clone(),
+                    FileAssignment {
+                        rel: file.rel.clone(),
+                        path_id: file.rel_id.clone(),
+                        is_symlink: Some(file.is_symlink),
+                        family: "text".into(),
+                        gzip: false,
+                        content_digest: Some(inventory.digests[i].clone()),
+                        assignments: vec![(None, "docs".into())],
+                        as_document: false,
+                    },
+                )
+            })
+            .collect();
+        Plan {
+            datasets: vec![PlanDataset {
+                slug: "docs".into(),
+                index: "ax-docs".into(),
+                family: "text".into(),
+                group: None,
+                specs: vec![],
+                time_field: None,
+                semantic_field: None,
+                text_analyzer: None,
+                scope: None,
+                sampled_records: 1,
+                file_count: files.len(),
+            }],
+            files,
+            duplicate_files: inventory.duplicates.clone(),
+            alias_paths_indexed: false,
+            ..Plan::default()
+        }
+    }
+
+    #[test]
+    fn a_consistent_plan_passes_the_preflight() {
+        let dir = tempfile::tempdir().unwrap();
+        let inventory = duplicate_inventory(dir.path());
+        let plan = plan_for(&inventory);
+        let groups = desired_content_groups(&[], &plan, &inventory).unwrap();
+        sync::preflight_plan_projection(&plan, &groups)
+            .expect("the plan a run builds must pass the preflight");
+    }
+
+    /// #1723: a plan whose canonical copy is not the lowest native identity —
+    /// the shape the Windows `rel`-vs-`path_id` ranking produced — is refused
+    /// by the preflight, i.e. before `create_prepared_snapshot_reporting` seals
+    /// anything, with the same invariant `PendingSync::new` reports after it.
+    #[test]
+    fn a_plan_that_cannot_project_is_refused_before_sealing() {
+        let dir = tempfile::tempdir().unwrap();
+        let mut inventory = duplicate_inventory(dir.path());
+        // Promote the alias to canonical and demote the real canonical to an
+        // alias. The groups re-rank by `(is_symlink, path_id)` and put `a.txt`
+        // back first, so the plan's canonical (`b.txt`) disagrees with them.
+        let alias = inventory.duplicates[0].clone();
+        let file = inventory.files[0].clone();
+        inventory.files[0].rel = alias.rel.clone();
+        inventory.files[0].rel_id = alias.path_id.clone();
+        inventory.duplicates[0].rel = file.rel.clone();
+        inventory.duplicates[0].path_id = file.rel_id.clone();
+        inventory.duplicates[0].duplicate_of = alias.rel.clone();
+        let plan = plan_for(&inventory);
+
+        let groups = desired_content_groups(&[], &plan, &inventory).unwrap();
+        let err = sync::preflight_plan_projection(&plan, &groups)
+            .expect_err("a plan that cannot project must be refused");
+        assert!(
+            format!("{err:#}").contains("plan canonical projection disagrees with manifest group"),
+            "{err:#}"
+        );
+    }
 }
 
 #[cfg(test)]
@@ -1986,6 +2224,40 @@ impl Drop for SampleLimitOverride {
 /// which every test owns as its own tempdir — makes it unstealable instead.
 #[cfg(test)]
 static REPLACEMENT_FAILPOINT: Mutex<Option<(u8, std::path::PathBuf)>> = Mutex::new(None);
+
+/// A test-only action run once when phase B starts, for the run that uses the
+/// given state directory: the window between phase A's digest and phase B's
+/// read, where a live file (a lock file, a log) changes under the run (#1911).
+/// Keyed on the state directory for the same reason as
+/// [`REPLACEMENT_FAILPOINT`].
+#[cfg(test)]
+type PhaseBStartHook = (std::path::PathBuf, Box<dyn FnOnce() + Send>);
+#[cfg(test)]
+static PHASE_B_START_HOOK: Mutex<Option<PhaseBStartHook>> = Mutex::new(None);
+
+#[cfg(test)]
+pub(crate) fn arm_phase_b_start_hook(state_dir: &Path, action: impl FnOnce() + Send + 'static) {
+    *PHASE_B_START_HOOK.lock().unwrap_or_else(|p| p.into_inner()) =
+        Some((state_dir.to_path_buf(), Box::new(action)));
+}
+
+#[cfg(test)]
+fn phase_b_start_hook(state_dir: &Path) {
+    let action = {
+        let mut armed = PHASE_B_START_HOOK.lock().unwrap_or_else(|p| p.into_inner());
+        match armed.as_ref() {
+            Some((dir, _)) if dir == state_dir => armed.take().map(|(_, action)| action),
+            _ => None,
+        }
+    };
+    if let Some(action) = action {
+        action();
+    }
+}
+
+#[cfg(not(test))]
+#[inline]
+fn phase_b_start_hook(_state_dir: &Path) {}
 
 /// Arm [`replacement_failpoint`] for the run that uses `state_dir`, once.
 #[cfg(test)]
@@ -3064,6 +3336,8 @@ mod phase_a_grouping_tests {
             bulk_timeout_secs: 10,
             snapshot_max_bytes: 64 << 30,
             prefix: "t".into(),
+            replace_prefix: false,
+            prefix_note: None,
             state_dir: None,
             fresh: true,
             follow_symlinks: false,
@@ -3659,6 +3933,9 @@ fn build_phase_a(
         }
     }
     let mut clusters = dataset::cluster(sketches, &rels, &scopes);
+    // `{prefix}-{slug}` must not stutter (`logs-logs-syslog`) when the slug's
+    // first segment is the prefix the operator already chose.
+    dataset::drop_repeated_prefix(&cfg.prefix, &mut clusters);
 
     // Demoted one-off config files (#173) were sampled as flattened records;
     // phase B will index them as documents. Re-sample them through the same
@@ -4980,14 +5257,28 @@ fn finish_generated_run(es: &Es, journal: &mut state::Journal, cfg: &IndexCfg) -
     if cfg.json {
         println!("{summary}");
     } else if !cfg.quiet {
+        let count = |field: &str| summary.get(field).and_then(Value::as_u64).unwrap_or(0);
         println!(
-            "generation {} committed — {} datasets, {} records live",
+            "{}",
+            outcome_headline(
+                generated_exit_code(&summary),
+                count("files_junk"),
+                count("junk_records_total"),
+                false,
+            )
+        );
+        println!(
+            "generation {} committed — {}, {} live",
             generation,
-            dataset_count,
-            summary
-                .get("records_total")
-                .and_then(Value::as_u64)
-                .unwrap_or(0)
+            estimate::count_phrase(dataset_count as u64, "dataset", "datasets"),
+            estimate::count_phrase(
+                summary
+                    .get("records_total")
+                    .and_then(Value::as_u64)
+                    .unwrap_or(0),
+                "record",
+                "records",
+            ),
         );
         // #929: read from the committed manifest, so a no-op re-run names the
         // refused datasets again instead of only the run that met the refusal.
@@ -5682,24 +5973,39 @@ fn truncation_note_message(rels: &[String]) -> Option<String> {
     // name only the first — so a mailbox holding one 2.3 GB message was told it
     // had "hit the per-file record cap (4096)" with 205 records, and to "raise
     // the cap", which is advice for a cap it never reached (review finding on
-    // PR #949). The flag does not say which cap fired, so the note names all
-    // three and what each one kept.
-    //
-    // "The file's tail" is right only for the first cause. A mailbox with one
-    // oversized message loses THAT message's tail; every message after it is
-    // indexed (review of PR #949: 201 of 201 messages after a 2.3 GB one were
-    // found), so the note says what was dropped per cause.
+    // PR #949). The flag does not say which cap fired. A path that looks like
+    // mail keeps all three causes. A plain document does not: telling the
+    // reader of an 8 MB `.txt` that a later mail message might still be
+    // indexed is false, and it is the note they actually saw.
+    let cause = if names.iter().any(|rel| rel_looks_like_mail(rel)) {
+        format!(
+            "one of: a single document over the per-document record cap ({} sections; its later \
+             sections were dropped), a mail message over the {} MB per-message cap (only that \
+             message's head was parsed; the messages after it are indexed), or a message with more \
+             MIME parts than the attachment cap (its later parts were dropped). Split the document \
+             or the message if the dropped part matters (#381)",
+            extract::MAX_RECORDS_PER_FILE,
+            extract::eml::MAX_EML >> 20,
+        )
+    } else {
+        format!(
+            "the per-document record cap is {} sections; later sections were dropped. Split the \
+             document if the dropped part matters (#381)",
+            extract::MAX_RECORDS_PER_FILE,
+        )
+    };
     Some(format!(
-        "{} file(s) had content cut short that was NOT indexed: {listed}{tail} — one of: a \
-         single document over the per-document record cap ({} sections; its later sections \
-         were dropped), a mail message over the {} MB per-message cap (only that message's \
-         head was parsed; the messages after it are indexed), or a message with more MIME \
-         parts than the attachment cap (its later parts were dropped). Split the document or \
-         the message if the dropped part matters (#381)",
+        "{} file(s) had content cut short that was NOT indexed: {listed}{tail} — {cause}",
         names.len(),
-        extract::MAX_RECORDS_PER_FILE,
-        extract::eml::MAX_EML >> 20,
     ))
+}
+
+/// The mail caps only apply to a mailbox. The last path component is enough:
+/// `inbox.eml`, `lists.mbox`, `note.msg`.
+fn rel_looks_like_mail(rel: &str) -> bool {
+    let name = rel.rsplit(['/', '\\']).next().unwrap_or(rel);
+    let lower = name.to_ascii_lowercase();
+    lower.ends_with(".eml") || lower.ends_with(".mbox") || lower.ends_with(".msg")
 }
 
 fn note_truncated_files(pr: &Progress, rels: &[String]) {
@@ -5728,15 +6034,35 @@ mod truncation_note_tests {
         );
         assert!(msg.contains("4096") && msg.contains("#381"), "{msg}");
         assert!(!msg.contains("and 0 more"), "{msg}");
-        // Every cap that can set the flag is named — an oversized mail message
-        // is not a "record cap" and must not be reported as one.
+        assert!(msg.contains("later sections were dropped"), "{msg}");
+        assert!(!msg.contains("raise the cap"), "{msg}");
+        // Neither file is mail. The mail caps must not be offered as a reason
+        // the tail might still be indexed.
+        assert!(!msg.contains("per-message cap"), "{msg}");
+        assert!(!msg.contains("MIME parts"), "{msg}");
+        assert!(!msg.contains("the messages after it are indexed"), "{msg}");
+    }
+
+    #[test]
+    fn a_mailbox_keeps_the_three_causes() {
+        let msg = truncation_note_message(&["mail/inbox.mbox".into(), "big.txt".into()]).unwrap();
+        assert!(
+            msg.contains("mail/inbox.mbox") && msg.contains("big.txt"),
+            "{msg}"
+        );
+        // The flag does not say which file hit which cap, so a list that
+        // contains any mailbox still names all three.
         assert!(msg.contains("64 MB per-message cap"), "{msg}");
         assert!(msg.contains("MIME parts"), "{msg}");
-        assert!(!msg.contains("raise the cap"), "{msg}");
-        // An oversized message costs that message's tail, not the mailbox's:
-        // the note must not tell a mailbox owner the rest of the file is gone.
+        assert!(msg.contains("4096"), "{msg}");
         assert!(!msg.contains("their tail"), "{msg}");
         assert!(msg.contains("the messages after it are indexed"), "{msg}");
+        assert!(truncation_note_message(&["Notes.EML".into()])
+            .unwrap()
+            .contains("MIME parts"));
+        assert!(!truncation_note_message(&["notes.eml.txt".into()])
+            .unwrap()
+            .contains("MIME parts"));
     }
 
     #[test]
@@ -5865,6 +6191,35 @@ fn legacy_rebuild_argv(cfg: &IndexCfg, state_dir: &Path, prefix: &str) -> Vec<St
     argv
 }
 
+/// Run documents in the shared catalog whose `prefix` term-matches.
+///
+/// A missing catalog is an empty list: the first index of a node has nothing
+/// to collide with. Any other search failure is returned — skipping the
+/// check on a 401 or a 500 would let the overwrite this guard exists to stop
+/// proceed. The caller re-checks the prefix exactly; a legacy analyzed
+/// `prefix` field can over-return sibling corpora.
+fn catalog_runs_for_prefix(es: &Es, prefix: &str) -> Result<Vec<Value>> {
+    let body = json!({
+        "size": 500,
+        "query": {"bool": {"filter": [
+            {"term": {"doc_kind": "run"}},
+            {"term": {"prefix": prefix}}
+        ]}}
+    });
+    let Some(page) = es.search_present(catalog::CATALOG_INDEX, &body)? else {
+        return Ok(Vec::new());
+    };
+    Ok(page
+        .pointer("/hits/hits")
+        .and_then(Value::as_array)
+        .map(|hits| {
+            hits.iter()
+                .filter_map(|hit| hit.get("_source").cloned())
+                .collect()
+        })
+        .unwrap_or_default())
+}
+
 fn run_index_report_inner(
     mut cfg: IndexCfg,
     tally: &ScanTally,
@@ -5912,6 +6267,11 @@ fn run_index_report_inner(
     if let Some(note) = &cfg.xerj_url_note {
         pr.warn(&format!("autoindex: {note}"));
     }
+    // #1845: a rewritten --prefix is said out loud, next to the other
+    // "this run is not quite what you typed" warning.
+    if let Some(note) = &cfg.prefix_note {
+        pr.warn(&format!("autoindex: {note}"));
+    }
     // One throughput meter for the whole run: both phase-A routes (the legacy
     // scan and the generated route's `project_reconcile_plan`) feed it, so the
     // estimate is built from whatever this invocation actually parsed.
@@ -5943,21 +6303,9 @@ fn run_index_report_inner(
     // #1102: ping's raw context is honest but teaches a first-time user
     // nothing — autoindex is the onboarding verb, so the no-node case here
     // gets the same recipe `xerj def` already prints: start one, or aim at
-    // an existing node.
+    // an existing node. `xerj autoindex map` uses the same wording.
     if let Err(e) = es.ping() {
-        if esclient::Es::ping_failure_is_auth(&e) {
-            anyhow::bail!(
-                "the node at {url} answered, but authentication failed.\n{e:#}",
-                url = cfg.url
-            );
-        }
-        anyhow::bail!(
-            "no XERJ node reachable at {url} ({e:#})\n\n\
-             Start one, then re-run this command:\n  \
-             xerj --insecure --data-dir ./.xerj-data &\n\n\
-             (or point at an existing node with --url / $XERJ_URL)",
-            url = cfg.url
-        );
+        anyhow::bail!("{}", node_ping_failure(&cfg.url, &e));
     }
 
     // `--label <question-set>` (#1062): every record's payload goes through
@@ -6009,6 +6357,44 @@ fn run_index_report_inner(
         .state_dir
         .clone()
         .unwrap_or_else(|| state::default_state_dir(&root_str, &cfg.url, &cfg.prefix));
+    // Same --prefix on a different folder overwrites catalog ids
+    // `ds:{prefix}:{slug}` and writes into `{prefix}-*` at finalize. The
+    // journals do not share a state dir (the default key includes the root),
+    // so nothing local notices a *new* folder. Refuse before preflight
+    // creates state, and before --dry-run walks the tree. --replace-prefix
+    // is the explicit opt-in; it prints the same facts and continues.
+    //
+    // A journal that already binds this state dir to this root, url, and
+    // prefix is a resume or an incremental re-run of the same folder,
+    // including one the local plan / `--fresh` gates are about to refuse.
+    // Those refusals promise the only remote call is the readiness GET, so
+    // this guard must not search the catalog on that path. A different
+    // folder has no such journal and still hits the check.
+    if !state::journal_continues_folder(&state_dir, &root_str, &cfg.url, &cfg.prefix) {
+        let foreign_roots = catalog::foreign_prefix_roots(
+            &catalog_runs_for_prefix(&es, &cfg.prefix)?,
+            &cfg.prefix,
+            &root_str,
+        );
+        if !foreign_roots.is_empty() {
+            let message = catalog::prefix_reuse_message(
+                &cfg.prefix,
+                &root_str,
+                &foreign_roots,
+                cfg.replace_prefix,
+            );
+            if cfg.replace_prefix {
+                // `warn` replaces newlines (they are not a safe display char), so
+                // each sentence is its own line. The refusal below keeps the
+                // newlines: it is an error, not a progress record.
+                for line in message.lines() {
+                    pr.warn(line);
+                }
+            } else {
+                anyhow::bail!("{message}");
+            }
+        }
+    }
     // Acquire state authority before discovery as well as hashing. A waiter
     // must never classify a path snapshot taken while another owner was
     // publishing or replacing the durable plan.
@@ -6841,10 +7227,9 @@ fn run_index_report_inner(
             &cfg,
         );
         pdf_spools = spools;
-        pr.note(&format!(
-            "phase A: {} datasets inferred, {} junk/skipped files",
-            plan.datasets.len(),
-            plan.junk_files.len()
+        pr.note(&estimate::phase_a_line(
+            plan.datasets.len() as u64,
+            plan.junk_files.len() as u64,
         ));
         clusters_rt = Some(clusters);
         plan
@@ -6962,21 +7347,21 @@ fn run_index_report_inner(
     pr.note(&format!("estimate: basis — {}", run_estimate.basis));
     for family in &run_estimate.families {
         pr.note(&format!(
-            "  estimate: {:<10} {:>5} files {:>9} at {}/s measured over {} file(s) / {} → {}",
+            "  estimate: {:<10} {} {:>9} at {}/s measured over {} / {} → {}",
             family.family,
-            family.planned_files,
+            estimate::count_files_column(family.planned_files),
             estimate::human_bytes(family.planned_bytes),
             estimate::human_bytes(family.bytes_per_sec as u64),
-            family.measured_files,
+            estimate::count_phrase(family.measured_files, "file", "files"),
             estimate::human_bytes(family.measured_bytes),
             estimate::human_secs(family.seconds_of_work),
         ));
     }
     for family in &run_estimate.unmeasured_families {
         pr.note(&format!(
-            "  estimate: {:<10} {:>5} files {:>9} NOT priced — {}",
+            "  estimate: {:<10} {} {:>9} NOT priced — {}",
             family.family,
-            family.planned_files,
+            estimate::count_files_column(family.planned_files),
             estimate::human_bytes(family.planned_bytes),
             family.reason,
         ));
@@ -6984,26 +7369,7 @@ fn run_index_report_inner(
     for exclude in &run_estimate.excludes {
         pr.note(&format!("  estimate excludes: {exclude}"));
     }
-    pr.note(&format!(
-        "work order: {} — {} inside each band at {} worker(s); a file that outlasts everything \
-         above it starts first regardless of band",
-        bands
-            .iter()
-            .map(|band| format!(
-                "{} ({} files, {})",
-                band.band,
-                band.files,
-                estimate::human_bytes(band.bytes)
-            ))
-            .collect::<Vec<_>>()
-            .join(" → "),
-        if cfg.workers == 1 {
-            "smallest first"
-        } else {
-            "biggest first"
-        },
-        cfg.workers,
-    ));
+    pr.note(&order::work_order_line(&bands, cfg.workers));
     for band in &bands {
         pr.note(&format!("  {:<16} {}", band.band, band.why));
     }
@@ -7706,6 +8072,7 @@ fn run_index_report_inner(
         "phase B: indexing {} files with {} workers → {}",
         n_todo, cfg.workers, cfg.url
     ));
+    phase_b_start_hook(&state_dir);
     if n_pdf_spools > 0 {
         pr.note(&format!(
             "phase B: reusing {n_pdf_spools} run-local PDF extraction(s); these PDFs will not be \
@@ -7848,11 +8215,17 @@ fn run_index_report_inner(
                     continue;
                 }
             };
+            // #1911: a file that changed since phase A hashed it (a lock
+            // file, a log, a sqlite -wal) is ONE skipped file, not a reason
+            // to abort every other file's run. Nothing of it is staged yet.
             if let Err(error) = content::verify(&f.path, f.size, expected_digest) {
-                let mut errors = bulk_errors.lock().unwrap();
-                if errors.len() < 5 {
-                    errors.push(format!("{error:#}"));
-                }
+                extra_junk.lock().unwrap().push(changed_during_run_junk(
+                    key,
+                    &f.rel,
+                    &format_str(Some(&sn)),
+                    f.size,
+                    &error,
+                ));
                 continue;
             }
             // File-card anchor node (§6.6.2a): one card doc per corpus
@@ -8188,10 +8561,18 @@ fn run_index_report_inner(
                 }
             }
             if send_err.is_none() {
+                // #1911: changed while it was being extracted. Its records are
+                // only staged locally (visibility starts below), so skipping it
+                // here leaves nothing of it on the node from this run.
                 if let Err(error) = content::verify(&f.path, f.size, expected_digest) {
-                    send_err = Some(format!(
-                        "{error:#}; no records from this changing file were made visible"
+                    extra_junk.lock().unwrap().push(changed_during_run_junk(
+                        key,
+                        &f.rel,
+                        &format_str(Some(&sn)),
+                        f.size,
+                        &error,
                     ));
+                    continue;
                 }
             }
             // Visibility begins only after extraction and the second
@@ -9054,14 +9435,12 @@ fn run_index_report_inner(
     let total_records: u64 = ds_counts.values().sum();
     // #904: ingest throughput, so the cost of a slow embedder (#366) is
     // visible in the summary itself rather than something an operator has
-    // to derive by hand from the elapsed line. `wall` can be 0.0 on a
-    // sub-millisecond run (e.g. an all-resume no-op); reporting 0 docs/sec
-    // there is more honest than a divide-by-zero `inf`.
-    let docs_per_sec = if wall > 0.0 {
-        total_records as f64 / wall
-    } else {
-        0.0
-    };
+    // to derive by hand from the elapsed line. The numerator is what THIS
+    // run submitted. Dividing the live catalog count by `wall` makes a
+    // no-op resume claim tens of thousands of docs/sec. `wall` can be 0.0
+    // on a sub-millisecond run; reporting 0 docs/sec there is more honest
+    // than a divide-by-zero `inf`.
+    let docs_per_sec = ingest_docs_per_sec(records_total.load(Ordering::Relaxed), wall);
     // Run-summary honesty (§6.6.4): what the detectors wrote AND what they
     // could not resolve — a dangling [[link]] is a fact about the corpus, not
     // something to swallow.
@@ -9288,11 +9667,46 @@ fn run_index_report_inner(
 
     // ── summary ──────────────────────────────────────────────────────────
     let junk_total_records = junk_records.load(Ordering::Relaxed);
+    // Exit 3 means "completed, some input was unusable". Backend rejections
+    // are not consulted and must not be: a rejected item aborts the run with
+    // an error long before this line, so `rejected_records` is provably 0
+    // here. Splitting them out of `junk_total_records` therefore changes no
+    // exit code.
+    //
+    // A failed alias sweep lands here too, and on 3 rather than on a code of
+    // its own: 3 already means "completed, and something about this run is
+    // recorded rather than fatal" (`cli.rs` EXIT CODES), and inventing a fourth
+    // success code would break every caller that already branches on 0/3. The
+    // `reason` is what tells the two apart.
+    let code = if junk_total_records > 0 || junk_file_count > 0 || alias_sweep_error.is_some() {
+        3
+    } else {
+        0
+    };
     if cfg.json {
         println!("{run_doc}");
     } else if !cfg.quiet {
-        println!("\ndone in {wall:.1}s — {} datasets, {} records live, {} duplicate aliases, {} junk records, {} junk/skipped files ({docs_per_sec:.1} docs/sec)",
-            plan.datasets.len(), total_records, plan.duplicate_files.len(), junk_total_records, junk_file_count);
+        println!(
+            "{}",
+            outcome_headline(
+                code,
+                junk_file_count as u64,
+                junk_total_records,
+                alias_sweep_error.is_some(),
+            )
+        );
+        println!(
+            "{}",
+            estimate::done_summary_line(
+                wall,
+                plan.datasets.len() as u64,
+                total_records,
+                plan.duplicate_files.len() as u64,
+                junk_total_records,
+                junk_file_count as u64,
+                docs_per_sec,
+            )
+        );
         // Indexed-vs-submitted honesty line (#195): the live count against
         // what this run actually submitted, so a silent-rejection mismatch
         // is visible in the client output alone. Units differ on purpose: a
@@ -9300,10 +9714,12 @@ fn run_index_report_inner(
         // documents, but submitted records with ZERO live documents is
         // always a defect (and fails above, before this line prints).
         println!(
-            "indexed: {} documents live; this run submitted {} source records from {} files",
-            total_records,
-            records_total.load(Ordering::Relaxed),
-            files_done.load(Ordering::Relaxed),
+            "{}",
+            indexed_vs_submitted_line(
+                total_records,
+                records_total.load(Ordering::Relaxed),
+                files_done.load(Ordering::Relaxed),
+            )
         );
         if !unextracted_archives.is_empty() {
             println!("not indexed — archives are never opened; extract, then run this command on the extracted folder:");
@@ -9347,14 +9763,10 @@ fn run_index_report_inner(
                 cfg.api_key_file.as_deref(),
             )
         );
-        // This line is where an agent learns how to search, so it is where the
-        // code-aware form belongs. A blind usability run showed the cost of
-        // omitting it: the agent followed exactly this guidance, got whole
-        // files back, and reinvented client-side slicing rather than
-        // discovering `_passage` — which it never saw mentioned anywhere.
-        // Only printed when source code was actually indexed; for a PDF or log
-        // corpus it would be noise. The text itself is shared with the
-        // generated-run printer via `code_search_hint` (#1103).
+        // This line is where an agent learns how to search. Only printed when
+        // source code was actually indexed; for a PDF or log corpus it would
+        // be noise. The text itself is shared with the generated-run printer
+        // via `code_search_hint` (#1103).
         let indexed_code = plan.files.values().any(|fa| fa.family == "code");
         if indexed_code {
             println!("{}", code_search_hint(&cfg.prefix));
@@ -9371,38 +9783,12 @@ fn run_index_report_inner(
             .values()
             .any(|fa| fa.family.starts_with("txt") || fa.family == "html");
         if indexed_code && indexed_prose {
-            println!(
-                "      this corpus mixes code and prose — code volume can swamp prose on\n\
-                 \x20     shared words. Scope the side you want:\n\
-                 \x20       …,\"query\":{{\"bool\":{{\"must\":[{{\"match\":{{\"body\":\"<text>\"}}}}],\
-                 \"filter\":[{{\"term\":{{\"ax_format\":\"code\"}}}}]}}}}\n\
-                 \x20       (values for `ax_format` in this run: {})",
-                {
-                    let mut fams: Vec<&str> =
-                        plan.files.values().map(|fa| fa.family.as_str()).collect();
-                    fams.sort_unstable();
-                    fams.dedup();
-                    fams.join(", ")
-                }
-            );
+            let mut fams: Vec<&str> = plan.files.values().map(|fa| fa.family.as_str()).collect();
+            fams.sort_unstable();
+            fams.dedup();
+            println!("{}", mixed_corpus_hint(&fams));
         }
     }
-    // Exit 3 means "completed, some input was unusable". Backend rejections
-    // are not consulted and must not be: a rejected item aborts the run with
-    // an error long before this line, so `rejected_records` is provably 0
-    // here. Splitting them out of `junk_total_records` therefore changes no
-    // exit code.
-    //
-    // A failed alias sweep lands here too, and on 3 rather than on a code of
-    // its own: 3 already means "completed, and something about this run is
-    // recorded rather than fatal" (`cli.rs` EXIT CODES), and inventing a fourth
-    // success code would break every caller that already branches on 0/3. The
-    // `reason` is what tells the two apart.
-    let code = if junk_total_records > 0 || junk_file_count > 0 || alias_sweep_error.is_some() {
-        3
-    } else {
-        0
-    };
     // Terminal line, in every progress mode but `none` (which `--quiet`
     // selects, and which prints nothing by definition). Exit 3 means
     // "completed, some files were unparseable" — success — and an agent reading
@@ -9467,6 +9853,35 @@ fn run_index_report_inner(
     Ok((code, Some(run_doc)))
 }
 
+/// The catalog entry for a source file that changed between phase A's digest
+/// and phase B's read (#1911).
+///
+/// That used to land in `bulk_errors`, which aborts the whole run after phase B:
+/// one live lock file on Windows stopped a 1,894-file run at ~258 s and left
+/// its partial indices and journal for hand cleanup — and every retry met the
+/// same still-changing file. It is now one `skipped` file with the reason, the
+/// run finishes (exit 3, like any other skipped file), and because the file is
+/// never journaled done, the next run picks up whatever it then holds.
+fn changed_during_run_junk(
+    file_key: &str,
+    rel: &str,
+    format: &str,
+    bytes: u64,
+    error: &anyhow::Error,
+) -> JunkFile {
+    JunkFile {
+        file_key: file_key.to_string(),
+        rel: rel.to_string(),
+        format: format.to_string(),
+        status: "skipped".into(),
+        reason: format!(
+            "changed while this run was reading it, so it was skipped and nothing from it was \
+             made visible ({error:#}); rerun to index its current content"
+        ),
+        bytes,
+    }
+}
+
 fn format_str(sn: Option<&Sniffed>) -> String {
     match sn {
         Some(s) if s.gzip => format!("{}(gzip)", s.family.as_str()),
@@ -9477,12 +9892,66 @@ fn format_str(sn: Option<&Sniffed>) -> String {
 
 // ─── map subcommand ──────────────────────────────────────────────────────
 
+/// What autoindex and `xerj map` say when the node does not answer.
+///
+/// A connect error is the common first-run miss (`xerj map` with nothing
+/// listening). An auth failure is the opposite — the node is up — so it must
+/// not tell the reader to start one.
+fn node_ping_failure(url: &str, err: &anyhow::Error) -> String {
+    if esclient::Es::ping_failure_is_auth(err) {
+        format!("the node at {url} answered, but authentication failed.\n{err:#}")
+    } else {
+        format!(
+            "no XERJ node reachable at {url} ({err:#})\n\n\
+             Start one, then re-run this command:\n  \
+             xerj --insecure --data-dir ./.xerj-data &\n\n\
+             (or point at an existing node with --url / $XERJ_URL)"
+        )
+    }
+}
+
+#[cfg(test)]
+mod node_ping_failure_tests {
+    use super::node_ping_failure;
+
+    #[test]
+    fn an_unreachable_node_gets_the_start_recipe() {
+        let err = anyhow::anyhow!(
+            "endpoint unreachable: http://127.0.0.1:9: Connection refused (os error 111)"
+        );
+        let msg = node_ping_failure("http://127.0.0.1:9", &err);
+        assert!(
+            msg.contains("no XERJ node reachable at http://127.0.0.1:9"),
+            "{msg}"
+        );
+        assert!(
+            msg.contains("xerj --insecure --data-dir ./.xerj-data"),
+            "{msg}"
+        );
+        assert!(msg.contains("--url"), "{msg}");
+        assert!(!msg.contains("authentication failed"), "{msg}");
+    }
+
+    #[test]
+    fn an_auth_failure_does_not_say_the_node_is_down() {
+        let err = anyhow::anyhow!("GET / failed (HTTP 401)");
+        let msg = node_ping_failure("http://127.0.0.1:9200", &err);
+        assert!(msg.contains("authentication failed"), "{msg}");
+        assert!(!msg.contains("no XERJ node reachable"), "{msg}");
+        assert!(!msg.contains("xerj --insecure"), "{msg}");
+    }
+}
+
 fn run_map(cfg: MapCfg) -> Result<i32> {
     if let Some(note) = &cfg.xerj_url_note {
         eprintln!("autoindex: {note}");
     }
     let es = Es::new(&cfg.url, cfg.api_key.clone())?;
-    es.ping()?;
+    // The same first-run miss as `xerj search`: nothing is listening, and a
+    // raw `endpoint unreachable` does not say how to start a node.
+    if let Err(e) = es.ping() {
+        anyhow::bail!("{}", node_ping_failure(&cfg.url, &e));
+    }
     let fetch = |query: Value, size: usize, sort: Option<Value>| -> Result<Vec<Value>> {
         let mut body = json!({"query": query, "size": size});
         if let Some(s) = sort {
@@ -11070,6 +11539,23 @@ mod map_metadata_tests {
 mod generation_contract_identity_tests {
     use super::*;
 
+    #[test]
+    fn field_report_footer_honours_the_opt_out() {
+        // issue #1903: `xerj corpus index` printed it under XERJ_DISABLE_FEEDBACK=true
+        let on = with_field_report_if("next: x".to_string(), true);
+        assert!(on.contains(xerj_common::feedback::AUTO_SEND_LINE), "{on}");
+        let off = with_field_report_if("next: x".to_string(), false);
+        assert_eq!(off, "next: x");
+        assert!(!xerj_common::feedback::enabled_from(
+            ["xerj", "corpus", "index", "lz4", "--disable-feedback"],
+            None
+        ));
+        assert!(!xerj_common::feedback::enabled_from(
+            ["xerj", "corpus", "index", "lz4"],
+            Some("true".to_string())
+        ));
+    }
+
     fn dataset(slug: &str, index: &str, family: &str) -> PlanDataset {
         PlanDataset {
             slug: slug.into(),
@@ -11202,12 +11688,10 @@ mod generation_contract_identity_tests {
             "map hint must carry the key, got: {hint}"
         );
         assert!(
-            hint.contains("Authorization: ApiKey s3cret"),
-            "search hint must carry the key, got: {hint}"
-        );
-        assert!(
-            hint.contains("http://localhost:9510/ax-*/_search"),
-            "search hint must target the run's url and prefix, got: {hint}"
+            hint.contains(
+                "xerj search --url http://localhost:9510 --prefix ax --api-key \"s3cret\""
+            ),
+            "search hint must carry the url, prefix, and key, got: {hint}"
         );
         // Nothing is left as an un-runnable `GET /…` sketch.
         assert!(
@@ -11230,7 +11714,7 @@ mod generation_contract_identity_tests {
         );
         assert!(
             hint.contains("--api-key \"$XERJ_API_KEY\"")
-                && hint.contains("Authorization: ApiKey $XERJ_API_KEY"),
+                && hint.contains("xerj search --url http://localhost:9200 --prefix ax --api-key \"$XERJ_API_KEY\""),
             "must reference the exported variable, got: {hint}"
         );
 
@@ -11254,6 +11738,114 @@ mod generation_contract_identity_tests {
             "an auth-free server must get auth-free hints, got: {hint}"
         );
         assert!(hint.contains("xerj autoindex map --url http://localhost:9200"));
+        assert!(
+            hint.contains(xerj_common::feedback::AUTO_SEND_LINE),
+            "the indexing footer must carry the field-report permission line, got: {hint}"
+        );
+        assert!(
+            hint.contains("xerj search --url http://localhost:9200 --prefix ax"),
+            "an auth-free search hint is still the CLI, got: {hint}"
+        );
+        let code = code_search_hint("smoke-anyhow");
+        assert!(
+            code.contains("xerj search --prefix smoke-anyhow")
+                && code.contains("xerj def --prefix smoke-anyhow"),
+            "{code}"
+        );
+        assert!(
+            !code.contains("curl"),
+            "the code hint must not send the reader to a raw search, got: {code}"
+        );
+    }
+
+    /// #1843: exit 3 read as failure because nothing an agent reads FIRST
+    /// said otherwise. Every finished run's stdout summary now opens with an
+    /// `ok:` line that names the exit code in words, and an exit-3 line says
+    /// what was recorded instead of hiding it.
+    #[test]
+    fn a_finished_run_leads_with_an_ok_line_that_spells_out_exit_3() {
+        let clean = outcome_headline(0, 0, 0, false);
+        assert!(clean.starts_with("ok: indexed and searchable"), "{clean}");
+        assert!(clean.contains("exit 0"), "{clean}");
+
+        let junk = outcome_headline(3, 1, 0, false);
+        assert!(junk.starts_with("ok: indexed and searchable"), "{junk}");
+        assert!(
+            junk.contains("exit 3 (completed-with-junk) is SUCCESS, not an error"),
+            "{junk}"
+        );
+        assert!(junk.contains("1 file recorded as junk"), "{junk}");
+        assert!(junk.contains("xerj autoindex"), "{junk}");
+        assert!(!junk.contains('\n'), "one line: {junk}");
+
+        let both = outcome_headline(3, 2, 5, false);
+        assert!(both.contains("2 files and 5 records"), "{both}");
+
+        let sweep = outcome_headline(3, 4, 0, true);
+        assert!(sweep.starts_with("ok: indexed and searchable"), "{sweep}");
+        assert!(sweep.contains(ALIAS_SWEEP_FAILED_REASON), "{sweep}");
+        assert!(sweep.contains("rerun the same command"), "{sweep}");
+    }
+
+    /// Resume of an already-indexed tokio tree printed
+    /// `submitted 0 source records from 0 files` beside 11246 live documents
+    /// and `(66096.3 docs/sec)`. The live count is the catalog; the rate is
+    /// this run's submissions.
+    #[test]
+    fn resume_that_sends_nothing_says_already_indexed_and_rates_zero() {
+        let line = indexed_vs_submitted_line(11246, 0, 0);
+        assert!(
+            line.contains("submitted 0 source records from 0 files"),
+            "{line}"
+        );
+        assert!(
+            line.contains("(already indexed; nothing new to send)"),
+            "{line}"
+        );
+        assert!(
+            !indexed_vs_submitted_line(11246, 11246, 861).contains("already indexed"),
+            "a first run that submitted records must keep the bare line"
+        );
+        assert!(
+            !indexed_vs_submitted_line(0, 0, 0).contains("already indexed"),
+            "an empty corpus is not already indexed"
+        );
+        assert_eq!(ingest_docs_per_sec(0, 0.2), 0.0);
+        assert_eq!(ingest_docs_per_sec(0, 0.0), 0.0);
+        assert_eq!(ingest_docs_per_sec(10, 2.0), 5.0);
+        // Live documents must not leak into the rate. The old formula was
+        // `11246 / 0.17 ≈ 66096`.
+        assert_eq!(ingest_docs_per_sec(0, 11246.0 / 66096.3), 0.0);
+    }
+
+    /// A tokio index stored CHANGELOG.md as `txt-lines` in `text`. The done
+    /// banner pasted a `match` on `body` only, so following it cannot see
+    /// that file. The hint names `text` and the run's `ax_format` values.
+    #[test]
+    fn mixed_corpus_hint_names_text_and_does_not_match_body_only() {
+        let hint = mixed_corpus_hint(&["code", "json", "txt-lines", "txt-prose"]);
+        assert!(
+            hint.contains("values in this run: code, json, txt-lines, txt-prose"),
+            "{hint}"
+        );
+        assert!(hint.contains("`text`"), "{hint}");
+        assert!(hint.contains("`body`"), "{hint}");
+        assert!(
+            hint.contains("ax_format"),
+            "the scope field must still be named, got: {hint}"
+        );
+        assert!(
+            !hint.contains("\"match\""),
+            "must not teach a body-only JSON filter, got: {hint}"
+        );
+        assert!(
+            !hint.contains("<text>"),
+            "must not leave a JSON placeholder, got: {hint}"
+        );
+
+        let empty = mixed_corpus_hint(&[]);
+        assert!(empty.contains("none recorded"), "{empty}");
+        assert!(!empty.contains("\"match\""), "{empty}");
     }
 
     /// A blind onboarding run found `autoindex` discovering `./data/admin.key`
