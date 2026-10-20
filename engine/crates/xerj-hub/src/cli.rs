@@ -29,6 +29,7 @@ use std::time::Duration;
 
 use anyhow::{anyhow, bail, Context, Result};
 use serde_json::{json, Value};
+use sha2::{Digest, Sha256};
 
 use xerj_common::hub::{
     render, Answer, CatalogueEntry, LicenceClass, PackIndex, PackManifest, PackSource,
@@ -49,6 +50,10 @@ const HUB_USAGE: &str = "usage: xerj hub <command>
 
   build-pack <slug> --registry <dir> --out <dir> --url <node> --sign-key <seed-file>
         Build a signed, pre-indexed pack from a registry manifest (CI).
+  build-pack <slug> --from-pack <dir> --out <dir> --url <node> --sign-key <seed-file>
+        The same, from a record pack `xerj corpus build` made (rust-vulns,
+        agent-session-trajectories): its pin is the first 40 hex of a sha256
+        over its record files, so the same records give the same pin.
   build-catalogue --registry <dir> --packs <dir> --out <file> --sign-key <seed-file>
         Build and sign the catalogue from verified packs (CI; see -h).
   sync [--url <node>] | sync --install-timer
@@ -122,6 +127,7 @@ pub fn run_hub_cli(args: &[String]) -> i32 {
 fn run_build_pack(args: &[String]) -> i32 {
     let mut slug: Option<String> = None;
     let mut registry: Option<String> = None;
+    let mut from_pack: Option<String> = None;
     let mut out: Option<String> = None;
     let mut url: Option<String> = None;
     let mut sign_key: Option<String> = None;
@@ -147,6 +153,7 @@ fn run_build_pack(args: &[String]) -> i32 {
                 return 0;
             }
             "--registry" => registry = Some(val!("--registry")),
+            "--from-pack" => from_pack = Some(val!("--from-pack")),
             "--out" => out = Some(val!("--out")),
             "--url" => url = Some(val!("--url")),
             "--sign-key" => sign_key = Some(val!("--sign-key")),
@@ -169,16 +176,32 @@ fn run_build_pack(args: &[String]) -> i32 {
     // It must never fall through to resolve_url's localhost:9200 default — the
     // builder clones + indexes + snapshots into the node it is handed, and a
     // silent default would mutate whatever shared node happens to answer there.
-    let (Some(slug), Some(registry), Some(out), Some(sign_key), Some(url)) =
-        (slug, registry, out, sign_key, url)
-    else {
+    let source = match (registry, from_pack) {
+        (Some(r), None) => BuildSource::Registry(r),
+        (None, Some(p)) => BuildSource::RecordPack(p),
+        (Some(_), Some(_)) => {
+            eprintln!(
+                "xerj hub build-pack: --registry and --from-pack name two different sources; \
+                 pass one\n\n{HUB_USAGE}"
+            );
+            return 2;
+        }
+        (None, None) => {
+            eprintln!(
+                "xerj hub build-pack: <slug>, --registry (or --from-pack), --out, --url and \
+                 --sign-key are all required\n\n{HUB_USAGE}"
+            );
+            return 2;
+        }
+    };
+    let (Some(slug), Some(out), Some(sign_key), Some(url)) = (slug, out, sign_key, url) else {
         eprintln!(
-            "xerj hub build-pack: <slug>, --registry, --out, --url and --sign-key are all \
-             required\n\n{HUB_USAGE}"
+            "xerj hub build-pack: <slug>, --registry (or --from-pack), --out, --url and \
+             --sign-key are all required\n\n{HUB_USAGE}"
         );
         return 2;
     };
-    match build_pack(&slug, &registry, &out, &url, &sign_key) {
+    match build_pack(&slug, &source, &out, &url, &sign_key) {
         Ok(summary) => {
             println!("{summary}");
             0
@@ -192,9 +215,17 @@ fn run_build_pack(args: &[String]) -> i32 {
 
 /// Build the pack and return the one-line summary `pack <slug> <pin8> <bytes>
 /// <indices> <defs>` (plan §2 step 6).
+/// What `build-pack` builds from.
+enum BuildSource {
+    /// `--registry <dir>`: the git manifest `<dir>/<slug>.json`.
+    Registry(String),
+    /// `--from-pack <dir>`: a record pack (`xerj corpus build` output).
+    RecordPack(String),
+}
+
 fn build_pack(
     slug: &str,
-    registry: &str,
+    source: &BuildSource,
     out: &str,
     url: &str,
     sign_key_file: &str,
@@ -203,25 +234,38 @@ fn build_pack(
         .with_context(|| format!("read sign key {sign_key_file}"))?
         .trim()
         .to_string();
-    let manifest_path = Path::new(registry).join(format!("{slug}.json"));
-    if !manifest_path.is_file() {
-        bail!("no registry manifest at {}", manifest_path.display());
-    }
 
     // 1. Licence, pin and sources — from the EXISTING parsers (no second parser
     //    for the registry manifest, plan §11): `read_hub_manifest` for the
     //    per-repo sources, and the catalogue builder for the restrictive-first
-    //    licence class + pin date it already computes.
-    let meta = resolve_pack_metadata(&manifest_path, &seed)
-        .with_context(|| format!("read licence/pin from {}", manifest_path.display()))?;
+    //    licence class + pin date it already computes. A record pack's come from
+    //    its own verified manifest (`harvest::pack::read_manifest`).
+    let (meta, add_from) = match source {
+        BuildSource::Registry(registry) => {
+            let manifest_path = Path::new(registry).join(format!("{slug}.json"));
+            if !manifest_path.is_file() {
+                bail!("no registry manifest at {}", manifest_path.display());
+            }
+            let meta = resolve_pack_metadata(&manifest_path, &seed)
+                .with_context(|| format!("read licence/pin from {}", manifest_path.display()))?;
+            (meta, manifest_path)
+        }
+        BuildSource::RecordPack(dir) => {
+            let dir = PathBuf::from(dir);
+            let meta = record_pack_metadata(&dir, slug)
+                .with_context(|| format!("read record pack {}", dir.display()))?;
+            (meta, dir)
+        }
+    };
     let pin8 = pin8_of(&meta.pin_sha)?;
 
-    // 2. Clone + index into the builder node (the SAME lifecycle the CLI runs).
+    // 2. Clone (or materialize the records) + index into the builder node (the
+    //    SAME lifecycle the CLI runs).
     let rc = xerj_autoindex::xc::run_corpus_cli(&[
         "add".into(),
         slug.into(),
         "--from".into(),
-        manifest_path.to_string_lossy().into_owned(),
+        add_from.to_string_lossy().into_owned(),
     ]);
     if rc != 0 {
         bail!("`corpus add` failed (exit {rc})");
@@ -253,8 +297,11 @@ fn build_pack(
             .filter(|s| !s.is_empty())
             .unwrap_or_else(|| overall_licence.clone())
     };
-    let (defs, files) = pack::build_defs_and_files(&corpus_root, &licence_of)
-        .with_context(|| format!("extract defs from {}", corpus_root.display()))?;
+    let (defs, files) = match source {
+        BuildSource::Registry(_) => pack::build_defs_and_files(&corpus_root, &licence_of),
+        BuildSource::RecordPack(_) => pack::record_defs_and_files(&corpus_root, &licence_of),
+    }
+    .with_context(|| format!("extract defs from {}", corpus_root.display()))?;
 
     // 4. Build + index the `-defs` index (plan §3 mapping) on the builder node.
     let node = HubNode::connect_with_key(url, None)?;
@@ -369,6 +416,95 @@ fn resolve_pack_metadata(manifest_path: &Path, seed: &str) -> Result<PackMetadat
         licence_spdx: entry.licence_spdx.clone(),
         licence_class: entry.licence_class,
         sources,
+    })
+}
+
+/// Pack metadata for a record pack (`xerj corpus build` output), from its own
+/// manifest after `harvest::pack::read_manifest` has re-hashed every file
+/// SHA256SUMS names.
+///
+/// - pin: a record pack has no commit, so its pin is a CONTENT pin: the first
+///   40 hex of sha256 over `"<file>  <sha256>\n"` for each record file, in name
+///   order. The same records give the same pin whatever the build date, and a
+///   changed record gives a new one (the hub's release-per-pin rule then
+///   applies unchanged). 40 hex keeps every pin the same shape.
+/// - pin_date: the pack's `created_at` date.
+/// - licence: each source's recorded SPDX; the class from the repo's one
+///   licence policy (`xccode::licence::is_restricted`, which also counts
+///   UNKNOWN as restricted). A source with no licence is refused.
+fn record_pack_metadata(dir: &Path, slug: &str) -> Result<PackMetadata> {
+    let meta = xerj_autoindex::harvest::pack::read_manifest(dir)?;
+    if meta.name != slug {
+        bail!("the pack is '{}', not '{slug}'", meta.name);
+    }
+    let raw: Value = serde_json::from_str(
+        &fs::read_to_string(dir.join("manifest.json")).context("read manifest.json")?,
+    )
+    .context("parse manifest.json")?;
+    let mut listing = String::new();
+    for f in &meta.files {
+        // read_manifest checked each of these is 64 hex and matches the bytes.
+        let sha = raw
+            .pointer(&format!(
+                "/files/{}/sha256",
+                f.name.replace('~', "~0").replace('/', "~1")
+            ))
+            .and_then(Value::as_str)
+            .ok_or_else(|| anyhow!("manifest.json lists no sha256 for {}", f.name))?;
+        listing.push_str(&format!("{}  {sha}\n", f.name));
+    }
+    if meta.files.is_empty() {
+        bail!("the pack has no record files");
+    }
+    let digest = Sha256::digest(listing.as_bytes());
+    let pin_sha: String = digest
+        .iter()
+        .map(|b| format!("{b:02x}"))
+        .collect::<String>()[..40]
+        .to_string();
+    let pin_date = raw
+        .get("created_at")
+        .and_then(Value::as_str)
+        .and_then(|c| c.get(0..10))
+        .ok_or_else(|| anyhow!("manifest.json has no created_at date"))?
+        .to_string();
+
+    let mut spdx: Vec<String> = Vec::new();
+    for s in &meta.sources {
+        let lic = s.licence.trim();
+        if lic.is_empty() {
+            bail!("source '{}' records no licence", s.slug);
+        }
+        if !spdx.iter().any(|l| l == lic) {
+            spdx.push(lic.to_string());
+        }
+    }
+    if spdx.is_empty() {
+        bail!("the pack declares no sources");
+    }
+    let licence_class = if spdx
+        .iter()
+        .any(|l| xerj_common::xccode::licence::is_restricted(l))
+    {
+        LicenceClass::ApproachOnly
+    } else {
+        LicenceClass::AdaptWithAttribution
+    };
+    Ok(PackMetadata {
+        pin_sha,
+        pin_date,
+        licence_spdx: spdx.join("/"),
+        licence_class,
+        sources: meta
+            .sources
+            .iter()
+            .map(|s| PackSource {
+                repo: s.slug.clone(),
+                url: s.url.clone().unwrap_or_default(),
+                sha: s.watermark.clone().unwrap_or_default(),
+                licence: s.licence.clone(),
+            })
+            .collect(),
     })
 }
 
@@ -509,10 +645,12 @@ fn run_pull(args: &[String]) -> i32 {
         return 2;
     };
     // Everything that can refuse this pull — a malformed or unknown slug, an
-    // excluded licence, a pack over the size cap, no key to verify it with — is
-    // decided BEFORE a node is looked for or started. A doomed pull used to boot a
-    // whole node first, and only then say "no".
-    let plan = match plan_pull(&slug) {
+    // excluded licence, a pack larger than the whole disk budget, no key to verify
+    // it with — is decided BEFORE a node is looked for or started. A doomed pull
+    // used to boot a whole node first, and only then say "no". This is the explicit
+    // command, so the ceiling is the disk budget, not the 50 MiB auto-pull cap: the
+    // person typing it has named exactly this pack.
+    let plan = match plan_pull(&slug, DISK_BUDGET_BYTES) {
         Ok(p) => p,
         Err(PullError { code, message }) => {
             eprintln!("xerj hub pull: {message}");
@@ -600,9 +738,10 @@ const E_NOKEY: i32 = ask::EXIT_NO_KEY;
 /// so this caps a hostile hub's "signature" far below the pack cap.
 const SIG_MAX_BYTES: u64 = 4096;
 /// How long a pull waits for another pull of the same pin to finish before it
-/// gives up. A pull is a download of at most [`AUTO_PULL_MAX_BYTES`] plus a
-/// restore, so this is generous; it exists so a wedged holder cannot hang a
-/// caller (an agent's tool call) for ever.
+/// gives up. A pull is a download of at most the planned ceiling
+/// ([`AUTO_PULL_MAX_BYTES`] for an automatic pull, [`DISK_BUDGET_BYTES`] for an
+/// explicit one) plus a restore, so this is generous; it exists so a wedged holder
+/// cannot hang a caller (an agent's tool call) for ever.
 const PULL_LOCK_WAIT: Duration = Duration::from_secs(60);
 
 /// Cross-process exclusion for one `(slug, pin)`: an OS lock on `<pin8>.lock`
@@ -672,16 +811,25 @@ impl PullLock {
 }
 
 /// What a pull has decided before it touches a node or the disk: the catalogue
-/// entry, the pin its files are named by, and the key it will verify with.
+/// entry, the pin its files are named by, the key it will verify with, and the
+/// byte ceiling this pull may download under (see [`plan_pull_entry`]).
 pub(crate) struct PullPlan {
     entry: CatalogueEntry,
     pin8: String,
     pubkey: String,
+    /// The largest pack this pull will accept and download. An *explicit*
+    /// `xerj hub pull <slug>` passes [`DISK_BUDGET_BYTES`]; an *automatic* pull
+    /// (the `ask` flow) passes [`AUTO_PULL_MAX_BYTES`]. The transfer in
+    /// [`pull_with`] is bounded again by this value, so a hub that lies in
+    /// `pack_bytes` still cannot write more than the ceiling the caller chose.
+    max_bytes: u64,
 }
 
 /// Look `slug` up in the catalogue and decide whether it may be pulled at all
-/// ([`plan_pull_entry`]).
-pub(crate) fn plan_pull(slug: &str) -> Result<PullPlan, PullError> {
+/// ([`plan_pull_entry`]). `max_bytes` is the largest pack this caller accepts —
+/// [`DISK_BUDGET_BYTES`] for an explicit pull, [`AUTO_PULL_MAX_BYTES`] for an
+/// automatic one.
+pub(crate) fn plan_pull(slug: &str, max_bytes: u64) -> Result<PullPlan, PullError> {
     // 0. Validate the slug BEFORE it is ever joined into a filesystem path. The
     //    catalogue is accepted UNVERIFIED when no hub pubkey is configured, so a
     //    hostile `slug` ("../../etc") must be rejected here, ahead of every fs op.
@@ -721,7 +869,7 @@ pub(crate) fn plan_pull(slug: &str) -> Result<PullPlan, PullError> {
             ),
         )
     })?;
-    plan_pull_entry(entry)
+    plan_pull_entry(entry, max_bytes)
 }
 
 /// Everything that can refuse to pull `entry`, checked in the order that costs
@@ -739,12 +887,22 @@ pub(crate) fn plan_pull(slug: &str) -> Result<PullPlan, PullError> {
 ///    a licence class, and a flag an agent can read in `--help` is not a human
 ///    decision. If an override is ever wanted it needs its own decision and its own
 ///    confirmation, not a switch here;
-/// 4. its advertised size is within [`AUTO_PULL_MAX_BYTES`] — a malicious hub must
-///    not OOM the client by advertising a huge pack (decision 2). The transfer is
-///    bounded again in [`fetch_to`] in case the field lies;
+/// 4. its advertised size is within `max_bytes` — a malicious hub must not OOM the
+///    client by advertising a huge pack (decision 2). The ceiling depends on who is
+///    pulling: an *automatic* pull (the `ask` flow) passes [`AUTO_PULL_MAX_BYTES`],
+///    so a question never silently drags down a large pack; an *explicit*
+///    `xerj hub pull <slug>` passes the larger [`DISK_BUDGET_BYTES`], because the
+///    person (or agent) naming the slug has asked for exactly this pack and the hub
+///    cannot keep a pack bigger than the whole cache anyway. The 50 MiB cap is on
+///    the implicit case, not on the command — the notice a build prints over the
+///    cap ("run `xerj hub pull <slug>`") now resolves to a command that works. The
+///    transfer is bounded again in [`fetch_to`] in case the field lies;
 /// 5. there is a key to verify it with (exit [`E_NOKEY`]). Resolved before any temp
 ///    dir exists, so a pull with no key leaves nothing to re-fetch.
-pub(crate) fn plan_pull_entry(entry: &CatalogueEntry) -> Result<PullPlan, PullError> {
+pub(crate) fn plan_pull_entry(
+    entry: &CatalogueEntry,
+    max_bytes: u64,
+) -> Result<PullPlan, PullError> {
     let slug = entry.slug.as_str();
     if !valid_slug(slug) {
         return Err(PullError::new(
@@ -767,12 +925,18 @@ pub(crate) fn plan_pull_entry(entry: &CatalogueEntry) -> Result<PullPlan, PullEr
             ),
         ));
     }
-    if entry.pack_bytes > AUTO_PULL_MAX_BYTES {
+    if entry.pack_bytes > max_bytes {
+        let hint = if max_bytes <= AUTO_PULL_MAX_BYTES {
+            "over the auto-pull cap; run `xerj hub pull` to fetch it explicitly"
+        } else {
+            "larger than the disk budget"
+        };
         return Err(PullError::new(
             E_INFRA,
             format!(
-                "pack '{slug}' is {} bytes, over the {}-byte auto-pull cap; not downloaded",
-                entry.pack_bytes, AUTO_PULL_MAX_BYTES
+                "pack '{slug}' is {} bytes, over the {max_bytes}-byte limit for this pull \
+                 ({hint}); not downloaded",
+                entry.pack_bytes
             ),
         ));
     }
@@ -781,6 +945,7 @@ pub(crate) fn plan_pull_entry(entry: &CatalogueEntry) -> Result<PullPlan, PullEr
         entry: entry.clone(),
         pin8,
         pubkey,
+        max_bytes,
     })
 }
 
@@ -829,7 +994,8 @@ pub(crate) fn pull_with(
     let pack_dir = hub_home.join("packs").join(slug);
     let _lock = PullLock::acquire(&pack_dir, slug, pin8, PULL_LOCK_WAIT, quiet)?;
 
-    // Download pack + sig into a temp dir (size-capped). NOTHING is extracted.
+    // Download pack + sig into a temp dir (size-capped at the ceiling this pull was
+    // planned under — see `PullPlan::max_bytes`). NOTHING is extracted.
     let tmp = pack_dir.join(format!("{pin8}.tmp"));
     let extract = pack_dir.join(pin8);
     let _ = fs::remove_dir_all(&tmp); // a stale temp from a crash must not poison this
@@ -838,7 +1004,7 @@ pub(crate) fn pull_with(
     let archive = tmp.join(format!("{slug}-{pin8}.hubpack.tar.zst"));
     let sig = tmp.join(format!("{slug}-{pin8}.hubpack.tar.zst.sig"));
     let dl = (|| -> Result<u64> {
-        let n = fetch_to(&entry.pack_url, &archive, AUTO_PULL_MAX_BYTES)
+        let n = fetch_to(&entry.pack_url, &archive, plan.max_bytes)
             .with_context(|| format!("download pack {}", entry.pack_url))?;
         fetch_to(&entry.sig_url, &sig, SIG_MAX_BYTES)
             .with_context(|| format!("download sig {}", entry.sig_url))?;
@@ -1563,6 +1729,121 @@ fn now_rfc3339() -> String {
 mod tests {
     use super::*;
 
+    /// A minimal record pack in the layout `xerj corpus build` writes and
+    /// `harvest::pack::read_manifest` verifies.
+    fn record_pack(dir: &Path, slug: &str, created_at: &str, records: &str, licence: &str) {
+        fs::create_dir_all(dir).unwrap();
+        let hex = |b: &[u8]| -> String {
+            Sha256::digest(b)
+                .iter()
+                .map(|x| format!("{x:02x}"))
+                .collect()
+        };
+        fs::write(dir.join("records-000.jsonl"), records).unwrap();
+        fs::write(dir.join("recipe.toml"), "[recipe]\n").unwrap();
+        let n = records.lines().filter(|l| !l.trim().is_empty()).count();
+        let manifest = json!({
+            "format_version": 1, "kind": "harvested", "pack": slug,
+            "created_at": created_at, "generation": 3,
+            "counts": { "records": n },
+            "files": { "records-000.jsonl": { "sha256": hex(records.as_bytes()), "records": n } },
+            "sources": [ { "slug": "src", "licence": licence, "url": "https://x.test/src" } ],
+        });
+        let manifest = serde_json::to_string_pretty(&manifest).unwrap();
+        fs::write(dir.join("manifest.json"), &manifest).unwrap();
+        let sums = format!(
+            "{}  manifest.json\n{}  recipe.toml\n{}  records-000.jsonl\n",
+            hex(manifest.as_bytes()),
+            hex(b"[recipe]\n"),
+            hex(records.as_bytes())
+        );
+        fs::write(dir.join("SHA256SUMS"), sums).unwrap();
+    }
+
+    const RECORDS: &str = "{\"id\":\"A-1\",\"source\":\"src\"}\n";
+
+    #[test]
+    fn a_record_packs_pin_is_its_content_not_its_build_date() {
+        let tmp = tempfile::tempdir().unwrap();
+        let (a, b, c) = (
+            tmp.path().join("a"),
+            tmp.path().join("b"),
+            tmp.path().join("c"),
+        );
+        record_pack(&a, "rv", "2026-10-16T04:23:00Z", RECORDS, "CC0-1.0");
+        record_pack(&b, "rv", "2026-10-17T04:23:00Z", RECORDS, "CC0-1.0");
+        record_pack(
+            &c,
+            "rv",
+            "2026-10-17T04:23:00Z",
+            "{\"id\":\"A-2\",\"source\":\"src\"}\n",
+            "CC0-1.0",
+        );
+        let ma = record_pack_metadata(&a, "rv").unwrap();
+        let mb = record_pack_metadata(&b, "rv").unwrap();
+        let mc = record_pack_metadata(&c, "rv").unwrap();
+        assert_eq!(ma.pin_sha.len(), 40);
+        assert!(ma.pin_sha.chars().all(|c| c.is_ascii_hexdigit()));
+        assert_eq!(ma.pin_sha, mb.pin_sha, "same records, same pin");
+        assert_ne!(mb.pin_sha, mc.pin_sha, "a changed record moves the pin");
+        assert_eq!(ma.pin_date, "2026-10-16");
+        assert_eq!(mb.pin_date, "2026-10-17");
+        assert_eq!(ma.licence_spdx, "CC0-1.0");
+        assert_eq!(ma.licence_class, LicenceClass::AdaptWithAttribution);
+        assert_eq!(ma.sources.len(), 1);
+        assert_eq!(ma.sources[0].repo, "src");
+        assert_eq!(ma.sources[0].url, "https://x.test/src");
+    }
+
+    #[test]
+    fn a_record_packs_licence_follows_the_one_licence_policy_and_fails_closed() {
+        let tmp = tempfile::tempdir().unwrap();
+        let gpl = tmp.path().join("gpl");
+        record_pack(&gpl, "rv", "2026-10-16T00:00:00Z", RECORDS, "GPL-3.0");
+        let m = record_pack_metadata(&gpl, "rv").unwrap();
+        assert_eq!(m.licence_class, LicenceClass::ApproachOnly);
+        let none = tmp.path().join("none");
+        record_pack(&none, "rv", "2026-10-16T00:00:00Z", RECORDS, "");
+        let err = format!("{:#}", record_pack_metadata(&none, "rv").err().unwrap());
+        assert!(err.contains("records no licence"), "{err}");
+    }
+
+    #[test]
+    fn a_record_pack_for_another_slug_or_a_tampered_one_is_refused() {
+        let tmp = tempfile::tempdir().unwrap();
+        let dir = tmp.path().join("p");
+        record_pack(&dir, "rv", "2026-10-16T00:00:00Z", RECORDS, "CC0-1.0");
+        let err = format!("{:#}", record_pack_metadata(&dir, "other").err().unwrap());
+        assert!(err.contains("not 'other'"), "{err}");
+        fs::write(
+            dir.join("records-000.jsonl"),
+            "{\"id\":\"B\",\"source\":\"src\"}\n",
+        )
+        .unwrap();
+        assert!(record_pack_metadata(&dir, "rv").is_err());
+    }
+
+    #[test]
+    fn build_pack_takes_one_source_not_two() {
+        let args: Vec<String> = [
+            "rv",
+            "--registry",
+            "r",
+            "--from-pack",
+            "p",
+            "--out",
+            "o",
+            "--url",
+            "http://127.0.0.1:1",
+            "--sign-key",
+            "k",
+        ]
+        .iter()
+        .map(|s| s.to_string())
+        .collect();
+        assert_eq!(run_build_pack(&args), 2);
+    }
+
     #[test]
     fn a_refused_restore_names_the_exact_config_line_that_fixes_it() {
         let hub = tempfile::tempdir().unwrap();
@@ -1951,9 +2232,12 @@ mod tests {
         // `xerj hub pull <slug>` is a command anyone can type — including from a
         // hint an earlier run printed. Plan §11: an excluded licence class is never
         // pulled. The refusal is the pull's, before any node, download or temp dir.
-        let err = plan_pull_entry(&entry("gpl-thing", LicenceClass::Excluded, 1024))
-            .err()
-            .expect("refused");
+        let err = plan_pull_entry(
+            &entry("gpl-thing", LicenceClass::Excluded, 1024),
+            DISK_BUDGET_BYTES,
+        )
+        .err()
+        .expect("refused");
         assert_eq!(err.code, 1, "a policy refusal, exit 1");
         assert!(
             err.message.contains("excluded licence class"),
@@ -1966,10 +2250,14 @@ mod tests {
             "names the licence: {}",
             err.message
         );
-        // Excluded wins over the size cap: the licence is the first thing said.
-        let err = plan_pull_entry(&entry("gpl-thing", LicenceClass::Excluded, u64::MAX / 2))
-            .err()
-            .expect("refused");
+        // Excluded wins over the size cap: the licence is the first thing said,
+        // even for a pack far over any ceiling.
+        let err = plan_pull_entry(
+            &entry("gpl-thing", LicenceClass::Excluded, u64::MAX / 2),
+            DISK_BUDGET_BYTES,
+        )
+        .err()
+        .expect("refused");
         assert!(
             err.message.contains("excluded licence class"),
             "{}",
@@ -1978,25 +2266,77 @@ mod tests {
     }
 
     #[test]
-    fn pull_refuses_a_pack_over_the_cap_and_a_bad_slug_before_anything_else() {
-        let err = plan_pull_entry(&entry(
+    fn the_size_ceiling_is_the_callers_not_a_fixed_cap() {
+        // A pack just over the 50 MiB auto-pull cap. Under the AUTOMATIC ceiling it
+        // is refused — a question must never silently drag it down — and the refusal
+        // points at the command that CAN fetch it.
+        let big = entry(
             "big",
             LicenceClass::AdaptWithAttribution,
             AUTO_PULL_MAX_BYTES + 1,
-        ))
-        .err()
-        .expect("refused");
+        );
+        let err = plan_pull_entry(&big, AUTO_PULL_MAX_BYTES)
+            .err()
+            .expect("auto-pull refuses an over-cap pack");
         assert_eq!(err.code, 1);
         assert!(err.message.contains("over the"), "{}", err.message);
+        assert!(
+            err.message.contains("xerj hub pull"),
+            "the refusal names the explicit escape hatch: {}",
+            err.message
+        );
 
-        let err = plan_pull_entry(&entry("../../etc", LicenceClass::AdaptWithAttribution, 1))
+        // The SAME pack under the EXPLICIT ceiling (the disk budget) is NOT refused
+        // for its size: the person typing `xerj hub pull big` asked for exactly it.
+        // The only thing that may still stop it here is the key lookup (no hub key
+        // in a unit test) — never a size refusal. This is the fix: over-50-MiB
+        // corpora were previously unpullable by any route.
+        match plan_pull_entry(&big, DISK_BUDGET_BYTES) {
+            Ok(plan) => assert_eq!(plan.max_bytes, DISK_BUDGET_BYTES),
+            Err(e) => {
+                assert_eq!(
+                    e.code, E_NOKEY,
+                    "only a missing key may stop it: {}",
+                    e.message
+                );
+                assert!(
+                    !e.message.contains("not downloaded"),
+                    "an explicit pull must not refuse on size: {}",
+                    e.message
+                );
+            }
+        }
+
+        // A pack larger than the whole disk budget is refused even explicitly —
+        // it could not be stored — and says so.
+        let huge = entry(
+            "huge",
+            LicenceClass::AdaptWithAttribution,
+            DISK_BUDGET_BYTES + 1,
+        );
+        let err = plan_pull_entry(&huge, DISK_BUDGET_BYTES)
             .err()
-            .expect("refused");
+            .expect("over the disk budget is refused");
+        assert_eq!(err.code, 1);
+        assert!(err.message.contains("disk budget"), "{}", err.message);
+
+        let err = plan_pull_entry(
+            &entry("../../etc", LicenceClass::AdaptWithAttribution, 1),
+            DISK_BUDGET_BYTES,
+        )
+        .err()
+        .expect("refused");
         assert_eq!(err.code, 2, "a malformed slug is exit 2");
 
         let mut bad_pin = entry("ok", LicenceClass::AdaptWithAttribution, 1);
         bad_pin.pin_sha = "not-a-commit".to_string();
-        assert_eq!(plan_pull_entry(&bad_pin).err().expect("refused").code, 1);
+        assert_eq!(
+            plan_pull_entry(&bad_pin, DISK_BUDGET_BYTES)
+                .err()
+                .expect("refused")
+                .code,
+            1
+        );
     }
 
     #[test]
@@ -2007,7 +2347,7 @@ mod tests {
             LicenceClass::AdaptWithAttribution,
             LicenceClass::ApproachOnly,
         ] {
-            match plan_pull_entry(&entry("fine", class, 1024)) {
+            match plan_pull_entry(&entry("fine", class, 1024), DISK_BUDGET_BYTES) {
                 Ok(plan) => assert_eq!(plan.pin8, "0774d055"),
                 Err(e) => assert_eq!(
                     e.code, E_NOKEY,
