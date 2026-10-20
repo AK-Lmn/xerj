@@ -112,6 +112,8 @@ landing/resources/xerj-sales-kit.zip
 !README.md
 !/README.zh-CN.md
 !/README.ja-JP.md
+!/README.ar.md
+!/README.es.md
 !CLA.md
 !LICENSE
 !LICENSE.md
@@ -191,3 +193,6 @@ __pycache__/
 # in site generation or in any CI gate, and its only output was
 # .dogfood/seo/evidence/, so it follows the captures out of the tree.
 scripts/seo/evidence/
+
+# MCP Registry bundle build output (deploy/mcp-registry/build-mcpb.py)
+/dist/
