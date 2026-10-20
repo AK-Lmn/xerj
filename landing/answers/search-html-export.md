@@ -2,7 +2,7 @@
 ---
 title: "Search a help-center you saved as HTML"
 canonical: "https://xerj.org/answers/search-html-export"
-updated: "2026-08-21"
+updated: "2026-10-19"
 source: "content/answers/search-html-export.md"
 ---
 
@@ -112,3 +112,4 @@ No. The capture is a sampler at a 0.05 second interval, so a connection opening 
 - [How do I search a Confluence export?](/answers/search-confluence-html-export)
 - [Can ChatGPT search a folder on my laptop, or do I need something else?](/answers/give-chatgpt-claude-local-file-access)
 - [Pagefind vs indexing a local HTML dump for an agent?](/compare/xerj-vs-pagefind)
+- [Extract structured data from a web page into JSON with a schema, and prove each field](/answers/extract-structured-data-from-web-page-json-schema)

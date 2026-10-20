@@ -2,7 +2,7 @@
 ---
 title: "Local folder search vs a web agent search API"
 canonical: "https://xerj.org/compare/xerj-vs-web-agent-search"
-updated: "2026-08-23"
+updated: "2026-10-19"
 source: "content/compare/xerj-vs-web-agent-search.md"
 ---
 
@@ -162,3 +162,4 @@ Not by XERJ. A single-node XERJ process reads local files and answers on localho
 - [I want to point something at a folder and then ask questions about what's in it. What should I use?](/answers/how-xerj-autoindexes-a-folder)
 - [I saved a help-center as HTML. How do I search it like the real help-center search?](/answers/search-html-export)
 - [I have a folder of PDFs, Word docs, and markdown. How do I search all of them at once?](/answers/search-file-contents-in-a-folder)
+- [Extract structured data from a web page into JSON with a schema, and prove each field](/answers/extract-structured-data-from-web-page-json-schema)
