@@ -1,6 +1,6 @@
 //! xerj configuration system.
 //!
-//! Configuration is intentionally minimal: **134 settings** versus
+//! Configuration is intentionally minimal: **135 settings** versus
 //! Elasticsearch's 3000+. Every option is named, documented, and has a sensible
 //! production-ready default. The format is TOML, loaded from a single file.
 //!
@@ -108,7 +108,7 @@ pub struct Config {
     pub hub: HubConfig,
 }
 
-// 24 sub-configs, 134 leaf settings in total. Do not maintain that sum by hand
+// 24 sub-configs, 135 leaf settings in total. Do not maintain that sum by hand
 // — `journey_zero_config` in xerj-engine/tests/product_experience.rs counts a
 // serialised `Config::default()` and fails if this comment and the module
 // header stop matching. `Default` is derived: every field is a sub-config that
@@ -563,7 +563,7 @@ impl Config {
 }
 
 // ═════════════════════════════════════════════════════════════════════════════
-// Sub-configs  (134 user-facing settings total; counted by
+// Sub-configs  (135 user-facing settings total; counted by
 // `journey_zero_config`, not by hand)
 // ═════════════════════════════════════════════════════════════════════════════
 
@@ -1556,11 +1556,15 @@ impl LogsConfig {
 ///     default: lexical, *not* neural semantic understanding.
 ///   * `"neural"` — a built-in BERT sentence embedder (all-MiniLM-L6-v2 by
 ///     default) that runs in-process via `candle`. The model weights are
-///     downloaded once on first use (or read from
+///     downloaded and loaded at startup (or read from
 ///     [`local_model_dir`](Self::local_model_dir) for
-///     air-gapped deployments). The neural backend ships in the standard
-///     binary; a `--no-default-features` slim build omits it and falls back
-///     to lexical.
+///     air-gapped deployments; `HF_ENDPOINT` selects a Hub mirror). If that
+///     load fails, the process refuses to start (#1840) instead of accepting
+///     traffic and failing every ingest. It does not substitute the lexical
+///     embedder: those vectors are not comparable with neural vectors, the
+///     same fail-closed rule as explicit `"proxy"` (#1189). The neural
+///     backend ships in the standard binary; a `--no-default-features` slim
+///     build omits it and falls back to lexical, and identity reports lexical.
 ///   * `"proxy"` — call an external OpenAI-compatible `/v1/embeddings`
 ///     endpoint ([`default_endpoint`](Self::default_endpoint)). Lets
 ///     customers plug in ANY embedding model / provider they already run. An explicit `mode = "proxy"` with a
@@ -1703,7 +1707,7 @@ pub const AUTO_PROCESS_MEMORY_MB: u64 = u64::MAX;
 
 /// Resource limits.
 ///
-/// **14 settings.**
+/// **15 settings.**
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(default, deny_unknown_fields)]
 pub struct LimitsConfig {
@@ -1733,6 +1737,22 @@ pub struct LimitsConfig {
     /// path inside `data_dir` or inside one of these bases.
     #[serde(default)]
     pub snapshot_repo_allowlist: Vec<String>,
+    /// Let a snapshot **restore** (never a create) read from the Corpus Hub pack
+    /// cache of the user the server runs as — `$XERJ_HUB_HOME/packs`, else
+    /// `~/.xerj/hub/packs` (`xerj_common::hub::hub_packs_dir`) — without listing
+    /// it in `snapshot_repo_allowlist` (default: `true`).
+    ///
+    /// `xerj hub pull` / `xerj ask` download a signed pack, verify it, extract it
+    /// under that directory and ask the server to restore it. Before this, only
+    /// the node XERJ starts for itself allowlisted the directory, so a server the
+    /// user started by hand refused every pull. The grant is deliberately
+    /// narrower than an allowlist entry: restore only (a client cannot write a
+    /// snapshot into the user's home), honoured only while the directory is a
+    /// real directory — not a symlink — owned by the server's own user, and the
+    /// repo location is still canonicalized, so a symlink inside the cache that
+    /// points elsewhere is refused. Set `false` to allow `data_dir` and the
+    /// allowlist only.
+    pub hub_pack_restore: bool,
     /// Maximum HTTP request body size in bytes (default: `100 * 1024 * 1024`,
     /// i.e. 100 MiB). Caps NDJSON bulk payloads, large mget bodies, etc.
     /// Raise this only if your client routinely sends bigger requests; the
@@ -1838,6 +1858,7 @@ impl Default for LimitsConfig {
             max_fields_per_index: 500,
             max_actions_per_bulk: 50_000,
             snapshot_repo_allowlist: Vec::new(),
+            hub_pack_restore: true,
             max_body_bytes: 100 * 1024 * 1024,
             max_result_window: 10_000,
             max_mget_docs: 10_000,
@@ -3702,7 +3723,7 @@ mod tests {
         ("vector", 6),
         ("logs", 2),
         ("embedding", 20),
-        ("limits", 14),
+        ("limits", 15),
         ("indexing", 3),
         ("engine", 4),
         ("cluster", 5),
@@ -3757,7 +3778,7 @@ mod tests {
             "the section table must sum to the whole config"
         );
         assert_eq!(
-            total, 134,
+            total, 135,
             "the total settings count changed. It is quoted in this module's \
              header, in xerj-common/src/lib.rs, in engine/README.md, in \
              xerj.default.toml and in EXPECTED_SETTINGS in \

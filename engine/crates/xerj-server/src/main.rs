@@ -240,10 +240,10 @@ where
                 println!("xerj v{}", env!("CARGO_PKG_VERSION"));
                 std::process::exit(0);
             }
-            other => {
-                eprintln!("unknown argument: {other}. Use --help for usage.");
-                std::process::exit(1);
-            }
+            // A usage error exits 2 (the same code `parse_args` uses for a
+            // missing flag value). Exiting 1 here made `xerj nosuch` disagree
+            // with the documented "usage is 2" rule.
+            other => return Err(format!("unknown argument: {other}")),
         }
     }
 
@@ -290,15 +290,15 @@ fn help_text(feedback: bool) -> String {
          \x20\x20\x20\x20xerj corpus add|index|list          the corpus lifecycle behind `xerj code`\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20(see xerj corpus --help)\n\
          {ask_lines}\
-         xerj index [OPTIONS]                direct NDJSON → engine ingest (see xerj\n\
+         \x20\x20\x20\x20xerj index [OPTIONS]                direct NDJSON → engine ingest (see xerj\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20index --help)\n\
          \x20\x20\x20\x20xerj brain <folder>                 index + browse in one command (see xerj\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20brain --help)\n\
          \x20\x20\x20\x20xerj share <index|folder>           give someone read-only search over one\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20index: link + passcode + expiry (see xerj\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20share --help)\n\
-         \x20\x20\x20\x20xerj feedback [OPTIONS]             draft the agent field report (and open its\n\
-         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20PR) — see xerj feedback --help\n\
+         \x20\x20\x20\x20xerj feedback [OPTIONS]             draft or --submit the agent field report —\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20see xerj feedback --help\n\
          \n\
          OPTIONS (for `xerj [OPTIONS]`, the bare server start):\n\
          \x20\x20\x20\x20--config,   -c <PATH>  Path to TOML config file. CORS is off by default (no\n\
@@ -319,13 +319,24 @@ fn help_text(feedback: bool) -> String {
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20Auth is ON by default, so without this flag every client\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20(`xerj autoindex` and `xerj brain` included) must send the\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20key this server writes to <data_dir>/admin.key on first\n\
-         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20start — export XERJ_API_KEY=$(cat ./data/admin.key)\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20start. The default data directory is ./data. Keep it outside any folder\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20you will autoindex — ./data inside that tree gets indexed, because data/\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20is not in the built-in ignore list. Start it with xerj --data-dir ~/xerj-data\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20(Windows: $HOME\\xerj-data), then:\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20export XERJ_API_KEY=\"$(cat ~/xerj-data/admin.key)\"\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20On Windows PowerShell:\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20$env:XERJ_API_KEY = Get-Content \"$env:USERPROFILE\\xerj-data\\admin.key\"\n\
          \x20\x20\x20\x20--embed-mode <MODE>    Embedding backend: lexical | neural | proxy | auto |\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20onnx-experimental\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20lexical  built-in feature-hash (default; offline, not neural)\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20neural   built-in BERT (all-MiniLM-L6-v2) — real semantics,\n\
-         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20in-process; auto-downloads the model (~90 MB) on\n\
-         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20first use, then runs from cache. Just add the flag.\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20in-process. The model (~90 MB) loads at startup:\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20downloaded from the HuggingFace Hub, or read from\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20embedding.local_model_dir, then cached. If that load\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20fails, the process refuses to start. It does not keep\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20running and fail every ingest, and it does not write\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20lexical vectors. Restart with: xerj --embed-mode lexical\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20Or set HF_ENDPOINT to a Hub mirror and start again.\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20proxy    external OpenAI-compatible /v1/embeddings endpoint\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20auto     proxy if embedding.default_endpoint is set, else lexical\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20onnx-experimental  local all-MiniLM-L6-v2-compatible FP32\n\
@@ -408,8 +419,8 @@ fn help_text(feedback: bool) -> String {
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20Proxies to a node you already started — set XERJ_URL or\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20--url (see xerj mcp --help)\n\
          \x20\x20\x20\x20xerj feedback   [opts]          draft the agent field report XERJ asks every agent to\n\
-         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20file, auto-filling version/OS/what-was-indexed; --open-pr\n\
-         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20files it, --dry-run just prints (see xerj feedback --help)\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20file; --submit sends it (GitHub PR first, API fallback),\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20--dry-run just prints (see xerj feedback --help)\n\
          \n\
          SEARCHING A CODEBASE:\n\
          \x20\x20\x20\x20A search hit returns the whole indexed document, which for source code is the\n\
@@ -475,20 +486,43 @@ fn help_text(feedback: bool) -> String {
 /// pack, so there the line says the command is unavailable instead of
 /// promising a pull that will only ever exit 5.
 fn ask_help_lines(hub: bool) -> &'static str {
+    // A trailing `\` eats the next line's source indent. The four spaces on
+    // the command, and the wrap under the description, are `\x20` so they
+    // survive. Descriptions in this block start at column 40, same as the
+    // other USAGE lines.
     if hub {
-        "xerj ask \"<question>\"              answer a question from a hub corpus: the\n\
-         pre-indexed pack is pulled the first time\n\
-         (see xerj ask --help); `xerj \"<question>\"`\n\
-         is the same\n"
+        "\x20\x20\x20\x20xerj ask \"<question>\"               answer a question from a hub corpus: the\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20pre-indexed pack is pulled the first time\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20(see xerj ask --help); `xerj \"<question>\"`\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20is the same\n"
     } else {
-        "xerj ask \"<question>\"              Corpus Hub answers: not available in this\n\
-         build (no hub signing key; exits 5) - use\n\
-         xerj corpus + xerj code instead\n"
+        "\x20\x20\x20\x20xerj ask \"<question>\"              Corpus Hub answers: not available in this\n\
+         \x20\x20\x20\x20build (no hub signing key; exits 5).\n\
+         \x20\x20\x20\x20A folder you autoindexed: xerj search / xerj def.\n\
+         \x20\x20\x20\x20Public libraries: xerj corpus + xerj code\n"
     }
 }
 
 /// How many tools `xerj mcp` serves — the length of the same `tool_specs()`
 /// array its `tools/list` returns.
+#[cfg(test)]
+mod ask_help_tests {
+    use super::ask_help_lines;
+
+    #[test]
+    fn a_build_without_a_hub_key_does_not_send_ask_at_the_local_index() {
+        let lines = ask_help_lines(false);
+        assert!(lines.contains("exits 5"), "{lines}");
+        assert!(lines.contains("xerj search"), "{lines}");
+        assert!(lines.contains("xerj def"), "{lines}");
+        assert!(lines.contains("xerj corpus"), "{lines}");
+        assert!(
+            ask_help_lines(true).contains("xerj ask"),
+            "a build with a key still documents the command"
+        );
+    }
+}
+
 fn mcp_tool_count() -> usize {
     xerj_mcp::tool_specs().as_array().map_or(0, Vec::len)
 }
@@ -527,6 +561,17 @@ struct BoundAddrs {
     rest: SocketAddr,
     es: SocketAddr,
     grpc: SocketAddr,
+}
+
+/// The auth-disabled posture line. On loopback the bind line says nothing
+/// off this host can reach the listeners, so this line must not then say
+/// the network can write.
+fn auth_disabled_line(loopback: bool) -> &'static str {
+    if loopback {
+        " │ ⚠  Auth:   DISABLED (--insecure) — every caller on this machine can write"
+    } else {
+        " │ ⚠  Auth:   DISABLED (--insecure) — anyone on the network can write"
+    }
 }
 
 fn print_banner(cfg: &Config, bound: &BoundAddrs, startup_ms: u128) {
@@ -617,7 +662,10 @@ fn print_banner(cfg: &Config, bound: &BoundAddrs, startup_ms: u128) {
         }
     }
     if !cfg.auth.enabled {
-        println!(" │ ⚠  Auth:   DISABLED (--insecure) — anyone on the network can write");
+        // The bind line above already said whether anything off this host can
+        // connect. Repeating "anyone on the network" on a loopback node
+        // contradicts that line.
+        println!("{}", auth_disabled_line(cfg.bind_address_is_loopback()));
     } else {
         println!(
             " │ ✓  Auth:   single API-key (no RBAC; per-doc / per-field controls roadmap v0.9)"
@@ -1273,9 +1321,64 @@ async fn serve(
 /// can never advertise a port another process owns — the failure mode that
 /// sent one user's contracts, invoices and bank export into a stranger's data
 /// directory under `ok=true exit=0` (issue #465).
+/// The `[server]` config key that moves only this listener.
+fn listener_port_key(name: &str) -> &'static str {
+    match name {
+        "ES-compat" => "es_compat_port",
+        "native REST" => "rest_port",
+        "gRPC" => "grpc_port",
+        _ => "es_compat_port / rest_port / grpc_port",
+    }
+}
+
+/// What startup prints when a listener cannot be bound.
+///
+/// Always `{name}: bind {addr}: {OS error}` first — the listener, the address
+/// and the reason, which is what the #465 process test pins — then, for the
+/// two failures an operator fixes by moving the port, the flags that move it.
+///
+/// #1687 added a hint for `AddrInUse` only, and #1778 re-appended the OS
+/// reason after it. Two gaps remained. The hint told every listener to "pass
+/// --port <PORT> to pick a different one", but `--port` sets the ES-compat
+/// port and puts native REST on PORT+1 and gRPC on PORT+2, so for those two
+/// it read as if `--port` were their own port. And the Windows refusal from
+/// #1723 / #1738 (`os error 10013`, WSAEACCES — usually a port inside a
+/// Hyper-V/WinNAT excluded range) is `PermissionDenied`, not `AddrInUse`, so
+/// it still printed the bare `native REST: bind 127.0.0.1:8080` with no hint.
+fn bind_error_message(name: &str, addr: SocketAddr, err: &std::io::Error) -> String {
+    let key = listener_port_key(name);
+    let move_it = "--port <BASE> moves all three listeners together (ES-compat BASE, \
+         native REST BASE+1, gRPC BASE+2; e.g. --port 9300)";
+    let only_this =
+        format!("or set `{key}` under [server] in a --config file to move only this one");
+    let not_a_server =
+        "If you did not mean to start a server, `xerj --help` lists the subcommands.";
+    match err.kind() {
+        std::io::ErrorKind::AddrInUse => format!(
+            "{name}: bind {addr}: {err}. Another process is already listening there. \
+             {move_it}, --auto-port takes the next free ports, {only_this}. {not_a_server}"
+        ),
+        std::io::ErrorKind::PermissionDenied => {
+            // `--auto-port` only steps past ports that are in use, so it is
+            // not offered for a refused one.
+            let cause = if cfg!(windows) {
+                "Windows refused the port; it is often inside a range reserved by \
+                 Hyper-V or WinNAT (list them with \
+                 `netsh int ipv4 show excludedportrange protocol=tcp`)."
+            } else if addr.port() < 1024 {
+                "Ports below 1024 need elevated privileges."
+            } else {
+                "The operating system refused the port."
+            };
+            format!("{name}: bind {addr}: {err}. {cause} {move_it}, {only_this}. {not_a_server}")
+        }
+        _ => format!("{name}: bind {addr}: {err}"),
+    }
+}
+
 fn bind_listener(addr: SocketAddr, name: &str) -> Result<std::net::TcpListener> {
-    let listener =
-        std::net::TcpListener::bind(addr).with_context(|| format!("{name}: bind {addr}"))?;
+    let listener = std::net::TcpListener::bind(addr)
+        .map_err(|e| anyhow::anyhow!("{}", bind_error_message(name, addr, &e)))?;
     // Both axum's accept loop and axum-server's rustls acceptor drive this
     // listener from the reactor; a blocking fd would stall the runtime thread
     // on the first accept.
@@ -1283,6 +1386,91 @@ fn bind_listener(addr: SocketAddr, name: &str) -> Result<std::net::TcpListener> 
         .set_nonblocking(true)
         .with_context(|| format!("{name}: set the listener on {addr} non-blocking"))?;
     Ok(listener)
+}
+
+#[cfg(test)]
+mod bind_listener_tests {
+    use super::{bind_error_message, bind_listener};
+    use std::io::{Error, ErrorKind};
+    use std::net::SocketAddr;
+
+    #[test]
+    fn a_taken_port_names_port_and_auto_port() {
+        let held = std::net::TcpListener::bind("127.0.0.1:0").expect("bind a free port");
+        let addr = held.local_addr().expect("read the held address");
+        let err = bind_listener(addr, "ES-compat").expect_err("the port is held");
+        let msg = format!("{err:#}");
+        assert!(msg.contains("--port"), "{msg}");
+        assert!(msg.contains("--auto-port"), "{msg}");
+        assert!(msg.contains("xerj --help"), "{msg}");
+        // #465's contract: the listener, the address, and the OS reason.
+        assert!(msg.contains(&format!("ES-compat: bind {addr}: ")), "{msg}");
+        assert!(msg.contains("os error"), "the OS error is kept: {msg}");
+        assert!(msg.contains("`es_compat_port`"), "{msg}");
+    }
+
+    /// `--port` is the ES-compat port; the hint for the other two listeners
+    /// must say how it moves them and name the key that moves only them.
+    #[test]
+    fn each_listener_names_its_own_key_and_how_port_moves_it() {
+        let addr: SocketAddr = "127.0.0.1:8080".parse().unwrap();
+        let os = Error::from(ErrorKind::AddrInUse);
+        for (name, key) in [
+            ("ES-compat", "es_compat_port"),
+            ("native REST", "rest_port"),
+            ("gRPC", "grpc_port"),
+        ] {
+            let msg = bind_error_message(name, addr, &os);
+            assert!(msg.starts_with(&format!("{name}: bind {addr}: ")), "{msg}");
+            assert!(msg.contains(&format!("`{key}`")), "{msg}");
+            assert!(msg.contains("native REST BASE+1, gRPC BASE+2"), "{msg}");
+            assert!(msg.contains("--auto-port"), "{msg}");
+        }
+    }
+
+    /// #1723 / #1738: Windows' `os error 10013` is `PermissionDenied`, and it
+    /// printed no hint at all. `--auto-port` is not offered: it only steps
+    /// past ports that are in use.
+    #[test]
+    fn a_refused_port_gets_a_hint_without_auto_port() {
+        let os = Error::from(ErrorKind::PermissionDenied);
+        let high: SocketAddr = "127.0.0.1:8080".parse().unwrap();
+        let msg = bind_error_message("native REST", high, &os);
+        assert!(
+            msg.starts_with("native REST: bind 127.0.0.1:8080: "),
+            "{msg}"
+        );
+        assert!(msg.contains("--port <BASE>"), "{msg}");
+        assert!(msg.contains("`rest_port`"), "{msg}");
+        assert!(!msg.contains("--auto-port"), "{msg}");
+        if cfg!(windows) {
+            assert!(msg.contains("excludedportrange"), "{msg}");
+        } else {
+            let low: SocketAddr = "127.0.0.1:80".parse().unwrap();
+            let msg = bind_error_message("native REST", low, &os);
+            assert!(msg.contains("below 1024"), "{msg}");
+        }
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn wsaeacces_is_classified_as_a_refused_port() {
+        // WSAEACCES, the code in both field reports.
+        let os = Error::from_raw_os_error(10013);
+        let addr: SocketAddr = "127.0.0.1:8080".parse().unwrap();
+        let msg = bind_error_message("native REST", addr, &os);
+        assert!(msg.contains("excludedportrange"), "{msg}");
+        assert!(msg.contains("os error 10013"), "{msg}");
+    }
+
+    /// Anything else keeps the plain `{name}: bind {addr}: {reason}`.
+    #[test]
+    fn other_bind_errors_are_not_given_a_port_hint() {
+        let os = Error::from(ErrorKind::AddrNotAvailable);
+        let addr: SocketAddr = "10.255.255.1:9200".parse().unwrap();
+        let msg = bind_error_message("ES-compat", addr, &os);
+        assert_eq!(msg, format!("ES-compat: bind {addr}: {os}"));
+    }
 }
 
 /// If `data_dir` is currently locked by another live process, find the first
@@ -1370,7 +1558,7 @@ fn bind_listener_candidate(
                 return Ok((listener, candidate));
             }
             Err(e) if e.kind() == std::io::ErrorKind::AddrInUse => {}
-            Err(e) => return Err(anyhow::anyhow!("{name}: bind {addr}: {e}")),
+            Err(e) => return Err(anyhow::anyhow!("{}", bind_error_message(name, addr, &e))),
         }
     }
 
@@ -1431,14 +1619,35 @@ async fn serve_on(
     // (Netty) sets this by default; without it small request/response
     // round-trips can stall on the delayed-ACK/Nagle interaction, which
     // shows up as a fixed per-request latency tax on trivial reads.
-    axum::serve(
+    //
+    // Bounded drain (#1635): `with_graceful_shutdown` stops accepting on
+    // signal but then waits forever for in-flight connections to drain.  A
+    // request parked on a wedged flush never drains, so SIGTERM would hang
+    // the process until SIGKILL.  Mirror the TLS path's 10 s grace: once the
+    // signal fires, give drainers 10 s, then force the listener down.
+    let (drain_tx, drain_rx) = tokio::sync::oneshot::channel::<()>();
+    let serve = axum::serve(
         listener,
         router.into_make_service_with_connect_info::<SocketAddr>(),
     )
     .tcp_nodelay(true)
-    .with_graceful_shutdown(shutdown_signal())
-    .await
-    .with_context(|| format!("{name} serve error"))?;
+    .with_graceful_shutdown(async move {
+        shutdown_signal().await;
+        let _ = drain_tx.send(());
+    });
+    // `with_graceful_shutdown` yields an `IntoFuture`, not a `Future`; the
+    // select arm polls `&mut serve`, so turn it into a concrete future first.
+    let serve = std::future::IntoFuture::into_future(serve);
+    tokio::pin!(serve);
+    tokio::select! {
+        r = &mut serve => r.with_context(|| format!("{name} serve error"))?,
+        _ = async {
+            let _ = drain_rx.await;
+            tokio::time::sleep(std::time::Duration::from_secs(10)).await;
+        } => {
+            warn!("{name}: in-flight connections did not drain within 10s of signal; forcing shutdown");
+        }
+    }
 
     info!("{name} shut down cleanly");
     Ok(())
@@ -1487,8 +1696,20 @@ fn parse_count(flag: &str, next: Option<String>) -> Result<usize, String> {
 }
 
 fn parse_index_args() -> IndexCmdArgs {
-    // Skip argv[0] (binary) + argv[1] ("index").
-    let mut args = xerj_common::argv::args_after_subcommand().into_iter();
+    // Arguments after "index", including a flag that was written before it.
+    parse_index_args_from(xerj_common::argv::args_after_subcommand().into_iter()).unwrap_or_else(
+        |e| {
+            eprintln!("error: {e}. Use --help for usage.");
+            std::process::exit(2);
+        },
+    )
+}
+
+fn parse_index_args_from<I>(args: I) -> Result<IndexCmdArgs, String>
+where
+    I: Iterator<Item = String>,
+{
+    let mut args = args;
     let mut index = None;
     let mut file = None;
     let mut batch = 5000usize;
@@ -1511,23 +1732,14 @@ fn parse_index_args() -> IndexCmdArgs {
                 print_index_help();
                 std::process::exit(0);
             }
-            other => {
-                eprintln!("unknown argument: {other}. Use --help for usage.");
-                std::process::exit(1);
-            }
+            other => return Err(format!("unknown argument: {other}")),
         }
     }
 
-    let index = index.unwrap_or_else(|| {
-        eprintln!("error: --index <name> is required");
-        std::process::exit(2);
-    });
-    let file = file.unwrap_or_else(|| {
-        eprintln!("error: --file <path> is required");
-        std::process::exit(2);
-    });
+    let index = index.ok_or("--index <name> is required")?;
+    let file = file.ok_or("--file <path> is required")?;
 
-    IndexCmdArgs {
+    Ok(IndexCmdArgs {
         index,
         file,
         batch,
@@ -1535,7 +1747,7 @@ fn parse_index_args() -> IndexCmdArgs {
         limit,
         config,
         data_dir,
-    }
+    })
 }
 
 fn print_index_help() {
@@ -2064,6 +2276,14 @@ fn main() -> Result<()> {
     #[cfg(unix)]
     raise_nofile_limit();
 
+    // Dispatch before creating Tokio's pool so each PDF worker stays small.
+    // Before the flag hoist below, too: the hoist reads `std::env::args()`,
+    // which panics on a non-UTF-8 argument, and a worker's PDF path may be
+    // one. Only `args_os` is read here.
+    if std::env::args_os().nth(1).as_deref() == Some(std::ffi::OsStr::new("__extract-pdf")) {
+        std::process::exit(xerj_autoindex::extract::pdf::run_worker_cli());
+    }
+
     // `xerj --url URL corpus index name` used to die here as an unknown
     // server flag. Move those flags behind the subcommand before any
     // dispatch reads argv.
@@ -2071,14 +2291,6 @@ fn main() -> Result<()> {
         &std::env::args().skip(1).collect::<Vec<_>>(),
         is_top_level_command,
     ));
-
-    // Dispatch before creating Tokio's pool so each PDF worker stays small.
-    if matches!(
-        xerj_common::argv::subcommand().as_deref(),
-        Some("__extract-pdf")
-    ) {
-        std::process::exit(xerj_autoindex::extract::pdf::run_worker_cli());
-    }
 
     // The isolated legacy-`.xls` BIFF reader. calamine 0.26.1 panics on crafted
     // records (short `Lbl`/`ExternSheet`) and the release profile is
@@ -2126,7 +2338,33 @@ fn main() -> Result<()> {
         .filter(|&n| n > 0)
         .unwrap_or_else(|| (cores * 8).clamp(64, 512));
     let rt = build_runtime(worker_threads)?;
-    rt.block_on(async_main())
+    run_to_exit(rt, async_main())
+}
+
+/// How long exit waits for blocking jobs still running after `async_main`
+/// returns ("Goodbye" has been logged and the final flush is done).
+const RUNTIME_SHUTDOWN_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(5);
+
+/// Drive the server future to completion, then tear the runtime down without
+/// waiting more than [`RUNTIME_SHUTDOWN_TIMEOUT`] for blocking jobs.
+///
+/// Dropping a `Runtime` joins its blocking pool with no time limit. After
+/// SIGTERM the one job left there is usually a background merge, detached by
+/// `spawn_blocking` and parked in the merge pool, which can spend minutes
+/// compressing a large column at zstd 19 on a low-priority thread. The
+/// process then outlived "Goodbye" by however long that merge had left
+/// (90 s+ measured on macOS), and a supervisor's stop timeout killed it.
+///
+/// Walking away from that merge is safe: a merge publishes atomically through
+/// `apply_merge`, and an unfinished batch leaves its input segments untouched
+/// (the LOSS FIREWALL notes in `xerj-engine`'s `index.rs`). The final
+/// `flush_all_force` has completed before `async_main` returns, and leaving a
+/// job unfinished here is no different from the SIGKILL or power loss the
+/// engine is already built to recover from.
+fn run_to_exit<F: std::future::Future>(rt: tokio::runtime::Runtime, fut: F) -> F::Output {
+    let out = rt.block_on(fut);
+    rt.shutdown_timeout(RUNTIME_SHUTDOWN_TIMEOUT);
+    out
 }
 
 /// Explicit worker-thread stack size for the production Tokio runtime.
@@ -2185,9 +2423,186 @@ fn build_runtime(worker_threads: usize) -> Result<tokio::runtime::Runtime> {
         .context("build tokio runtime")
 }
 
+/// #1840: a neural startup whose Hub cannot be reached fails once, here,
+/// before any listener exists. This lives in `xerj-server` because that
+/// crate's default features include `neural`, which is what
+/// `cargo test --workspace` actually runs. `xerj-ai`'s own tests do not
+/// enable the feature unless asked.
+#[cfg(all(test, feature = "neural"))]
+mod neural_startup_tests {
+    use xerj_ai::neural::{startup_failure_message, NeuralConfig};
+    use xerj_ai::Embedder;
+
+    /// Closed port on loopback. Connection refused is local and immediate;
+    /// nothing is sent off the machine.
+    const UNREACHABLE_HUB: &str = "http://127.0.0.1:1";
+
+    #[test]
+    fn unreachable_hub_refuses_once_and_does_not_install_lexical() {
+        let cache = tempfile::tempdir().unwrap();
+        let cfg = NeuralConfig {
+            model_id: "sentence-transformers/all-MiniLM-L6-v2".into(),
+            cache_dir: Some(cache.path().to_path_buf()),
+            local_dir: None,
+            hub_endpoint: Some(UNREACHABLE_HUB.into()),
+        };
+        // `NeuralEmbedder` is not `Debug`, so `expect_err` cannot name the Ok side.
+        let error = match Embedder::preload_neural(&cfg) {
+            Ok(_) => panic!("a closed hub must not load a model"),
+            Err(error) => error,
+        };
+        let message = startup_failure_message(&cfg.model_id, &error);
+        assert!(
+            message.contains("127.0.0.1") || message.contains("Connection refused"),
+            "the cause must be the closed local hub, not a real download: {message}"
+        );
+        assert!(
+            message.contains("xerj --embed-mode lexical"),
+            "the error must give the lexical command: {message}"
+        );
+        assert!(
+            message.contains("embedding.local_model_dir"),
+            "the error must name the offline model directory: {message}"
+        );
+        assert!(
+            message.contains("HF_ENDPOINT"),
+            "the error must name the mirror variable: {message}"
+        );
+        assert!(
+            message.contains("Refusing to start"),
+            "the error must say the process will not start: {message}"
+        );
+        assert!(
+            !message
+                .to_ascii_lowercase()
+                .contains("falling back to lexical"),
+            "must not describe a lexical swap: {message}"
+        );
+        // The shared cell stays empty, so a later embed cannot pretend the
+        // model loaded. Preload's return type is the neural model itself:
+        // failure cannot hand back a lexical embedder.
+        assert!(
+            Embedder::preload_neural(&cfg).is_err(),
+            "a second attempt must still fail rather than reuse a lexical stand-in"
+        );
+    }
+
+    #[test]
+    fn missing_local_model_refuses_with_the_same_startup_error() {
+        let dir = tempfile::tempdir().unwrap();
+        let cfg = xerj_common::config::EmbeddingConfig {
+            mode: "neural".into(),
+            local_model_dir: dir.path().to_string_lossy().into_owned(),
+            ..Default::default()
+        };
+        let error = xerj_engine::index::ensure_neural_ready(&cfg)
+            .expect_err("an empty local model directory must refuse startup");
+        let message = error.to_string();
+        assert!(
+            message.contains("embedding.mode=neural"),
+            "must name the setting: {message}"
+        );
+        assert!(
+            message.contains("xerj --embed-mode lexical"),
+            "must give the lexical command: {message}"
+        );
+        assert!(
+            message.contains("model.safetensors") || message.contains("missing"),
+            "must name the missing local asset: {message}"
+        );
+        assert!(
+            !message.contains("127.0.0.1"),
+            "a local directory must not contact the hub: {message}"
+        );
+    }
+}
+
 #[cfg(test)]
 mod help_text_tests {
-    use super::help_text;
+    use super::{auth_disabled_line, help_text};
+
+    /// #1840: `--embed-mode neural` must say the model loads at startup and
+    /// that a failed download refuses to start, with the lexical command.
+    #[test]
+    fn neural_help_says_a_failed_download_refuses_to_start() {
+        let help = help_text(true);
+        let neural = help
+            .lines()
+            .position(|line| line.contains("neural   built-in BERT"))
+            .expect("neural mode must be documented");
+        let window: String = help
+            .lines()
+            .skip(neural)
+            .take(12)
+            .collect::<Vec<_>>()
+            .join("\n");
+        assert!(
+            window.contains("loads at startup"),
+            "neural help must say the model loads at startup:\n{window}"
+        );
+        assert!(
+            window.contains("refuses to start"),
+            "neural help must say a failed load refuses to start:\n{window}"
+        );
+        assert!(
+            window.contains("xerj --embed-mode lexical"),
+            "neural help must give the lexical command:\n{window}"
+        );
+        assert!(
+            window.contains("embedding.local_model_dir"),
+            "neural help must name the offline model directory:\n{window}"
+        );
+        assert!(
+            window.contains("HF_ENDPOINT"),
+            "neural help must name the Hub mirror variable:\n{window}"
+        );
+    }
+
+    /// A loopback `--insecure` boot says nothing off this host can connect,
+    /// then used to say anyone on the network can write. Those two lines
+    /// cannot both be true.
+    #[test]
+    fn insecure_loopback_does_not_say_the_network_can_write() {
+        let loopback = auth_disabled_line(true);
+        assert!(
+            loopback.contains("this machine"),
+            "loopback auth line must name this machine: {loopback}"
+        );
+        assert!(
+            !loopback.contains("network"),
+            "loopback auth line must not claim the network can write: {loopback}"
+        );
+        let exposed = auth_disabled_line(false);
+        assert!(
+            exposed.contains("anyone on the network can write"),
+            "a non-loopback bind is the network case: {exposed}"
+        );
+    }
+
+    /// `--help` used to show `cat ./data/admin.key`. The default data dir is
+    /// `./data`, and llms.txt says that path inside a folder you autoindex
+    /// indexes the node's own storage. The installer starts with `~/xerj-data`.
+    /// Help outranks the website, so the example agents copy has to be that path.
+    #[test]
+    fn insecure_help_example_keeps_the_data_dir_outside_the_tree() {
+        let help = help_text(true);
+        assert!(
+            help.contains("~/xerj-data/admin.key"),
+            "the export example must be the outside-the-tree data dir:\n{help}"
+        );
+        assert!(
+            help.contains("USERPROFILE"),
+            "Windows must get a path too:\n{help}"
+        );
+        assert!(
+            !help.contains("cat ./data/admin.key"),
+            "the old in-tree example is what agents copy"
+        );
+        assert!(
+            help.contains("default data directory is ./data"),
+            "omitting --data-dir still writes ./data, and the help must say so"
+        );
+    }
 
     /// `--insecure` disables TLS **and** auth (see `apply_overrides`, which
     /// sets `cfg.tls.enabled = false; cfg.auth.enabled = false;`), but the
@@ -2270,6 +2685,43 @@ mod help_text_tests {
             index_lines[fb + 1]
         );
     }
+
+    /// `xerj ask` and the `xerj index` line after it used to start at column 0.
+    /// A trailing `\` in the help string eats the next line's source indent,
+    /// and those two lines were the ones that still relied on it.
+    #[test]
+    fn usage_command_lines_keep_their_indent() {
+        for hub in [false, true] {
+            for line in super::ask_help_lines(hub).lines().filter(|l| !l.is_empty()) {
+                assert!(
+                    line.starts_with("    "),
+                    "ask usage line lost its indent (hub={hub}): {line:?}"
+                );
+            }
+        }
+        let help = help_text(false);
+        let usage = help
+            .split_once("USAGE:")
+            .expect("USAGE")
+            .1
+            .split_once("\nOPTIONS ")
+            .expect("OPTIONS")
+            .0;
+        for line in usage.lines().filter(|l| l.contains("xerj ")) {
+            assert!(
+                line.starts_with("    "),
+                "a USAGE line lost its indent: {line:?}"
+            );
+        }
+        assert!(
+            usage.contains("\n    xerj index "),
+            "xerj index lost the indent the other commands have:\n{usage}"
+        );
+        assert!(
+            usage.contains("\n    xerj ask "),
+            "xerj ask lost the indent the other commands have:\n{usage}"
+        );
+    }
 }
 
 /// `--decide-mode` / `--decide-model-dir` (#1057 tier 2): the CLI grammar and
@@ -2336,6 +2788,18 @@ mod decide_flag_tests {
     }
 
     #[test]
+    fn an_unknown_argument_is_a_usage_error_not_a_process_exit() {
+        // Usage errors exit 2 via `parse_args`. This used to `process::exit(1)`
+        // inside the parser, so the documented usage code never ran.
+        let err = parse_args_from(argv(&["not-a-subcommand"])).unwrap_err();
+        assert!(err.contains("unknown argument: not-a-subcommand"), "{err}");
+        let err = super::parse_index_args_from(argv(&["--nope"])).unwrap_err();
+        assert!(err.contains("unknown argument: --nope"), "{err}");
+        let err = super::parse_index_args_from(argv(&["--index", "logs"])).unwrap_err();
+        assert!(err.contains("--file"), "{err}");
+    }
+
+    #[test]
     fn index_counts_refuse_a_non_number_instead_of_defaulting() {
         use super::parse_count;
         assert_eq!(parse_count("--batch", Some("200".into())), Ok(200));
@@ -2351,12 +2815,13 @@ mod decide_flag_tests {
     #[test]
     fn help_counts_the_mcp_tools_actually_served() {
         // #1443: the help said "exposes 13 tools" while `tools/list` served 16.
+        // `xerj_field_report` is a fourteenth non-hub tool (seventeen with the hub).
         let served = super::mcp_tool_count();
         if xerj_common::hub::hub_key_configured() {
-            assert!(served >= 16, "tool_specs() shrank to {served}");
+            assert!(served >= 17, "tool_specs() shrank to {served}");
         } else {
             assert_eq!(
-                served, 13,
+                served, 14,
                 "a no-key process must not count the hub tools it does not serve"
             );
         }
@@ -2537,9 +3002,87 @@ mod decide_flag_tests {
     }
 }
 
+/// Return every jemalloc arena's dirty pages to the OS (`arena.4096.purge`,
+/// 4096 being `MALLCTL_ARENAS_ALL`).
+///
+/// `arena.<i>.purge` is a void control: jemalloc rejects it with EPERM unless
+/// all four of `oldp`, `oldlenp`, `newp` and `newlen` are null/0
+/// (`NEITHER_READ_NOR_WRITE` in jemalloc's `ctl.c`). The earlier
+/// `tikv_jemalloc_ctl::raw::write(.., 0u64)` passed a value, so every purge
+/// failed and the error was discarded. On Linux `background_thread:true`
+/// hid it; on macOS there is no background thread, and the drain freed
+/// nothing back to the OS.
+#[cfg(not(target_env = "msvc"))]
+fn purge_all_jemalloc_arenas() -> Result<(), i32> {
+    // SAFETY: the name is a NUL-terminated literal naming a real ctl node,
+    // and a void control reads and writes nothing, so null pointers and a
+    // zero length are exactly what it requires.
+    let rc = unsafe {
+        tikv_jemalloc_sys::mallctl(
+            c"arena.4096.purge".as_ptr(),
+            std::ptr::null_mut(),
+            std::ptr::null_mut(),
+            std::ptr::null_mut(),
+            0,
+        )
+    };
+    if rc == 0 {
+        Ok(())
+    } else {
+        Err(rc)
+    }
+}
+
+#[cfg(all(test, not(target_env = "msvc")))]
+mod allocator_purge_tests {
+    use super::purge_all_jemalloc_arenas;
+
+    /// The memory drain's purge must actually run. `arena.<i>.purge` is a
+    /// void control: jemalloc answers EPERM to any call that passes a new
+    /// value (`ctl.c`, `NEITHER_READ_NOR_WRITE`), so a "write 0" purge is a
+    /// silent no-op and the drain returns nothing to the OS.
+    #[test]
+    fn arena_purge_succeeds() {
+        // Dirty some pages first so the purge has work to do.
+        let blocks: Vec<Vec<u8>> = (0..64).map(|i| vec![i as u8; 256 * 1024]).collect();
+        drop(std::hint::black_box(blocks));
+        assert_eq!(
+            purge_all_jemalloc_arenas(),
+            Ok(()),
+            "arena.4096.purge must return 0"
+        );
+    }
+}
+
 #[cfg(test)]
 mod runtime_tests {
-    use super::build_runtime;
+    use super::{build_runtime, run_to_exit};
+
+    /// SIGTERM → "Goodbye" → exit must not wait on a blocking job that is
+    /// still running (in production: a background merge compressing a large
+    /// column on a low-priority thread). Dropping a Runtime joins its blocking
+    /// pool with no timeout, so the process outlived "Goodbye" by as long as
+    /// the job had left.
+    #[test]
+    fn exit_does_not_wait_for_a_running_blocking_job() {
+        let rt = build_runtime(2).expect("prod runtime builds");
+        let started = std::time::Instant::now();
+        run_to_exit(rt, async {
+            let (tx, rx) = tokio::sync::oneshot::channel::<()>();
+            // Detached, like the merge task: nothing awaits it.
+            drop(tokio::task::spawn_blocking(move || {
+                let _ = tx.send(());
+                std::thread::sleep(std::time::Duration::from_secs(30));
+            }));
+            // Make sure the job is really running before the server returns.
+            rx.await.expect("blocking job started");
+        });
+        let waited = started.elapsed();
+        assert!(
+            waited < std::time::Duration::from_secs(10),
+            "exit waited {waited:?} for a detached blocking job"
+        );
+    }
 
     #[test]
     fn runtime_builds_and_boots() {
@@ -2829,6 +3372,35 @@ async fn async_main() -> Result<()> {
             cfg.server.es_compat_port,
             cfg.server.grpc_port,
         );
+    }
+
+    // 3d. Explicit mode=neural loads the model before the data directory, the
+    //     admin key, or any listener (#1840). A blocked Hub used to boot a
+    //     node that then failed every ingest. Explicit proxy already refuses
+    //     to start rather than substitute lexical vectors (#1189); neural does
+    //     the same, because those vectors are not comparable. A slim build
+    //     without the neural feature keeps its documented lexical fallback
+    //     (identity reports lexical) — there is no model to load.
+    if cfg.embedding.mode.trim().eq_ignore_ascii_case("neural") {
+        #[cfg(feature = "neural")]
+        {
+            let embedding = cfg.embedding.clone();
+            info!(
+                model = %embedding.neural_model,
+                "embedding.mode=neural: loading the model before opening the data directory"
+            );
+            tokio::task::spawn_blocking(move || {
+                xerj_engine::index::ensure_neural_ready(&embedding)
+            })
+            .await
+            .context("neural embedder load task panicked")??;
+            info!("embedding.mode=neural: model loaded");
+        }
+        #[cfg(not(feature = "neural"))]
+        {
+            // Slim binary. `make_neural_embedder` warns and uses lexical when
+            // an index actually embeds. Do not refuse to start.
+        }
     }
 
     // 4. Data directory
@@ -3332,11 +3904,14 @@ async fn async_main() -> Result<()> {
             // MALLCTL_ARENAS_ALL. Both are best-effort: a failing mallctl
             // must never propagate out of the drain path.
             let _ = tikv_jemalloc_ctl::epoch::advance();
-            // SAFETY: `arena.<i>.purge` with i = MALLCTL_ARENAS_ALL (4096)
-            // is a plain "purge every arena" action mallctl; the value is an
-            // unused unsigned scalar. The name is NUL-terminated and names a
-            // real jemalloc ctl node, so the write cannot read out of bounds.
-            let _ = unsafe { tikv_jemalloc_ctl::raw::write(b"arena.4096.purge\0", 0u64) };
+            // Best-effort as before, but no longer silent: a purge that
+            // fails is a drain that returns nothing to the OS. Warn once.
+            if let Err(rc) = purge_all_jemalloc_arenas() {
+                static WARNED: std::sync::Once = std::sync::Once::new();
+                WARNED.call_once(|| {
+                    warn!("jemalloc arena.4096.purge failed (mallctl returned {rc}); memory drains will not return pages to the OS");
+                });
+            }
         }));
         state.engine.spawn_resource_sampler();
     }
@@ -3410,8 +3985,16 @@ async fn async_main() -> Result<()> {
     if storage_available {
         info!("flushing in-memory state before exit…");
         let flush_started = std::time::Instant::now();
-        state.engine.flush_all_force().await;
-        info!("final flush complete in {:.0?}", flush_started.elapsed());
+        // Bounded (#1635): a wedged memtable flush must not re-hang shutdown
+        // after the listeners drained.  Docs live in the WAL and replay on the
+        // next boot, so a skipped final flush is non-destructive.
+        let flush_budget = std::time::Duration::from_secs(10);
+        match tokio::time::timeout(flush_budget, state.engine.flush_all_force()).await {
+            Ok(()) => info!("final flush complete in {:.0?}", flush_started.elapsed()),
+            Err(_) => warn!(
+                "final flush exceeded {flush_budget:?}; exiting anyway (WAL replays on next boot)"
+            ),
+        }
     }
 
     info!("xerj v{} stopped. Goodbye.", env!("CARGO_PKG_VERSION"));

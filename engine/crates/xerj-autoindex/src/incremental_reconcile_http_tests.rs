@@ -948,6 +948,8 @@ fn cfg(root: &Path, state_dir: &Path, url: &str, semantic: bool) -> IndexCfg {
         bulk_timeout_secs: 30,
         snapshot_max_bytes: 64 << 30,
         prefix: "incremental-http".into(),
+        replace_prefix: false,
+        prefix_note: None,
         state_dir: Some(state_dir.to_owned()),
         fresh: false,
         follow_symlinks: false,
@@ -2630,8 +2632,9 @@ fn a_two_table_sqlite_file_commits_its_generation() {
 /// The shape #360 was actually reported against, and the one that reaches the
 /// fan-out through the *sniffer* rather than through an extension: ordinary
 /// markdown prose with SQL blocks in it, as in `unum-cloud/usearch`'s
-/// `sqlite/README.md`. `sniff` routes any text containing `CREATE TABLE` and a
-/// `;` to the `sqldump` family, so a README documenting two tables is one
+/// `sqlite/README.md`. The SQL blocks contain `INSERT INTO … VALUES`, which
+/// is what `sniff` routes to the `sqldump` family (#1984: `CREATE TABLE`
+/// alone is schema, not a dump), so a README documenting two tables is one
 /// content group feeding two datasets — no dump and no database file involved.
 /// Worth pinning separately: the reporter's corpus contained neither.
 #[test]
