@@ -1,14 +1,16 @@
-"""Halftone motifs for the blog cover series ("engineering field-log posters").
+"""Square-matrix motifs for the blog cover series ("engineering field-log posters").
 
 Every motif is a pure function ``motif(w, h, rng) -> str`` that returns SVG
 markup drawn inside a ``w`` x ``h`` box whose origin is the top-left corner.
-They draw with dots only (plus thin hairlines and mono labels), in four inks:
+They draw with squares on a grid only (plus 1px hairlines and mono labels);
+``dot`` is a filled cell, ``ring`` an empty one. Inks, on light paper:
 
-    .y  yellow   --z-accent  #ffc400   XERJ / the result the post is about
-    .w  paper    --z-ink     #f4f2ec   structure, neutral series
-    .b  blue     --z-cmp     #7f93aa   the comparison series, never XERJ
-    .m  mute     --z-mute    #8a8680   annotation
-    .f  faint    --z-line    #3a3836   the empty cell, the background grid
+    .y  yellow   #ffc400   fill only: XERJ / the one result the post is about
+                           (its labels and hairlines print in ochre #a06800)
+    .w  ink      #0b0b0d   structure, neutral series
+    .b  blue     #6f8aa8   the comparison series, never XERJ
+    .m  mute     #696762   annotation
+    .f  rule     #cfcbbf   the empty cell, the background grid
 
 Every number a motif draws or labels is quoted from the post it illustrates;
 the comment above each motif names where. Randomness only ever decides
@@ -30,14 +32,21 @@ def _f(v: float) -> str:
 
 
 def dot(x: float, y: float, r: float, ink: str) -> str:
+    """One cell of the matrix: a square centred on (x, y). ``r`` is the
+    half-pitch-scaled size the halftone asks for; the square keeps the same
+    centre, so every screen stays on its grid."""
     if r <= 0.15:
         return ""
-    return f'<circle cx="{_f(x)}" cy="{_f(y)}" r="{_f(r)}" class="{ink}"/>'
+    s = r * 1.78
+    return (f'<rect x="{_f(x - s / 2)}" y="{_f(y - s / 2)}" width="{_f(s)}" height="{_f(s)}" '
+            f'class="{ink}"/>')
 
 
 def ring(x: float, y: float, r: float, ink: str, sw: float = 1.2) -> str:
-    return (f'<circle cx="{_f(x)}" cy="{_f(y)}" r="{_f(r)}" class="{ink}-s" '
-            f'fill="none" stroke-width="{_f(sw)}"/>')
+    """An empty cell: a square outline, the matrix's "not this one"."""
+    s = r * 1.78
+    return (f'<rect x="{_f(x - s / 2)}" y="{_f(y - s / 2)}" width="{_f(s)}" height="{_f(s)}" '
+            f'class="{ink}-s" fill="none" stroke-width="{_f(sw)}"/>')
 
 
 def label(x: float, y: float, text: str, cls: str = "lab", anchor: str = "start") -> str:
@@ -131,10 +140,10 @@ def disc(cx: float, cy: float, R: float, pitch: float, ink: str,
 # ── motifs ───────────────────────────────────────────────────────────────────
 
 def m_index28(w: float, h: float, rng: random.Random) -> str:
-    """cutting-the-index-28-percent: the index as a block of dots, before and
+    """cutting-the-index-28-percent: the index as a block of squares, before and
     after. Areas are to scale: 5.52 MB before, 3.99 MB after (-28%), the whole-
-    index figures in the post's lede and index card. The cut-away is drawn as
-    hollow dots. The two side bars are the post's .seg (1,671 -> 449 kB,
+    index figures in the post's lede and index card. The cut-away (the 28%)
+    is the yellow L. The two side bars are the post's .seg (1,671 -> 449 kB,
     -73.1%) and .meta (200.8 -> 13.8 kB, -93.1%) rows, each against its own
     'before' length."""
     out = []
@@ -149,13 +158,11 @@ def m_index28(w: float, h: float, rng: random.Random) -> str:
             cx, cy = x0 + (i + 0.5) * pitch, y0 + (j + 0.5) * pitch
             if i < k and j >= n - k:
                 u, v = i / k, (j - (n - k)) / k
-                a = 0.30 + 0.70 * (0.5 * (1 - u) + 0.5 * v)
-                r = pitch * 0.5 * math.sqrt(a) * 0.96 * (1 + rng.uniform(-0.06, 0.06))
-                out.append(dot(cx, cy, r, "y"))
+                out.append(dot(cx, cy, pitch * 0.40, "w"))
             else:
-                out.append(ring(cx, cy, pitch * 0.22, "m", 0.9))
+                out.append(dot(cx, cy, pitch * 0.40, "y"))
     out.append(label(x0, y0 - 12, "BEFORE · 5.52 MB", "lab"))
-    out.append(label(x0, y0 + S + 22, "AFTER · 3.99 MB", "lab y"))
+    out.append(label(x0, y0 + S + 22, "AFTER · 3.99 MB", "lab w"))
     bx = x0 + S + 30
     bw = w - bx
     out.append(label(bx, y0 + 40, "−28%", "big w"))
@@ -165,14 +172,14 @@ def m_index28(w: float, h: float, rng: random.Random) -> str:
         bp = max(5.0, pitch * 0.55)
         for name, before, after, delta in rows:
             out.append(label(bx, by, f"{name} {delta}", "lab"))
-            out.append(dotbar(bx, by + 10, bw, 2, bp, "w", 3))
-            out.append(dotbar(bx, by + 14 + 2 * bp, max(bp, bw * after / before), 2, bp, "y", 1))
+            out.append(dotbar(bx, by + 10, bw, 2, bp, "f", 3))
+            out.append(dotbar(bx, by + 14 + 2 * bp, max(bp, bw * after / before), 2, bp, "w", 1))
             by += S * 0.30
     return "".join(out)
 
 
 def m_jevbars(w: float, h: float, rng: random.Random) -> str:
-    """does-xerj-beat-jev: the verdict table as dot-bars. nDCG@10 from the post:
+    """does-xerj-beat-jev: the verdict table as square-bars. nDCG@10 from the post:
     SciFact 0.6993 (hybrid) vs 0.7410 (BM25+Jev), NFCorpus 0.3448 vs 0.3312,
     FiQA 0.2382 (BM25) vs 0.3638 (BM25+Jev). One denominator, 0.7410, for every
     row. Last row: the FiQA rerank bill, $0.6375 vs $0 local."""
@@ -187,8 +194,8 @@ def m_jevbars(w: float, h: float, rng: random.Random) -> str:
     y = 8.0
     for name, a, an, b, bn in rows:
         out.append(label(0, y + 12, name, "lab"))
-        out.append(dotbar(lab_w, y + 22, full * a / 0.7410, 3, pitch, "y"))
-        out.append(label(lab_w + full * a / 0.7410 + 10, y + 22 + 2.2 * pitch, f"{a:.4f} {an}", "num y"))
+        out.append(dotbar(lab_w, y + 22, full * a / 0.7410, 3, pitch, "w"))
+        out.append(label(lab_w + full * a / 0.7410 + 10, y + 22 + 2.2 * pitch, f"{a:.4f} {an}", "num w"))
         out.append(dotbar(lab_w, y + 26 + 3 * pitch, full * b / 0.7410, 3, pitch, "b"))
         out.append(label(lab_w + full * b / 0.7410 + 10, y + 26 + 5.2 * pitch, f"{b:.4f} {bn}", "num b"))
         y += gap
@@ -196,14 +203,15 @@ def m_jevbars(w: float, h: float, rng: random.Random) -> str:
     out.append(label(0, y + 16, "FIQA RERANK BILL", "lab"))
     out.append(dotbar(lab_w, y + 26, full, 3, pitch, "b"))
     out.append(label(lab_w + full + 10, y + 26 + 2.2 * pitch, "$0.6375", "num b"))
-    out.append(dot(lab_w + pitch / 2, y + 30 + 4.5 * pitch, pitch * 0.48, "y"))
-    out.append(label(lab_w + pitch + 10, y + 30 + 4.9 * pitch, "$0 · XERJ local", "num y"))
+    out.append(f'<rect x="{_f(lab_w)}" y="{_f(y + 30 + 3.4 * pitch)}" width="{_f(2.2 * pitch)}" height="{_f(2.2 * pitch)}" class="yo"/>')
+    out.append(label(lab_w + 2.2 * pitch + 10, y + 30 + 5.0 * pitch, "$0 · XERJ local", "num y"))
     return "".join(out)
 
 
 def m_vote(w: float, h: float, rng: random.Random) -> str:
-    """jev-vs-a-bm25-vote: Banking77, 500 decisions per arm as a 25x20 dot
-    grid; filled = correct, ring = wrong, at the post's accuracies 0.9140 (BM25
+    """jev-vs-a-bm25-vote: Banking77, 500 decisions per arm as a 25x20
+    square grid; filled = correct, outline = wrong (yellow: the vote's 45
+    correct answers beyond Jev's 412), at the post's accuracies 0.9140 (BM25
     vote) and 0.8240 (Jev). The footer line is the SMS row: 0.9840 vs 0.9880,
     McNemar p = 0.75."""
     out = []
@@ -211,7 +219,8 @@ def m_vote(w: float, h: float, rng: random.Random) -> str:
     gw = (w - 36) / 2
     pitch = min(gw / cols, (h - 92) / rows_n)
     gy = 34.0
-    for k, (name, acc, ink) in enumerate([("BM25 VOTE", 0.9140, "y"), ("JEV", 0.8240, "b")]):
+    jev_right = round(0.8240 * 500)
+    for k, (name, acc, ink) in enumerate([("BM25 VOTE", 0.9140, "w"), ("JEV", 0.8240, "b")]):
         gx = k * (gw + 36)
         right = round(acc * 500)
         out.append(label(gx, gy - 14, f"{name} · {acc:.4f}", f"lab {ink}"))
@@ -219,7 +228,8 @@ def m_vote(w: float, h: float, rng: random.Random) -> str:
             i, j = n % cols, n // cols
             cx, cy = gx + (i + 0.5) * pitch, gy + (j + 0.5) * pitch
             if n < right:
-                out.append(dot(cx, cy, pitch * 0.40, ink))
+                # yellow: the decisions the vote gets right that Jev does not
+                out.append(dot(cx, cy, pitch * 0.40, "y" if (k == 0 and n >= jev_right) else ink))
             else:
                 out.append(ring(cx, cy, pitch * 0.30, "m", 1.0))
     yb = gy + rows_n * pitch + 26
@@ -236,8 +246,10 @@ def m_names(w: float, h: float, rng: random.Random) -> str:
     names = ["RUSTSEC-2021-0003", "GHSA-43w2-9j62-hq99", "CVE-2021-25900"]
     R = min(h * 0.27, w * 0.2)
     cx, cy = w - R - 6, h * 0.46
-    out.append(disc(cx, cy, R, max(7.0, R / 9), "y"))
-    out.append(ring(cx, cy, R + 12, "w", 1.0))
+    out.append(disc(cx, cy, R, max(7.0, R / 9), "w"))
+    c = max(7.0, R / 9) * 1.6
+    out.append(f'<rect x="{_f(cx - c)}" y="{_f(cy - c)}" width="{_f(2 * c)}" height="{_f(2 * c)}" class="yo"/>')
+    out.append(ring(cx, cy, R + 12, "y", 1.0))
     ys = [h * 0.12, h * 0.46, h * 0.80]
     for n, y in zip(names, ys):
         out.append(f'<rect x="0" y="{_f(y - 17)}" width="{_f(w * 0.40)}" height="30" class="w-s" fill="none" stroke-width="1"/>')
@@ -311,7 +323,7 @@ def m_gates(w: float, h: float, rng: random.Random) -> str:
 def m_tiles(w: float, h: float, rng: random.Random) -> str:
     """the-corpus-hub: the registry as a 10x10 wall of pack tiles, 100 being
     the live-corpus count in the post's 2026-10-06 update. The four launch
-    corpora are solid yellow; the one signed daily pack carries a seal ring."""
+    corpora are solid yellow; the one signed daily pack carries a seal frame."""
     out = []
     n = 10
     side = min((h - 44) / n, w * 0.78 / n)
@@ -403,7 +415,7 @@ def m_scars(w: float, h: float, rng: random.Random) -> str:
         r, c = divmod(k, 3)
         cx = c * cw + cw * rng.uniform(0.30, 0.55)
         cy = r * rh + rh * rng.uniform(0.32, 0.50)
-        ink = "y" if k % 2 == 0 else "w"
+        ink = "y" if k == 5 else "w"
         a = rng.uniform(-1.25, -0.85)
         strokes = 3 + (k % 3)
         L = rh * 0.52

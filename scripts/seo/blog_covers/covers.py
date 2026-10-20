@@ -8,7 +8,7 @@ headless Chromium through Playwright), never from an image model:
     landing/blog/covers/<slug>-hero.webp 1600x640  the cover at the top of the post
     landing/blog/covers/<slug>-thumb.webp 640x336  the card thumbnail on /blog/
 
-Layout, type and colour are fixed for the series; only the halftone motif
+Layout, type and colour are fixed for the series; only the square-matrix motif
 (scripts/seo/blog_covers/motifs.py) and the words change per post. The words
 live in POSTS below. Every number a cover shows must appear in its post.
 
@@ -37,17 +37,24 @@ HERE = pathlib.Path(__file__).resolve().parent
 REPO = HERE.parent.parent.parent
 LANDING = REPO / "landing"
 sys.path.insert(0, str(HERE))
-from motifs import MOTIFS, disc  # noqa: E402
+from motifs import MOTIFS  # noqa: E402
 
-# ── brand tokens: literal values of landing/style.css :root (night theme) ────
+# ── brand tokens: the brand book's print palette on the site's day paper ────
+# Paper and rules are landing/style.css html[data-theme='day'] (the theme the
+# /blog/ index is served in); ink, yellow and ochre are landing/brand.html.
+# Yellow is a FILL only (a square, a bar, the one result the post is about):
+# it never carries text on paper. Text and hairlines that need the accent use
+# ochre, which holds contrast on paper.
 TOKENS = {
-    "bg": "#0b0b0d",      # --z-bg
-    "ink": "#f4f2ec",     # --z-ink
-    "mute": "#8a8680",    # --z-mute
-    "faint": "#2b2a28",   # --z-faint
-    "line": "#3a3836",    # --z-line
-    "accent": "#ffc400",  # --z-accent
-    "cmp": "#7f93aa",     # --z-cmp
+    "bg": "#f6f4ee",      # day --z-bg (paper)
+    "ink": "#0b0b0d",     # brand ink
+    "mute": "#696762",    # day --z-mute
+    "faint": "#ebe8df",   # grid paper rule
+    "line": "#cfcbbf",    # day --z-line
+    "accent": "#ffc400",  # brand yellow, fills only
+    "ochre": "#a06800",   # brand ochre: accent text and accent strokes
+    "cmp": "#6f8aa8",     # day --z-cmp, the comparison series, never XERJ
+    "frame": "#d6d4cb",   # 1px og frame so the card holds its edge on white
 }
 
 # ── the series: one entry per post ───────────────────────────────────────────
@@ -60,15 +67,15 @@ POSTS: list[dict[str, str]] = [
     dict(slug="does-xerj-beat-jev", date="2026-09-21", motif="jevbars",
          title="Does XERJ beat JEV?",
          subtitle="On the bill, outright. On FiQA, no.",
-         alt="Cover: dot-bars of nDCG@10 for XERJ and BM25+Jev on SciFact (0.6993 vs 0.7410), NFCorpus (0.3448 vs 0.3312) and FiQA (0.2382 vs 0.3638), and the FiQA rerank bill, $0.6375 against $0 local"),
+         alt="Cover: square-matrix bars of nDCG@10 for XERJ and BM25+Jev on SciFact (0.6993 vs 0.7410), NFCorpus (0.3448 vs 0.3312) and FiQA (0.2382 vs 0.3638), and the FiQA rerank bill, $0.6375 against $0 local"),
     dict(slug="jev-vs-a-bm25-vote", date="2026-09-22", motif="vote",
          title="A BM25 vote ties Jev on spam and beats it on intent",
          subtitle="Count your labels before you pay for a model.",
-         alt="Cover: two grids of 500 Banking77 decisions, filled dots for correct answers: BM25 vote 0.9140, Jev 0.8240; SMS spam is a tie, 0.9840 vs 0.9880"),
+         alt="Cover: two grids of 500 Banking77 decisions, filled squares for correct answers, the vote's extra correct answers in yellow: BM25 vote 0.9140, Jev 0.8240; SMS spam is a tie, 0.9840 vs 0.9880"),
     dict(slug="cutting-the-index-28-percent", date="2026-09-27", motif="index28",
          title="Cutting the index 28%",
          subtitle="Dissect first, write Rust second.",
-         alt="Cover: a block of dots for the 5.52 MB index with the 3.99 MB index drawn inside it to scale, minus 28%, and bars for the .seg (minus 73.1%) and .meta (minus 93.1%) formats"),
+         alt="Cover: a block of squares for the 5.52 MB index with the 3.99 MB index drawn inside it to scale and the 28% cut in yellow, and bars for the .seg (minus 73.1%) and .meta (minus 93.1%) formats"),
     dict(slug="one-vulnerability-three-names", date="2026-09-27", motif="names",
          title="One vulnerability, three names",
          subtitle="Checksums prove integrity. They do not prove origin.",
@@ -80,7 +87,7 @@ POSTS: list[dict[str, str]] = [
     dict(slug="the-corpus-hub", date="2026-10-01", motif="tiles",
          title="The Corpus Hub",
          subtitle="Pinned, licenced, signed, contributed by pull request.",
-         alt="Cover: a wall of 100 pack tiles with the four launch corpora in yellow and a seal ring on the signed pack"),
+         alt="Cover: a wall of 100 pack tiles with the four launch corpora in yellow and a seal frame on the signed pack"),
     dict(slug="eval-scars-from-agent-memory", date="2026-10-07", motif="scars",
          title="Six eval scars from production agent memory",
          subtitle="If every query scores zero hits, suspect your mask.",
@@ -116,7 +123,7 @@ html, body { background: %(bg)s; }
 .kicker { position: absolute; left: %(P)spx; top: %(P)spx; right: %(P)spx;
           font: 600 %(kfs)spx/1 'JetBrains Mono', monospace; letter-spacing: .14em;
           color: %(ink)s; display: flex; gap: 14px; align-items: center; }
-.kicker .sq { width: 12px; height: 12px; background: %(accent)s; flex: none; }
+.kicker .sq { width: 14px; height: 14px; background: %(accent)s; flex: none; }
 .kicker .no { margin-left: auto; color: %(mute)s; }
 .textcol { position: absolute; left: %(P)spx; top: %(ttop)spx; width: %(tw)spx;
            height: %(th)spx; display: flex; flex-direction: column; justify-content: center; }
@@ -125,8 +132,8 @@ h1 { font-family: 'Big Shoulders Display', sans-serif; font-weight: 900;
      color: %(ink)s; font-size: %(tfs)spx; }
 .sub { margin-top: 22px; font-family: 'Big Shoulders Display', sans-serif; font-weight: 700;
        text-transform: uppercase; letter-spacing: .02em; line-height: 1.02;
-       color: %(accent)s; font-size: %(sfs)spx; max-width: %(tw)spx; }
-.rule { width: 72px; height: 3px; background: %(accent)s; margin: 0 0 22px; }
+       color: %(ochre)s; font-size: %(sfs)spx; max-width: %(tw)spx; }
+.rule { width: 72px; height: 1px; background: %(ink)s; margin: 0 0 22px; }
 .motif { position: absolute; left: %(mx)spx; top: %(my)spx; }
 .foot { position: absolute; left: %(P)spx; right: %(P)spx; bottom: %(fb)spx;
         border-top: 1px solid %(line)s; padding-top: 14px; display: flex;
@@ -136,18 +143,18 @@ h1 { font-family: 'Big Shoulders Display', sans-serif; font-weight: 900;
 svg text { font-family: 'JetBrains Mono', monospace; }
 .y { fill: %(accent)s; } .w { fill: %(ink)s; } .b { fill: %(cmp)s; }
 .m { fill: %(mute)s; } .f { fill: %(line)s; }
-.y-s { stroke: %(accent)s; } .w-s { stroke: %(ink)s; } .b-s { stroke: %(cmp)s; }
+.y-s { stroke: %(ochre)s; } .w-s { stroke: %(ink)s; } .b-s { stroke: %(cmp)s; }
 .m-s { stroke: %(mute)s; } .f-s { stroke: %(line)s; }
 .bgfill { fill: %(bg)s; } .fa { fill: %(faint)s; }
 svg text { paint-order: stroke; stroke: %(bg)s; stroke-width: 5px; stroke-linejoin: round; }
+.yo { fill: %(accent)s; stroke: %(ochre)s; stroke-width: 1px; }
 .lab { font-size: %(lfs)spx; font-weight: 600; letter-spacing: .1em; fill: %(mute)s; }
-.lab.y { fill: %(accent)s; } .lab.w { fill: %(ink)s; } .lab.b { fill: %(cmp)s; }
+.lab.y { fill: %(ochre)s; } .lab.w { fill: %(ink)s; } .lab.b { fill: %(cmp)s; }
 .num { font-size: %(nfs)spx; font-weight: 600; letter-spacing: .02em; }
-.num.y { fill: %(accent)s; } .num.b { fill: %(cmp)s; } .num.w { fill: %(ink)s; } .num.m { fill: %(mute)s; }
+.num.y { fill: %(ochre)s; } .num.b { fill: %(cmp)s; } .num.w { fill: %(ink)s; } .num.m { fill: %(mute)s; }
 .tag { font-size: %(gfs)spx; font-weight: 700; letter-spacing: .06em; }
-.tag.y { fill: %(accent)s; } .tag.w { fill: %(ink)s; } .tag.m { fill: %(mute)s; }
+.tag.y { fill: %(ochre)s; } .tag.w { fill: %(ink)s; } .tag.m { fill: %(mute)s; }
 .big { font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; font-size: %(bfs)spx; }
-.ink { mix-blend-mode: screen; }
 """
 
 FIT_JS = """
@@ -170,35 +177,20 @@ def layout(kind: str) -> dict:
 
 
 def background(W: int, H: int, seed: int) -> str:
-    """Grid paper, crop marks and a fixed-seed risograph grain."""
+    """Grid paper (1px squares, the matrix every motif snaps to) and crop marks.
+    Flat: no gradient, no grain, no shadow."""
     marks = []
     for (x, y) in [(22, 22), (W - 22, 22), (22, H - 22), (W - 22, H - 22)]:
         marks.append(f'<line x1="{x-9}" y1="{y}" x2="{x+9}" y2="{y}" stroke="{TOKENS["line"]}"/>'
-                     f'<line x1="{x}" y1="{y-9}" x2="{x}" y2="{y+9}" stroke="{TOKENS["line"]}"/>'
-                     f'<circle cx="{x}" cy="{y}" r="5" fill="none" stroke="{TOKENS["line"]}"/>')
+                     f'<line x1="{x}" y1="{y-9}" x2="{x}" y2="{y+9}" stroke="{TOKENS["line"]}"/>')
     return f"""<svg class="bgsvg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg">
 <defs>
- <pattern id="grid" width="16" height="16" patternUnits="userSpaceOnUse">
-  <circle cx="8" cy="8" r="1" fill="#1d1c1b"/></pattern>
- <filter id="grain" x="0" y="0" width="100%" height="100%">
-  <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="{seed}"/>
-  <feColorMatrix values="0 0 0 0 0.96  0 0 0 0 0.95  0 0 0 0 0.92  0 0 0 0.9 -0.35"/>
- </filter>
+ <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+  <path d="M24 0H0V24" fill="none" stroke="{TOKENS["faint"]}" stroke-width="1"/></pattern>
 </defs>
 <rect width="{W}" height="{H}" fill="url(#grid)"/>
 {''.join(marks)}
 </svg>"""
-
-
-def grain_overlay(W: int, H: int, seed: int) -> str:
-    """Risograph speckle: sparse, fixed-seed flecks of paper ink. Sparse on
-    purpose; per-pixel noise would triple the PNG size for no visible gain."""
-    rng = random.Random(seed)
-    flecks = "".join(
-        f'<rect x="{rng.randrange(W)}" y="{rng.randrange(H)}" width="{rng.choice((1, 1, 2))}" height="1"/>'
-        for _ in range(W * H // 900))
-    return (f'<svg class="bgsvg" width="{W}" height="{H}" style="opacity:.22;pointer-events:none" '
-            f'xmlns="http://www.w3.org/2000/svg"><g fill="{TOKENS["mute"]}">{flecks}</g></svg>')
 
 
 def page(post: dict, kind: str, number: int, total: int) -> str:
@@ -206,15 +198,9 @@ def page(post: dict, kind: str, number: int, total: int) -> str:
     seed = sum(post["slug"].encode()) % 997
     rng = random.Random(post["slug"] + ":" + kind)
     motif = MOTIFS[post["motif"]](L["mw"], L["mh"], rng)
-    # the poster's ground: one big, faint halftone sun behind every motif
-    R = max(L["mw"], L["mh"]) * 0.62
-    wash = disc(L["mw"] * 0.62, L["mh"] * 0.50, R, 13, "fa", lambda d: 0.55 * (1 - d) ** 1.4)
-    # misregistration: the yellow plate sits 1.5px off the paper plate, as on a riso
     motif_svg = (f'<svg class="motif" width="{L["mw"]}" height="{L["mh"] + 4}" '
                  f'viewBox="0 0 {L["mw"]} {L["mh"] + 4}" overflow="visible" xmlns="http://www.w3.org/2000/svg">'
-                 f'<g>{wash}</g><g filter="url(#rough)">{motif}</g>'
-                 f'<defs><filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.6" seed="{seed}" result="n"/>'
-                 f'<feDisplacementMap in="SourceGraphic" in2="n" scale="1.6"/></filter></defs></svg>')
+                 f'{motif}</svg>')
     css = CSS % {**TOKENS, **L, "display": font_url("BigShouldersDisplay-wght.ttf"),
                  "mono": font_url("JetBrainsMono-wght.ttf")}
     e = html.escape
@@ -225,8 +211,7 @@ def page(post: dict, kind: str, number: int, total: int) -> str:
 <span class="no">No. {number:02d} / {total:02d}</span></div>
 <div class="textcol"><div class="rule"></div><h1>{e(post["title"])}</h1><p class="sub">{e(post["subtitle"])}</p></div>
 {motif_svg}
-<div class="foot"><span><b>xerj.org/blog/{e(post["slug"])}</b></span><span class="r">FIELD LOG · DRAWN FROM THE POST'S OWN NUMBERS</span></div>
-{grain_overlay(L["W"], L["H"], seed)}
+<div class="foot"><span><b>xerj.org/blog/{e(post["slug"])}</b></span><span class="r">DRAWN FROM THE POST'S OWN NUMBERS</span></div>
 </div></body></html>"""
 
 
@@ -293,12 +278,22 @@ def render(posts: list[dict], series_total: int, numbers: dict[str, int],
     return out
 
 
+def framed(img):
+    """The og card gets a 1px frame in TOKENS["frame"]: paper on a white
+    timeline (X, Slack, LinkedIn) otherwise loses its edge. The hero and the
+    thumbnail are framed by blog.css instead."""
+    from PIL import ImageDraw
+    out = img.copy()
+    ImageDraw.Draw(out).rectangle([0, 0, out.width - 1, out.height - 1], outline=TOKENS["frame"])
+    return out
+
+
 def write(images: dict[str, dict]) -> list[pathlib.Path]:
     from PIL import Image
     written = []
     for slug, imgs in images.items():
         og = LANDING / "og" / f"blog-{slug}.png"
-        save_png(imgs["og"], og)
+        save_png(framed(imgs["og"]), og)
         hero = LANDING / "blog" / "covers" / f"{slug}-hero.webp"
         save_webp(imgs["hero"], hero)
         thumb = LANDING / "blog" / "covers" / f"{slug}-thumb.webp"
@@ -315,10 +310,10 @@ def contact_sheet(images: dict[str, dict], path: pathlib.Path) -> None:
     cw, ch = 600, 315
     gap = 24
     rows = (len(images) + cols - 1) // cols
-    sheet = Image.new("RGB", (cols * cw + (cols + 1) * gap, rows * ch + (rows + 1) * gap), (0x1d, 0x1c, 0x1b))
+    sheet = Image.new("RGB", (cols * cw + (cols + 1) * gap, rows * ch + (rows + 1) * gap), (255, 255, 255))
     for n, (slug, imgs) in enumerate(images.items()):
         r, c = divmod(n, cols)
-        sheet.paste(imgs["og"].resize((cw, ch), Image.LANCZOS), (gap + c * (cw + gap), gap + r * (ch + gap)))
+        sheet.paste(framed(imgs["og"].resize((cw, ch), Image.LANCZOS)), (gap + c * (cw + gap), gap + r * (ch + gap)))
     path.parent.mkdir(parents=True, exist_ok=True)
     sheet.save(path, optimize=True)
 

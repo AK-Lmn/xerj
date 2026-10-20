@@ -107,7 +107,7 @@ PAGES: dict[str, dict[str, str]] = {
         # content unchanged. updated follows the edit, published stays pinned.
         updated="2026-09-27",
         og_image="og/blog-does-xerj-beat-jev.png",
-        og_image_alt="Cover: dot-bars of nDCG@10 for XERJ and BM25+Jev on SciFact (0.6993 vs 0.7410), NFCorpus (0.3448 vs 0.3312) and FiQA (0.2382 vs 0.3638), and the FiQA rerank bill, $0.6375 against $0 local",
+        og_image_alt="Cover: square-matrix bars of nDCG@10 for XERJ and BM25+Jev on SciFact (0.6993 vs 0.7410), NFCorpus (0.3448 vs 0.3312) and FiQA (0.2382 vs 0.3638), and the FiQA rerank bill, $0.6375 against $0 local",
     ),
     # Decisions study, 2026-09-22. published/updated pinned so the schema dates
     # do not drift with git (same reason as the post above). Prose written to the
@@ -121,7 +121,7 @@ PAGES: dict[str, dict[str, str]] = {
         # content unchanged. updated follows the edit, published stays pinned.
         updated="2026-09-27",
         og_image="og/blog-jev-vs-a-bm25-vote.png",
-        og_image_alt="Cover: two grids of 500 Banking77 decisions, filled dots for correct answers: BM25 vote 0.9140, Jev 0.8240; SMS spam is a tie, 0.9840 vs 0.9880",
+        og_image_alt="Cover: two grids of 500 Banking77 decisions, filled squares for correct answers, the vote's extra correct answers in yellow: BM25 vote 0.9140, Jev 0.8240; SMS spam is a tie, 0.9840 vs 0.9880",
     ),
     # Size-epic stage-1 write-up, 2026-09-27. published/updated pinned like the
     # two posts above; in-body run dates stay 2026-09-26/27.
@@ -131,7 +131,7 @@ PAGES: dict[str, dict[str, str]] = {
         description="Four file-format changes took our 100k-doc index from 5.52 MB to 3.99 MB (−28%), each gated on dissecting real segments first. The losing rows are in the post.",
         published="2026-09-27", updated="2026-09-27",
         og_image="og/blog-cutting-the-index-28-percent.png",
-        og_image_alt="Cover: a block of dots for the 5.52 MB index with the 3.99 MB index drawn inside it to scale, minus 28%, and bars for the .seg (minus 73.1%) and .meta (minus 93.1%) formats",
+        og_image_alt="Cover: a block of squares for the 5.52 MB index with the 3.99 MB index drawn inside it to scale and the 28% cut in yellow, and bars for the .seg (minus 73.1%) and .meta (minus 93.1%) formats",
     ),
     # Corpus-pack GTM post, 2026-09-27. Every count traces to tools/packs/
     # rust-vulns/pack-stats.json (provenance "measured", pinned by test); the
@@ -167,7 +167,7 @@ PAGES: dict[str, dict[str, str]] = {
         description="A public registry of corpora for AI agents: reference code pinned to SHAs, record packs ed25519-signed, every source licence-reviewed by a human. The measured use case (2.7× fewer output tokens), the tie we published anyway, and how to contribute yours by PR.",
         published="2026-10-01", updated="2026-10-01",
         og_image="og/blog-the-corpus-hub.png",
-        og_image_alt="Cover: a wall of 100 pack tiles with the four launch corpora in yellow and a seal ring on the signed pack",
+        og_image_alt="Cover: a wall of 100 pack tiles with the four launch corpora in yellow and a seal frame on the signed pack",
     ),
     # Guest post, 2026-10-07: Chunxiao Wang (Assay / nautilus-compass)
     # answered our practitioner invitation in #1118 + #1138. Every measurement

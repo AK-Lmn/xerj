@@ -1,9 +1,14 @@
 # `scripts/seo/blog_covers/`: the blog cover series
 
 Every post on xerj.org/blog gets a cover from one series, the **engineering
-field-log poster**: night-black ground, a large halftone motif drawn from
-that post's own numbers, a mono kicker, the title in the display face, a
-yellow subtitle and the post URL. All of it comes from code: HTML + SVG
+field-log poster**, printed in the brand book's palette: light paper
+(`#f6f4ee`, the day theme the `/blog/` index is served in) on a 1px square
+grid, a square-matrix motif drawn from that post's own numbers in ink
+(`#0B0B0D`), a mono kicker, the title in Big Shoulders Display 900, an ochre
+(`#A06800`) subtitle and the post URL. Brand yellow (`#FFC400`) is earned: a
+fill on the one result the post is about, never text. Flat: 1px lines, no
+gradients, no grain, no shadows. The og PNG carries a 1px `#d6d4cb` frame so
+it keeps its edge on white timelines (X, Slack, LinkedIn). All of it comes from code: HTML + SVG
 rendered by headless Chromium. No image model is involved, and the same
 inputs give the same pixels.
 
@@ -30,9 +35,9 @@ that every `og:image` exists and is 1200×630.
 The fonts are vendored in `fonts/` (Big Shoulders Display and JetBrains Mono,
 both SIL OFL 1.1, licence texts beside them), so a render does not depend on
 what is installed on the machine. They are the families `landing/style.css`
-names as `--font-display` and `--font-mono`. The colours are the literal
-`landing/style.css` tokens (`--z-bg`, `--z-ink`, `--z-mute`, `--z-line`,
-`--z-accent`, `--z-cmp`), copied into `TOKENS` in `covers.py`.
+names as `--font-display` and `--font-mono`. The colours are
+`landing/style.css`'s day tokens (paper, mute, line, cmp) plus the brand-book
+ink, yellow and ochre (`landing/brand.html`), copied into `TOKENS` in `covers.py`.
 
 ## Adding a post
 
@@ -60,9 +65,9 @@ names as `--font-display` and `--font-mono`. The colours are the literal
 
 | motif | post | what it draws |
 |---|---|---|
-| `jevbars` | does-xerj-beat-jev | nDCG@10 dot-bars per dataset, one denominator; the FiQA bill |
-| `vote` | jev-vs-a-bm25-vote | 500 Banking77 decisions per arm, filled = correct |
-| `index28` | cutting-the-index-28-percent | 5.52 MB and 3.99 MB blocks to scale; .seg/.meta bars |
+| `jevbars` | does-xerj-beat-jev | nDCG@10 square-bars per dataset, one denominator; the FiQA bill |
+| `vote` | jev-vs-a-bm25-vote | 500 Banking77 decisions per arm, filled = correct, the vote's extra wins in yellow |
+| `index28` | cutting-the-index-28-percent | 5.52 MB and 3.99 MB blocks to scale, the 28% cut in yellow; .seg/.meta bars |
 | `names` | one-vulnerability-three-names | three advisory ids converging on one signed record |
 | `gates` | the-rc80-gates | ten features as gates: pass / fail / split / unmeasured |
 | `tiles` | the-corpus-hub | a wall of 100 pack tiles, the launch four in yellow |
@@ -70,6 +75,8 @@ names as `--font-display` and `--font-mono`. The colours are the literal
 | `network` | the-exploit-hub | PoC documents linked to the three CVEs of the eval |
 | `route` | corpus-hub-v2 | 245 packs, the 14 catalogue corpora, a question routed to lz4 |
 
-Inks: yellow (`--z-accent`) for XERJ or the result the post is about,
-grey-blue (`--z-cmp`) for the comparison series and never for XERJ,
-paper (`--z-ink`) for structure, and mute/line for annotation and empty cells.
+Inks: yellow fill (with ochre for its labels and hairlines) for the one
+result the post is about, grey-blue (day `--z-cmp`) for the comparison series
+and never for XERJ, ink for structure, and mute/line for annotation and empty
+cells. Every motif is built from squares on a grid: `dot()` draws a filled
+cell, `ring()` an empty one.
