@@ -100,12 +100,18 @@ def main() -> None:
     ap.add_argument("--assets", required=True, type=pathlib.Path, help="folder holding the downloaded release archives")
     ap.add_argument("--out", type=pathlib.Path, default=ROOT / "dist")
     ap.add_argument("--server-json", type=pathlib.Path, default=ROOT / "server.json")
+    ap.add_argument("--omit-tools", action="store_true",
+                    help="leave the manifest tools list empty (Smithery's CLI rejects declared tools) and do not touch server.json")
     a = ap.parse_args()
     v = a.version.lstrip("v")
 
     manifest = json.loads((HERE / "manifest.template.json").read_text())
     manifest["version"] = v
-    manifest["tools"] = tools_from_schema()
+    if a.omit_tools:
+        manifest.pop("tools", None)
+        manifest["tools_generated"] = True
+    else:
+        manifest["tools"] = tools_from_schema()
 
     files = {
         "manifest.json": (json.dumps(manifest, indent=2, ensure_ascii=False).encode() + b"\n", 0o644),
@@ -128,6 +134,11 @@ def main() -> None:
     bundle.write_bytes(buf.getvalue())
     digest = sha256(buf.getvalue())
 
+    print(f"{bundle}  {bundle.stat().st_size} bytes")
+    print(f"sha256 {digest}")
+    if a.omit_tools:
+        return
+
     sj = json.loads(a.server_json.read_text())
     sj["version"] = v
     pkg = next(p for p in sj["packages"] if p["registryType"] == "mcpb")
@@ -135,9 +146,6 @@ def main() -> None:
     pkg["fileSha256"] = digest
     pkg.pop("version", None)
     a.server_json.write_text(json.dumps(sj, indent=2, ensure_ascii=False) + "\n")
-
-    print(f"{bundle}  {bundle.stat().st_size} bytes")
-    print(f"sha256 {digest}")
     print(f"updated {a.server_json}")
 
 

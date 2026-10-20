@@ -25,8 +25,11 @@ client (`XERJ_URL`, default `http://localhost:9200`).
 
 ## Publish a version
 
-`mcp-publisher login` is interactive and must be done by an **Owner** of the
-`xerj-org` GitHub org (plain membership is not enough for `io.github.xerj-org/*`).
+`mcp-publisher login github` is interactive (GitHub device flow). `xerj-org` is a
+GitHub **user** account, not an organization, so `io.github.xerj-org/*` is that
+account's personal namespace: sign in to GitHub as `xerj-org` when you approve
+the device code. Signing in as any other account grants only that account's
+namespace, and publishing fails with a permission error.
 
 ```sh
 V=1.0.0-rc.97
@@ -59,6 +62,15 @@ echo "xerj.org. IN TXT \"v=MCPv1; k=ed25519; p=$(openssl pkey -in mcp-key.pem -p
 ./mcp-publisher login dns --domain xerj.org --private-key "$(openssl pkey -in mcp-key.pem -noout -text | grep -A3 priv: | tail -n +2 | tr -d ' :\n')"
 ./mcp-publisher publish
 ```
+
+## Other directories
+
+- **Smithery** (`smithery mcp publish dist/xerj-mcp-<version>.mcpb -n xerj-org/xerj`):
+  its CLI currently rejects a bundle whose manifest lists `tools`
+  ([smithery-ai/cli#787](https://github.com/smithery-ai/cli/issues/787)). Build a
+  separate copy with `--omit-tools --out dist/smithery` for it. Do not upload that copy as
+  the registry asset, because its hash differs.
+- **Glama** reads `glama.json` at the repo root to assign maintainers.
 
 ## Automating it later
 
