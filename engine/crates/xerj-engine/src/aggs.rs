@@ -7217,13 +7217,27 @@ pub(crate) fn doc_matches_filter(doc: &Value, filter: &Value) -> bool {
                 if let Some(field_map) = query_body.as_object() {
                     for (field, expected) in field_map {
                         let actual_values = extract_field_values(doc, field);
-                        let prefix = match expected {
-                            Value::Object(o) => {
-                                o.get("value").map(value_to_string).unwrap_or_default()
-                            }
-                            other => value_to_string(other),
+                        let (prefix, case_insensitive) = match expected {
+                            Value::Object(o) => (
+                                o.get("value").map(value_to_string).unwrap_or_default(),
+                                o.get("case_insensitive")
+                                    .and_then(Value::as_bool)
+                                    .unwrap_or(false),
+                            ),
+                            other => (value_to_string(other), false),
                         };
-                        if !actual_values.iter().any(|v| v.starts_with(&prefix)) {
+                        // #1812: fold both sides when `case_insensitive` is
+                        // set, mirroring the `wildcard` arm above and the
+                        // keyword branch of `QueryNode::Prefix` (index.rs).
+                        let matched = if case_insensitive {
+                            let prefix_lc = prefix.to_lowercase();
+                            actual_values
+                                .iter()
+                                .any(|v| v.to_lowercase().starts_with(&prefix_lc))
+                        } else {
+                            actual_values.iter().any(|v| v.starts_with(&prefix))
+                        };
+                        if !matched {
                             return false;
                         }
                     }
@@ -7273,11 +7287,14 @@ pub(crate) fn doc_matches_filter(doc: &Value, filter: &Value) -> bool {
                 if let Some(field_map) = query_body.as_object() {
                     for (field, expected) in field_map {
                         let actual_values = extract_field_values(doc, field);
-                        let pattern = match expected {
-                            Value::Object(o) => {
-                                o.get("value").map(value_to_string).unwrap_or_default()
-                            }
-                            other => value_to_string(other),
+                        let (pattern, case_insensitive) = match expected {
+                            Value::Object(o) => (
+                                o.get("value").map(value_to_string).unwrap_or_default(),
+                                o.get("case_insensitive")
+                                    .and_then(Value::as_bool)
+                                    .unwrap_or(false),
+                            ),
+                            other => (value_to_string(other), false),
                         };
                         // #959: `regexp` had no arm at all and fell through
                         // the catch-all ("unknown filter type — pass
@@ -7289,6 +7306,15 @@ pub(crate) fn doc_matches_filter(doc: &Value, filter: &Value) -> bool {
                         // multi-valued field — mirroring `QueryNode::Regexp`
                         // (index.rs). An invalid pattern matches nothing,
                         // same as the doc-scan arm.
+                        // #1812: `case_insensitive` prepends the inline
+                        // `(?i)` flag inside the same anchored compile —
+                        // still a full-string match, mirroring the query
+                        // path's keyword branch.
+                        let pattern = if case_insensitive {
+                            format!("(?i){}", pattern)
+                        } else {
+                            pattern
+                        };
                         let matched = crate::index::compiled_anchored_regex(&pattern)
                             .map(|re| actual_values.iter().any(|v| re.is_match(v)))
                             .unwrap_or(false);
@@ -7323,97 +7349,108 @@ pub(crate) fn doc_matches_filter(doc: &Value, filter: &Value) -> bool {
                         if values.is_empty() {
                             return false;
                         }
-                        // Try numeric range check.
-                        let num_val: Option<f64> = values.first().and_then(|s| s.parse().ok());
-                        if let Some(n) = num_val {
-                            if let Some(gte) = bounds.get("gte").and_then(Value::as_f64) {
-                                if n < gte {
-                                    return false;
-                                }
-                            }
-                            if let Some(gt) = bounds.get("gt").and_then(Value::as_f64) {
-                                if n <= gt {
-                                    return false;
-                                }
-                            }
-                            if let Some(lte) = bounds.get("lte").and_then(Value::as_f64) {
-                                if n > lte {
-                                    return false;
-                                }
-                            }
-                            if let Some(lt) = bounds.get("lt").and_then(Value::as_f64) {
-                                if n >= lt {
-                                    return false;
-                                }
-                            }
-                        } else {
-                            // Non-numeric value — a date or a keyword.  Before
-                            // this branch existed the `if let Some(n)` above
-                            // simply fell through, so a range over a DATE field
-                            // matched **every** document unconditionally: no
-                            // bound was ever compared. That silently inflated
-                            // any date-filtered agg served over memtable-
-                            // resident docs (measured: a one-day window on a
-                            // 1.12 M-doc index reported 135,972 hits instead of
-                            // 40,000 — the whole 95,972-doc memtable admitted
-                            // wholesale).
-                            //
-                            // Dates compare as instants (so `2026-06-17` and
-                            // `2026-06-17T00:00:00.000Z` are the same point);
-                            // anything that is not a date on both sides falls
-                            // back to lexicographic comparison, which is ES's
-                            // keyword-range semantics.
-                            let raw = Value::String(values[0].clone());
-                            let doc_ms = parse_date_ms(&raw);
-                            let bound_ms =
-                                |k: &str| -> Option<i64> { bounds.get(k).and_then(parse_date_ms) };
-                            if let Some(v) = doc_ms {
-                                if let Some(b) = bound_ms("gte") {
-                                    if v < b {
+                        // #1750 — a multi-valued field matches when ANY one
+                        // of its values satisfies EVERY bound (Lucene's
+                        // per-value semantics). Checking only `values[0]`
+                        // dropped a doc whose in-range value was not first.
+                        let in_range = |value: &str| -> bool {
+                            // Try numeric range check.
+                            let num_val: Option<f64> = value.parse().ok();
+                            if let Some(n) = num_val {
+                                if let Some(gte) = bounds.get("gte").and_then(Value::as_f64) {
+                                    if n < gte {
                                         return false;
                                     }
                                 }
-                                if let Some(b) = bound_ms("gt") {
-                                    if v <= b {
+                                if let Some(gt) = bounds.get("gt").and_then(Value::as_f64) {
+                                    if n <= gt {
                                         return false;
                                     }
                                 }
-                                if let Some(b) = bound_ms("lte") {
-                                    if v > b {
+                                if let Some(lte) = bounds.get("lte").and_then(Value::as_f64) {
+                                    if n > lte {
                                         return false;
                                     }
                                 }
-                                if let Some(b) = bound_ms("lt") {
-                                    if v >= b {
+                                if let Some(lt) = bounds.get("lt").and_then(Value::as_f64) {
+                                    if n >= lt {
                                         return false;
                                     }
                                 }
                             } else {
-                                let s = values[0].as_str();
-                                let bound_str = |k: &str| -> Option<&str> {
-                                    bounds.get(k).and_then(Value::as_str)
+                                // Non-numeric value — a date or a keyword.  Before
+                                // this branch existed the `if let Some(n)` above
+                                // simply fell through, so a range over a DATE field
+                                // matched **every** document unconditionally: no
+                                // bound was ever compared. That silently inflated
+                                // any date-filtered agg served over memtable-
+                                // resident docs (measured: a one-day window on a
+                                // 1.12 M-doc index reported 135,972 hits instead of
+                                // 40,000 — the whole 95,972-doc memtable admitted
+                                // wholesale).
+                                //
+                                // Dates compare as instants (so `2026-06-17` and
+                                // `2026-06-17T00:00:00.000Z` are the same point);
+                                // anything that is not a date on both sides falls
+                                // back to lexicographic comparison, which is ES's
+                                // keyword-range semantics.
+                                let raw = Value::String(value.to_string());
+                                let doc_ms = parse_date_ms(&raw);
+                                let bound_ms = |k: &str| -> Option<i64> {
+                                    bounds.get(k).and_then(parse_date_ms)
                                 };
-                                if let Some(b) = bound_str("gte") {
-                                    if s < b {
-                                        return false;
+                                if let Some(v) = doc_ms {
+                                    if let Some(b) = bound_ms("gte") {
+                                        if v < b {
+                                            return false;
+                                        }
                                     }
-                                }
-                                if let Some(b) = bound_str("gt") {
-                                    if s <= b {
-                                        return false;
+                                    if let Some(b) = bound_ms("gt") {
+                                        if v <= b {
+                                            return false;
+                                        }
                                     }
-                                }
-                                if let Some(b) = bound_str("lte") {
-                                    if s > b {
-                                        return false;
+                                    if let Some(b) = bound_ms("lte") {
+                                        if v > b {
+                                            return false;
+                                        }
                                     }
-                                }
-                                if let Some(b) = bound_str("lt") {
-                                    if s >= b {
-                                        return false;
+                                    if let Some(b) = bound_ms("lt") {
+                                        if v >= b {
+                                            return false;
+                                        }
+                                    }
+                                } else {
+                                    let s = value;
+                                    let bound_str = |k: &str| -> Option<&str> {
+                                        bounds.get(k).and_then(Value::as_str)
+                                    };
+                                    if let Some(b) = bound_str("gte") {
+                                        if s < b {
+                                            return false;
+                                        }
+                                    }
+                                    if let Some(b) = bound_str("gt") {
+                                        if s <= b {
+                                            return false;
+                                        }
+                                    }
+                                    if let Some(b) = bound_str("lte") {
+                                        if s > b {
+                                            return false;
+                                        }
+                                    }
+                                    if let Some(b) = bound_str("lt") {
+                                        if s >= b {
+                                            return false;
+                                        }
                                     }
                                 }
                             }
+                            true
+                        };
+                        if !values.iter().any(|v| in_range(v)) {
+                            return false;
                         }
                     }
                 }
@@ -7843,14 +7880,20 @@ fn run_histogram(
     } else {
         let data_min = buckets.keys().min().copied();
         let data_max = buckets.keys().max().copied();
-        let min_key = extended_min
-            .map(|v| ((v - offset) / interval).floor() as i64)
-            .or(data_min)
-            .unwrap_or(0);
-        let max_key = extended_max
-            .map(|v| ((v - offset) / interval).floor() as i64)
-            .or(data_max)
-            .unwrap_or(0);
+        // #1819: `extended_bounds` only ADDS empty buckets — the fill range
+        // is the wider of the bounds and the data, so a bound inside the data
+        // never drops a bucket that holds documents (only `hard_bounds`, below,
+        // does). `date_histogram` widens the same way (`range_min.min(key)`).
+        let ext_min_key = extended_min.map(|v| ((v - offset) / interval).floor() as i64);
+        let ext_max_key = extended_max.map(|v| ((v - offset) / interval).floor() as i64);
+        let min_key = match (ext_min_key, data_min) {
+            (Some(e), Some(d)) => e.min(d),
+            (e, d) => e.or(d).unwrap_or(0),
+        };
+        let max_key = match (ext_max_key, data_max) {
+            (Some(e), Some(d)) => e.max(d),
+            (e, d) => e.or(d).unwrap_or(0),
+        };
         // Guard against pathological inputs (tiny intervals with a wide
         // numeric span — a few billion buckets would DoS the process).
         // ES rejects aggs that exceed `search.max_buckets` (default 65536).
