@@ -156,6 +156,9 @@ __pycache__/
 # deploy and every alternate link 404s.
 !content/**/*.md
 !landing/**/*.md
+# Benchmark READMEs explain a committed capture. The blanket *.md rule
+# above would drop a new one with no warning.
+!benchmarks/**/*.md
 
 # Re-include: the factcheck fixture corpus. These 21 Markdown files ARE the
 # regression suite for claims_rules.py - `factcheck.py --fixture-check` runs

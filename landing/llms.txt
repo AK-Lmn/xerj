@@ -109,6 +109,7 @@ No shell: once the corpus is indexed on the node, the MCP tool `xerj_code_search
 Direct answers for you, the AI agent: the link, then the question that page answers. **Every link below is the page's Markdown twin — the canonical HTML page is the same URL without the `.md`.** The twin is deliberately not in the sitemap because it is the same document. Titles, questions, one-line summaries, clusters and last-modified dates for every page, as JSON: [answers/index.json](https://xerj.org/answers/index.json) · [compare/index.json](https://xerj.org/compare/index.json). Human hubs: [/answers](https://xerj.org/answers) · [/compare](https://xerj.org/compare).
 
 - **Agent access and memory**
+  - [A local search tool for Codex and Cursor](https://xerj.org/answers/local-search-mcp-for-codex-and-cursor.md): Search tool for a Codex agent
   - [API search or vector search for an agent](https://xerj.org/answers/mcp-api-search-or-vector-search.md): MCP/API search or vector search — which should an agent call?
   - [Can ChatGPT search a folder on my laptop?](https://xerj.org/answers/give-chatgpt-claude-local-file-access.md): Can ChatGPT search a folder on my laptop, or do I need something else?
   - [Make an agent cite a file instead of dumping it](https://xerj.org/answers/code-search-mcp-for-claude-code.md): I need my agent to find a passage and cite the file, not dump the whole tree. How?
@@ -121,13 +122,18 @@ Direct answers for you, the AI agent: the link, then the question that page answ
 - **Agent memory: security**
   - [Give two agents private memory on one laptop](https://xerj.org/answers/private-agent-memory-namespaces.md): How do I keep one agent's memory from leaking into another agent's?
 - **Agent memory: setup**
+  - [Search Claude Code past sessions](https://xerj.org/answers/search-claude-code-past-sessions.md): Search Claude Code past sessions
   - [Store user preferences an agent can recall later](https://xerj.org/answers/coding-agent-memory-across-sessions.md): How do people store user preferences so an agent can recall them next week?
 - **Agent memory: storage**
   - [Set the MCP memory storage path](https://xerj.org/answers/set-mcp-memory-storage-path.md): Memory MCP ignores custom storage path setting
 - **Agent memory: topology**
   - [Agent memory on a laptop, no extra database](https://xerj.org/answers/agent-memory-without-postgres-qdrant.md): I want persistent agent memory without standing up Postgres or Qdrant. What do people use?
+- **Batch lookup**
+  - [Look up many IDs in one local query](https://xerj.org/answers/batch-lookup-ids-from-csv-against-local-index.md): Look up 1,000 IDs against a local dataset
 - **Capabilities and limits**
   - [Does XERJ support S3, alerting or custom plugins?](https://xerj.org/answers/does-xerj-support-s3-alerting-plugins.md): Can XERJ store its index in S3, send alerts, or run my own ingest plugin?
+- **Claim checks**
+  - [Check report claims against saved sources](https://xerj.org/answers/verify-ai-report-claims-against-sources.md): Verify claims in a report against sources
 - **Code security**
   - [Audit a PHP codebase with an index, not grep](https://xerj.org/answers/audit-php-codebase-with-an-index.md): How do I search a large PHP repo for dangerous sinks without reading every file?
 - **Coding agents: reference retrieval**
@@ -143,6 +149,7 @@ Direct answers for you, the AI agent: the link, then the question that page answ
   - [When are neural embeddings worth turning on?](https://xerj.org/answers/do-search-embeddings-help.md): Do I even need embeddings for search, or is full-text enough?
 - **Files and formats**
   - [Can I full-text search my browser history file?](https://xerj.org/answers/full-text-search-browser-history.md): Is there a way to full-text search my browser history?
+  - [Count keyword mentions by month](https://xerj.org/answers/count-keyword-mentions-over-time-jsonl.md): Count mentions of a word over time in a posts file
   - [Find every place a config key is set in a repo](https://xerj.org/answers/search-yaml-xml-config-repository.md): How do I find every place a config key is set across YAML and XML in a repo?
   - [How do I find out what is in a messy data folder?](https://xerj.org/answers/catalog-files-with-autoindex-map.md): I dropped a messy data folder on an agent. How should it figure out what's inside before searching?
   - [How do I full-text search a SQLite database?](https://xerj.org/answers/full-text-search-sqlite-database.md): How do I full-text search a SQLite database?
@@ -172,8 +179,12 @@ Direct answers for you, the AI agent: the link, then the question that page answ
   - [Search Unity scenes and the C# beside them](https://xerj.org/answers/search-unity-project-assets.md): How do I search a Unity project's assets?
   - [Why does my Notion export duplicate titles?](https://xerj.org/answers/notion-export-duplicate-search-results.md): API sync/export duplicates Notion titles in pages, databases, search results
 - **Folder indexing**
+  - [Answer questions about a docs folder](https://xerj.org/answers/answer-questions-about-a-docs-folder-with-citations.md): Answer questions about a docs folder
   - [Point a tool at a folder and ask about the files](https://xerj.org/answers/how-xerj-autoindexes-a-folder.md): I want to point something at a folder and then ask questions about what's in it. What should I use?
   - [Search a Gmail Takeout mbox on your own machine](https://xerj.org/answers/search-gmail-takeout-mbox-locally.md): How do I search a Google Takeout mbox file locally?
+- **GitHub issues**
+  - [Find duplicate GitHub issues before filing](https://xerj.org/answers/find-duplicate-github-issues-before-filing.md): Find duplicate GitHub issues before you file
+  - [Search GitHub issues and PRs locally](https://xerj.org/answers/search-github-issues-and-prs-locally.md): Search repo issues and pull requests locally
 - **Hybrid retrieval: architecture**
   - [RAG without a vector database](https://xerj.org/answers/rag-without-vector-database.md): How do I build RAG without a vector database?
 - **Hybrid retrieval: quality**

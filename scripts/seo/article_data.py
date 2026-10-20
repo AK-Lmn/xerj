@@ -23,6 +23,11 @@ TOP_FIELDS = frozenset({
     "title", "h1", "description", "slug", "cluster", "question", "intent",
     "published", "updated", "author", "reviewer", "schema_type", "links_out",
     "evidence", "faq", "noindex", "agent_prompt", "commands",
+    # Literal query strings this page is written to answer. Rendered on the
+    # page; not FAQPage/HowTo JSON-LD.
+    "queries",
+    # Optional per-page Open Graph card. Both fields, or neither.
+    "og_image", "og_image_alt",
 })
 # ``evidence`` is optional.  The block existed to point at capture files that
 # are no longer part of the repository, so an article without one is normal and
@@ -44,8 +49,9 @@ REQUIRED_FIELDS = frozenset({
 STRING_FIELDS = frozenset({
     "title", "h1", "description", "slug", "cluster", "question", "intent",
     "author", "reviewer", "schema_type", "agent_prompt",
+    "og_image", "og_image_alt",
 })
-LIST_FIELDS = frozenset({"links_out", "evidence", "faq", "commands"})
+LIST_FIELDS = frozenset({"links_out", "evidence", "faq", "commands", "queries"})
 MAP_FIELDS = frozenset({"evidence", "faq", "commands"})
 MAP_KEYS = {
     "evidence": frozenset({"claim", "source"}),
@@ -57,6 +63,8 @@ TOP_KEY_RE = re.compile(r"^([A-Za-z][A-Za-z0-9_]*)\s*:\s*(.*?)\s*$")
 NESTED_KEY_RE = re.compile(r"^ {4}([A-Za-z][A-Za-z0-9_]*)\s*:\s*(.*?)\s*$")
 LIST_ITEM_RE = re.compile(r"^ {2}-\s*(.*?)\s*$")
 SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+# Per-page cards live next to the site-wide card and must name this article.
+OG_IMAGE_RE = re.compile(r"^og/answers-[a-z0-9]+(?:-[a-z0-9]+)*\.png$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 INT_RE = re.compile(r"^-?(?:0|[1-9]\d*)$")
 COMMAND_TOKEN_RE = re.compile(r"^-{1,2}[A-Za-z][A-Za-z0-9-]*(?:=.*)?$")
@@ -69,8 +77,11 @@ COMMAND_TOKEN_RE = re.compile(r"^-{1,2}[A-Za-z][A-Za-z0-9-]*(?:=.*)?$")
 # engine/crates/xerj-server/src/share.rs).
 # `code` and `corpus` added 2026-09-21 with #977's port of the xc wrapper
 # scripts into the binary (engine/crates/xerj-autoindex/src/xc.rs).
+# `search`, `def` and `init` are real subcommands (engine/crates/xerj-server/src/main.rs
+# dispatch). `ask` and `hub` are too. Checked against that dispatch on 2026-10-20.
 XERJ_COMMANDS = frozenset({
     "index", "autoindex", "brain", "mcp", "share", "code", "corpus", "help", "version",
+    "ask", "search", "def", "hub", "init",
 })
 SHELL_PRIMITIVES = frozenset({
     "bash", "cd", "command", "curl", "env", "export", "git", "sh", "until", "wget",
@@ -109,8 +120,11 @@ class Article:
     noindex: bool
     agent_prompt: str | None
     commands: tuple[dict[str, str], ...]
-    body: str
-    body_start_line: int
+    queries: tuple[str, ...] = ()
+    og_image: str | None = None
+    og_image_alt: str | None = None
+    body: str = ""
+    body_start_line: int = 1
 
     @property
     def output_rel(self) -> str:
@@ -135,6 +149,9 @@ class Article:
         }
         if self.updated:
             out["updated"] = self.updated
+        if self.og_image:
+            out["og_image"] = self.og_image
+            out["og_image_alt"] = self.og_image_alt
         return out
 
 
@@ -415,6 +432,7 @@ def _validate(path: pathlib.Path, values: dict[str, Any], line_map: dict[str, in
     # with a bare KeyError instead of a clean schema decision (found by
     # test_article_schema.py's minimal fixture, #974).
     values.setdefault("commands", [])
+    values.setdefault("queries", [])
     for key in LIST_FIELDS:
         value = values[key]
         if not isinstance(value, list):
@@ -484,9 +502,28 @@ def _validate(path: pathlib.Path, values: dict[str, Any], line_map: dict[str, in
             _validate_command(command, path, cmd_line)
             if "```" in command or "```" in note:
                 raise _error(path, cmd_line, "commands values must not contain a Markdown fence")
+    for i, item in enumerate(values["queries"]):
+        if not isinstance(item, str) or not item.strip():
+            raise _error(path, line_map.get("queries", 1),
+                         f"queries item {i + 1} must be a non-empty string")
+    if ("og_image" in values) != ("og_image_alt" in values):
+        raise _error(path, line_map.get("og_image", line_map.get("og_image_alt", 1)),
+                     "og_image and og_image_alt go together")
+    if "og_image" in values:
+        if not OG_IMAGE_RE.fullmatch(values["og_image"]):
+            raise _error(path, line_map.get("og_image", 1),
+                         "og_image must be og/answers-<slug>.png")
+        if values["og_image"] != f"og/answers-{slug}.png":
+            raise _error(path, line_map.get("og_image", 1),
+                         f"og_image must be og/answers-{slug}.png for this slug")
+        alt = values["og_image_alt"]
+        if not isinstance(alt, str) or not alt.strip():
+            raise _error(path, line_map.get("og_image_alt", 1),
+                         "og_image_alt must be a non-empty string")
     values["noindex"] = values.get("noindex", False)
     values["agent_prompt"] = values.get("agent_prompt")
     values["commands"] = values.get("commands", [])
+    values["queries"] = [item.strip() for item in values["queries"]]
     values["published"] = published
     values["updated"] = updated
     return values
@@ -532,6 +569,9 @@ def load(path: pathlib.Path, category: str | None = None) -> Article:
         noindex=values["noindex"],
         agent_prompt=values["agent_prompt"],
         commands=tuple(dict(item) for item in values["commands"]),
+        queries=tuple(values["queries"]),
+        og_image=values.get("og_image"),
+        og_image_alt=values.get("og_image_alt"),
         body=body,
         body_start_line=body_start_line,
     )

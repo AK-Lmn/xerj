@@ -587,6 +587,10 @@ def render_markdown_twin(article: article_data.Article, context: BuildContext) -
     if body:
         out += ["", body]
 
+    if article.queries:
+        out += ["", "## Queries this page answers", ""]
+        for query in article.queries:
+            out.append(f"- {query}")
     out += ["", "## FAQ", ""]
     for item in article.faq:
         out += [f"### {item['q'].strip()}", "", item["a"].strip(), ""]
@@ -628,6 +632,12 @@ def render_article_sections(article: article_data.Article, context: BuildContext
     if commands:
         out.append(commands)
     out.extend(body_blocks[1:])
+    if article.queries:
+        out.append("  <h2>Queries this page answers</h2>")
+        out.append("  <ul>")
+        for query in article.queries:
+            out.append(f"    <li>{esc_text(query)}</li>")
+        out.append("  </ul>")
     out.append("  <h2>FAQ</h2>")
     for item in article.faq:
         # No grammar rule on the question string. A real user types "The
