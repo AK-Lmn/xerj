@@ -376,17 +376,21 @@ def tile(c):
 
 # Brandbook tokens from xerj.org (landing/style.css), day palette only.
 # White schema is the one scheme: no dark variant, no prefers-color-scheme
-# override (user directive 2026-10-06).
+# override (user directive 2026-10-06). 2026-10 readability pass: every text
+# colour is >= 7:1 against --z-bg (ratios in the comments), body 18px / 1.6.
 STYLE = """/* corpus hub - xerj.org brandbook, day palette, white only */
 :root{
---z-bg:#f6f4ee;--z-ink:#11120f;--z-mute:#696762;--z-faint:#e3dfd4;--z-line:#cfcbbf;
---z-accent:#7f5200;--z-cmp:#6f8aa8;
---ok:#2e6b3a;--bad:#8c2f2f;--warn:#8a6d1a;
+color-scheme:light;
+--z-bg:#fafaf7;--z-ink:#1a1a1a;--z-mute:#4a4843;--z-faint:#e7e5de;--z-line:#d4d1c7;
+--z-accent:#6b4400;--z-cmp:#3b536f;
+--z-brand:#ffc400;--z-focus:#8a5a00;--z-code-bg:#f3f4f6;--z-code-line:#e2e4e8;
+--ok:#1e5c30;--bad:#8f2427;--warn:#5f4a0e;
+/* vs --z-bg: ink 16.6, mute 8.7, accent 8.2, cmp 7.6, ok 7.6, bad 8.2, warn 8.1 */
 --font-display:'Big Shoulders Display','Inter',system-ui,sans-serif;
 --font-prose:'Inter',system-ui,sans-serif;
 --font-data:'IBM Plex Sans','Inter',system-ui,sans-serif;
 --font-mono:'JetBrains Mono','IBM Plex Mono',monospace;
---fs-11:11px;--fs-13:13px;--fs-16:16px;--fs-20:20px;--fs-32:32px;
+--fs-11:12px;--fs-13:14px;--fs-16:18px;--fs-20:20px;--fs-32:32px;
 --fs-56:56px;--fs-96:96px;--fs-160:160px;
 --track-ui:.14em;--track-label:.08em;
 --sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:20px;--sp-6:24px;
@@ -395,9 +399,18 @@ STYLE = """/* corpus hub - xerj.org brandbook, day palette, white only */
 }
 *{box-sizing:border-box}
 body{margin:0;font-family:var(--font-prose);background:var(--z-bg);color:var(--z-ink);
-line-height:1.5;font-size:var(--fs-16)}
+line-height:1.6;font-size:var(--fs-16)}
 a{color:inherit}
-code{font-family:var(--font-mono);font-size:.92em;background:var(--z-faint);padding:.1em .35em}
+:where(p,li,dd,td,.kbox,.note) a:not([class]){color:var(--z-accent);text-decoration:underline;
+text-decoration-thickness:1px;text-underline-offset:.18em}
+:where(p,li,dd,td,.kbox,.note) a:not([class]):hover{color:var(--z-ink);text-decoration-thickness:2px}
+:focus-visible{outline:3px solid var(--z-focus);outline-offset:2px}
+::placeholder{color:var(--z-mute);opacity:1}
+@media (max-width:720px){:root{--fs-16:17px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;
+animation-iteration-count:1!important;transition-duration:.01ms!important}}
+code{font-family:var(--font-mono);font-size:.9em;background:var(--z-code-bg);
+border:1px solid var(--z-code-line);padding:.05em .35em}
 /* nav: main-site pattern, 1px bottom line */
 .nav{display:flex;align-items:baseline;gap:var(--sp-5);padding:var(--sp-4) var(--page-x);
 border-bottom:1px solid var(--z-line);font-family:var(--font-data);font-size:var(--fs-11);
@@ -451,7 +464,7 @@ main{max-width:var(--max-w);margin:0 auto;padding:var(--sp-8) var(--page-x) var(
 .kicker{font-family:var(--font-data);font-size:var(--fs-11);font-weight:500;
 letter-spacing:var(--track-ui);text-transform:uppercase;color:var(--z-mute)}
 .kicker .accent{color:var(--z-accent)}
-.kicker .dash{opacity:.4;margin:0 6px}
+.kicker .dash{margin:0 6px}
 h1.hero{font-family:var(--font-display);font-weight:900;font-size:clamp(40px,6vw,var(--fs-96));
 line-height:.9;letter-spacing:-.02em;margin:0 0 var(--sp-6);color:var(--z-ink)}
 h1.hero .accent{color:var(--z-accent)}
@@ -523,7 +536,8 @@ font-weight:600;text-transform:uppercase;letter-spacing:var(--track-label);color
 .toolbar .row{display:flex;gap:var(--sp-2);flex-wrap:wrap;align-items:center}
 .toolbar input{font-family:var(--font-prose);font-size:var(--fs-13);padding:.5em .8em;
 border:1px solid var(--z-line);background:transparent;color:var(--z-ink);min-width:22rem}
-.toolbar input:focus{outline:none;border-color:var(--z-accent)}
+.toolbar input{border-color:#8c8a82}
+.toolbar input:focus{outline:3px solid var(--z-focus);outline-offset:1px;border-color:var(--z-accent)}
 .chip{font-family:var(--font-data);font-size:var(--fs-11);font-weight:500;
 text-transform:uppercase;letter-spacing:var(--track-label);border:1px solid var(--z-line);
 background:transparent;color:var(--z-mute);padding:.35em .9em;cursor:pointer}
@@ -551,7 +565,7 @@ padding:.1em .5em;color:var(--z-mute)}
 .badge.cat{color:var(--z-accent);border-color:var(--z-accent)}
 .badge.g7.ok,.badge.imp{color:var(--ok);border-color:var(--ok)}
 .badge.g7.bad{color:var(--bad);border-color:var(--bad)}
-.badge.g7.mute{opacity:.6}
+.badge.g7.mute{border-style:dashed}
 /* detail pages */
 section.detail h2{font-family:var(--font-display);font-weight:700;font-size:var(--fs-32);
 line-height:.95;border-bottom:1px solid var(--z-line);padding-bottom:var(--sp-2);margin:var(--sp-10) 0 var(--sp-4)}
