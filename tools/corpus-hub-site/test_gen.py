@@ -9,9 +9,14 @@ Covers issue #1279: a graded backlog file whose "graded" value is a string
 (a timestamp note, not a slug->suite map) must not crash the whole site
 build. One malformed file froze every corpus discovery page in the deploy.
 """
+import contextlib
+import io
 import json
+import os
 import pathlib
+import re
 import sys
+import urllib.parse
 import tempfile
 import unittest
 
@@ -293,6 +298,141 @@ class BusyPortStepTest(unittest.TestCase):
         self.assertIn("--port 9400", gen.SETUP_STEPS)
         self.assertIn("--url http://127.0.0.1:9400", gen.SETUP_STEPS)
         self.assertIn("ES-compat", gen.SETUP_STEPS)
+
+def _contrast(a, b):
+    def lum(h):
+        c = [int(h[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+        c = [x / 12.92 if x <= 0.04045 else ((x + 0.055) / 1.055) ** 2.4 for x in c]
+        return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
+    hi, lo = sorted((lum(a), lum(b)), reverse=True)
+    return (hi + 0.05) / (lo + 0.05)
+
+
+class TreemapTest(unittest.TestCase):
+    """The /contributors/ star treemap (treemap.py)."""
+
+    def _items(self, stars):
+        return [{"login": f"user{i}", "name": f"User Number {i}", "stars": s, "stars_txt": f"★ {s:,}"}
+                for i, s in enumerate(stars)]
+
+    def test_squarify_areas_are_proportional_and_fill_the_box(self):
+        import treemap
+        vals = [500, 300, 120, 80, 40, 9, 1]
+        for aspect in (1.0, 2.5):
+            rects = treemap.squarify(vals, 1040, 720, aspect)
+            total = sum(vals)
+            for v, (x, y, w, h) in zip(vals, rects):
+                self.assertAlmostEqual(w * h, v / total * 1040 * 720, delta=1e-6 * 1040 * 720)
+                self.assertGreaterEqual(x, -1e-6)
+                self.assertGreaterEqual(y, -1e-6)
+                self.assertLessEqual(x + w, 1040 + 1e-6)
+                self.assertLessEqual(y + h, 720 + 1e-6)
+            self.assertAlmostEqual(sum(w * h for _, _, w, h in rects), 1040 * 720, places=3)
+
+    def test_every_tile_fits_a_14px_one_line_name(self):
+        import treemap
+        # long tail like the real data: one huge, many tiny
+        items = self._items([400000, 300000] + [50000 - 900 * i for i in range(50)] + [3] * 400 + [0] * 5)
+        for key, W, H, aspect, _ in treemap.LAYOUTS:
+            tiles = treemap.fit(items, W, H, aspect)
+            self.assertTrue(tiles, key)
+            self.assertLess(len(tiles), len(items))        # the tail is cut, not squeezed
+            self.assertEqual([t[0]["login"] for t in tiles], [i["login"] for i in items[:len(tiles)]])
+            for it, (x, y, w, h), lab in tiles:
+                self.assertGreaterEqual(lab["fs"], 14)
+                self.assertGreaterEqual(h - treemap.GAP, treemap.MIN_H)
+                self.assertLessEqual(treemap.text_w(lab["text"], lab["fs"]), w - treemap.GAP)
+                self.assertIn(lab["text"], (it["name"], it["login"]))
+
+    def test_tile_colours_are_aaa(self):
+        import treemap
+        for bg in treemap.TINTS:
+            self.assertGreaterEqual(_contrast(treemap.INK, bg), 7.0, bg)
+            self.assertGreaterEqual(_contrast(treemap.MUTE, bg), 7.0, bg)
+
+    def test_render_links_profiles_and_lazy_avatars(self):
+        import treemap
+        html, shown = treemap.render(self._items([900, 500, 300, 100]), gen.esc, lambda l: f"{l}.html")
+        self.assertEqual(set(shown), {"l", "m", "s"})
+        self.assertIn('href="user0.html"', html)
+        self.assertIn('loading="lazy"', html)
+        self.assertNotIn("<script", html)
+
+
+class SiteLinksTest(unittest.TestCase):
+    """Builds the whole site once into a temp dir and checks it (issue: corpus
+    pages and contributor pages were not linked to each other)."""
+
+    HREF = re.compile(r'\bhref="([^"]*)"')
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = tempfile.TemporaryDirectory()
+        orig = gen.OUT
+        gen.OUT = pathlib.Path(cls.tmp.name) / "out"
+        try:
+            with contextlib.redirect_stdout(io.StringIO()):
+                gen.main()
+        finally:
+            cls.out, gen.OUT = gen.OUT, orig
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def _resolves(self, page, href):
+        u = urllib.parse.urlsplit(href)
+        if u.scheme or u.netloc or not u.path:
+            return True                                   # external, or a #fragment on the same page
+        path = urllib.parse.unquote(u.path)
+        t = pathlib.Path(os.path.normpath((self.out / path.lstrip("/")) if path.startswith("/") else (page.parent / path)))
+        return t.is_file() or (t / "index.html").is_file() or t.with_name(t.name + ".html").is_file()
+
+    def _pages(self, sub):
+        return sorted((self.out / sub).glob("*.html"))
+
+    def test_every_corpus_page_links_a_contributor_and_every_link_resolves(self):
+        pages = self._pages("corpus")
+        self.assertGreater(len(pages), 500)
+        bad, lonely = [], []
+        for f in pages:
+            hrefs = self.HREF.findall(f.read_text())
+            people = [h for h in hrefs if "contributors/" in h and not h.endswith("contributors/index.html")]
+            if not people:
+                lonely.append(f.name)
+            bad += [(f.name, h) for h in hrefs if not self._resolves(f, h)]
+        self.assertEqual(lonely, [], "corpus pages without a contributor link")
+        self.assertEqual(bad, [], "broken links on corpus pages")
+
+    def test_every_contributor_page_links_its_corpora_and_every_link_resolves(self):
+        bad, lonely = [], []
+        for f in self._pages("contributors"):
+            html = f.read_text()
+            hrefs = self.HREF.findall(html)
+            bad += [(f.name, h) for h in hrefs if not self._resolves(f, h)]
+            if f.stem != "index" and not f.stem.startswith("list.") and not any(h.startswith("../corpus/") for h in hrefs):
+                lonely.append(f.name)
+        self.assertEqual(lonely, [], "contributor pages that link no corpus")
+        self.assertEqual(bad, [], "broken links on contributor pages")
+
+    def test_list_chunks_cover_every_contributor_once_in_wall_order(self):
+        import contributors
+        d = self.out / "contributors"
+        html = (d / "index.html").read_text()
+        first = re.findall(r'<a href="([^"]+)\.html" data-id=', html.split('class="wall"', 1)[1])
+        self.assertEqual(len(first), contributors.CHUNK)
+        rest = []
+        for f in sorted(d.glob("list.*.json"), key=lambda p: int(p.name.split(".")[1])):
+            rows = json.loads(f.read_text())
+            self.assertLessEqual(len(rows), contributors.CHUNK)
+            rest += [r[0] for r in rows]
+            self.assertTrue((d / f.name.replace(".json", ".html")).is_file())   # crawlable twin
+        logins = first + rest
+        self.assertEqual(len(logins), len(set(logins)))
+        self.assertTrue(all((d / f"{l}.html").is_file() for l in logins))
+        self.assertIn('class="pager"', html)                                   # plain links without JS
+        self.assertIn('class="tmap"', html)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -984,7 +984,11 @@ def detail_body(c, g7, graded, impact, prov, contrib=""):
 <td class="mono">{human_bytes(r.get('bytes'))} / {human_files(r.get('files'))}</td>
 <td class="note">{esc(plain(rv.get('note',''))[:400])}</td></tr>''')
     for s in c.get("sources", []):
-        rows.append(f'''<tr><td class="mono"><a href="{esc(s.get('url',''))}">{esc(s.get('slug', s.get('url','')))}</a></td>
+        # a backlog row's "url" can be a note ("superseded by ...", "mined from ...");
+        # link only real URLs, print the rest as text (no dead relative hrefs)
+        u, label = s.get('url', ''), esc(s.get('slug', s.get('url', '')))
+        src = f'<a href="{esc(u)}">{label}</a>' if re.match(r"^https?://", u or "") else label
+        rows.append(f'''<tr><td class="mono">{src}</td>
 <td class="mono">recipe</td><td>{esc(s.get('licence','?'))}</td><td class="mono">curated pack</td>
 <td class="note">{esc(plain(s.get('licence_hint',''))[:400])}</td></tr>''')
     g = graded.get(c["slug"])
@@ -1039,11 +1043,12 @@ def detail_body(c, g7, graded, impact, prov, contrib=""):
 <section class="detail"><h2>Sources and pins</h2><table>
 <tr><th>source</th><th>pin</th><th>licence</th><th>size</th><th>review note</th></tr>{''.join(rows)}</table>
 <p class="note">{human_bytes(nbytes)} across {human_files(files)}. Added {esc(c['added'][:10] or 'n/a')}.</p></section>
+{contrib}
 <section class="detail"><h2>Rights</h2><p>{esc(' + '.join(licences) or '?')}.
 {esc('Redistribution permitted with attribution per the licence review' if any(r.get('review',{}).get('use')=='adapt-with-attribution' for r in c['repos']) else 'See per-source review blocks')}.
 The review block records a human opening each licence file at the pin. Detector output is a hint, never the verdict.</p></section>
 {contributors.more_block("corpus", c["slug"], esc)}
-{g7sec}{impsec}{agent_score.section(c['slug'], esc)}{usage.traffic_section(c["slug"], esc)}{usage.corpus_section(c["slug"], esc)}{contrib}
+{g7sec}{impsec}{agent_score.section(c['slug'], esc)}{usage.traffic_section(c["slug"], esc)}{usage.corpus_section(c["slug"], esc)}
 </main>
 {COPY_JS}{contributors.STARS_JS}{contributors.MORE_JS}{usage.USAGE_JS}{agent_score.PANEL_JS}'''
 
@@ -1153,9 +1158,12 @@ def main():
     impact, prov = load_impact()
     (OUT / "index.html").write_text(render_index(corpora, g7, graded, impact, prov))
     people = contributors.load(HUB, corpora)
-    in_corpus = contributors.by_corpus(people)
+    # every corpus page credits its people: signed-up contributors, the upstream
+    # owners of its pinned repositories, or the curator (contributors.credits)
+    credit, upstream = contributors.credits(corpora, people)
     for c in corpora:
-        contrib = contributors.corpus_section(in_corpus.get(c["slug"], []), esc, people)
+        cr = credit[c["slug"]]
+        contrib = contributors.corpus_section(cr["contributors"], esc, people, cr["upstream"], cr["curator"], cr["aggregate"])
         (OUT / "corpus" / f"{c['slug']}.html").write_text(
             page(f"{c['slug']}: XERJ Corpus Hub", c["usecase"][:150], detail_body(c, g7, graded, impact, prov, contrib), rel="../"))
     for k, (title, what) in CATS.items():
@@ -1285,7 +1293,7 @@ def main():
               "  withdrawn states (visible, not hidden: hub policy is honest statuses).",
               "  Browse all: https://hub.xerj.org"]
     (OUT / "llms.txt").write_text("\n".join(lines) + "\n")
-    n_people = contributors.generate(OUT, HUB, page, esc, {c["slug"] for c in live}, corpora, people)
+    n_people = contributors.generate(OUT, HUB, page, esc, {c["slug"] for c in live}, corpora, people, upstream)
     # Signed-in details: bundled into the Pages Functions, never written to out/.
     if os.environ.get("GITHUB_ACTIONS") == "true" or os.environ.get("HUB_FUNCTION_DATA") == "1":
         mod = private_data.module(private_data.build(ROOT, HUB, PACKS, corpora, people,
@@ -1293,7 +1301,8 @@ def main():
         (ROOT / "functions" / "_lib" / "hubdata.js").write_text(mod)
         print(f"signed-in details: functions/_lib/hubdata.js, {len(mod):,} bytes")
     n = len(list((OUT / "corpus").glob("*.html")))
-    print(f"generated: index, about, {len(CATS)} category pages, {n} corpus pages, {n_people} contributor pages -> {OUT}")
+    print(f"generated: index, about, {len(CATS)} category pages, {n} corpus pages ({len(corpora)} registry), "
+          f"{n_people} contributor pages, {len(upstream)} upstream/curator pages -> {OUT}")
 
 
 if __name__ == "__main__":
