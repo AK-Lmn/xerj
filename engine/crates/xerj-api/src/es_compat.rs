@@ -7547,7 +7547,18 @@ fn parse_highlight(hl_val: &Value) -> Option<xerj_query::ast::HighlightRequest> 
     use xerj_query::ast::{HighlightFieldOptions, HighlightRequest};
 
     let obj = hl_val.as_object()?;
-    let fields_val = obj.get("fields")?.as_object()?;
+    // `fields` is an object, or ES's ordered form: an array of single-field
+    // objects (`[{"title": {}}, {"body": {}}]`). The array used to fail
+    // `as_object()` and drop highlighting with no error (#1946).
+    let field_entries: Vec<(&String, &Value)> = match obj.get("fields")? {
+        Value::Object(m) => m.iter().collect(),
+        Value::Array(items) => items
+            .iter()
+            .filter_map(Value::as_object)
+            .flat_map(|m| m.iter())
+            .collect(),
+        _ => return None,
+    };
 
     fn pull_tag(
         obj: &serde_json::Map<String, Value>,
@@ -7563,7 +7574,7 @@ fn parse_highlight(hl_val: &Value) -> Option<xerj_query::ast::HighlightRequest> 
     }
 
     let mut fields = std::collections::HashMap::new();
-    for (field_name, field_opts) in fields_val {
+    for (field_name, field_opts) in field_entries {
         let opts = if let Some(o) = field_opts.as_object() {
             HighlightFieldOptions {
                 pre_tag: pull_tag(o, "pre_tags", "pre_tag"),
@@ -26511,7 +26522,7 @@ async fn msearch_impl(
         }
 
         // Parse search request.
-        let search_req = match xerj_query::parse_request(&effective_body)
+        let mut search_req = match xerj_query::parse_request(&effective_body)
             .map_err(|e| xerj_common::XerjError::invalid_query(e.to_string()))
         {
             Ok(r) => r,
@@ -26525,16 +26536,20 @@ async fn msearch_impl(
             }
         };
 
+        // `highlight` the way `_search` reads it (`pre_tags` arrays, the
+        // array form of `fields`), not `parse_request`'s serde shape (#1945).
+        search_req.highlight = effective_body.get("highlight").and_then(parse_highlight);
+
         // Resolve index names (comma-separated or "*" = all).
         let index_names: Vec<String> = if let Some(pit) = pit_context.as_ref() {
             pit.indices.clone()
-        } else if index_name == "*" || index_name == "_all" {
-            state.engine.index_name_list()
         } else {
-            index_name
-                .split(',')
-                .flat_map(|n| state.engine.resolve_alias(n.trim()))
-                .collect()
+            // #1932: expand wildcards and aliases through the same selector
+            // the other read endpoints use. `resolve_alias` knew aliases
+            // only, so `logs-*` reached `get_index` as a literal name and the
+            // item answered 404. A pattern that matches nothing is an empty
+            // result, and a missing concrete name still fails the item.
+            resolve_index_selector(&state, &index_name).await
         };
 
         let index_names: Vec<String> = if idx_constraints.is_empty() {
@@ -26633,12 +26648,18 @@ async fn msearch_impl(
                 } else {
                     Some(h.source.clone())
                 };
-                json!({
+                let mut hit = json!({
                     "_index": idx_name,
                     "_id": h.id,
                     "_score": h.score as f64,
                     "_source": source,
-                })
+                });
+                // The engine already built the fragments; this renderer used
+                // to drop them (#1945).
+                if let Some(hl) = h.highlight {
+                    hit["highlight"] = json!(hl);
+                }
+                hit
             })
             .collect();
 
@@ -27836,17 +27857,69 @@ fn es_aggregator_class_name_ctx(
     }
 }
 
+/// `*`-only glob over an index, alias or field name: `*` matches any run of
+/// characters (including none), anywhere in the pattern, any number of times.
+/// Every other character is literal, as in ES index patterns (`?` is not a
+/// wildcard there).
+///
+/// This used to handle one leading or one trailing `*` and fall back to
+/// string equality for anything else, so `logs-*-2026` (#1933) and
+/// `*-app-*` matched nothing and `_search` answered 0 hits with no error.
 fn glob_match_simple(pattern: &str, name: &str) -> bool {
-    if pattern == "*" {
+    if !pattern.contains('*') {
+        return pattern == name;
+    }
+    let mut parts = pattern.split('*');
+    // `split` always yields at least one item; the first is anchored at the
+    // start of `name`, the last at its end, the middle ones float in order.
+    let first = parts.next().unwrap_or("");
+    let Some(mut rest) = name.strip_prefix(first) else {
+        return false;
+    };
+    let middle: Vec<&str> = parts.collect();
+    let Some((last, middle)) = middle.split_last() else {
         return true;
+    };
+    for part in middle {
+        if part.is_empty() {
+            continue;
+        }
+        match rest.find(part) {
+            Some(at) => rest = &rest[at + part.len()..],
+            None => return false,
+        }
     }
-    if let Some(prefix) = pattern.strip_suffix('*') {
-        return name.starts_with(prefix);
+    rest.ends_with(last)
+}
+
+#[cfg(test)]
+mod glob_match_simple_tests {
+    use super::glob_match_simple;
+
+    #[test]
+    fn a_star_anywhere_in_an_index_pattern_matches() {
+        // #1933: a mid-name `*` used to fall through to string equality.
+        assert!(glob_match_simple("logs-*-2026", "logs-app-2026"));
+        assert!(glob_match_simple("logs-*-2026", "logs--2026"));
+        assert!(!glob_match_simple("logs-*-2026", "logs-app-2025"));
+        assert!(glob_match_simple("*-app-*", "logs-app-2026"));
+        assert!(glob_match_simple("l*s-*-20*6", "logs-app-2026"));
+        assert!(
+            !glob_match_simple("ab*ba", "aba"),
+            "anchors may not overlap"
+        );
+        assert!(glob_match_simple("a**b", "ab"));
+        // Unchanged shapes.
+        assert!(glob_match_simple("*", "anything"));
+        assert!(glob_match_simple("logs-*", "logs-app-2026"));
+        assert!(glob_match_simple("*-2026", "logs-app-2026"));
+        assert!(glob_match_simple("logs-app-2026", "logs-app-2026"));
+        assert!(!glob_match_simple("logs-app", "logs-app-2026"));
+        assert!(
+            !glob_match_simple("logs-?pp-2026", "logs-app-2026"),
+            "`?` is literal"
+        );
     }
-    if let Some(suffix) = pattern.strip_prefix('*') {
-        return name.ends_with(suffix);
-    }
-    pattern == name
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

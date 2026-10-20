@@ -176,6 +176,11 @@ const SEARCH_MM_FIELDS: &[(&str, &str)] = &[
 /// #916 shape exactly.
 const PROSE_EXTRA_FIELDS: &[&str] = &["text", "impl", "message"];
 
+/// Analyzed content fields that get the exact-phrase clause when the
+/// `multi_match` names them. `name`, `code` and `title` are keywords and
+/// `defs` has its own phrase clause.
+const PHRASE_CONTENT_FIELDS: &[&str] = &["body", "text", "impl", "message"];
+
 /// Every field `xerj search` might name in `multi_match`, `term`, or
 /// `match_phrase`. A numeric mapping of one of these on any index in the
 /// wildcard fails the whole request (`For input string`, #1284).
@@ -398,12 +403,30 @@ fn build_search_query(
     if field_lookup_ok(mapped, numeric, "name") {
         should.push(json!({ "term": { "name": { "value": query.trim(), "boost": 10 } } }));
     }
+    // An exact phrase in a content field. A pasted error message or log
+    // line is the strongest signal of which file is meant, and the
+    // bag-of-words `multi_match` alone ranks a short `defs` list sharing two
+    // of its words above the long file holding all of them in order. Only
+    // the content fields the `multi_match` already names, so the mapping and
+    // numeric drops (#1601, #1284) apply unchanged. Appended last so the
+    // historical clause positions do not move.
+    if let Some(phrase) = xerj_common::code_query::exact_phrase_query(query) {
+        for field in &fields {
+            let base = field.split('^').next().unwrap_or(field);
+            if PHRASE_CONTENT_FIELDS.contains(&base) {
+                should.push(json!({ "match_phrase": { base: {
+                    "query": phrase,
+                    "boost": xerj_common::code_query::EXACT_PHRASE_BOOST
+                } } }));
+            }
+        }
+    }
     json!({
         "size": k,
         "query": { "bool": { "should": should }},
         // No `body` here: whole-file bodies are the token flood (measured ~9x
         // the size of the matching passage). `_passage` carries the snippet.
-        "_source": ["ax_path", "line", "start_line", "language", "kind", "code", "title", "heading", "page", "cell"],
+        "_source": ["ax_path", "ax_locator", "line", "start_line", "language", "kind", "code", "title", "heading", "page", "cell"],
         "fields": ["_passage"]
     })
 }
@@ -458,10 +481,40 @@ pub(crate) fn hit_location(hit: &Value) -> String {
     if let Some(n) = src.get("cell").and_then(Value::as_u64).filter(|n| *n > 0) {
         return format!("{path} cell {n}");
     }
+    // A row of a JSONL/CSV/JSON/YAML/spreadsheet file is one record: the
+    // passage ordinal counts lines of that record's own text, not of the
+    // file, so `rows.jsonl:1` named a different row for every hit (#1934).
+    // Cite the record by its locator instead (a byte offset or a row number).
+    if let Some(loc) = record_locator(src) {
+        return format!("{path}#{loc}");
+    }
     match passage_line(hit) {
         Some(n) => xerj_common::xccode::passage::cite_path_line(path, n),
         None => path.to_string(),
     }
+}
+
+/// The `ax_locator` of a record that is one row or element of a data file,
+/// where a passage ordinal is not a file line: `b<byte offset>` (JSONL rows,
+/// log records, byte-addressed chunks), `r<N>` (CSV rows), `row<N>` (HTML
+/// table rows), `<sheet>!r<N>` (spreadsheet rows), `<key>:e<N>` (JSON array
+/// elements) and `d<N>` / `d<N>e<N>` (YAML documents). Whole files (`file`),
+/// code records and prose sections are left to the line logic.
+fn record_locator(src: &Value) -> Option<&str> {
+    let loc = src.get("ax_locator").and_then(Value::as_str)?;
+    let digits = |s: &str| !s.is_empty() && s.bytes().all(|b| b.is_ascii_digit());
+    let yaml = loc
+        .strip_prefix('d')
+        .is_some_and(|rest| match rest.split_once('e') {
+            Some((doc, elem)) => digits(doc) && digits(elem),
+            None => digits(rest),
+        });
+    let row = ["b", "r", "row"]
+        .iter()
+        .any(|p| loc.strip_prefix(p).is_some_and(digits));
+    let sheet_row = loc.rsplit_once("!r").is_some_and(|(_, n)| digits(n));
+    let element = loc.rsplit_once(":e").is_some_and(|(_, n)| digits(n));
+    (row || yaml || sheet_row || element).then_some(loc)
 }
 
 /// A line an agent can cite: `_source.line` / `start_line`, else a lexical
@@ -962,7 +1015,7 @@ pub fn run_search_cli() -> i32 {
         }
     }
     println!(
-        "\n{} passage(s) from '{pattern}'. Cite ax_path:line for anything you rely on.",
+        "\n{} passage(s) from '{pattern}'. Cite ax_path:line (ax_path#locator for a data row) for anything you rely on.",
         hits.len()
     );
     0
@@ -1327,6 +1380,51 @@ mod tests {
         );
     }
 
+    /// #1934: two JSONL rows both printed as `xerj-prs.jsonl:1` because the
+    /// passage ordinal counts lines inside the row's own `body`. A data row
+    /// is cited by its locator; whole files, code and sections keep lines.
+    #[test]
+    fn a_data_row_is_cited_by_its_locator_not_a_passage_ordinal() {
+        let row = |loc: &str, ordinal: u64| {
+            json!({
+                "_source": { "ax_path": "xerj-prs.jsonl", "ax_locator": loc },
+                "fields": { "_passage": [{ "field": "body", "ordinal": ordinal }] }
+            })
+        };
+        assert_eq!(hit_location(&row("b0", 0)), "xerj-prs.jsonl#b0");
+        assert_eq!(hit_location(&row("b68801", 0)), "xerj-prs.jsonl#b68801");
+        assert_ne!(
+            hit_location(&row("b9229", 0)),
+            hit_location(&row("b68801", 0)),
+            "two rows never share a citation"
+        );
+        for (loc, want) in [
+            ("r17", "xerj-prs.jsonl#r17"),
+            ("row3", "xerj-prs.jsonl#row3"),
+            ("Sheet1!r5", "xerj-prs.jsonl#Sheet1!r5"),
+            ("items:e12", "xerj-prs.jsonl#items:e12"),
+            ("d0e4", "xerj-prs.jsonl#d0e4"),
+            ("d2", "xerj-prs.jsonl#d2"),
+        ] {
+            assert_eq!(hit_location(&row(loc, 3)), want);
+        }
+        // Lines still win where they are lines.
+        assert_eq!(hit_location(&row("file", 4)), "xerj-prs.jsonl:5");
+        assert_eq!(hit_location(&row("code", 4)), "xerj-prs.jsonl:5");
+        assert_eq!(hit_location(&row("s2", 4)), "xerj-prs.jsonl:5");
+        assert_eq!(hit_location(&row("bogus", 4)), "xerj-prs.jsonl:5");
+        let lined = json!({
+            "_source": { "ax_path": "a.jsonl", "ax_locator": "b40", "line": 3 }
+        });
+        assert_eq!(hit_location(&lined), "a.jsonl:3");
+        // No locator (an older index, or `xerj def`): unchanged.
+        let bare = json!({
+            "_source": { "ax_path": "a.rs" },
+            "fields": { "_passage": [{ "field": "body", "ordinal": 9 }] }
+        });
+        assert_eq!(hit_location(&bare), "a.rs:10");
+    }
+
     /// A PDF passage with ordinal 0 is page 4, not line 1. A notebook section
     /// heading is cell 19, not line 1. A symbol line still wins over a page.
     #[test]
@@ -1464,13 +1562,15 @@ mod tests {
         let mapped = names_of(&["body", "title", "text", "impl"]);
         let body = search_query_body_for_mapping("retention ceiling", 5, Some(&mapped), None);
         let should = body["query"]["bool"]["should"].as_array().unwrap();
-        assert_eq!(should.len(), 1, "{body}");
         assert!(should[0].get("match_phrase").is_none(), "{body}");
-        assert!(should[0].get("term").is_none(), "{body}");
+        assert!(should.iter().all(|c| c.get("term").is_none()), "{body}");
         assert_eq!(
             should[0]["multi_match"]["fields"],
             json!(["body", "title", "text", "impl"])
         );
+        // The exact-phrase legs name only mapped content fields; `title` is
+        // a keyword and gets none.
+        assert_eq!(phrase_fields(&body), vec!["body", "text", "impl"], "{body}");
         let rendered = body["query"].to_string();
         assert!(!rendered.contains("\"defs\""), "{rendered}");
         assert!(!rendered.contains("\"name\""), "{rendered}");
@@ -1484,8 +1584,72 @@ mod tests {
         let mapped = names_of(&["message", "ts", "host"]);
         let body = search_query_body_for_mapping("SIP 403 Forbidden", 3, Some(&mapped), None);
         let should = body["query"]["bool"]["should"].as_array().unwrap();
-        assert_eq!(should.len(), 1, "{body}");
+        assert_eq!(should.len(), 2, "{body}");
         assert_eq!(should[0]["multi_match"]["fields"], json!(["message"]));
+        assert_eq!(phrase_fields(&body), vec!["message"], "{body}");
+    }
+
+    /// Fields named by the exact-phrase legs, in order. The `defs` phrase
+    /// leg is the symbol clause, not one of these.
+    fn phrase_fields(body: &Value) -> Vec<String> {
+        body["query"]["bool"]["should"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter_map(|c| c.get("match_phrase").and_then(Value::as_object))
+            .flat_map(|m| m.keys().cloned())
+            .filter(|f| f != "defs")
+            .collect()
+    }
+
+    /// A pasted error message is matched as typed, glue words included:
+    /// the normalized `multi_match` text drops `the`/`must`, and a phrase
+    /// built from that would not occur in the file.
+    #[test]
+    fn exact_phrase_leg_matches_the_query_as_typed() {
+        let query = "  the boosted whole-value doc must rank first ";
+        let body = search_query_body(query, 5);
+        let should = body["query"]["bool"]["should"].as_array().unwrap();
+        let leg = should
+            .iter()
+            .find_map(|c| c.pointer("/match_phrase/body"))
+            .unwrap_or_else(|| panic!("no exact-phrase leg on body: {body}"));
+        assert_eq!(leg["query"], "the boosted whole-value doc must rank first");
+        assert_eq!(
+            leg["boost"],
+            json!(xerj_common::code_query::EXACT_PHRASE_BOOST)
+        );
+        assert_ne!(
+            should[0]["multi_match"]["query"], leg["query"],
+            "the multi_match keeps the normalized text"
+        );
+    }
+
+    /// One token is a lookup: no phrase leg, and the #916 clauses stay at
+    /// their historical positions for every query.
+    #[test]
+    fn single_token_query_gets_no_exact_phrase_leg() {
+        for query in ["normalize_code_search_query", "IOSIntfLine", "  flush  "] {
+            let body = search_query_body(query, 5);
+            assert!(phrase_fields(&body).is_empty(), "{body}");
+        }
+        let body = search_query_body("rotate the WAL segment", 5);
+        let should = body["query"]["bool"]["should"].as_array().unwrap();
+        assert!(should[0].get("multi_match").is_some(), "{body}");
+        assert!(should[1].pointer("/match_phrase/defs").is_some(), "{body}");
+        assert!(should[2].pointer("/term/name").is_some(), "{body}");
+        assert_eq!(phrase_fields(&body), vec!["body"], "{body}");
+    }
+
+    /// A content field some index maps as numeric is dropped from the
+    /// phrase legs too (#1284): naming it fails the whole wildcard request.
+    #[test]
+    fn exact_phrase_leg_skips_a_numeric_content_field() {
+        let mapped = names_of(&["name", "code", "body", "defs", "title", "message"]);
+        let numeric: BTreeSet<String> = ["message".to_string()].into_iter().collect();
+        let body =
+            search_query_body_for_mapping("SIP 403 Forbidden", 3, Some(&mapped), Some(&numeric));
+        assert_eq!(phrase_fields(&body), vec!["body"], "{body}");
     }
 
     /// A code corpus — and an unreadable mapping — keep the #916 shape,
