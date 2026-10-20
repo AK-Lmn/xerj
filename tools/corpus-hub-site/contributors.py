@@ -349,15 +349,16 @@ STARS_JS = """<script>
           .catch(function(){btn.disabled=false})});
     }).catch(function(){});
   });
-  // hub-star counts on the wall; hubStarMark() is called again by WALL_JS for
-  // every chunk it appends, and skips tiles it has already marked
+  // hub-star counts in the people table's Hub ★ column (shown only when the
+  // hub-stars API is on); hubStarMark() is called again by TABLE_JS for every
+  // batch of rows it renders, and skips rows it has already marked
   var counts=null,wall=document.querySelector('[data-stars]');
   window.hubStarMark=function(root){if(!counts||!root)return;
-    root.querySelectorAll('[data-id]').forEach(function(a){var s=a.querySelector('.hs');if(!s||!s.hidden)return;
-      s.textContent=' · hub ★ '+fmt(counts[a.dataset.id]||0);s.hidden=false})};
+    root.querySelectorAll('[data-id]').forEach(function(a){var s=a.querySelector('.hs');if(!s||s.dataset.done)return;
+      s.dataset.done='1';s.textContent=fmt(counts[a.dataset.id]||0)})};
   if(wall)fetch(API+'?kind='+wall.dataset.stars).then(function(r){return r.json()}).then(function(r){
     if(!r||!r.ok||!r.enabled)return;
-    counts=r.counts||{};window.hubStarMark(wall);
+    counts=r.counts||{};wall.classList.add('hubon');window.hubStarMark(wall);
   }).catch(function(){});
 })();
 </script>"""
@@ -538,8 +539,8 @@ def _av(login, esc, px=28):
 def people_tr(rank, l, pp, v, esc):
     nm = pp["name"] if pp["name"] and pp["name"] != l else ""
     return (f'<tr data-id="{esc(l.lower())}"><td class="n">{rank:,}</td><td class="who"><a href="{esc(l)}.html">{_av(l, esc)}'
-            f'<span><b>{esc(nm or l)}</b>{"<small>@" + esc(l) + "</small>" if nm else ""}<small class="hs" hidden></small></span></a></td>'
-            f'<td class="num">{_n(v["gh_stars"])}</td><td class="num o1">{v["repos"]:,}</td><td class="num o1">{v["corpora"]:,}</td>'
+            f'<span><b>{esc(nm or l)}</b>{"<small>@" + esc(l) + "</small>" if nm else ""}</span></a></td>'
+            f'<td class="num">{_n(v["gh_stars"])}</td><td class="num o1 hub hs"></td><td class="num o1">{v["repos"]:,}</td><td class="num o1">{v["corpora"]:,}</td>'
             f'<td class="num o2">{_n(v["lines"]) if v["lines"] else "—"}</td><td class="o2 d">{esc((v["since"] or "")[:10]) or "—"}</td></tr>')
 
 
@@ -551,7 +552,7 @@ def repo_tr(rank, e, esc, rel=""):
             f'<td class="num">{_n(e["stars"])}</td><td class="o1 corp">{corp}</td></tr>')
 
 
-PEOPLE_COLS = (("#", "rank", ""), ("Contributor", "who", ""), ("GitHub ★", "stars", "num"), ("Repos", "repos", "num o1"),
+PEOPLE_COLS = (("#", "rank", ""), ("Contributor", "who", ""), ("GitHub ★", "stars", "num"), ("Hub ★", "hub", "num o1 hub"), ("Repos", "repos", "num o1"),
                ("Corpora", "corpora", "num o1"), ("Lines", "lines", "num o2"), ("Signed up", "since", "o2"))
 REPO_COLS = (("#", "rank", ""), ("Repository", "repo", ""), ("Owner", "owner", ""), ("GitHub ★", "stars", "num"),
              ("Corpus", "corpus", "o1"))
@@ -561,7 +562,7 @@ def thead(cols, sortable=True):
     ths = []
     for label, key, cls in cols:
         aria = ' aria-sort="ascending"' if key == "rank" else ""
-        inner = f'<button type="button" data-k="{key}">{label}</button>' if sortable else label
+        inner = f'<button type="button" data-k="{key}">{label}</button>' if sortable and key != "hub" else label
         ths.append(f'<th scope="col" class="{cls}"{aria}>{inner}</th>')
     return f'<thead><tr>{"".join(ths)}</tr></thead>'
 
@@ -606,8 +607,9 @@ border-radius:999px;padding:0 18px;min-height:40px;cursor:pointer}
 .tfilter{display:flex;flex-wrap:wrap;gap:var(--sp-3);align-items:center;background:#e7e5de;padding:var(--sp-3) var(--sp-4);margin:var(--sp-4) 0 0;font-family:var(--font-data)}
 .tfilter button,.tsort select{font-family:var(--font-data);font-size:var(--fs-13);font-weight:600;color:var(--z-ink);background:#fff;border:0;padding:.5em 1em;min-height:40px;cursor:pointer}
 .tsort{display:none;gap:var(--sp-2);align-items:center;font-family:var(--font-data);font-size:var(--fs-13);margin-top:var(--sp-4);color:var(--z-mute)}
+.ctab .hub{display:none}.ctab.hubon .hub{display:table-cell}
 @container (max-width:760px){.ctab .o2{display:none}}
-@container (max-width:520px){.ctab .o1{display:none}.ctab{font-size:var(--fs-13)}.ctab td{padding:8px}.ctab th{padding:0 8px 8px}
+@container (max-width:520px){.ctab .o1,.ctab.hubon .o1{display:none}.ctab{font-size:var(--fs-13)}.ctab td{padding:8px}.ctab th{padding:0 8px 8px}
 .tsort:not([hidden]){display:flex}.ctab td.n{width:2.5em}}
 """
 
@@ -640,9 +642,9 @@ TABLE_JS = """<script>
   function td(c,txt){return el('td',c?{'class':c}:{},txt)}
   function ptr(r){var tr=el('tr',{'data-id':r[0].toLowerCase()});tr.appendChild(td('n',fmt(r[7])));
     var c=td('who'),a=el('a',{href:r[0]+'.html'}),s=el('span');a.appendChild(av(r[0]));s.appendChild(el('b',{},r[1]||r[0]));
-    if(r[1])s.appendChild(el('small',{},'@'+r[0]));var hs=el('small',{'class':'hs'});hs.hidden=true;s.appendChild(hs);
+    if(r[1])s.appendChild(el('small',{},'@'+r[0]));
     a.appendChild(s);c.appendChild(a);tr.appendChild(c);
-    tr.appendChild(td('num',fmt(r[4])));tr.appendChild(td('num o1',fmt(r[5])));tr.appendChild(td('num o1',fmt(r[2])));
+    tr.appendChild(td('num',fmt(r[4])));tr.appendChild(td('num o1 hub hs',''));tr.appendChild(td('num o1',fmt(r[5])));tr.appendChild(td('num o1',fmt(r[2])));
     tr.appendChild(td('num o2',r[3]?fmt(r[3]):'—'));tr.appendChild(td('o2 d',r[6]||'—'));return tr}
   function rtr(r){var tr=el('tr');tr.appendChild(td('n',fmt(r[6])));
     var c=td('repo');c.appendChild(el('a',{href:r[1]},r[0]));tr.appendChild(c);

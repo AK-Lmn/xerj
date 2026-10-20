@@ -502,6 +502,10 @@ class SiteLinksTest(unittest.TestCase):
         self.assertEqual(stars, sorted(stars, reverse=True))
         self.assertIn('class="pager"', html)                                   # plain links without JS
         self.assertIn('class="tmap tm tm-l"', html)
+        # hub stars sit in their own Hub ★ column, filled by STARS_JS, not as a '· hub ★ n' line under the name
+        self.assertIn('<th scope="col" class="num o1 hub">Hub ★</th>', html)
+        self.assertEqual(people.count('<td class="num o1 hub hs"></td>'), contributors.CHUNK)
+        self.assertNotIn("· hub ★", contributors.STARS_JS + contributors.TABLE_JS)
 
     def test_repos_mode_map_and_table_cover_every_starred_repo_once(self):
         # owner request: People | Repos switch; Repos = one tile / row per distinct indexed repo
