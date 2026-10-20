@@ -19,13 +19,13 @@ stretched by ASPECT, so it optimises tiles toward ASPECT:1 (wide) rather than
 a longer name than as a square.
 """
 
-GAP = 2                 # px between tiles (each tile is inset by GAP)
+GAP = 2                 # px of page background between tiles (each tile is inset by GAP); no borders
 PAD_X = 8               # horizontal padding inside a tile, each side
 MIN_FONT = 14           # px: the smallest name on any tile
 LINE = 1.25             # line-height of tile text
 GLYPH = 0.62            # em per character; wider than IBM Plex Sans 600 averages (~0.55)
 PAD_Y = 6               # vertical padding inside a tile, each side
-BORDER = 1
+BORDER = 0              # tiles have no border: the GAP separates them
 CHROME = 2 * (PAD_Y + BORDER)                      # vertical px a tile spends on padding + border
 MIN_H = int(MIN_FONT * LINE + CHROME + 0.999) + 1  # one 14px line, rounded up, +1px slack
 INLINE_AV, INLINE_GAP = 32, 8                      # avatar beside the two-line label
@@ -172,14 +172,16 @@ STYLE = (
     ".tm{display:none}\n"
     ".tmap{position:relative;list-style:none;margin:0;padding:0;width:100%}\n"
     + "".join(f"@container {q}{{.tm-{k}{{display:block}}}}\n" for k, _, _, _, q in LAYOUTS)
-    + f".tmap li{{position:absolute;overflow:hidden;border:{BORDER}px solid rgba(26,26,26,.14)}}\n"
+    + ".tmap li{position:absolute;overflow:hidden;border:0}\n"
     ".tmap a{display:flex;flex-direction:column;justify-content:center;gap:2px;width:100%;height:100%;"
     f"padding:{PAD_Y}px {PAD_X - BORDER}px;text-decoration:none;color:{INK};line-height:{LINE};font-family:var(--font-data)}}\n"
-    ".tmap a:hover,.tmap a:focus-visible{background:rgba(255,255,255,.55);outline:2px solid var(--z-ink);outline-offset:-2px}\n"
+    ".tmap a:hover{background:rgba(255,255,255,.55)}\n"
+    # keyboard focus keeps a visible ring (WCAG 2.4.7); it is not a tile border
+    ".tmap a:focus-visible{background:rgba(255,255,255,.55);outline:3px solid var(--z-focus);outline-offset:-3px}\n"
     ".tmap b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}\n"
     f".tmap span{{display:block;font-size:14px;color:{MUTE};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}}\n"
     ".tmap .t-xl a{justify-content:flex-end}\n"
-    ".tmap img{display:block;border-radius:50%;border:1px solid rgba(26,26,26,.18);background:#fff;margin-bottom:auto}\n"
+    ".tmap img{display:block;border-radius:50%;background:#fff;margin-bottom:auto}\n"
     f".tmap .av a{{display:grid;grid-template-columns:{INLINE_AV}px minmax(0,1fr);column-gap:{INLINE_GAP}px;row-gap:2px;align-content:center}}\n"
     ".tmap .av img{grid-row:1 / span 2;align-self:center;margin:0}\n"
     ".tmcap{font-size:var(--fs-13);color:var(--z-mute);margin:var(--sp-2) 0 0}\n"

@@ -362,6 +362,16 @@ class TreemapTest(unittest.TestCase):
                 self.assertLessEqual(treemap.text_w(lab["text"], lab["fs"]), w - treemap.GAP)
                 self.assertIn(lab["text"], (it["name"], it["login"]))
 
+    def test_tiles_have_no_borders_or_shadows(self):
+        # owner review of #1955: tiles are separated by a gap of page background only
+        import treemap
+        self.assertEqual(treemap.BORDER, 0)
+        self.assertGreaterEqual(treemap.GAP, 2)
+        css = treemap.STYLE
+        self.assertIn(".tmap li{position:absolute;overflow:hidden;border:0}", css)
+        for bad in ("box-shadow", "gradient", "solid rgba"):
+            self.assertNotIn(bad, css)
+
     def test_tile_colours_are_aaa(self):
         import treemap
         for bg in treemap.TINTS:
