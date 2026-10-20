@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `xerj autoindex --walk-only` stops after the walk. It prints each top-level
+  folder's file count and size, what the ignore rules would drop and which
+  rule, and the totals. It does not hash or sniff file contents. `--dry-run`
+  still hashes, sniffs and prints the plan (#1912).
+
 ### Fixed
 
 - `xerj search` and a plain-string `xerj_search` rank a file that contains
