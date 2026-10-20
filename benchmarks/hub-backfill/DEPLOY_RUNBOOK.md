@@ -24,13 +24,18 @@ gh variable set HUB_CATALOGUE_DEPLOY --repo xerj-org/xerj --body true
 # already published — it does NOT spend 90 min rebuilding corpus packs.
 gh workflow run hub-packs.yml --repo xerj-org/xerj --ref corpus-hub \
   -f first_catalogue=true -f max_builds=0
+
+# verify (full checklist in §4): expect HTTP 200 and a body starting with '{', not '<'
+curl -s -o /tmp/live.json -w '%{http_code}\n' https://hub.xerj.org/api/v1/catalogue.json && head -c1 /tmp/live.json
 ```
 
 Do **not** run this until §3 (pre-flight) passes, in particular the size gate.
 
 > ⛔ **BLOCKER AS OF 2026-10-19 — the catalogue is over 2 MiB on `corpus-hub`.**
-> The term-sketch sizing fix (16 bits/term + 1500-term cap, measured
-> `catalogue.json` = 1.70 MB / 1.04 MB gzip) is **not on `corpus-hub`**. Its known
+> The term-sketch sizing fix (16 bits/term + 1500-term cap; 1.70 MB / 1.04 MB
+> gzip is the `catalogue.json` size reported on #1737's branch at `d5f89be27`,
+> a projection for `corpus-hub`, not a measurement of code in this tree) is
+> **not on `corpus-hub`**. Its known
 > PR **#1737** ("perf(hub): size and route the catalogue at full (512-corpus)
 > scale", commit `d5f89be27`) is **CLOSED, not merged**, and targets `main`, not
 > `corpus-hub`. On `corpus-hub` today `engine/crates/xerj-hub/src/sketch.rs` sizes
