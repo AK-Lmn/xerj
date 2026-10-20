@@ -62,7 +62,10 @@ PAGES: dict[str, dict[str, str]] = {
     ),
     "product.html": dict(
         label="Product", kind="software",
-        description="One Rust binary holding logs, vectors and agent memory instead of three glued systems — with live dashboard visualizations and benchmarks against ES 8.13.",
+        title="XERJ: local search for AI agents, CLI, MCP and Corpus Hub",
+        # Rewritten 2026-10-19 against the v1.0.0-rc.97 binary; every claim
+        # on the page is checked against --help, a real run or a named page.
+        description="XERJ is one Apache-2.0 Rust binary: a local search node, the xerj CLI and xerj ask, an MCP server, signed Corpus Hub packs, and measured benchmarks.",
     ),
     "for-agents.html": dict(
         label="For AI agents", kind="software",
