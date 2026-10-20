@@ -127,7 +127,7 @@
   <div>
     <p class="v2-eyebrow"><span class="sq" aria-hidden="true"></span>Architecture</p>
     <h1 id="h1">How XERJ works: <span class="hl">one binary, one node</span></h1>
-    <p class="v2-answer"><strong>XERJ is a single Rust binary that is both a search node and its own clients.</strong> Run bare, it is the node: an Elasticsearch-compatible REST API on :9200, a native API on :8080, a write-ahead log and immutable segments on local disk. Run with a subcommand, it is a client of a node: <code class="inline">autoindex</code> and <code class="inline">search</code> for your files, <code class="inline">mcp</code> for agents over stdio, and <code class="inline">ask</code> for Corpus Hub packs, which starts a node of its own when none answers. There is no JVM and no sidecar. It runs on one machine; data is not replicated between nodes.</p>
+    <p class="v2-answer"><strong>XERJ is a single Rust binary that is both a search node and its own clients.</strong> Run bare, it is the node: an Elasticsearch-compatible REST API on :9200, a native API on :8080, a write-ahead log and immutable segments on local disk. Run with a subcommand, it is a client of a node: <code class="inline">autoindex</code> and <code class="inline">search</code> for your files, <code class="inline">mcp</code> for agents over stdio, and <code class="inline">ask</code> for Corpus Hub packs, which starts a node of its own when none answers. There is no JVM and no sidecar. It runs on one machine, and there is no replication between nodes.</p>
   </div>
   <figure>
     <img src="/og/covers/page-architecture-hero.webp" width="1600" height="640" fetchpriority="high" decoding="async"
