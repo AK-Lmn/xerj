@@ -169,7 +169,10 @@ const KNOWN: &[(&str, Role)] = &[
     // every non-template word replaced, a random install id; never query text
     // or document text), so it has its own published row and air-gapped row.
     // It is a client path, not the node's, so DATA_EGRESS does not change.
-    ("xerj-hub/src/feedback.rs", Role::Client("`xerj hub feedback`")),
+    (
+        "xerj-hub/src/feedback.rs",
+        Role::Client("`xerj hub feedback`"),
+    ),
 ];
 
 /// Phrasings that were false and must not come back on a published surface.
