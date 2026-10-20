@@ -18,6 +18,7 @@ pub mod build_catalogue;
 pub mod catalogue;
 pub mod cli;
 pub mod def;
+pub mod feedback;
 mod flock;
 pub mod lockfile;
 pub mod node;
@@ -25,6 +26,8 @@ pub mod pack;
 pub mod router;
 pub mod sketch;
 pub mod sync;
+#[cfg(test)]
+mod test_support;
 
 pub use xerj_common::hub::{
     render, Answer, AnswerMode, AnsweredFrom, Catalogue, CatalogueEntry, DefRecord, Hit,

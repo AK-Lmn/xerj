@@ -36,7 +36,7 @@ use xerj_vector::distance::DistanceMetric;
 use xerj_vector::hnsw::{HnswIndex, HnswParams};
 use xerj_vector::{Sq8CodeStore, Sq8Params};
 
-use crate::aggs::run_aggs_with_all;
+use crate::aggs::run_aggs_with_schema;
 use crate::segment_cache_budget::{
     CacheResident, SegmentCacheCategory, SegmentHydrationBudget, CATEGORY_COUNT,
 };
@@ -15402,9 +15402,15 @@ impl Index {
             candidates = scored.len(),
             "knn served via HNSW (coverage gate passed)"
         );
-        let generated_companion_fields = {
+        let (generated_companion_fields, knn_schema) = {
             let schema = self.schema.read().await;
-            generated_embedding_companion_fields(&schema.schema)
+            (
+                generated_embedding_companion_fields(&schema.schema),
+                // #1745: filter/filters aggs evaluate their clauses with the
+                // query matcher; only clone the mapping when this request
+                // actually carries aggregations.
+                request.aggs.as_ref().map(|_| schema.schema.clone()),
+            )
         };
         Some(knn_result_from_scored(
             self,
@@ -15414,6 +15420,7 @@ impl Index {
             k,
             started,
             &generated_companion_fields,
+            knn_schema.as_ref(),
         ))
     }
 
@@ -15692,9 +15699,15 @@ impl Index {
             return None;
         }
 
-        let generated_companion_fields = {
+        let (generated_companion_fields, knn_schema) = {
             let schema = self.schema.read().await;
-            generated_embedding_companion_fields(&schema.schema)
+            (
+                generated_embedding_companion_fields(&schema.schema),
+                // #1745: filter/filters aggs evaluate their clauses with the
+                // query matcher; only clone the mapping when this request
+                // actually carries aggregations.
+                request.aggs.as_ref().map(|_| schema.schema.clone()),
+            )
         };
         Some(knn_result_from_scored(
             self,
@@ -15704,6 +15717,7 @@ impl Index {
             k,
             started,
             &generated_companion_fields,
+            knn_schema.as_ref(),
         ))
     }
 
@@ -16577,9 +16591,15 @@ impl Index {
                 }
             }
         }
-        let generated_companion_fields = {
+        let (generated_companion_fields, knn_schema) = {
             let schema = self.schema.read().await;
-            generated_embedding_companion_fields(&schema.schema)
+            (
+                generated_embedding_companion_fields(&schema.schema),
+                // #1745: filter/filters aggs evaluate their clauses with the
+                // query matcher; only clone the mapping when this request
+                // actually carries aggregations.
+                request.aggs.as_ref().map(|_| schema.schema.clone()),
+            )
         };
         // The default `_source` drops the generated embedding companions from
         // every hit without reporting it (`apply_source_filter_measured`), and
@@ -16670,6 +16690,7 @@ impl Index {
             ranked,
             started,
             &generated_companion_fields,
+            knn_schema.as_ref(),
         );
         result.timed_out = timed_out;
         if timed_out {
@@ -16753,9 +16774,15 @@ impl Index {
         // passage metadata. Child clauses retain ordinary ranking semantics;
         // provenance is intentionally omitted until per-clause ownership is
         // represented in the merged winner.
-        let generated_companion_fields = {
+        let (generated_companion_fields, knn_schema) = {
             let schema = self.schema.read().await;
-            generated_embedding_companion_fields(&schema.schema)
+            (
+                generated_embedding_companion_fields(&schema.schema),
+                // #1745: filter/filters aggs evaluate their clauses with the
+                // query matcher; only clone the mapping when this request
+                // actually carries aggregations.
+                request.aggs.as_ref().map(|_| schema.schema.clone()),
+            )
         };
         let mut result = knn_result_from_scored(
             self,
@@ -16765,6 +16792,7 @@ impl Index {
             k_sum,
             started,
             &generated_companion_fields,
+            knn_schema.as_ref(),
         );
         result.timed_out = any_timed_out;
         if any_timed_out {
@@ -23933,7 +23961,12 @@ impl Index {
                         sort_cand
                             .as_ref()
                             .map(|sc| Arc::new(PrefilterSet::from_set(sc.set.clone())))
-                    } else if let QueryNode::Regexp { field, pattern } = query {
+                    } else if let QueryNode::Regexp {
+                        field,
+                        pattern,
+                        case_insensitive,
+                    } = query
+                    {
                         // Dictionary-expansion pre-filter (mirrors the
                         // `try_shortcut_count` Regexp arm).  When the
                         // exact total comes from the shortcut
@@ -23963,15 +23996,37 @@ impl Index {
                         } else {
                             None
                         };
-                        self.build_regexp_prefilter_cached(
-                            &segments_dir,
-                            &seg_id,
-                            field,
-                            pattern,
-                            cap,
-                            regexp_field_is_keyword,
-                        )
-                        .map(|s| Arc::new(PrefilterSet::from_set(s)))
+                        // #1812: the dictionary expansion compiles this same
+                        // pattern, so it must carry the inline `(?i)` flag too
+                        // — a case-sensitive expansion would pre-filter away
+                        // exactly the hits the (case-insensitive) doc-scan arm
+                        // would have matched.  This arm is a CANDIDATE filter:
+                        // the scan re-checks every position against
+                        // `doc_matches_query`, so a folded (wider) candidate
+                        // set is safe for any field type, and required for
+                        // keyword (where the doc-scan folds too).
+                        if *case_insensitive {
+                            let folded = format!("(?i){}", pattern);
+                            self.build_regexp_prefilter_cached(
+                                &segments_dir,
+                                &seg_id,
+                                field,
+                                &folded,
+                                cap,
+                                regexp_field_is_keyword,
+                            )
+                            .map(|s| Arc::new(PrefilterSet::from_set(s)))
+                        } else {
+                            self.build_regexp_prefilter_cached(
+                                &segments_dir,
+                                &seg_id,
+                                field,
+                                pattern,
+                                cap,
+                                regexp_field_is_keyword,
+                            )
+                            .map(|s| Arc::new(PrefilterSet::from_set(s)))
+                        }
                     } else {
                         None
                     };
@@ -25159,7 +25214,7 @@ impl Index {
                         } else {
                             &all_docs[..]
                         };
-                        run_aggs_with_all(aggs_def, fg, bg)
+                        run_aggs_with_schema(aggs_def, fg, bg, &dmq_schema)
                     } else {
                         // Safety net: corpus not built — aggregate the hit window.
                         let sources: Vec<Value> = final_hits
@@ -25197,7 +25252,7 @@ impl Index {
                         } else {
                             &all_docs[..]
                         };
-                        run_aggs_with_all(aggs_def, &sources, bg)
+                        run_aggs_with_schema(aggs_def, &sources, bg, &dmq_schema)
                     }
                 };
                 Some(agg_result)
@@ -28005,6 +28060,15 @@ impl Index {
                 (None, None) => (f64::INFINITY, true),
             };
             let field_str = field.as_str();
+            // #1750 — the memtable numeric column keeps only an array's
+            // first element, so `for_each_numeric_value` below would count a
+            // multi-valued doc by that element alone. Abandon to the counting
+            // scan, whose matcher checks every element. (Segments already
+            // abandon: a field that is an array anywhere in a segment gets no
+            // dv column, which is the `None` arm below.)
+            if self.memtable.range_column_unusable(field_str) {
+                return None;
+            }
 
             let segments_dir = self.data_dir.join("segments");
             let mut seg_matches: u64 = 0;
@@ -28114,7 +28178,12 @@ impl Index {
         // segment has neither source (dotted / nested fields, pre-FTS
         // segments) or when deletes are present (both dictionaries tally
         // physical docs, not live ones).
-        if let QueryNode::Regexp { field, pattern } = query {
+        if let QueryNode::Regexp {
+            field,
+            pattern,
+            case_insensitive,
+        } = query
+        {
             // Delete-blind guard — same conservative signal as the F1
             // `deletes_present` gate in `search_inner`.
             let seg_physical: u64 = snap.segments.iter().map(|m| m.doc_count).sum();
@@ -28144,6 +28213,20 @@ impl Index {
                 // per query after that.  `None` (no usable dictionary /
                 // non-keyword field / pathological pattern) abandons to
                 // the stored-doc scan.
+                //
+                // #1812: this shortcut's segment total is used VERBATIM (no
+                // doc-scan re-check), so a `case_insensitive` pattern must
+                // also fold inside the dictionary expansion — otherwise the
+                // count would silently drop the case-variant matches the
+                // doc-scan arm would return.  Gated on `field_is_keyword`,
+                // the same gate the doc-scan arm applies.
+                let folded;
+                let pattern: &str = if *case_insensitive && field_is_keyword {
+                    folded = format!("(?i){}", pattern);
+                    &folded
+                } else {
+                    pattern
+                };
                 let exp = self.regexp_segment_expansion(
                     &segments_dir,
                     &meta.id,
@@ -36436,7 +36519,9 @@ fn apply_highlight(hits: Vec<Hit>, hl: &HighlightRequest, query: &QueryNode) -> 
                     // so matches can be translated back to original-text char
                     // boundaries (fixes the multibyte highlight SIGABRT).
                     let (text_lower, lower_map) = build_lower_offset_map(&text);
-                    let has_any = query_terms.iter().any(|t| text_lower.contains(t.as_str()));
+                    let has_any = query_terms
+                        .iter()
+                        .any(|t| next_term_match(&text_lower, t, 0).is_some());
                     if !has_any {
                         continue;
                     }
@@ -36622,14 +36707,29 @@ fn collect_highlight_terms(query: &QueryNode, out: &mut Vec<String>) {
     match query {
         QueryNode::Match { query, .. }
         | QueryNode::MatchPhrase { query, .. }
-        | QueryNode::MultiMatch { query, .. }
-        | QueryNode::QueryString { query, .. } => {
+        | QueryNode::MultiMatch { query, .. } => {
             for tok in query.split_whitespace() {
                 let tok = tok
                     .trim_matches(|c: char| !c.is_alphanumeric())
                     .to_lowercase();
                 if !tok.is_empty() {
                     out.push(tok);
+                }
+            }
+        }
+        QueryNode::QueryString { query, .. } => {
+            for tok in query.split_whitespace() {
+                // `wild*` keeps its star so it highlights `wildcard` as a
+                // prefix match; every other term matches whole words only.
+                let prefix = tok
+                    .trim_start_matches(|c: char| !c.is_alphanumeric())
+                    .trim_end_matches(|c: char| !c.is_alphanumeric() && c != '*')
+                    .ends_with('*');
+                let tok = tok
+                    .trim_matches(|c: char| !c.is_alphanumeric())
+                    .to_lowercase();
+                if !tok.is_empty() {
+                    out.push(if prefix { format!("{tok}*") } else { tok });
                 }
             }
         }
@@ -36655,6 +36755,112 @@ fn collect_highlight_terms(query: &QueryNode, out: &mut Vec<String>) {
         }
         _ => {}
     }
+}
+
+/// A character that continues a word, for highlight boundaries.
+fn is_word_char(c: char) -> bool {
+    c.is_alphanumeric() || c == '_'
+}
+
+/// The next occurrence of highlight `term` in `text_lower` at or after byte
+/// `from` that stands as a whole word: the characters on either side are not
+/// word characters. A term ending in `*` (a `query_string` prefix) needs a
+/// boundary before it only and extends to the end of the word it starts.
+///
+/// Plain substring search (#1948) highlighted `or` inside `for`, `no` inside `not`
+/// and `OR` inside `SECTOR`, and a phrase's short words then claimed the
+/// fragment away from the phrase itself.
+fn next_term_match(text_lower: &str, term: &str, from: usize) -> Option<(usize, usize)> {
+    let (needle, prefix) = match term.strip_suffix('*') {
+        Some(stem) => (stem, true),
+        None => (term, false),
+    };
+    if needle.is_empty() || from > text_lower.len() {
+        return None;
+    }
+    let mut start = from;
+    while let Some(pos) = text_lower[start..].find(needle) {
+        let abs = start + pos;
+        let mut end = abs + needle.len();
+        let before_ok = !text_lower[..abs]
+            .chars()
+            .next_back()
+            .is_some_and(is_word_char);
+        if prefix {
+            end += text_lower[end..]
+                .char_indices()
+                .find(|&(_, c)| !is_word_char(c))
+                .map(|(i, _)| i)
+                .unwrap_or(text_lower.len() - end);
+        }
+        let after_ok = prefix || !text_lower[end..].chars().next().is_some_and(is_word_char);
+        if before_ok && after_ok {
+            return Some((abs, end));
+        }
+        // Step one character, not one byte, past this candidate.
+        start = abs + text_lower[abs..].chars().next().map_or(1, char::len_utf8);
+    }
+    None
+}
+
+/// Wrap every whole-word occurrence of every term inside `text[win_start..
+/// win_end]` with `pre`/`post`. Overlapping spans merge into one tag pair.
+#[allow(clippy::too_many_arguments)]
+fn tag_terms_in_window(
+    text: &str,
+    text_lower: &str,
+    lower_map: &[(usize, usize, usize)],
+    terms: &[String],
+    win_start: usize,
+    win_end: usize,
+    pre: &str,
+    post: &str,
+) -> String {
+    let orig_len = text.len();
+    // Start the scan at the window, not at the top of a large document.
+    let window_lower_start = lower_map
+        .get(lower_map.partition_point(|e| e.1 < win_start))
+        .map_or(text_lower.len(), |e| e.0);
+    let mut spans: Vec<(usize, usize)> = Vec::new();
+    for term in terms {
+        let mut from = window_lower_start;
+        while let Some((ls, le)) = next_term_match(text_lower, term, from) {
+            let (oa, ob) = lower_span_to_orig(lower_map, orig_len, ls, le);
+            if oa >= win_end {
+                break;
+            }
+            if oa >= win_start && ob <= win_end && ob > oa {
+                spans.push((oa, ob));
+            }
+            from = le.max(ls + 1);
+        }
+    }
+    spans.sort_unstable();
+    let mut out = String::with_capacity(win_end - win_start + spans.len() * 9);
+    let mut cursor = win_start;
+    let mut open: Option<(usize, usize)> = None;
+    let flush = |out: &mut String, cursor: &mut usize, (s, e): (usize, usize)| {
+        out.push_str(&text[*cursor..s]);
+        out.push_str(pre);
+        out.push_str(&text[s..e]);
+        out.push_str(post);
+        *cursor = e;
+    };
+    for (s, e) in spans {
+        match open {
+            Some((os, oe)) if s <= oe => open = Some((os, oe.max(e))),
+            Some(span) => {
+                flush(&mut out, &mut cursor, span);
+                open = Some((s, e));
+            }
+            None => open = Some((s, e)),
+        }
+    }
+    if let Some(span) = open {
+        flush(&mut out, &mut cursor, span);
+    }
+    out.push_str(&text[cursor..win_end]);
+    out
 }
 
 /// Build highlighted fragments for a single field value.
@@ -36736,15 +36942,14 @@ fn highlight_full_text(
             continue;
         }
         let mut start = 0;
-        while let Some(pos) = text_lower[start..].find(term.as_str()) {
-            let abs = start + pos;
+        while let Some((ls, le)) = next_term_match(text_lower, term, start) {
             // Translate the lowercased-text match offsets back to original
             // text char boundaries before recording the span.
-            let (oa, ob) = lower_span_to_orig(lower_map, orig_len, abs, abs + term.len());
+            let (oa, ob) = lower_span_to_orig(lower_map, orig_len, ls, le);
             if ob > oa {
                 spans.push((oa, ob));
             }
-            start = abs + term.len();
+            start = le.max(ls + 1);
         }
     }
     spans.sort_by_key(|&(s, _)| s);
@@ -36810,14 +37015,13 @@ fn build_highlight_fragments(
         // highlighting and downloaded whole documents instead.
         let mut per_term = 0usize;
         let per_term_cap = (num_frags * 4).max(4);
-        while let Some(pos) = text_lower[start..].find(term.as_str()) {
-            let abs = start + pos;
-            let (oa, ob) = lower_span_to_orig(lower_map, orig_len, abs, abs + term.len());
+        while let Some((ls, le)) = next_term_match(text_lower, term, start) {
+            let (oa, ob) = lower_span_to_orig(lower_map, orig_len, ls, le);
             if ob > oa {
                 match_positions.push((oa, ob));
-                lower_positions.push((abs, abs + term.len()));
+                lower_positions.push((ls, le));
             }
-            start = abs + term.len();
+            start = le.max(ls + 1);
             per_term += 1;
             if per_term >= per_term_cap {
                 break; // enough candidates FOR THIS TERM; keep scanning others
@@ -36855,7 +37059,10 @@ fn build_highlight_fragments(
                 .find(|&i| text_lower.is_char_boundary(i))
                 .unwrap_or(lower_len);
             let window = &text_lower[lo..hi];
-            let distinct = terms.iter().filter(|t| window.contains(t.as_str())).count();
+            let distinct = terms
+                .iter()
+                .filter(|t| next_term_match(window, t, 0).is_some())
+                .count();
             (distinct, orig)
         })
         .collect();
@@ -36891,7 +37098,7 @@ fn build_highlight_fragments(
     let mut fragments: Vec<String> = Vec::new();
     let mut last_win_end: usize = 0;
 
-    for (byte_start, byte_end) in &match_positions {
+    for (byte_start, _) in &match_positions {
         if fragments.len() >= num_frags {
             break;
         }
@@ -36913,28 +37120,16 @@ fn build_highlight_fragments(
         }
         last_win_end = win_end;
 
-        // Clamp match offsets to the window.
-        let match_start = (*byte_start).max(win_start).min(win_end);
-        let match_end = (*byte_end).max(win_start).min(win_end);
-
-        // Build the fragment: prefix + pre-tag + matched span + post-tag + suffix.
+        // Build the fragment: every query term inside the window is tagged,
+        // not only the match the window is centred on, so a phrase reads as
+        // its words tagged in place (original casing kept).
         let mut frag = String::with_capacity(frag_size + pre.len() + post.len() + 6);
         if win_start > 0 {
             frag.push_str("...");
         }
-        // Text before the match (within the window).
-        if match_start > win_start {
-            // Use the original text casing for the context surrounding the match.
-            frag.push_str(&text[win_start..match_start]);
-        }
-        frag.push_str(pre);
-        // The matched span (from original text, not lowercased).
-        frag.push_str(&text[match_start..match_end]);
-        frag.push_str(post);
-        // Text after the match (within the window).
-        if match_end < win_end {
-            frag.push_str(&text[match_end..win_end]);
-        }
+        frag.push_str(&tag_terms_in_window(
+            text, text_lower, lower_map, terms, win_start, win_end, pre, post,
+        ));
         if win_end < total_bytes {
             frag.push_str("...");
         }
@@ -37157,6 +37352,9 @@ fn configured_neural_config(
         model_id,
         cache_dir: (!cfg.model_cache_dir.is_empty()).then(|| cfg.model_cache_dir.clone().into()),
         local_dir: (!cfg.local_model_dir.is_empty()).then(|| cfg.local_model_dir.clone().into()),
+        // The mirror URL is `HF_ENDPOINT`, read inside the hub client. There
+        // is no config field for it; tests inject one on `NeuralConfig` directly.
+        hub_endpoint: None,
     }
 }
 
@@ -38571,7 +38769,7 @@ fn make_embedder(cfg: &xerj_common::config::EmbeddingConfig) -> Result<xerj_ai::
         || (mode != "neural" && mode != "lexical" && !cfg.default_endpoint.is_empty());
 
     if mode == "neural" {
-        return Ok(make_neural_embedder(cfg));
+        return make_neural_embedder(cfg);
     }
 
     if mode == "onnx-experimental" {
@@ -38707,27 +38905,66 @@ fn make_onnx_embedder(_cfg: &xerj_common::config::EmbeddingConfig) -> Result<xer
     )))
 }
 
-/// Construct the built-in neural embedder when compiled in; otherwise warn
-/// and fall back to lexical so a `mode=neural` config never bricks startup.
+/// Load the neural model when this binary can, before any ingest.
+///
+/// Explicit `mode=neural` fails closed (#1840), the same shape as explicit
+/// `mode=proxy` (#1189): a download or file error is returned, and the lexical
+/// embedder is not installed in its place. Those vectors are not comparable.
+/// The server calls this at startup so the failure happens once, before it
+/// listens. A slim build without the `neural` feature still returns `Ok` —
+/// `make_neural_embedder` warns and substitutes lexical, and identity reports
+/// lexical, because there is no model to load.
+pub fn ensure_neural_ready(cfg: &xerj_common::config::EmbeddingConfig) -> Result<()> {
+    if !cfg.mode.trim().eq_ignore_ascii_case("neural") {
+        return Ok(());
+    }
+    #[cfg(feature = "neural")]
+    {
+        let neural_cfg = configured_neural_config(cfg);
+        if let Err(error) = xerj_ai::Embedder::preload_neural(&neural_cfg) {
+            return Err(EngineError::Common(xerj_common::XerjError::embedding(
+                xerj_ai::neural::startup_failure_message(&neural_cfg.model_id, &error),
+            )));
+        }
+        Ok(())
+    }
+    #[cfg(not(feature = "neural"))]
+    {
+        Ok(())
+    }
+}
+
+/// Construct the built-in neural embedder when compiled in.
+///
+/// The model is loaded here (and at server startup via [`ensure_neural_ready`]).
+/// A failure is an error, not a lexical embedder. A slim build without the
+/// feature warns and returns lexical so a `mode=neural` config on that binary
+/// still starts; identity reports lexical for that case.
 #[cfg(feature = "neural")]
-fn make_neural_embedder(cfg: &xerj_common::config::EmbeddingConfig) -> xerj_ai::Embedder {
+fn make_neural_embedder(cfg: &xerj_common::config::EmbeddingConfig) -> Result<xerj_ai::Embedder> {
     // Exactly the resolution the execution identity content-addresses — see
     // `configured_neural_config`. Duplicating it here once let the reported
     // identity describe a different model than the one that loads.
+    ensure_neural_ready(cfg)?;
     let neural_cfg = configured_neural_config(cfg);
-    info!(model = %neural_cfg.model_id, "embedding backend: built-in neural BERT (loads on first use)");
-    xerj_ai::Embedder::neural(neural_cfg)
+    info!(
+        model = %neural_cfg.model_id,
+        "embedding backend: built-in neural BERT (loaded)"
+    );
+    Ok(xerj_ai::Embedder::neural(neural_cfg))
 }
 
 #[cfg(not(feature = "neural"))]
-fn make_neural_embedder(_cfg: &xerj_common::config::EmbeddingConfig) -> xerj_ai::Embedder {
+fn make_neural_embedder(_cfg: &xerj_common::config::EmbeddingConfig) -> Result<xerj_ai::Embedder> {
+    // Identity reports lexical for this build. The warning is the whole
+    // signal: there is no model download that can fail later.
     warn!(
         "embedding.mode=neural requested but this is a slim build (compiled with \
          `--no-default-features`, no neural backend) — falling back to the built-in lexical \
          embedder. The standard release binary ships the neural embedder; use it, or rebuild \
          xerj-server with default features."
     );
-    xerj_ai::Embedder::lexical()
+    Ok(xerj_ai::Embedder::lexical())
 }
 
 // ── HNSW persistence helpers (module-level, called from sync `Index::open`)
@@ -40402,6 +40639,9 @@ fn apply_lexical_passages(hits: Vec<Hit>, query: &QueryNode) -> Vec<Hit> {
 /// rank by score desc, cap the candidate pool at `k`, window with
 /// `from`/`size`, and shape the response. Centralised so the exact and
 /// approximate paths cannot drift on hits format or total semantics.
+// `schema` is the one parameter the aggregation tail needs beyond the kNN
+// executor's own tuple; a struct for it would exist only here.
+#[allow(clippy::too_many_arguments)]
 fn knn_result_from_scored(
     index: &Index,
     request: &SearchRequest,
@@ -40410,6 +40650,7 @@ fn knn_result_from_scored(
     k: usize,
     started: std::time::Instant,
     generated_companion_fields: &HashSet<String>,
+    schema: Option<&Schema>,
 ) -> SearchResult {
     rank_knn_pool(&mut scored, k, |entry| entry.1);
     knn_result_from_ranked(
@@ -40419,6 +40660,7 @@ fn knn_result_from_scored(
         scored,
         started,
         generated_companion_fields,
+        schema,
     )
 }
 
@@ -40446,6 +40688,8 @@ fn rank_knn_pool<T>(pool: &mut Vec<T>, k: usize, score: impl Fn(&T) -> f32) {
 
 /// Shape an already ranked, already `k`-capped pool (see [`rank_knn_pool`])
 /// into the response.
+// Same parameter set as `knn_result_from_scored`, minus the ranking pool.
+#[allow(clippy::too_many_arguments)]
 fn knn_result_from_ranked(
     index: &Index,
     request: &SearchRequest,
@@ -40453,6 +40697,7 @@ fn knn_result_from_ranked(
     scored: Vec<(String, f32, Value, Option<u32>)>,
     started: std::time::Instant,
     generated_companion_fields: &HashSet<String>,
+    schema: Option<&Schema>,
 ) -> SearchResult {
     // ES reports `hits.total.value` for a knn/semantic query as the size
     // of the retrieved neighbor pool (min(k, matches)), NOT the number of
@@ -40475,7 +40720,13 @@ fn knn_result_from_ranked(
             .iter()
             .map(|(_, _, source, _)| source.clone())
             .collect();
-        crate::aggs::run_aggs(aggs_def, &sources)
+        // #1745: filter/filters aggs see the real mapping, so their clauses
+        // are evaluated by the query matcher instead of the `_source`
+        // approximation (`doc_matches_filter`).
+        match schema {
+            Some(s) => crate::aggs::run_aggs_with_schema(aggs_def, &sources, &sources, s),
+            None => crate::aggs::run_aggs(aggs_def, &sources),
+        }
     });
 
     let hits: Vec<Hit> = if request.size == 0 {
@@ -41600,7 +41851,7 @@ fn lookup_vector_quantization(schema: &Schema, field: &str) -> Option<String> {
 /// `FieldConfig::fields` (object sub-paths and multi-fields). Returns `None`
 /// for anything the schema does not declare — dynamic fields have no declared
 /// mapping options to honour.
-fn declared_field<'a>(schema: &'a Schema, field: &str) -> Option<&'a FieldConfig> {
+pub(crate) fn declared_field<'a>(schema: &'a Schema, field: &str) -> Option<&'a FieldConfig> {
     fn find<'a>(fields: &'a [FieldConfig], path: &[&str]) -> Option<&'a FieldConfig> {
         let head = *path.first()?;
         let tail = &path[1..];
@@ -42608,6 +42859,7 @@ mod lexically_typeless_lowering_tests {
                 value: "0".into(),
                 boost: None,
                 constant_score: true,
+                case_insensitive: false,
             },
             QueryNode::Wildcard {
                 field: "emb".into(),
@@ -43953,11 +44205,13 @@ fn strip_nested_path_in_query(q: &QueryNode, path: &str) -> QueryNode {
             value,
             boost,
             constant_score,
+            case_insensitive,
         } => QueryNode::Prefix {
             field: strip(field),
             value: value.clone(),
             boost: *boost,
             constant_score: *constant_score,
+            case_insensitive: *case_insensitive,
         },
         QueryNode::Wildcard {
             field,
@@ -44031,9 +44285,14 @@ fn strip_nested_path_in_query(q: &QueryNode, path: &str) -> QueryNode {
             case_insensitive: *case_insensitive,
             prefix_length: *prefix_length,
         },
-        QueryNode::Regexp { field, pattern } => QueryNode::Regexp {
+        QueryNode::Regexp {
+            field,
+            pattern,
+            case_insensitive,
+        } => QueryNode::Regexp {
             field: strip(field),
             pattern: pattern.clone(),
+            case_insensitive: *case_insensitive,
         },
         QueryNode::MultiMatch {
             fields,
@@ -45863,7 +46122,7 @@ pub(crate) fn value_present(v: &Value) -> bool {
     }
 }
 
-fn doc_matches_query_typed(q: &QueryNode, source: &Value, schema: &Schema) -> bool {
+pub(crate) fn doc_matches_query_typed(q: &QueryNode, source: &Value, schema: &Schema) -> bool {
     match q {
         QueryNode::MatchAll => true,
         QueryNode::MatchNone => false,
@@ -45930,69 +46189,12 @@ fn doc_matches_query_typed(q: &QueryNode, source: &Value, schema: &Schema) -> bo
             lte,
             lt,
             ..
-        } => {
-            let doc_val = get_field_value(source, field);
-            match doc_val {
-                Some(dv) => {
-                    // Check if we're comparing IP addresses.
-                    let doc_is_ip = dv
-                        .as_str()
-                        .map(|s| parse_ip_to_u128(s).is_some())
-                        .unwrap_or(false);
-                    let bound_is_ip = gte
-                        .as_ref()
-                        .or(gt.as_ref())
-                        .or(lte.as_ref())
-                        .or(lt.as_ref())
-                        .and_then(|b| b.as_str())
-                        .map(|s| parse_ip_to_u128(s).is_some())
-                        .unwrap_or(false);
-
-                    if doc_is_ip && bound_is_ip {
-                        // IP address comparison using numeric ordering.
-                        let doc_ip = parse_ip_to_u128(dv.as_str().unwrap_or("")).unwrap_or(0);
-                        let passes_lower = match (gte, gt) {
-                            (Some(b), _) => {
-                                let bound = b.as_str().and_then(parse_ip_to_u128).unwrap_or(0);
-                                doc_ip >= bound
-                            }
-                            (None, Some(b)) => {
-                                let bound = b.as_str().and_then(parse_ip_to_u128).unwrap_or(0);
-                                doc_ip > bound
-                            }
-                            (None, None) => true,
-                        };
-                        let passes_upper = match (lte, lt) {
-                            (Some(b), _) => {
-                                let bound =
-                                    b.as_str().and_then(parse_ip_to_u128).unwrap_or(u128::MAX);
-                                doc_ip <= bound
-                            }
-                            (None, Some(b)) => {
-                                let bound =
-                                    b.as_str().and_then(parse_ip_to_u128).unwrap_or(u128::MAX);
-                                doc_ip < bound
-                            }
-                            (None, None) => true,
-                        };
-                        passes_lower && passes_upper
-                    } else {
-                        let passes_lower = match (gte, gt) {
-                            (Some(b), _) => json_compare(&dv, b) >= 0,
-                            (None, Some(b)) => json_compare(&dv, b) > 0,
-                            (None, None) => true,
-                        };
-                        let passes_upper = match (lte, lt) {
-                            (Some(b), _) => json_compare(&dv, b) <= 0,
-                            (None, Some(b)) => json_compare(&dv, b) < 0,
-                            (None, None) => true,
-                        };
-                        passes_lower && passes_upper
-                    }
-                }
-                None => false,
+        } => match get_field_value(source, field) {
+            Some(dv) => {
+                range_value_matches(&dv, gte.as_ref(), gt.as_ref(), lte.as_ref(), lt.as_ref())
             }
-        }
+            None => false,
+        },
 
         QueryNode::Exists { field } => match field.as_str() {
             "_id" | "_index" | "_seq_no" | "_version" | "_primary_term" => true,
@@ -46005,11 +46207,16 @@ fn doc_matches_query_typed(q: &QueryNode, source: &Value, schema: &Schema) -> bo
             _ => get_field_value(source, field).is_some_and(|v| value_present(&v)),
         },
 
-        QueryNode::Prefix { field, value, .. } => {
+        QueryNode::Prefix {
+            field,
+            value,
+            case_insensitive,
+            ..
+        } => {
             // #396: prefix semantics depend on the field's mapping, and ES never
             // analyses the prefix VALUE itself.
-            //  - keyword: match the RAW stored value, case-SENSITIVE ("Hello"
-            //    does not start with "hel").
+            //  - keyword: match the RAW stored value, case-SENSITIVE by default
+            //    ("Hello" does not start with "hel") unless `case_insensitive` true.
             //  - analysed text: match the analysed (lower-cased) token stream
             //    against the RAW query ("hel" prefixes "hello"; "Hel" does not).
             //  - unknown field (schemaless shim caller — no `Schema` in scope):
@@ -46021,7 +46228,11 @@ fn doc_matches_query_typed(q: &QueryNode, source: &Value, schema: &Schema) -> bo
             let value_lc = value.to_lowercase();
             let matches_str = |s: &str| -> bool {
                 if is_keyword {
-                    s.starts_with(value.as_str())
+                    if *case_insensitive {
+                        s.to_lowercase().starts_with(&value_lc)
+                    } else {
+                        s.starts_with(value.as_str())
+                    }
                 } else if is_text {
                     s.split(|c: char| !c.is_alphanumeric()).any(|tok| {
                         !tok.is_empty() && tok.to_lowercase().starts_with(value.as_str())
@@ -46883,13 +47094,28 @@ fn doc_matches_query_typed(q: &QueryNode, source: &Value, schema: &Schema) -> bo
                 .unwrap_or(false)
         }
 
-        QueryNode::Regexp { field, pattern } => {
+        QueryNode::Regexp {
+            field,
+            pattern,
+            case_insensitive,
+        } => {
             get_field_value(source, field)
                 .and_then(|v| match v {
                     Value::String(s) => {
                         // Compile-once (thread-local cache) — this arm runs
                         // per candidate doc and used to recompile every time.
-                        compiled_anchored_regex(pattern).map(|re| re.is_match(&s))
+                        // #1812: `case_insensitive` on a KEYWORD field compiles
+                        // the same anchored pattern with the inline `(?i)` flag
+                        // (still full-string match — the anchored wrapper is
+                        // unchanged, so complex patterns keep ES semantics).
+                        let ft = declared_field(schema, field).map(|f| &f.field_type);
+                        let is_keyword = matches!(ft, Some(FieldType::Keyword));
+                        if is_keyword && *case_insensitive {
+                            compiled_anchored_regex(&format!("(?i){}", pattern))
+                                .map(|re| re.is_match(&s))
+                        } else {
+                            compiled_anchored_regex(pattern).map(|re| re.is_match(&s))
+                        }
                     }
                     _ => None,
                 })
@@ -50322,6 +50548,85 @@ fn compute_sort_values(
     sort_vals
 }
 
+/// `_source` matcher for one `range` clause against a field value.
+///
+/// #1750 — a multi-valued field matches when ANY single element satisfies
+/// EVERY bound, which is Lucene's per-value point semantics and what ES 8.13
+/// returns. Comparing the array itself sent `json_compare` to its serialized
+/// text (`["alpha","mid"]`, `[22,8080]`), and because `'['` sorts after every
+/// digit and before every lowercase letter, an array passed any numeric/date
+/// lower bound, failed any upper bound, and failed a keyword `gte "m"` —
+/// whatever its elements were. The bounds are deliberately NOT split across
+/// elements: `["2020-01-01","2024-06-01"]` is outside
+/// `[2021-01-01, 2023-01-01)` even though one element clears each bound.
+/// Nested arrays flatten (ES indexes `[[1,2],3]` as three values) and `null`
+/// elements are skipped, as ES does not index them.
+fn range_value_matches(
+    dv: &Value,
+    gte: Option<&Value>,
+    gt: Option<&Value>,
+    lte: Option<&Value>,
+    lt: Option<&Value>,
+) -> bool {
+    if let Value::Array(arr) = dv {
+        return arr
+            .iter()
+            .any(|elem| !elem.is_null() && range_value_matches(elem, gte, gt, lte, lt));
+    }
+    // Check if we're comparing IP addresses.
+    let doc_is_ip = dv
+        .as_str()
+        .map(|s| parse_ip_to_u128(s).is_some())
+        .unwrap_or(false);
+    let bound_is_ip = gte
+        .or(gt)
+        .or(lte)
+        .or(lt)
+        .and_then(|b| b.as_str())
+        .map(|s| parse_ip_to_u128(s).is_some())
+        .unwrap_or(false);
+
+    if doc_is_ip && bound_is_ip {
+        // IP address comparison using numeric ordering.
+        let doc_ip = parse_ip_to_u128(dv.as_str().unwrap_or("")).unwrap_or(0);
+        let passes_lower = match (gte, gt) {
+            (Some(b), _) => {
+                let bound = b.as_str().and_then(parse_ip_to_u128).unwrap_or(0);
+                doc_ip >= bound
+            }
+            (None, Some(b)) => {
+                let bound = b.as_str().and_then(parse_ip_to_u128).unwrap_or(0);
+                doc_ip > bound
+            }
+            (None, None) => true,
+        };
+        let passes_upper = match (lte, lt) {
+            (Some(b), _) => {
+                let bound = b.as_str().and_then(parse_ip_to_u128).unwrap_or(u128::MAX);
+                doc_ip <= bound
+            }
+            (None, Some(b)) => {
+                let bound = b.as_str().and_then(parse_ip_to_u128).unwrap_or(u128::MAX);
+                doc_ip < bound
+            }
+            (None, None) => true,
+        };
+        passes_lower && passes_upper
+    } else {
+        let passes_lower = match (gte, gt) {
+            (Some(b), _) => json_compare(dv, b) >= 0,
+            (None, Some(b)) => json_compare(dv, b) > 0,
+            (None, None) => true,
+        };
+        let passes_upper = match (lte, lt) {
+            (Some(b), _) => json_compare(dv, b) <= 0,
+            (None, Some(b)) => json_compare(dv, b) < 0,
+            (None, None) => true,
+        };
+        passes_lower && passes_upper
+    }
+}
+
 pub(crate) fn get_field_value(source: &Value, field: &str) -> Option<Value> {
     // Fast path: literal dotted key at the source root (subobjects:false).
     if let Value::Object(obj) = source {
@@ -52063,6 +52368,7 @@ fn query_node_to_fts_projected(
             value,
             boost,
             constant_score,
+            case_insensitive,
         } => {
             // `prefix` on a KEYWORD field: whole-value, case-sensitive prefix
             // match over the keyword FST term dictionary — byte-identical to ES
@@ -52079,7 +52385,17 @@ fn query_node_to_fts_projected(
             // exact.  TEXT fields keep the doc-scan (None): their prefix runs
             // against analyzed tokens, which the FST-whole-value route can't
             // reproduce.
+            //
+            // #1812: `case_insensitive: true` makes the KEYWORD FST route
+            // bail to the brute scan — that route expands CASE-SENSITIVELY
+            // and can't fold, while the doc-scan arm folds both sides for
+            // keyword fields.  TEXT keeps its route: analyzed terms are
+            // already lowercased and the pattern is matched raw (flag
+            // irrelevant on text, per ES).
             if exact_fields.contains(field.as_str()) {
+                if *case_insensitive {
+                    return None;
+                }
                 return Some(FtsQuery::Prefix(xerj_fts::search::PrefixQuery {
                     field: field.clone(),
                     prefix: value.clone(),
@@ -53601,14 +53917,25 @@ fn scored_fast_plan(
             value,
             boost,
             constant_score: true,
-        } if fs.kw.contains(field) => Some(ScoredPlan::Filtered {
-            filter: vec![ScoredFilterLeaf::KeywordPrefix {
-                field: field.clone(),
-                prefix: value.clone(),
-            }],
-            must_not: Vec::new(),
-            score: scoring_boost(boost)?,
-        }),
+            case_insensitive,
+        } if fs.kw.contains(field) => {
+            // #1812: the keyword-ordinal prefix filter is case-SENSITIVE —
+            // a `case_insensitive` prefix must fall through to the brute
+            // scan (which folds both sides), like the `Wildcard` arm below
+            // threads the flag into its filter instead.
+            if *case_insensitive {
+                None
+            } else {
+                Some(ScoredPlan::Filtered {
+                    filter: vec![ScoredFilterLeaf::KeywordPrefix {
+                        field: field.clone(),
+                        prefix: value.clone(),
+                    }],
+                    must_not: Vec::new(),
+                    score: scoring_boost(boost)?,
+                })
+            }
+        }
         QueryNode::Wildcard {
             field,
             value,
@@ -55874,6 +56201,7 @@ mod fts_projection_tests {
             value: "run".into(),
             boost: None,
             constant_score: true,
+            case_insensitive: false,
         };
         match query_node_to_fts(&q, &tf, &kw(&[])).expect("text prefix projects") {
             FtsQuery::Prefix(p) => {
@@ -56536,6 +56864,45 @@ mod highlight_multibyte_tests {
             "the rare term is what the caller searched for; fragments must reach \
              it rather than returning the head of the document: {frags:?}"
         );
+    }
+
+    /// #1948: a phrase query highlighted `or` inside `for` and `no` inside
+    /// `not`, and only the one match each fragment was centred on, so the
+    /// phrase itself came back untagged.
+    #[test]
+    fn highlight_tags_whole_words_and_every_term_in_the_fragment() {
+        let text = "Pricing is per-node for Professional, custom for Enterprise. \
+                    No per-doc, per-vector, or per-query fees. Binary delivery \
+                    does not require a sector license.";
+        let (lower, map) = build_lower_offset_map(text);
+        let mut terms: Vec<String> = ["no", "per-doc", "per-vector", "or", "per-query", "fees"]
+            .iter()
+            .map(|t| t.to_string())
+            .collect();
+        terms.sort();
+        let frags = build_highlight_fragments(text, &lower, &map, &terms, "<em>", "</em>", 150, 1);
+        assert_eq!(frags.len(), 1, "{frags:?}");
+        let f = &frags[0];
+        assert!(
+            f.contains("<em>No</em> <em>per-doc</em>, <em>per-vector</em>, <em>or</em> <em>per-query</em> <em>fees</em>"),
+            "every phrase word is tagged in place: {f}"
+        );
+        assert!(!f.contains("f<em>or</em>"), "no match inside `for`: {f}");
+        assert!(!f.contains("<em>no</em>t"), "no match inside `not`: {f}");
+
+        let full = highlight_full_text(text, &lower, &map, &terms, "<em>", "</em>");
+        assert!(
+            !full.contains("f<em>or</em>") && !full.contains("<em>no</em>t"),
+            "{full}"
+        );
+        assert!(!full.contains("sect<em>or</em>"), "{full}");
+
+        // A `query_string` prefix term still reaches into the word.
+        let (lower, map) = build_lower_offset_map("a wildcard and wild cats");
+        let prefix = vec!["wild*".to_string()];
+        let full = highlight_full_text("a wildcard and wild cats", &lower, &map, &prefix, "[", "]");
+        assert_eq!(full, "a [wildcard] and [wild] cats");
+        assert_eq!(next_term_match("rewild", "wild*", 0), None);
     }
 
     #[test]
@@ -60459,6 +60826,7 @@ mod exact_scan_hydration_tests {
                 value: "t".into(),
                 boost: None,
                 constant_score: false,
+                case_insensitive: false,
             },
             QueryNode::Bool {
                 must: vec![exists("tag")],

@@ -296,6 +296,40 @@ pub fn sanitize_slug(s: &str) -> String {
     out.trim_matches('-').to_string()
 }
 
+/// [`sanitize_slug`] for an index prefix (`--prefix`, and the `xc-<corpus>-b<n>`
+/// prefix `xerj corpus index` passes). Same rules, with one difference: a run
+/// made only of literal `-` is kept as written. `sanitize_slug` collapsed it,
+/// so a corpus named `owner--repo` (every author-approved hub candidate) was
+/// indexed under `xc-owner-repo-…` while `corpus index` verified, and `xerj code`
+/// searched, `xc-owner--repo-…`: 0 records, every build (issue #1889). Any other
+/// separator run (`_`, `.`, spaces, a mix with `-`) still becomes one `-`.
+pub fn sanitize_prefix(s: &str) -> String {
+    let mut out = String::new();
+    let mut run = String::new();
+    let flush = |out: &mut String, run: &mut String| {
+        if !run.is_empty() {
+            if !out.is_empty() {
+                if run.chars().all(|c| c == '-') {
+                    out.push_str(run);
+                } else {
+                    out.push('-');
+                }
+            }
+            run.clear();
+        }
+    };
+    for c in s.chars() {
+        if c.is_ascii_alphanumeric() {
+            flush(&mut out, &mut run);
+            out.push(c.to_ascii_lowercase());
+        } else {
+            run.push(c);
+        }
+    }
+    // a trailing separator run is dropped, as in `sanitize_slug`
+    out
+}
+
 fn numericish_segment(s: &str) -> bool {
     let t = s.trim();
     !t.is_empty()
@@ -422,9 +456,65 @@ fn assign_slugs(clusters: &mut [Cluster], rels: &[String], used: &mut HashSet<St
     }
 }
 
+/// Drop a leading `{prefix}-` from each slug.
+///
+/// The index name is `{prefix}-{slug}`. A folder of root-level logs indexed
+/// with `--prefix logs` otherwise becomes `logs-logs-syslog`: the slug's
+/// family fallback is `logs` and a single-file collision appends the stem.
+/// Stripping that one repeated segment makes the index `logs-syslog`. A slug
+/// that does not start with the prefix is left alone, so the default prefix
+/// `ax` does not rename `logs-syslog`. An empty remainder is not produced.
+/// Collisions created by the strip are numbered `-2`, `-3`, in slug order.
+pub fn drop_repeated_prefix(prefix: &str, clusters: &mut [Cluster]) {
+    let prefix = sanitize_prefix(prefix);
+    if prefix.is_empty() {
+        return;
+    }
+    let needle = format!("{prefix}-");
+    let mut order: Vec<usize> = (0..clusters.len()).collect();
+    order.sort_by_key(|&i| clusters[i].slug.clone());
+    let mut used: HashSet<String> = HashSet::new();
+    let mut next = vec![String::new(); clusters.len()];
+    for &i in &order {
+        let base = match clusters[i].slug.strip_prefix(&needle) {
+            Some(rest) if !rest.is_empty() => rest.to_string(),
+            _ => clusters[i].slug.clone(),
+        };
+        let mut slug = base.clone();
+        let mut k = 2u32;
+        while !used.insert(slug.clone()) {
+            slug = format!("{base}-{k}");
+            k += 1;
+        }
+        next[i] = slug;
+    }
+    for (i, slug) in next.into_iter().enumerate() {
+        clusters[i].slug = slug;
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn sanitize_prefix_keeps_a_literal_double_hyphen() {
+        // issue #1889: `owner--repo` corpora must index under the name they verify under
+        assert_eq!(
+            sanitize_prefix("xc-0whitedev--java-process-inspector-b1792446398"),
+            "xc-0whitedev--java-process-inspector-b1792446398"
+        );
+        assert_eq!(sanitize_prefix("My_Proj"), "my-proj");
+        assert_eq!(sanitize_prefix("a_-b"), "a-b");
+        assert_eq!(sanitize_prefix("a. b"), "a-b");
+        assert_eq!(sanitize_prefix("--ref--"), "ref");
+        assert_eq!(sanitize_prefix("ref-"), "ref");
+        assert_eq!(sanitize_prefix("___"), "");
+        // without a double hyphen it agrees with sanitize_slug
+        for s in ["ax", "xc-lz4-b17", "Logs 2026", "a__b", "x.y.z"] {
+            assert_eq!(sanitize_prefix(s), sanitize_slug(s), "{s}");
+        }
+    }
     use crate::ids;
 
     fn acc(value: &str) -> FieldAcc {
@@ -858,5 +948,43 @@ mod tests {
             &root_scopes(3),
         );
         assert_eq!(before[0].slug, after[0].slug);
+    }
+
+    /// `--prefix logs` on a folder of root-level log files. The slug's family
+    /// fallback is `logs` and a one-file collision appends the stem, so the
+    /// index `{prefix}-{slug}` was `logs-logs-syslog`. The default prefix
+    /// `ax` does not contain that segment and must not rename the slug.
+    #[test]
+    fn a_logs_prefix_does_not_repeat_inside_a_root_syslog_slug() {
+        let rels = vec!["syslog".into(), "xferlog".into()];
+        let sketches = || {
+            vec![
+                data_sketch_n(0, Family::Logs, &["ts", "host", "program", "message"], 40),
+                data_sketch_n(
+                    1,
+                    Family::Logs,
+                    &["date", "host", "bytes", "path", "user"],
+                    40,
+                ),
+            ]
+        };
+        let mut clusters = cluster(sketches(), &rels, &root_scopes(2));
+        let mut raw: Vec<String> = clusters.iter().map(|c| c.slug.clone()).collect();
+        raw.sort();
+        assert_eq!(
+            raw,
+            ["logs-syslog", "logs-xferlog"],
+            "the family fallback plus the file stem is what stuttered"
+        );
+        drop_repeated_prefix("logs", &mut clusters);
+        let mut slugs: Vec<String> = clusters.iter().map(|c| c.slug.clone()).collect();
+        slugs.sort();
+        assert_eq!(slugs, ["syslog", "xferlog"]);
+
+        let mut untouched = cluster(sketches(), &rels, &root_scopes(2));
+        let before: Vec<String> = untouched.iter().map(|c| c.slug.clone()).collect();
+        drop_repeated_prefix("ax", &mut untouched);
+        let after: Vec<String> = untouched.iter().map(|c| c.slug.clone()).collect();
+        assert_eq!(before, after, "the default prefix must not rename slugs");
     }
 }

@@ -67,6 +67,15 @@ pub struct IndexCfg {
     pub bulk_timeout_secs: u64,
     pub snapshot_max_bytes: u64,
     pub prefix: String,
+    /// #1845: set when `--prefix` was rewritten on the way to `prefix` (a
+    /// trailing `-`/`_`, a `_`, a repeated separator, upper case). Said out loud
+    /// through `pr.warn` because the rewrite is exactly what makes sibling
+    /// projects collide under a `<prefix>-*` wildcard.
+    pub prefix_note: Option<String>,
+    /// `--replace-prefix`: this folder may take over a prefix whose catalog
+    /// runs were indexed from a different root. Off by default; without it
+    /// that run is refused before anything is written.
+    pub replace_prefix: bool,
     pub state_dir: Option<PathBuf>,
     pub fresh: bool,
     pub follow_symlinks: bool,
@@ -274,7 +283,26 @@ pub fn help_text_with(feedback: bool) -> String {
          \x20\x20\x20\x20--bulk-timeout-secs <N>\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20bulk HTTP request timeout in seconds (default 300;\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20valid range 1..=3600)\n\
-         \x20\x20\x20\x20--prefix <P>         index prefix (default ax)\n\
+         \x20\x20\x20\x20--prefix <P>         index prefix (default ax). One prefix is one\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20source folder. The same prefix on a different\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20folder is refused: datasets are keyed\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20ds:<prefix>:<slug> and indices are <prefix>-*,\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20so finalize overwrites the earlier datasets.\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20Several repositories under one prefix also\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20collapse: each repo indexed on its own has an\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20empty scope and becomes the single dataset\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<prefix>-docs. Use one --prefix per folder,\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20or index the parent folder once. A prefix\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20keeps only [a-z0-9] runs joined by single '-',\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20so a trailing '-' or '_' is dropped (the run\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20warns). <prefix>-* also matches a sibling\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20prefix that starts with <prefix>-, so pick\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20prefixes that do not start one another\n\
+         \x20\x20\x20\x20--replace-prefix     retire datasets already stored under --prefix\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20that were indexed from a different folder.\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20Prints those folders and continues. Without\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20this flag that run is refused and nothing\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20is written. --dry-run does not bypass it\n\
          \x20\x20\x20\x20--state-dir <PATH>   resume journal location (default ~/.xerj/autoindex/<hash>/);\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20for an s3:// source this is also where the local\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20object mirror lives, so point it at a disk with room\n\
@@ -389,6 +417,8 @@ pub fn help_text_with(feedback: bool) -> String {
          \x20\x20\x20\x20\x20\x20.xerjignore  same syntax as .gitignore, XERJ-only. Use it to exclude\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20something git tracks, or to re-include (!pattern) something\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20git ignores. Outranks .gitignore at any depth.\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20!pattern cannot re-include a hidden (dot-named)\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20entry: see HIDDEN below.\n\
          \x20\x20\x20\x20\x20\x20.gitignore   including nested ones and negation; the closest file wins.\n\
          \x20\x20\x20\x20\x20\x20.git/info/exclude  per-checkout excludes, including nested checkouts.\n\
          \x20\x20\x20\x20\x20\x20built-in     {defaults}\n\
@@ -406,6 +436,11 @@ pub fn help_text_with(feedback: bool) -> String {
          \x20\x20\x20\x20ignored_files_in_pruned_dirs_exact=false to say so).\n\
          \x20\x20\x20\x20The folder you name is never rejected: if it is itself ignored, it is\n\
          \x20\x20\x20\x20indexed anyway and the run says which rule it would have matched.\n\
+         \x20\x20\x20\x20HIDDEN: dot-named files and directories below the folder (.env, .git,\n\
+         \x20\x20\x20\x20.ssh, .<tool>/) are skipped by a separate rule that runs before any\n\
+         \x20\x20\x20\x20ignore file. No .xerjignore !pattern and no --no-ignore lifts it (the\n\
+         \x20\x20\x20\x20run warns when a .xerjignore tries). To index one, name it as the\n\
+         \x20\x20\x20\x20root, which is never rejected: xerj autoindex ./.openfox --prefix openfox\n\
          \n\
          OBJECT STORAGE:\n\
          \x20\x20\x20\x20`xerj autoindex s3://bucket/prefix` indexes objects instead of files.\n\
@@ -620,7 +655,10 @@ pub fn help_text_with(feedback: bool) -> String {
          \x20\x20\x20\x20AWS_SECRET_ACCESS_KEY, optionally AWS_SESSION_TOKEN. Never from a flag.\n\
          \n\
          EXIT CODES: 0 complete (also: gate answered with --approve cancel);\n\
-         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x203 completed-with-junk (junk recorded, never fatal) — this\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x203 completed-with-junk (junk recorded, never fatal) — SUCCESS:\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20the index is searchable, and the summary on stdout opens\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20with a line starting `ok:` that says so (xerj-done carries\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20ok=true). Treat 0 and 3 alike as a finished run. This\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20includes a dataset whose mapping the server REFUSED: its\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20files are recorded as junk with the server's reason, the\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20xerj-done line carries datasets_refused / files_refused,\n\
@@ -629,9 +667,7 @@ pub fn help_text_with(feedback: bool) -> String {
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20journal committed; only the catalog's duplicate-alias cleanup\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20could not run. Read `reason` on the xerj-done line to tell the\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20two apart, and rerun the same command once the reported server\n\
-         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20condition clears. ok=true with exit=3 is success: the next\n\
-         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20line is a xerj-note that says so (--progress json sets\n\
-         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20exit_meaning on the done object);\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20condition clears;\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x204 NEEDS A DECISION — the estimate exceeded --max-minutes, or a\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20--watch poll cost more than --max-monthly-ops; nothing was\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20indexed and a JSON decision request is on stdout;\n\
@@ -696,6 +732,33 @@ fn set_max_file_bytes(
     Ok(())
 }
 
+/// The note for a `--prefix` that was not used exactly as typed (#1845).
+///
+/// A prefix keeps only runs of `[a-z0-9]` joined by single `-`, so
+/// `forbidden-lands-combat-` and `forbidden-lands-combat_` both become
+/// `forbidden-lands-combat`, and its indices `forbidden-lands-combat-docs`. An
+/// agent that added the trailing separator to keep this project apart from a
+/// sibling (`forbidden-lands-combat-sauvegarde`) got no word that it had been
+/// dropped, and the two still collide under `forbidden-lands-combat-*`.
+/// `None` when the prefix was used as given.
+pub(crate) fn prefix_rewrite_note(given: &str, used: &str) -> Option<String> {
+    if given == used || used.is_empty() {
+        return None;
+    }
+    let trailing = given.ends_with(['-', '_']);
+    let why = if trailing {
+        "a trailing '-' or '_' is not kept"
+    } else {
+        "a prefix keeps only lower-case [a-z0-9] runs joined by single '-'"
+    };
+    Some(format!(
+        "--prefix {given:?} is used as {used:?} ({why}). Indices are named {used}-<dataset>, so \
+         a {used}-* wildcard also matches any other prefix that starts with {used}- (for \
+         example {used}-other-<dataset>). If a sibling project's prefix starts with {used}-, \
+         give this one a prefix that is not the start of another (for example {used}-main)"
+    ))
+}
+
 pub fn parse(args: Vec<String>) -> Result<Cmd, String> {
     let mut it = args.into_iter().peekable();
     let mut folder: Option<PathBuf> = None;
@@ -723,7 +786,9 @@ pub fn parse(args: Vec<String>) -> Result<Cmd, String> {
     let mut snapshot_max_bytes = 64u64 << 30;
     let mut bulk_timeout_explicit = false;
     let mut prefix = "ax".to_string();
+    let mut replace_prefix = false;
     let mut prefix_explicit = false;
+    let mut prefix_given: Option<String> = None;
     let mut state_dir: Option<PathBuf> = None;
     let mut endpoint_url: Option<String> = None;
     let mut endpoint_explicit = false;
@@ -857,7 +922,9 @@ pub fn parse(args: Vec<String>) -> Result<Cmd, String> {
             "--prefix" => {
                 prefix = it.next().ok_or("--prefix needs a value")?;
                 prefix_explicit = true;
+                prefix_given = Some(prefix.clone());
             }
+            "--replace-prefix" => replace_prefix = true,
             "--state-dir" => state_dir = it.next().map(PathBuf::from),
             "--endpoint-url" => {
                 let value = it.next().ok_or(
@@ -1146,7 +1213,7 @@ pub fn parse(args: Vec<String>) -> Result<Cmd, String> {
         }
     }
 
-    let prefix = crate::dataset::sanitize_slug(&prefix);
+    let prefix = crate::dataset::sanitize_prefix(&prefix);
     if prefix.is_empty() {
         return Err("--prefix must contain at least one [a-z0-9] character".into());
     }
@@ -1634,7 +1701,11 @@ pub fn parse(args: Vec<String>) -> Result<Cmd, String> {
                 bulk_mb,
                 bulk_timeout_secs,
                 snapshot_max_bytes,
+                prefix_note: prefix_given
+                    .as_deref()
+                    .and_then(|given| prefix_rewrite_note(given, &prefix)),
                 prefix,
+                replace_prefix,
                 state_dir,
                 fresh,
                 follow_symlinks,
@@ -1668,7 +1739,15 @@ pub fn parse(args: Vec<String>) -> Result<Cmd, String> {
                 exclude_rels: Vec::new(),
             })))
         }
-        _ => Ok(Cmd::Help),
+        // No folder and no subcommand. This used to print the full help and
+        // exit 0, so a bare `xerj autoindex` looked like a successful run.
+        // `--help` / `-h` still return [`Cmd::Help`] above.
+        _ => Err(
+            "a folder is required (`xerj autoindex <folder>`), or use \
+             `xerj autoindex map` / `xerj autoindex status`. \
+             `xerj autoindex --help` prints the full usage"
+                .into(),
+        ),
     }
 }
 
@@ -1676,6 +1755,23 @@ pub fn parse(args: Vec<String>) -> Result<Cmd, String> {
 mod tests {
     use super::{parse, Approval, Cmd, Duration, ProgressMode, DEFAULT_MAX_MINUTES};
     use std::path::PathBuf;
+
+    #[test]
+    fn a_bare_autoindex_is_a_usage_error() {
+        let err = parse(Vec::new()).expect_err("bare autoindex must not succeed");
+        assert!(err.contains("a folder is required"), "{err}");
+        assert!(matches!(
+            parse(vec!["--help".into()]).expect("help still parses"),
+            Cmd::Help
+        ));
+        assert!(matches!(
+            parse(vec!["-h".into()]).expect("-h still parses"),
+            Cmd::Help
+        ));
+        let err = parse(vec!["--url".into(), "http://127.0.0.1:9200".into()])
+            .expect_err("flags without a folder are still usage");
+        assert!(err.contains("a folder is required"), "{err}");
+    }
 
     /// A flag that is accepted and silently does nothing is refused, because
     /// the operator who passed it believes the run did something it did not.
@@ -2046,6 +2142,35 @@ mod tests {
         );
         // With --no-graph it parses, and the watcher is on.
         assert!(index(&["data", "--watch", "--no-graph"]).watch);
+    }
+
+    /// #1845: `--prefix forbidden-lands-combat-` silently became
+    /// `forbidden-lands-combat`, so a trailing separator meant to keep sibling
+    /// projects apart did nothing and nobody was told. The rewrite is now
+    /// carried as a note naming the prefix actually used and the wildcard
+    /// collision it implies; a prefix used as typed carries none.
+    #[test]
+    fn a_rewritten_prefix_is_named_and_an_exact_one_is_not() {
+        for given in ["forbidden-lands-combat-", "forbidden-lands-combat_"] {
+            let cfg = index(&["data", "--prefix", given]);
+            assert_eq!(cfg.prefix, "forbidden-lands-combat");
+            let note = cfg
+                .prefix_note
+                .expect("a dropped trailing separator must be said");
+            assert!(note.contains(&format!("{given:?}")), "{note}");
+            assert!(note.contains("\"forbidden-lands-combat\""), "{note}");
+            assert!(note.contains("trailing '-' or '_' is not kept"), "{note}");
+            assert!(note.contains("forbidden-lands-combat-*"), "{note}");
+        }
+        let cfg = index(&["data", "--prefix", "My_Proj"]);
+        assert_eq!(cfg.prefix, "my-proj");
+        assert!(cfg.prefix_note.is_some_and(|n| n.contains("\"my-proj\"")));
+        // Used exactly as typed, or not typed at all: nothing to say.
+        assert!(index(&["data", "--prefix", "forbidden-lands-combat"])
+            .prefix_note
+            .is_none());
+        assert!(index(&["data"]).prefix_note.is_none());
+        assert!(super::help_text().contains("trailing '-' or '_' is dropped"));
     }
 
     /// `xerj autoindex` reads its endpoint from `--url` only; setting `XERJ_URL`
@@ -2669,6 +2794,22 @@ mod tests {
                 );
             }
         }
+    }
+
+    #[test]
+    fn replace_prefix_is_off_unless_asked_and_help_names_the_refusal() {
+        assert!(!index(&["data", "--prefix", "ref"]).replace_prefix);
+        assert!(index(&["data", "--prefix", "ref", "--replace-prefix"]).replace_prefix);
+        let help = super::help_text();
+        assert!(help.contains("--replace-prefix"), "{help}");
+        assert!(
+            help.contains("ds:<prefix>:<slug>"),
+            "help must say how catalog ids collide: {help}"
+        );
+        assert!(
+            help.contains("<prefix>-docs"),
+            "help must say a shared prefix collapses per-repo provenance: {help}"
+        );
     }
 
     /// #1586: a second positional folder used to fall through to
