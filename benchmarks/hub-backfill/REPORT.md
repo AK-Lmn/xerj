@@ -6,7 +6,7 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 
 ## Current state
 
-378 corpora attempted: 330 published at their latest attempt, 48 not.
+402 corpora attempted: 355 published at their latest attempt, 47 not.
 
 ### Latest attempt did not publish (fix or delist on purpose)
 
@@ -44,7 +44,6 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 | `awesome-ai-system-prompts` | `74964625` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `axe-core` | `7e287a6a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `axolotl` | `e767fe07` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `cassandra` | `ec2c276b` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `exploit-pocs-2023` | `af9e194d` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
@@ -56,12 +55,57 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 | `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `ipsum-blocklist` | `444b4802` | 26405336 | 0 | failed at `e2e` | no question from ask_for (reputation |
+| `ipsum-blocklist` | `444b4802` | 26408102 | 0 | failed at `e2e` | no question from ask_for (reputation |
 | `milvus` | `b48661d3` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `mtl-bioinformatics-ner` | `df0df02f` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `nuclei-templates` | `24a43e14` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 
 ## Runs (newest first)
+
+### Run [39535889582](https://github.com/xerj-org/xerj/actions/runs/39535889582), 2026-10-21: 25 of 40 published
+
+| slug | pin8 | bytes | defs | result | error |
+|---|---|---:|---:|---|---|
+| `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `exploit-pocs-2023` | `af9e194d` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2024` | `7855e58f` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2025` | `374cf8f1` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2026` | `160f470e` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploitdb-src` | `12879ca7` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `fluent-bit` | `3b6ce5cf` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ipsum-blocklist` | `444b4802` | 26408102 | 0 | failed at `e2e` | no question from ask_for (reputation |
+| `milvus` | `b48661d3` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `mtl-bioinformatics-ner` | `df0df02f` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `nuclei-templates` | `24a43e14` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `cassandra` | `ec2c276b` | 267729959 | 111305 | published `pack-cassandra-ec2c276b` |  |
+| `pagerduty-incident-response` | `464fc9d3` | 1503555 | 0 | published `pack-pagerduty-incident-response-464fc9d3` |  |
+| `parquet-format` | `bf099392` | 1100478 | 0 | published `pack-parquet-format-bf099392` |  |
+| `parse5` | `103d9aa6` | 3186850 | 708 | published `pack-parse5-103d9aa6` |  |
+| `payloadsallthethings` | `3ac27901` | 10502050 | 92 | published `pack-payloadsallthethings-3ac27901` |  |
+| `pebble` | `e0818dd0` | 29843166 | 13823 | published `pack-pebble-e0818dd0` |  |
+| `plain-language-guidelines` | `fd769474` | 7263361 | 2 | published `pack-plain-language-guidelines-fd769474` |  |
+| `polars` | `099c2863` | 95464284 | 46897 | published `pack-polars-099c2863` |  |
+| `postcss` | `f1aca7ec` | 2376212 | 537 | published `pack-postcss-f1aca7ec` |  |
+| `postgres-src` | `50d6e533` | 349981745 | 69477 | published `pack-postgres-src-50d6e533` |  |
+| `postman-collection` | `8801e7f4` | 4336144 | 241 | published `pack-postman-collection-8801e7f4` |  |
+| `preact` | `8ff8785b` | 5605372 | 3487 | published `pack-preact-8ff8785b` |  |
+| `prism` | `2a1b2052` | 7051370 | 462 | published `pack-prism-2a1b2052` |  |
+| `prometheus-src` | `7c741e28` | 52747135 | 15251 | published `pack-prometheus-src-7c741e28` |  |
+| `prompt-engineering-guide` | `57673726` | 4247694 | 52 | published `pack-prompt-engineering-guide-57673726` |  |
+| `promptify` | `bc5ed081` | 869858 | 266 | published `pack-promptify-bc5ed081` |  |
+| `proselint` | `dbed789c` | 8110886 | 1697 | published `pack-proselint-dbed789c` |  |
+| `protobuf` | `fb0a6f67` | 136322177 | 90906 | published `pack-protobuf-fb0a6f67` |  |
+| `protovalidate` | `c550962b` | 10521984 | 8059 | published `pack-protovalidate-c550962b` |  |
+| `pubhealth-fact-checking` | `02136d3e` | 1198387 | 17 | published `pack-pubhealth-fact-checking-02136d3e` |  |
+| `pubmedqa` | `1cbae8e9` | 10747743 | 20 | published `pack-pubmedqa-1cbae8e9` |  |
+| `pysec` | `3373aa62` | 63738469 | 0 | published `pack-pysec-3373aa62` |  |
+| `quiche` | `b60aff93` | 7193128 | 6307 | published `pack-quiche-b60aff93` |  |
+| `quinn` | `7f1c6b55` | 2794340 | 2868 | published `pack-quinn-7f1c6b55` |  |
+| `qwik` | `09c73b97` | 27846285 | 11299 | published `pack-qwik-09c73b97` |  |
 
 ### Run [39513172739](https://github.com/xerj-org/xerj/actions/runs/39513172739), 2026-10-21: 24 of 40 published
 
