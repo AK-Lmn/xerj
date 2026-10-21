@@ -343,7 +343,7 @@ lives and which key wraps it differ per client. `tested` means the server was re
 client and `xerj_search` appeared in its tool list; `untested` means the path and shape are
 transcribed from the client's own documentation and nobody has run it yet. Only the OpenCode row
 has been run: v2.1.2 on Windows against `xerj` v1.0.0-rc.97, which answered `initialize` and
-`tools/list` with all seventeen tools. Correcting an `untested` row is a welcome first PR.
+`tools/list` with its full tool list. Correcting an `untested` row is a welcome first PR.
 
 | Client | Config file | Key | Note | Tested |
 |---|---|---|---|---|
