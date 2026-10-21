@@ -7863,9 +7863,8 @@ fn run_index_report_inner(
         // eprintln! here would break `--progress json`'s single parseable
         // stream, and `--quiet` already selects `--progress none`.
         pr.note(&format!(
-            "autoindex: {} file(s) were skipped because the resumed plan is stale — {} file(s) \
+            "autoindex: {} file(s) were skipped because the resumed plan is stale: they \
              appeared after the resume plan was frozen and were NOT indexed:",
-            stale_rels.len(),
             stale_rels.len()
         ));
         for rel in stale_rels.iter().take(REFUSAL_LIST_CAP) {
