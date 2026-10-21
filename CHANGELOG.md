@@ -26,6 +26,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- A bare hub question that names a language or a technology
+  (`xerj "how do I use async let in Swift"`, `xerj "Swift Result type map"`)
+  routes from the catalogue entry — slug, topics, a language word in the
+  description, then the rest of the description — instead of the term sketch.
+  On the 468-corpus hub the sketch's false positives tied swift-book with
+  unrelated corpora (qwik, docker-docs, harper, oss-review-toolkit) and both
+  questions exited 4. One clear winner is searched on its own. Two or three
+  corpora that share the winning name are searched together and named on one
+  `using:` line. Exit 4 stays for a genuine tie and lists at most five
+  candidates, best first.
+
+- An MCP tool call that cannot connect to `XERJ_URL` now says that no XERJ
+  node is listening there, that `xerj mcp` does not start one, and prints
+  `xerj --insecure --data-dir ~/xerj-data`. A bare connection error was the
+  whole tool result, so agents abandoned xerj for the session. HTTP
+  responses, including 401, are unchanged (#2079).
+
 - `xerj autoindex` on the graph path no longer counts files that appeared
   after the resume plan was frozen as junk. A resume whose plan predates
   files now on disk still cannot re-cluster that plan — dataset identity and
@@ -45,6 +62,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   reads the node (`GET /_cat/allocation?format=json`), not the client's
   disk. A node that does not report the threshold is unchanged, and
   `--dry-run` (which writes nothing) is never refused for disk.
+
+- Playground user dashboards resolve their inherited template for chart data
+  and panel editing. Cloning a user dashboard retains the underlying template;
+  missing or cyclic template references keep the blank fallback. Custom
+  dashboard layout overrides also survive reloading the page.
+
+- Landing-page copy buttons report `COPY FAILED` when clipboard access is
+  denied or the legacy copy command fails, and retain their original label
+  after repeated clicks. A failed copy can be retried.
+
+- Playground PNG exports preserve computed SVG paint and text styles, including
+  the embedding query crosshair whose CSS-variable stroke disappeared when
+  rasterized outside the page stylesheet. The live chart is left unchanged.
+
+- Release-download snapshots now refuse malformed existing JSONL history without
+  replacing its contents. Repair the history file and rerun the snapshot command.
+
+- Playground saved views immediately restore the current dashboard, replace
+  stale URL filters when navigating, and preserve custom time-range endpoints.
+
+- Debian release-candidate package versions now sort before the corresponding
+  final release, preserving normal upgrade order without renaming release assets.
+
+- Debian Rust coverage reports now include valid zero-overlap measurements instead
+  of exiting before printing counts. Empty source indexes remain an error.
+
+- Hub pack planning reports malformed manifest JSON shapes as per-corpus warnings
+  and continues planning healthy corpora, rather than crashing on an invalid entry.
+
+- Hub re-pin automation only supersedes generated proposal branches for the
+  exact corpus, preserving proposals for corpora with longer overlapping names.
 
 - `xerj search` and a plain-string `xerj_search` rank a file that contains
   the query as an exact phrase (a pasted error message or log line) at the
