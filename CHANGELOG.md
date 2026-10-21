@@ -51,6 +51,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   reads the node (`GET /_cat/allocation?format=json`), not the client's
   disk. A node that does not report the threshold is unchanged.
 
+- `xerj autoindex` counts the walked folder and estimates the index before
+  hashing. The free-space budget reuses that same allocation row (free bytes
+  under the reported flood-stage watermark; the threshold is not guessed),
+  and `--max-index-size` can lower it. When the default plan does not fit,
+  stdout is a JSON plan list and the run exits 4 until `--plan` or `--yes`
+  names a plan that fits. A kind with no measured ratio stays unmeasured and
+  does not refuse the run. A digit-leading `--prefix` is rejected before the
+  walk ([#2057](https://github.com/xerj-org/xerj/issues/2057)). Skipped files
+  are named after the `ok:` line, and a PDF reuse-fallback line says the PDF
+  is still indexed ([#2056](https://github.com/xerj-org/xerj/issues/2056)).
+  A folder already indexed under another prefix is named before the walk
+  ([#2078](https://github.com/xerj-org/xerj/issues/2078)). MCP:
+  `xerj_index_budget` returns the same estimate and does not index.
+
 - Playground user dashboards resolve their inherited template for chart data
   and panel editing. Cloning a user dashboard retains the underlying template;
   missing or cyclic template references keep the blank fallback. Custom
