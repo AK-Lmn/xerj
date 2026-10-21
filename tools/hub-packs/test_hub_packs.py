@@ -131,6 +131,33 @@ class RegistryTests(unittest.TestCase):
             self.assertEqual(len(warnings), 2)
 
 
+    def test_invalid_manifest_shapes_warn_without_losing_healthy_corpora(self):
+        good = json.loads(manifest_text("broken", [("r", "https://x.test/r", SHA_A)]))
+        cases = [[], None, "manifest", {"corpus": "broken", "repos": "repos"},
+                 {"corpus": "broken", "repos": [None]},
+                 {"corpus": "broken", "repos": [{"sha": None}]},
+                 {"corpus": "broken", "repos": [{"sha": 123}]},
+                 {"corpus": "broken", "repos": [{"sha": SHA_A, "repo": ["r"], "url": "https://x.test/r"}]},
+                 {"corpus": "broken", "repos": [{"sha": SHA_A, "repo": "r", "url": {"url": "https://x.test/r"}}]}]
+        for invalid in cases:
+            with self.subTest(manifest=invalid), tempfile.TemporaryDirectory() as t:
+                reg, backlog = write_registry(pathlib.Path(t), [row("good"), row("broken")], {
+                    "good": manifest_text("good", [("g", "https://x.test/g", SHA_A)]),
+                    "broken": json.dumps(invalid),
+                })
+                before = (reg / "broken.json").read_bytes()
+                corpora, warnings = hp.load_live(reg, backlog)
+                self.assertEqual([c.slug for c in corpora], ["good"])
+                self.assertEqual(len(warnings), 1)
+                self.assertIn("broken.json", warnings[0])
+                self.assertEqual((reg / "broken.json").read_bytes(), before)
+                # A corrected manifest recovers on the next run without other changes.
+                (reg / "broken.json").write_text(json.dumps(good))
+                recovered, warnings = hp.load_live(reg, backlog)
+                self.assertEqual([c.slug for c in recovered], ["broken", "good"])
+                self.assertEqual(warnings, [])
+
+
 class PlanTests(unittest.TestCase):
     def corpora(self, t: str, slugs: list[tuple[str, str, str]]):
         rows = [row(s, refresh=r) for s, _, r in slugs]
@@ -484,6 +511,24 @@ class ApplyTests(unittest.TestCase):
         self.assertTrue(any("closed superseded PR #100" in l for l in log), log)
         open_heads = [p["headRefName"] for p in self.gh_state()["prs"] if p["state"] == "OPEN"]
         self.assertEqual(open_heads, [new.branch])
+
+    def test_superseding_a_corpus_preserves_longer_slug_branches(self):
+        (proposal,) = self.proposals(["feed"])
+        st = self.gh_state()
+        st["prs"] = [
+            {"number": 91, "state": "OPEN", "headRefName": "hub-repin/feed-12345678"},
+            {"number": 92, "state": "OPEN", "headRefName": "hub-repin/feed-extra-12345678"},
+            {"number": 93, "state": "OPEN", "headRefName": "hub-repin/feed-manual-review"},
+        ]
+        self.state.write_text(json.dumps(st))
+        _, failures = self.apply([proposal])
+        self.assertEqual(failures, 0)
+        by_number = {p["number"]: p["state"] for p in self.gh_state()["prs"]}
+        self.assertEqual(by_number[91], "CLOSED", "an older exact-corpus proposal is superseded")
+        self.assertEqual(by_number[92], "OPEN", "a longer corpus slug is independently owned")
+        self.assertEqual(by_number[93], "OPEN", "non-generated branch suffixes are not ours")
+        closes = [c[2] for c in self.gh_state()["calls"] if c[:2] == ["pr", "close"]]
+        self.assertEqual(closes, ["91"])
 
     def test_one_failure_does_not_stop_the_rest(self):
         first, second = self.proposals()

@@ -113,15 +113,22 @@ def load_manifest(path: pathlib.Path, refresh: str = "pinned") -> Corpus:
         data = json.loads(path.read_text())
     except (OSError, json.JSONDecodeError) as e:
         raise RegistryError(f"{path.name}: unreadable ({e})") from e
+    if not isinstance(data, dict):
+        raise RegistryError(f"{path.name}: manifest must be an object")
     slug = data.get("corpus")
     if slug != path.stem or not isinstance(slug, str) or not SLUG_RE.match(slug):
         raise RegistryError(f"{path.name}: corpus {slug!r} must equal the file name")
     repos = []
-    for i, r in enumerate(data.get("repos") or []):
+    raw_repos = data.get("repos", [])
+    if not isinstance(raw_repos, list):
+        raise RegistryError(f"{path.name}: repos must be an array")
+    for i, r in enumerate(raw_repos):
+        if not isinstance(r, dict):
+            raise RegistryError(f"{path.name}: repos[{i}] must be an object")
         sha = r.get("sha", "")
-        if not SHA_RE.match(sha):
+        if not isinstance(sha, str) or not SHA_RE.fullmatch(sha):
             raise RegistryError(f"{path.name}: repos[{i}].sha is not a 40-hex commit")
-        if not r.get("url") or not r.get("repo"):
+        if any(not isinstance(r.get(key), str) or not r[key] for key in ("url", "repo")):
             raise RegistryError(f"{path.name}: repos[{i}] lacks repo/url")
         repos.append(Repo(r["repo"], r["url"], sha))
     if not repos:
@@ -521,10 +528,10 @@ def apply_proposals(
             open_prs = _gh_json(
                 gh, ["pr", "list", "--state", "open", "--limit", "200", "--json", "number,headRefName"], repo_root
             ) or []
-            mine = f"{BRANCH_PREFIX}{p.slug}-"
+            mine = re.compile(re.escape(f"{BRANCH_PREFIX}{p.slug}-") + r"[0-9a-f]{8}")
             for other in open_prs:
                 head = other["headRefName"]
-                if head.startswith(mine) and head != p.branch:
+                if mine.fullmatch(head) and head != p.branch:
                     _run(
                         [gh, "pr", "close", str(other["number"]), "--delete-branch", "--comment", f"Superseded by {url}"],
                         cwd=repo_root,
