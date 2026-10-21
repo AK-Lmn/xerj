@@ -141,6 +141,13 @@ ASK=$(jq -r --arg s "$SLUG" '.corpora[] | select(.slug == $s) | .ask_for' \
 WORDS=$(tr -cs 'A-Za-z' '\n' <<<"$ASK" | tr 'A-Z' 'a-z' | awk 'length >= 4' \
         | grep -vxE 'agent|agents|working|needing|queries|query|this|that|with|from|when|into|their|about|does' \
         | awk '{ print length, $0 }' | sort -rn -k1,1 -s | cut -d' ' -f2 | awk '!seen[$0]++' | head -n 3 || true)
+# ask_for is a hand-written description, so its longest words need not occur in
+# the corpus at all (ipsum-blocklist: "reputation aggregated blocklists" against
+# an IP list; retext-passive/-profanities: "constructions", "rephrasings"). The
+# slug's own words ("ipsum", "passive", "profanities") name what the corpus is
+# and are tried after them, so such a pack is still asked a real question.
+SLUG_WORDS=$(tr -cs 'A-Za-z' '\n' <<<"$SLUG" | tr 'A-Z' 'a-z' | awk 'length >= 4' || true)
+WORDS=$(printf '%s\n%s\n' "$WORDS" "$SLUG_WORDS" | awk 'NF && !seen[$0]++')
 [ -n "$WORDS" ] || WORDS=$SLUG
 # A hit is "real and citable" when its `_source` yields a provenance path the
 # way `xerj code` itself cites one: the first non-empty of ax_path / ax_file /
@@ -164,6 +171,6 @@ for w in $WORDS; do
     hit=$w; break
   fi
 done
-[ -n "$hit" ] || { cat "$WORK/q.json" "$WORK/q.err" 2>/dev/null | head -c 4000; fail "no question from ask_for ($WORDS) returned a citable hit"; }
+[ -n "$hit" ] || { cat "$WORK/q.json" "$WORK/q.err" 2>/dev/null | head -c 4000; fail "no question from ask_for or the slug ($WORDS) returned a citable hit"; }
 echo "question ok: \"$hit\" -> $(jq -r "$CITE[0]" "$WORK/q.json")"
 echo "consumer e2e passed for $SLUG @ $PIN8"
