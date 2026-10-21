@@ -26,6 +26,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `xerj autoindex` checks the node's data volume against the disk
+  flood-stage watermark before walking or hashing. A volume already at or
+  over the watermark (default 95%) used to fail only at the first write,
+  after the prepare. The run now stops immediately and reports the free
+  space, the threshold, and `limits.disk_flood_stage_percent`. The probe
+  reads the node (`GET /_cat/allocation?format=json`), not the client's
+  disk. A node that does not report the threshold is unchanged.
+
 - `xerj search` and a plain-string `xerj_search` rank a file that contains
   the query as an exact phrase (a pasted error message or log line) at the
   top. The bag-of-words leg alone let a short `defs` list sharing two of the
