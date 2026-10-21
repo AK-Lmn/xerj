@@ -239,19 +239,21 @@ warning: approach-only licence (mixed: BSD-2 (lib) / GPL-2.0+ (rest)): read, do 
   <code class="inline">file:line</code> it rests on. Retrieval is lexical (BM25 over the words and
   identifiers in the source), not semantic: ask with the names the source uses.</p>
 
-  <p><strong>Which binary this page describes.</strong> Every command and every output block on this
-  page was run against <code class="inline">xerj</code> built from <code class="inline">main</code> at
-  <code class="inline">b3753ddb</code> (<code class="inline">xerj -V</code> prints
-  <code class="inline">xerj v1.0.0-rc.96</code>). The tagged v1.0.0-rc.96 release has
+  <p><strong>Which binary this page describes.</strong> This page applies to the released
+  <code class="inline">xerj v1.0.0-rc.97</code> and later. That release has
+  <code class="inline">xerj ask</code>, <code class="inline">xerj hub</code> and the built-in hub key,
+  and on 2026-10-21 its <code class="inline">xerj hub sync</code> fetched and verified the production
+  signed catalogue (324 corpora). The earlier v1.0.0-rc.96 release has
   <code class="inline">xerj ask</code> and <code class="inline">xerj hub</code> but no hub key: there,
   every pull exits 5 and downloads nothing. To check your binary, run
   <code class="inline">xerj hub --help | grep -c build-catalogue</code>; it prints
   <code class="inline">1</code> on a binary this page applies to and <code class="inline">0</code> on
   v1.0.0-rc.96. A binary that prints 1 but has no key still exits 5 on the first pull, with the
-  message under <a href="#troubleshooting">When it does not work</a>. The example outputs come from a
-  rehearsal hub (a catalogue of lz4, snappy and zstd served from this machine and signed with a test
-  key) because the production catalogue was not yet served when the page was written. Pack sizes,
-  ages and process IDs on your machine will differ; the formats will not.</p>
+  message under <a href="#troubleshooting">When it does not work</a>. The example outputs were
+  captured from <code class="inline">main</code> at <code class="inline">b3753ddb</code> against a
+  rehearsal hub (a catalogue of lz4, snappy and zstd signed with a test key), before the production
+  catalogue was served. Pack sizes, ages and process IDs on your machine will differ; the formats
+  will not.</p>
 
   <p class="source-note">Source · engine/crates/xerj-hub/src/ (cli.rs, ask.rs, sync.rs, node.rs) · spec docs/CORPUS_HUB_V2_IMPLEMENTATION.md · browse: hub.xerj.org</p>
 
