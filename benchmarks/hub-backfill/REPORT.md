@@ -6,7 +6,7 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 
 ## Current state
 
-427 corpora attempted: 378 published at their latest attempt, 49 not.
+450 corpora attempted: 401 published at their latest attempt, 49 not.
 
 ### Latest attempt did not publish (fix or delist on purpose)
 
@@ -55,14 +55,59 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 | `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `ipsum-blocklist` | `444b4802` | 26384581 | 0 | failed at `e2e` | no question from ask_for (reputation |
-| `milvus` | `b48661d3` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ipsum-blocklist` | `444b4802` | 26332846 | 0 | failed at `e2e` | no question from ask_for (reputation |
 | `mtl-bioinformatics-ner` | `df0df02f` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `nuclei-templates` | `24a43e14` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `retext-passive` | `66ca2c56` | 111383 | 2 | failed at `e2e` | no question from ask_for (constructions |
-| `retext-profanities` | `2627fb08` | 131129 | 4 | failed at `e2e` | no question from ask_for (rephrasings |
+| `nuclei-templates` | `24a43e14` |  |  | failed at `build` | autoindex: _bulk failed: bulk send (request timeout 300s): error sending request for url (http://127.0.0.1:19200/_bulk): operation timed out; retrying (attempt 1 of 6, 373 s in this request so far) |
+| `retext-passive` | `66ca2c56` | 111959 | 2 | failed at `e2e` | no question from ask_for (constructions |
+| `retext-profanities` | `2627fb08` | 130498 | 4 | failed at `e2e` | no question from ask_for (rephrasings |
+| `stripe-openapi` | `e73367db` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 
 ## Runs (newest first)
+
+### Run [39582439994](https://github.com/xerj-org/xerj/actions/runs/39582439994), 2026-10-21: 23 of 40 published
+
+| slug | pin8 | bytes | defs | result | error |
+|---|---|---:|---:|---|---|
+| `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `exploit-pocs-2023` | `af9e194d` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2024` | `7855e58f` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2025` | `374cf8f1` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2026` | `160f470e` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploitdb-src` | `12879ca7` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `fluent-bit` | `3b6ce5cf` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ipsum-blocklist` | `444b4802` | 26332846 | 0 | failed at `e2e` | no question from ask_for (reputation |
+| `mtl-bioinformatics-ner` | `df0df02f` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `nuclei-templates` | `24a43e14` |  |  | failed at `build` | autoindex: _bulk failed: bulk send (request timeout 300s): error sending request for url (http://127.0.0.1:19200/_bulk): operation timed out; retrying (attempt 1 of 6, 373 s in this request so far) |
+| `retext-passive` | `66ca2c56` | 111959 | 2 | failed at `e2e` | no question from ask_for (constructions |
+| `retext-profanities` | `2627fb08` | 130498 | 4 | failed at `e2e` | no question from ask_for (rephrasings |
+| `stripe-openapi` | `e73367db` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `milvus` | `b48661d3` | 283395080 | 122468 | published `pack-milvus-b48661d3` |  |
+| `rustls` | `7dcbe4c1` | 10229482 | 5070 | published `pack-rustls-7dcbe4c1` |  |
+| `s2n-tls` | `b1700000` | 58375808 | 26189 | published `pack-s2n-tls-b1700000` |  |
+| `sass-spec` | `57c81dd7` | 7385059 | 162 | published `pack-sass-spec-57c81dd7` |  |
+| `scap-security-guide` | `f0f3396f` | 108454940 | 3975 | published `pack-scap-security-guide-f0f3396f` |  |
+| `school-of-sre` | `22979a6e` | 3602564 | 0 | published `pack-school-of-sre-22979a6e` |  |
+| `scispacy` | `eacccd4e` | 1646644 | 239 | published `pack-scispacy-eacccd4e` |  |
+| `season-of-docs` | `ec6161e9` | 3736800 | 0 | published `pack-season-of-docs-ec6161e9` |  |
+| `serverless-workflow-spec` | `13b6a625` | 1695602 | 6 | published `pack-serverless-workflow-spec-13b6a625` |  |
+| `simonw-llm` | `05d7ae7d` | 6939656 | 2032 | published `pack-simonw-llm-05d7ae7d` |  |
+| `siren-hypermedia` | `c29a8784` | 143165 | 0 | published `pack-siren-hypermedia-c29a8784` |  |
+| `smallstep-certificates` | `69d3c36f` | 5941816 | 5194 | published `pack-smallstep-certificates-69d3c36f` |  |
+| `smithy` | `2a61b43f` | 66692219 | 22876 | published `pack-smithy-2a61b43f` |  |
+| `solid` | `25138e1c` | 4167902 | 1151 | published `pack-solid-25138e1c` |  |
+| `sourcegraph-handbook` | `5752928b` | 7958415 | 109 | published `pack-sourcegraph-handbook-5752928b` |  |
+| `spdx-spec` | `395d06e1` | 9482359 | 10 | published `pack-spdx-spec-395d06e1` |  |
+| `spectral` | `62527eec` | 12918859 | 5007 | published `pack-spectral-62527eec` |  |
+| `spectrum-web-components` | `be922808` | 92356834 | 11482 | published `pack-spectrum-web-components-be922808` |  |
+| `splunk-security-content` | `c653da7c` | 41621103 | 1222 | published `pack-splunk-security-content-c653da7c` |  |
+| `sqlite-src` | `9696acb0` | 114724778 | 23629 | published `pack-sqlite-src-9696acb0` |  |
+| `standard-readme` | `5d18ad4d` | 213365 | 0 | published `pack-standard-readme-5d18ad4d` |  |
+| `standard-webhooks` | `7537d2a2` | 583264 | 322 | published `pack-standard-webhooks-7537d2a2` |  |
+| `stratus-red-team` | `3ff51c44` | 11583379 | 1232 | published `pack-stratus-red-team-3ff51c44` |  |
 
 ### Run [39557589186](https://github.com/xerj-org/xerj/actions/runs/39557589186), 2026-10-21: 23 of 40 published
 
