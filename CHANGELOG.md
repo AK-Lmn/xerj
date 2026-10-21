@@ -26,13 +26,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `xerj autoindex` on the graph path no longer counts files that appeared
+  after the resume plan was frozen as junk. A resume whose plan predates
+  files now on disk still cannot re-cluster that plan — dataset identity and
+  graph anchors stay put, and the `--no-graph` route is what reconciles
+  additions. The resume finishes `reason=stale-resume-plan` (exit 3, recorded,
+  not a failure), leaves `junk_files` for unusable input, sets
+  `skipped_appeared` to the count on every resume while those files are
+  unindexed, and names `--fresh` as the flag that rebuilds the plan in place
+  and includes them
+  ([#2076](https://github.com/xerj-org/xerj/issues/2076)).
+
 - `xerj autoindex` checks the node's data volume against the disk
   flood-stage watermark before walking or hashing. A volume already at or
   over the watermark (default 95%) used to fail only at the first write,
   after the prepare. The run now stops immediately and reports the free
   space, the threshold, and `limits.disk_flood_stage_percent`. The probe
   reads the node (`GET /_cat/allocation?format=json`), not the client's
-  disk. A node that does not report the threshold is unchanged.
+  disk. A node that does not report the threshold is unchanged, and
+  `--dry-run` (which writes nothing) is never refused for disk.
 
 - `xerj search` and a plain-string `xerj_search` rank a file that contains
   the query as an exact phrase (a pasted error message or log line) at the
