@@ -26,6 +26,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- An MCP tool call that cannot connect to `XERJ_URL` now says that no XERJ
+  node is listening there, that `xerj mcp` does not start one, and prints
+  `xerj --insecure --data-dir ~/xerj-data`. A bare connection error was the
+  whole tool result, so agents abandoned xerj for the session. HTTP
+  responses, including 401, are unchanged (#2079).
+
 - `xerj search` and a plain-string `xerj_search` rank a file that contains
   the query as an exact phrase (a pasted error message or log line) at the
   top. The bag-of-words leg alone let a short `defs` list sharing two of the
