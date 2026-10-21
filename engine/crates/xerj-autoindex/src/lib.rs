@@ -6316,8 +6316,12 @@ fn run_index_report_inner(
     // `limits.disk_flood_stage_percent = 99` workaround and a disabled
     // watermark. Nothing has been walked or written yet, so bailing here
     // leaves no journal and no remote mutation.
-    if let Some(message) = flood::refusal(&es) {
-        anyhow::bail!("{message}");
+    // A dry run writes nothing, so a full volume is not a reason to refuse
+    // it: the plan (and its size) is exactly what a user short on disk needs.
+    if !cfg.dry_run {
+        if let Some(message) = flood::refusal(&es) {
+            anyhow::bail!("{message}");
+        }
     }
 
     // `--label <question-set>` (#1062): every record's payload goes through

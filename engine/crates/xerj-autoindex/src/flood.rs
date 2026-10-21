@@ -266,6 +266,18 @@ mod tests {
             !message.contains("limits.disk_flood_stage_percent"),
             "{message}"
         );
+
+        // A dry run writes nothing: a flooded node does not refuse it.
+        let dry_state = tempfile::tempdir().unwrap();
+        let mut dry = index_cfg(&root, dry_state.path(), &flooded.url);
+        dry.dry_run = true;
+        if let Err(error) = crate::run_index_report(dry) {
+            let message = format!("{error:#}");
+            assert!(
+                !message.contains("limits.disk_flood_stage_percent"),
+                "a dry run must not be refused for disk: {message}"
+            );
+        }
     }
 
     fn index_cfg(
