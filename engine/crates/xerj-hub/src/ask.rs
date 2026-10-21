@@ -635,16 +635,22 @@ const MAX_SYMBOL_CANDIDATES: usize = 5;
 /// How many closest corpora a "nothing matches" answer names.
 const CLOSEST_SHOWN: usize = 3;
 
-/// The corpora whose term sketch holds `symbol` verbatim, by slug. The sketch is
-/// built from every definition's symbol in its own case, so a hit means the corpus
-/// defines exactly that name (a Bloom filter's false-positive rate at the planned
-/// sizing is around 1e-8). Empty when the name is too common to point anywhere
-/// ([`MAX_SYMBOL_CANDIDATES`]).
+/// The corpora whose term sketch holds `symbol`, by slug. Sketches hold every
+/// definition's symbol lower-cased (catalogues built before that hold the raw
+/// case too, so both forms are probed), so a hit means the corpus defines that
+/// name, give or take the Bloom false-positive rate (~0.07% per corpus at 16
+/// bits per term) and the per-corpus term cap (`sketch::MAX_TERMS`: a corpus
+/// with more terms keeps its most characteristic ones, and an exact lookup of a
+/// rare symbol there needs the corpus named). Empty when the name is too common
+/// to point anywhere ([`MAX_SYMBOL_CANDIDATES`]).
 fn symbol_hits(cat: &Catalogue, symbol: &str) -> Vec<String> {
+    let lower = symbol.to_lowercase();
     let mut hits: Vec<String> = cat
         .corpora
         .iter()
-        .filter(|e| sketch::contains(&e.term_sketch, symbol))
+        .filter(|e| {
+            sketch::contains(&e.term_sketch, symbol) || sketch::contains(&e.term_sketch, &lower)
+        })
         .map(|e| e.slug.clone())
         .collect();
     if hits.len() > MAX_SYMBOL_CANDIDATES {

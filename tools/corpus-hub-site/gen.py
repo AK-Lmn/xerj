@@ -8,7 +8,7 @@ Reads ONLY registry state on this branch (corpus-hub):
   tools/xerj-code/hub/backlog/*-graded.json  - graded G7 suites (non-IT lane)
   tools/xerj-code/hub/backlog/impact-snapshot-*.json - benchmark A/B snapshot
   tools/packs/*/recipe.toml                  - lane B packs
-Writes out/ (index, per-corpus, per-category, about, style, data.json).
+Writes out/ (index, per-corpus, per-category, whats-this, style, data.json).
 
 Design: xerj.org brandbook, day palette only (user directive 2026-10-06:
 strictly main-site fonts and CSS, domains as large typography, white default).
@@ -18,16 +18,38 @@ registry change.
 """
 import datetime as dt
 import hashlib
+import agent_score
+import contributors
+import os
+import private_data
+import struct
+import usage
 import html
 import json
 import pathlib
 import re
 import tomllib
+import zlib
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 HUB = ROOT / "tools" / "xerj-code" / "hub"
 PACKS = ROOT / "tools" / "packs"
 OUT = pathlib.Path(__file__).resolve().parent / "out"
+BRAND = pathlib.Path(__file__).resolve().parent / "brand"
+
+# Canonical origin. xerj-hub.pages.dev serves the same files; every page names
+# this origin so the pages.dev hostname is not a second site.
+SITE = "https://hub.xerj.org"
+PAGES_DEV_HOST = "xerj-hub.pages.dev"
+GA_ID = "G-Z77ETCDJYL"
+# Day-palette page background (--z-bg). The OG card is this colour with the
+# light wordmark centered on it.
+BG_RGB = (0xFA, 0xFA, 0xF7)
+OG_W, OG_H = 1200, 630
+OG_IMAGE = f"{SITE}/assets/og.png"
+LOGO_IMAGE = f"{SITE}/assets/hub-logo.png"
+ORG_ID = f"{SITE}/#organization"
+SITE_ID = f"{SITE}/#website"
 
 CATS = {
     "SEC": ("Security and vulnerabilities", "Is this CVE exploited; does this pattern have KEV/GHSA precedent; how was it fixed"),
@@ -247,10 +269,13 @@ def impact_badge(c, impact):
             f'A/B {esc(r["p"])} to {esc(r["x"])}</span>')
 
 
-def card(c, g7, graded, impact):
+def card(c, g7, graded, impact, rel=""):
+    """One corpus card. `rel` is the path back to the site root: category
+    pages live one level down, and their cards linked category/corpus/<slug>
+    (a 404) before it existed."""
     files, nbytes, licences = corpus_stats(c)
     st, stcls = STATUSES.get(c["status"], (c["status"], "mute"))
-    return f'''<a class="card" data-cat="{esc(c['cat'])}" data-region="{esc(region(c))}" href="corpus/{esc(c['slug'])}.html">
+    return f'''<a class="card" data-cat="{esc(c['cat'])}" data-region="{esc(region(c))}" data-slug="{esc(c['slug'].lower())}" href="{rel}corpus/{esc(c['slug'])}">
   <div class="chead"><span class="cname">{esc(c['slug'])}</span><span class="dot {stcls}"></span></div>
   <p class="cuse">{esc(plain(c['usecase'])[:180])}{'...' if len(c['usecase']) > 180 else ''}</p>
   {tag_line(c)}
@@ -272,6 +297,44 @@ def card(c, g7, graded, impact):
 #
 # The one line needs a binary that has `xerj ask`. Every prompt opens with
 # `xerj ask --help`, so an agent on an older binary finds out at step 1.
+
+# Which corpora have a signed hub pack to ask: the ones in the live signed
+# catalogue (the same list `xerj ask` routes over). A live lane-A manifest whose
+# pack has not been published yet gets no pull/ask commands, so the site never
+# advertises a pack that does not exist. The site is generated before the
+# deploy job fetches the catalogue, so read the live one here. If it cannot be
+# read (offline build, XERJ_HUB_OFFLINE=1), fall back to treating every live
+# lane-A corpus as packed, which is what the site printed before this gate.
+CATALOGUE_JSON = os.environ.get("XERJ_HUB_CATALOGUE_JSON", SITE + "/api/v1/catalogue.json")
+_PACKED = None
+
+
+def packed_slugs():
+    global _PACKED
+    if _PACKED is None:
+        _PACKED = False
+        if os.environ.get("XERJ_HUB_OFFLINE") != "1":
+            try:
+                import urllib.request
+                req = urllib.request.Request(CATALOGUE_JSON, headers={"User-Agent": "xerj-hub-site-gen"})
+                with urllib.request.urlopen(req, timeout=20) as r:
+                    cat = json.loads(r.read().decode("utf-8"))
+                slugs = {c["slug"] for c in cat.get("corpora", []) if isinstance(c, dict) and c.get("slug")}
+                if slugs:
+                    _PACKED = slugs
+                    print(f"gen: {len(slugs)} corpora have a hub pack (signed catalogue)")
+            except Exception as e:  # noqa: BLE001 - any failure means "unknown", not "none"
+                print(f"gen: catalogue unavailable ({e}); every live lane-A corpus is treated as packed")
+    return _PACKED
+
+
+def has_pack(c):
+    """True when this live, lane-A corpus has a published hub pack (see above)."""
+    if c["status"] != "live" or c["lane"] != "A":
+        return False
+    packed = packed_slugs()
+    return packed is False or c["slug"] in packed
+
 
 # The catalogue, one line per corpus: linked from every page and every prompt.
 CATALOGUE_URL = "https://hub.xerj.org/llms.txt"
@@ -393,24 +456,28 @@ def tile(c):
             f'data-region="{esc(region(c))}" data-name="{esc(c["slug"])}" '
             f'data-bytes="{nbytes}" title="{esc(ttl)}">'
             f'<span class="tdot {stcls}" title="{esc(st)}"></span>'
-            f'<a class="tlink" href="corpus/{esc(c["slug"])}.html">'
+            f'<a class="tlink" href="corpus/{esc(c["slug"])}">'
             f'<span class="tn">{esc(c["slug"])}</span>'
             f'<span class="ts">{esc(meta)}</span></a></div>')
 
 
 # Brandbook tokens from xerj.org (landing/style.css), day palette only.
 # White schema is the one scheme: no dark variant, no prefers-color-scheme
-# override (user directive 2026-10-06).
+# override (user directive 2026-10-06). 2026-10 readability pass: every text
+# colour is >= 7:1 against --z-bg (ratios in the comments), body 18px / 1.6.
 STYLE = """/* corpus hub - xerj.org brandbook, day palette, white only */
 :root{
---z-bg:#f6f4ee;--z-ink:#11120f;--z-mute:#696762;--z-faint:#e3dfd4;--z-line:#cfcbbf;
---z-accent:#7f5200;--z-cmp:#6f8aa8;
---ok:#2e6b3a;--bad:#8c2f2f;--warn:#8a6d1a;
+color-scheme:light;
+--z-bg:#fafaf7;--z-ink:#1a1a1a;--z-mute:#4a4843;--z-faint:#e7e5de;--z-line:#d4d1c7;
+--z-accent:#6b4400;--z-cmp:#3b536f;
+--z-brand:#ffc400;--z-focus:#8a5a00;--z-code-bg:#f3f4f6;--z-code-line:#e2e4e8;
+--ok:#1e5c30;--bad:#8f2427;--warn:#5f4a0e;
+/* vs --z-bg: ink 16.6, mute 8.7, accent 8.2, cmp 7.6, ok 7.6, bad 8.2, warn 8.1 */
 --font-display:'Big Shoulders Display','Inter',system-ui,sans-serif;
 --font-prose:'Inter',system-ui,sans-serif;
 --font-data:'IBM Plex Sans','Inter',system-ui,sans-serif;
 --font-mono:'JetBrains Mono','IBM Plex Mono',monospace;
---fs-11:11px;--fs-13:13px;--fs-16:16px;--fs-20:20px;--fs-32:32px;
+--fs-11:12px;--fs-13:14px;--fs-16:18px;--fs-20:20px;--fs-32:32px;
 --fs-56:56px;--fs-96:96px;--fs-160:160px;
 --track-ui:.14em;--track-label:.08em;
 --sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:20px;--sp-6:24px;
@@ -419,9 +486,18 @@ STYLE = """/* corpus hub - xerj.org brandbook, day palette, white only */
 }
 *{box-sizing:border-box}
 body{margin:0;font-family:var(--font-prose);background:var(--z-bg);color:var(--z-ink);
-line-height:1.5;font-size:var(--fs-16)}
+line-height:1.6;font-size:var(--fs-16)}
 a{color:inherit}
-code{font-family:var(--font-mono);font-size:.92em;background:var(--z-faint);padding:.1em .35em}
+:where(p,li,dd,td,.kbox,.note) a:not([class]){color:var(--z-accent);text-decoration:underline;
+text-decoration-thickness:1px;text-underline-offset:.18em}
+:where(p,li,dd,td,.kbox,.note) a:not([class]):hover{color:var(--z-ink);text-decoration-thickness:2px}
+:focus-visible{outline:3px solid var(--z-focus);outline-offset:2px}
+::placeholder{color:var(--z-mute);opacity:1}
+@media (max-width:720px){:root{--fs-16:17px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;
+animation-iteration-count:1!important;transition-duration:.01ms!important}}
+code{font-family:var(--font-mono);font-size:.9em;background:var(--z-code-bg);
+border:1px solid var(--z-code-line);padding:.05em .35em}
 /* nav: main-site pattern, 1px bottom line */
 .nav{display:flex;align-items:baseline;gap:var(--sp-5);padding:var(--sp-4) var(--page-x);
 border-bottom:1px solid var(--z-line);font-family:var(--font-data);font-size:var(--fs-11);
@@ -444,6 +520,23 @@ background:none;transition:color .2s,border-color .2s}
 .nav a.navcta.on{color:#fff;border:0;
 background:linear-gradient(100deg,#6d28d9,#9333ea,#7c3aed,#6d28d9);background-size:280% 100%;animation:ctaflow 5s ease infinite}
 .nav a.navcta.on:hover{color:#fff;filter:brightness(1.12)}
+/* sign-in (functions/auth/*): hidden until /api/me says enabled; see AUTH_JS */
+.authbox[hidden]{display:none}
+.authbox{position:relative;align-self:center}
+.authbox summary{list-style:none;cursor:pointer;color:var(--z-mute);display:inline-flex;align-items:center;gap:var(--sp-2)}
+.authbox summary::-webkit-details-marker{display:none}
+.authbox summary:hover{color:var(--z-ink)}
+.authbox summary img{width:24px;height:24px;border-radius:50%;border:1px solid var(--z-line);display:block}
+.authbox .menu{position:absolute;right:0;top:calc(100% + 8px);min-width:220px;background:#fff;border:1px solid var(--z-line);
+padding:var(--sp-2) 0;display:flex;flex-direction:column;z-index:60;box-shadow:0 6px 24px rgba(0,0,0,.06)}
+.authbox .menu a,.authbox .menu span{padding:var(--sp-2) var(--sp-4);display:block}
+.authbox .menu span{color:var(--z-ink);text-transform:none;letter-spacing:normal;font-size:var(--fs-13)}
+.authbox .menu a:hover{background:var(--z-faint);color:var(--z-ink)}
+.mystars{width:100%;border-collapse:collapse;margin-top:var(--sp-6);background:#fff}
+.mystars th,.mystars td{border:1px solid var(--z-line);padding:var(--sp-2) var(--sp-3);text-align:left}
+.spark{width:160px;height:32px;display:block}.spark polyline{fill:none;stroke:var(--z-accent);stroke-width:1.5}
+.authnote{position:fixed;bottom:var(--sp-5);right:var(--sp-5);background:var(--z-ink);color:#fff;padding:var(--sp-3) var(--sp-5);
+font-family:var(--font-data);font-size:var(--fs-13);z-index:70}
 .cta{display:inline-block;margin-top:var(--sp-5);font-family:var(--font-data);font-size:var(--fs-13);
 font-weight:600;text-transform:uppercase;letter-spacing:var(--track-ui);text-decoration:none;color:#fff;
 background:linear-gradient(100deg,#6d28d9,#9333ea,#7c3aed,#6d28d9);background-size:280% 100%;animation:ctaflow 5s ease infinite;padding:.72em 1.25em;border:0}
@@ -458,7 +551,7 @@ main{max-width:var(--max-w);margin:0 auto;padding:var(--sp-8) var(--page-x) var(
 .kicker{font-family:var(--font-data);font-size:var(--fs-11);font-weight:500;
 letter-spacing:var(--track-ui);text-transform:uppercase;color:var(--z-mute)}
 .kicker .accent{color:var(--z-accent)}
-.kicker .dash{opacity:.4;margin:0 6px}
+.kicker .dash{margin:0 6px}
 h1.hero{font-family:var(--font-display);font-weight:900;font-size:clamp(40px,6vw,var(--fs-96));
 line-height:.9;letter-spacing:-.02em;margin:0 0 var(--sp-6);color:var(--z-ink)}
 h1.hero .accent{color:var(--z-accent)}
@@ -502,6 +595,7 @@ gap:1px;background:var(--z-line);border:1px solid var(--z-line)}
 .stat{background:var(--z-bg);padding:var(--sp-4) var(--sp-5);min-height:88px;
 display:flex;flex-direction:column;justify-content:center;gap:4px}
 .stat.wide{grid-column:1 / -1}
+.stat a{display:flex;flex-direction:column;gap:4px;text-decoration:none;color:inherit}.stat a:hover b{color:var(--z-accent)}
 .stat b{font-family:var(--font-display);font-weight:800;white-space:nowrap;
 font-size:var(--fs-32);line-height:1;color:var(--z-ink)}
 .stat span{font-family:var(--font-data);font-size:var(--fs-11);font-weight:500;
@@ -530,7 +624,8 @@ font-weight:600;text-transform:uppercase;letter-spacing:var(--track-label);color
 .toolbar .row{display:flex;gap:var(--sp-2);flex-wrap:wrap;align-items:center}
 .toolbar input{font-family:var(--font-prose);font-size:var(--fs-13);padding:.5em .8em;
 border:1px solid var(--z-line);background:transparent;color:var(--z-ink);min-width:22rem}
-.toolbar input:focus{outline:none;border-color:var(--z-accent)}
+.toolbar input{border-color:#8c8a82}
+.toolbar input:focus{outline:3px solid var(--z-focus);outline-offset:1px;border-color:var(--z-accent)}
 .chip{font-family:var(--font-data);font-size:var(--fs-11);font-weight:500;
 text-transform:uppercase;letter-spacing:var(--track-label);border:1px solid var(--z-line);
 background:transparent;color:var(--z-mute);padding:.35em .9em;cursor:pointer}
@@ -558,7 +653,7 @@ padding:.1em .5em;color:var(--z-mute)}
 .badge.cat{color:var(--z-accent);border-color:var(--z-accent)}
 .badge.g7.ok,.badge.imp{color:var(--ok);border-color:var(--ok)}
 .badge.g7.bad{color:var(--bad);border-color:var(--bad)}
-.badge.g7.mute{opacity:.6}
+.badge.g7.mute{border-style:dashed}
 /* detail pages */
 section.detail h2{font-family:var(--font-display);font-weight:700;font-size:var(--fs-32);
 line-height:.95;border-bottom:1px solid var(--z-line);padding-bottom:var(--sp-2);margin:var(--sp-10) 0 var(--sp-4)}
@@ -620,6 +715,322 @@ background:transparent;color:var(--z-mute);padding:.3em .7em;cursor:pointer}
 }
 """
 
+def href(path):
+    """Internal link with no .html. Cloudflare Pages 308s /x.html to /x and
+    /dir/index.html to /dir/, so the link has to be the URL that is served."""
+    frag = ""
+    if "#" in path:
+        path, frag = path.split("#", 1)
+        frag = "#" + frag
+    query = ""
+    if "?" in path:
+        path, query = path.split("?", 1)
+        query = "?" + query
+    if path.endswith("/index.html"):
+        path = path[:-len("index.html")]
+    elif path == "index.html":
+        path = "./"
+    elif path.endswith(".html"):
+        path = path[:-len(".html")]
+    return path + query + frag
+
+
+def canonical_url(path):
+    """Absolute https://hub.xerj.org URL. path is already extensionless."""
+    if not path.startswith("/"):
+        path = "/" + path
+    return SITE + path
+
+
+def file_url(rel):
+    """Output-relative HTML path -> the URL Cloudflare Pages serves."""
+    rel = rel.replace("\\", "/")
+    if rel == "index.html":
+        return canonical_url("/")
+    if rel.endswith("/index.html"):
+        return canonical_url("/" + rel[:-len("index.html")])
+    if rel.endswith(".html"):
+        return canonical_url("/" + rel[:-len(".html")])
+    return canonical_url("/" + rel)
+
+
+def _png_chunk(tag, data):
+    return struct.pack(">I", len(data)) + tag + data + struct.pack(">I", zlib.crc32(tag + data) & 0xFFFFFFFF)
+
+
+def read_png(path):
+    """RGBA rows from a non-interlaced 8-bit PNG. Stdlib only."""
+    data = pathlib.Path(path).read_bytes()
+    if data[:8] != b"\x89PNG\r\n\x1a\n":
+        raise ValueError(f"{path} is not a PNG")
+    pos, w, h, idat = 8, None, None, b""
+    while pos < len(data):
+        n, typ = struct.unpack(">I4s", data[pos:pos + 8])
+        pos += 8
+        chunk, pos = data[pos:pos + n], pos + n + 4
+        if typ == b"IHDR":
+            w, h, bit, color, _comp, _filt, inter = struct.unpack(">IIBBBBB", chunk[:13])
+            if bit != 8 or color != 6 or inter != 0:
+                raise ValueError(f"{path} is not 8-bit non-interlaced RGBA")
+        elif typ == b"IDAT":
+            idat += chunk
+        elif typ == b"IEND":
+            break
+    raw = zlib.decompress(idat)
+    bpp, stride, rows, i, prev = 4, w * 4, [], 0, bytearray(w * 4)
+    for _y in range(h):
+        f, i = raw[i], i + 1
+        row = bytearray(raw[i:i + stride])
+        i += stride
+        if f == 1:
+            for x in range(stride):
+                row[x] = (row[x] + (row[x - bpp] if x >= bpp else 0)) & 255
+        elif f == 2:
+            for x in range(stride):
+                row[x] = (row[x] + prev[x]) & 255
+        elif f == 3:
+            for x in range(stride):
+                left = row[x - bpp] if x >= bpp else 0
+                row[x] = (row[x] + ((left + prev[x]) // 2)) & 255
+        elif f == 4:
+            for x in range(stride):
+                a = row[x - bpp] if x >= bpp else 0
+                b, c = prev[x], prev[x - bpp] if x >= bpp else 0
+                p = a + b - c
+                pa, pb, pc = abs(p - a), abs(p - b), abs(p - c)
+                pred = a if pa <= pb and pa <= pc else b if pb <= pc else c
+                row[x] = (row[x] + pred) & 255
+        elif f != 0:
+            raise ValueError(f"unsupported PNG filter {f}")
+        rows.append(row)
+        prev = row
+    return w, h, rows
+
+
+def _composite(dst, src):
+    """src over dst, both (r, g, b, a) bytes."""
+    sa, da = src[3] / 255.0, dst[3] / 255.0
+    out_a = sa + da * (1 - sa)
+    if out_a <= 0:
+        return (0, 0, 0, 0)
+    ch = []
+    for i in range(3):
+        ch.append(round((src[i] / 255.0 * sa + dst[i] / 255.0 * da * (1 - sa)) / out_a * 255))
+    ch.append(round(out_a * 255))
+    return tuple(ch)
+
+
+def _flatten(rows, bg=BG_RGB):
+    """RGBA rows -> tightly packed RGBA bytes on an opaque background."""
+    h, w = len(rows), len(rows[0]) // 4
+    out = bytearray(w * h * 4)
+    base = (bg[0], bg[1], bg[2], 255)
+    i = 0
+    for row in rows:
+        for x in range(0, w * 4, 4):
+            px = _composite(base, tuple(row[x:x + 4]))
+            out[i:i + 4] = bytes(px)
+            i += 4
+    return w, h, bytes(out)
+
+
+def write_png(path, w, h, rgba):
+    raw = bytearray()
+    stride = w * 4
+    for y in range(h):
+        raw.append(0)
+        raw += rgba[y * stride:(y + 1) * stride]
+    ihdr = struct.pack(">IIBBBBB", w, h, 8, 6, 0, 0, 0)
+    png = (b"\x89PNG\r\n\x1a\n" + _png_chunk(b"IHDR", ihdr)
+           + _png_chunk(b"IDAT", zlib.compress(bytes(raw), 9)) + _png_chunk(b"IEND", b""))
+    pathlib.Path(path).write_bytes(png)
+
+
+def write_brand_assets(out):
+    """Favicon plus a light social card.
+
+    The mark and the wordmark are the light Corpus Hub logos from the
+    brand-assets branch (hub-logo-128.png, hub-logo-text-512.png): black and
+    gold on a transparent background. Social cards composite the wordmark onto
+    the hub's own page background so a transparent corner is not black.
+    """
+    out = pathlib.Path(out)
+    (out / "assets").mkdir(parents=True, exist_ok=True)
+    mark = (BRAND / "hub-logo-128.png").read_bytes()
+    (out / "favicon.png").write_bytes(mark)
+    _w, _h, rows = read_png(BRAND / "hub-logo-text-512.png")
+    lw, lh, flat = _flatten(rows)
+    write_png(out / "assets" / "hub-logo.png", lw, lh, flat)
+    canvas = bytearray(OG_W * OG_H * 4)
+    pix = bytes(BG_RGB) + b"\xff"
+    for i in range(0, len(canvas), 4):
+        canvas[i:i + 4] = pix
+    ox, oy = (OG_W - lw) // 2, (OG_H - lh) // 2
+    for y in range(lh):
+        src = y * lw * 4
+        dst = ((oy + y) * OG_W + ox) * 4
+        canvas[dst:dst + lw * 4] = flat[src:src + lw * 4]
+    write_png(out / "assets" / "og.png", OG_W, OG_H, bytes(canvas))
+
+
+def _ld(obj):
+    body = json.dumps(obj, ensure_ascii=False, indent=2).replace("<", "\\u003c")
+    return f'<script type="application/ld+json">\n{body}\n</script>'
+
+
+def seo_block(title, desc, path, rel, kind="WebPage", image=None, noindex=False,
+              og_title=None, og_desc=None):
+    """Canonical, social tags, JSON-LD, favicon, analytics. Not visible layout."""
+    url = canonical_url(path)
+    ot, od = og_title if og_title is not None else title, og_desc if og_desc is not None else desc
+    own_image = image is None
+    img = OG_IMAGE if own_image else image
+    card = "summary_large_image" if own_image else "summary"
+    icon = f"{rel}favicon.png"
+    lines = [
+        f'<link rel="canonical" href="{url}">',
+        f'<link rel="icon" href="{icon}" type="image/png" sizes="128x128">',
+        f'<meta property="og:site_name" content="XERJ Corpus Hub">',
+        f'<meta property="og:type" content="website">',
+        f'<meta property="og:title" content="{esc(ot)}">',
+        f'<meta property="og:description" content="{esc(od)}">',
+        f'<meta property="og:url" content="{url}">',
+        f'<meta property="og:image" content="{esc(img)}">',
+    ]
+    if own_image:
+        lines += [
+            f'<meta property="og:image:width" content="{OG_W}">',
+            f'<meta property="og:image:height" content="{OG_H}">',
+            f'<meta property="og:image:alt" content="{esc(ot)}">',
+        ]
+    lines += [
+        '<meta property="og:locale" content="en_US">',
+        f'<meta name="twitter:card" content="{card}">',
+        f'<meta name="twitter:title" content="{esc(ot)}">',
+        f'<meta name="twitter:description" content="{esc(od)}">',
+        f'<meta name="twitter:image" content="{esc(img)}">',
+    ]
+    if noindex:
+        lines.append('<meta name="robots" content="noindex,follow">')
+    # Same HTML is served on the pages.dev hostname. Leave that host before
+    # analytics runs. Branch preview hostnames (*.pages.dev) stay put so a
+    # deploy preview still opens.
+    lines.append(
+        '<script>if(location.hostname==="' + PAGES_DEV_HOST + '")'
+        'location.replace("' + SITE + '"+location.pathname+location.search+location.hash);</script>'
+    )
+    lines += [
+        _ld({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "@id": ORG_ID,
+            "name": "XERJ",
+            "url": "https://xerj.org/",
+            "logo": LOGO_IMAGE,
+            "sameAs": ["https://github.com/xerj-org/xerj", "https://x.com/xerj_org"],
+        }),
+        _ld({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "@id": SITE_ID,
+            "name": "XERJ Corpus Hub",
+            "url": SITE + "/",
+            "inLanguage": "en",
+            "publisher": {"@id": ORG_ID},
+        }),
+        _ld({
+            "@context": "https://schema.org",
+            "@type": kind,
+            "name": plain(ot),
+            "description": plain(od),
+            "url": url,
+            "inLanguage": "en",
+            "isPartOf": {"@id": SITE_ID},
+            "publisher": {"@id": ORG_ID},
+        }),
+        f'<script async src="https://www.googletagmanager.com/gtag/js?id={GA_ID}"></script>',
+        "<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}"
+        f"gtag('js',new Date());gtag('config','{GA_ID}');</script>",
+    ]
+    return "\n".join(lines)
+
+
+# Allows every crawler, including the AI crawlers a managed robots.txt would
+# otherwise name. Content-Signal tokens are the three at contentsignals.org.
+ROBOTS = """# hub.xerj.org. Every crawler may fetch every page.
+# Agent index: https://hub.xerj.org/llms.txt
+
+User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+Allow: /
+
+# Repeated so a crawler that only honours its own group still sees Allow.
+# These are the user-agents Cloudflare's managed robots.txt names, plus the
+# OpenAI and Perplexity crawlers.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+Sitemap: https://hub.xerj.org/sitemap.xml
+"""
+
+
+def write_sitemap(out):
+    """One <loc> per indexable HTML page, identical to that page's canonical.
+    No lastmod: a generated tree has no per-file commit date that Google could
+    check, and a wrong lastmod is worse than none. No priority, no changefreq."""
+    import xml.sax.saxutils as saxutils
+    out = pathlib.Path(out)
+    locs = []
+    for f in sorted(out.rglob("*.html")):
+        rel = f.relative_to(out).as_posix()
+        if rel == "404.html":
+            continue
+        head = f.read_text(encoding="utf-8").split("</head>", 1)[0]
+        if 'name="robots"' in head and "noindex" in head:
+            continue
+        locs.append(file_url(rel))
+    locs.sort()
+    lines = ['<?xml version="1.0" encoding="UTF-8"?>',
+             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for loc in locs:
+        lines.append("  <url>")
+        lines.append(f"    <loc>{saxutils.escape(loc)}</loc>")
+        lines.append("  </url>")
+    lines.append("</urlset>")
+    (out / "sitemap.xml").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return len(locs)
+
+
 FONTS = """<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;700;800;900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">"""
@@ -627,20 +1038,21 @@ FONTS = """<link rel="preconnect" href="https://fonts.googleapis.com">
 PAGE = """<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{title}</title><meta name="description" content="{desc}">
+{seo}
 {fonts}
 <link rel="stylesheet" href="{rel}assets/style.css?v={ver}"></head>
 <body><nav class="nav"><a class="brand" href="https://xerj.org">XERJ<b>·</b>HUB</a>
-<a href="{rel}index.html">CORPORA</a><a href="{rel}index.html#domains">DOMAINS</a>
-<a href="{rel}about.html">ABOUT</a>
+<a href="{home}">CORPORA</a>
+<a href="{people}">CONTRIBUTORS</a>
+<a href="{rel}whats-this/">WHAT'S THIS?</a>
 <a href="{rel}llms.txt" title="The catalogue: every live corpus, one line each">CATALOGUE</a>
-<a href="https://github.com/xerj-org/xerj/tree/corpus-hub/tools/xerj-code/hub">REGISTRY (GIT)</a>
-<span class="spacer"></span><a class="navicon" href="https://x.com/xerj_org" title="XERJ on X" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a><a class="navicon" href="https://discord.com/invite/yetXFusXfs" title="XERJ on Discord" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.37a19.79 19.79 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.74 19.74 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.1 13.1 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.3 12.3 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.84 19.84 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></a><a href="https://xerj.org">XERJ.ORG</a><a href="{rel}contribute.html" class="navcta">ADD YOUR CORPUS</a></nav>
+<span class="spacer"></span><details class="authbox" id="hubauth" hidden></details><a class="navicon" href="https://x.com/xerj_org" title="XERJ on X" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a><a class="navicon" href="https://discord.com/invite/yetXFusXfs" title="XERJ on Discord" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.37a19.79 19.79 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.74 19.74 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.1 13.1 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.3 12.3 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.84 19.84 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></a><a href="https://xerj.org">XERJ.ORG</a><a href="{add}" class="navcta">ADD YOUR CORPUS</a></nav>
 {body}
 <footer><span>XERJ · CORPUS HUB · {stamp}</span>
 <span>PINNED SOURCES · VERIFIED LICENCES · MEASURED RETRIEVAL</span>
-<span><a href="{rel}index.html">CORPORA</a> · <a href="{rel}about.html">ABOUT</a> ·
+<span><a href="{home}">CORPORA</a> · <a href="{rel}whats-this/">WHAT'S THIS?</a> ·
 <a href="{rel}llms.txt">LLMS.TXT</a></span></footer>
-{navjs}
+{navjs}{authjs}
 </body></html>"""
 
 
@@ -661,12 +1073,113 @@ NAVCTA_JS = """<script>
 
 # Content hash of the stylesheet: appended as ?v= on every page's CSS link so a
 # changed stylesheet always busts the browser cache (assets carry a long max-age).
+STYLE += contributors.STYLE
+STYLE += """
+/* What's this? (WHATS_THIS): short, readable measure */
+.whats .lead,.whats .detail{max-width:72ch}
+.steps{padding-left:1.4em}.steps li{margin:0 0 var(--sp-4)}
+"""
+STYLE += usage.STYLE
+STYLE += agent_score.STYLE
 STYLE_VER = hashlib.sha1(STYLE.encode("utf-8")).hexdigest()[:8]
 
 
-def page(title, desc, body, rel=""):
+# Sign in / avatar / sign out in the nav. Asks /api/me (functions/api/me.js); the
+# box stays hidden unless sign-in is enabled (HUB_SESSION_SECRET and at least one
+# provider's OAuth app configured), and if the Function is absent or errors.
+# Only offered providers are listed. window.hubMe is the one shared /api/me request
+# (whichever page script runs first starts it). User text goes in via textContent, never as HTML.
+AUTH_JS = """<script>
+(function(){
+  var box=document.getElementById('hubauth');
+  function el(t,a,txt){var e=document.createElement(t);for(var k in a)e.setAttribute(k,a[k]);if(txt)e.textContent=txt;return e}
+  var here=encodeURIComponent(location.pathname+location.search.replace(/([?&])signin=[^&]*&?/,'$1').replace(/[?&]$/,''));
+  var m=location.search.match(/[?&]signin=(failed|cancelled|disabled)/);
+  if(m){
+    var n=el('div',{'class':'authnote',role:'status'},m[1]==='failed'?'Sign-in did not complete. Try again.':m[1]==='cancelled'?'Sign-in cancelled.':'Sign-in is not available yet.');
+    document.body.appendChild(n);setTimeout(function(){n.remove()},5000);
+    history.replaceState(null,'',decodeURIComponent(here)+location.hash);
+  }
+  (window.hubMe=window.hubMe||fetch('/api/me',{credentials:'same-origin'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})).then(function(me){
+    if(!box||!me||!me.ok||!me.enabled)return;
+    var sum=el('summary'),menu=el('div',{'class':'menu'});
+    if(me.user){
+      var u=me.user;
+      if(u.avatar)sum.appendChild(el('img',{src:u.avatar,alt:'',referrerpolicy:'no-referrer'}));
+      sum.appendChild(el('span',{},u.login));
+      menu.appendChild(el('span',{},(u.name||u.login)+' · '+(u.provider==='hf'?'Hugging Face':'GitHub')));
+      (me.links||[]).forEach(function(l){menu.appendChild(el('a',{href:l.href},l.label))});
+      menu.appendChild(el('a',{href:'/auth/logout?return='+here},'Sign out'));
+    }else{
+      sum.textContent='Sign in';
+      if(me.providers.github)menu.appendChild(el('a',{href:'/auth/github/login?return='+here},'with GitHub'));
+      if(me.providers.hf)menu.appendChild(el('a',{href:'/auth/hf/login?return='+here},'with Hugging Face'));
+    }
+    box.appendChild(sum);box.appendChild(menu);box.hidden=false;
+    document.addEventListener('click',function(e){if(!box.contains(e.target))box.open=false});
+  });
+})();
+</script>"""
+
+
+# /me.html: the signed-in visitor's own hub page. The static file is an empty
+# shell; everything on it comes from the authenticated API at view time
+# (/api/v1/me/stars; functions/api/v1/me/stars.js), so nothing personal is ever
+# in the generated site.
+ME_BODY = """<main class="cwrap"><section class="whead"><h1>Your hub</h1>
+<p id="me-lead">Sign in from the header to see the corpora and contributors you starred, and how their hub stars grew.</p></section>
+<div id="me-stars"></div></main>"""
+
+ME_JS = """<script>
+(function(){
+  var lead=document.getElementById('me-lead'),box=document.getElementById('me-stars');
+  function el(t,a,txt){var e=document.createElement(t);for(var k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e}
+  function spark(h){ // cumulative hub stars over the days we have history for
+    if(!h||!h.length)return null;
+    var c=0,pts=h.map(function(d){c+=d[1];return c}),mx=pts[pts.length-1]||1,w=160,ht=32,n=pts.length;
+    var d=pts.map(function(v,i){return (n===1?w:i*w/(n-1)).toFixed(1)+','+(ht-v/mx*(ht-2)-1).toFixed(1)}).join(' ');
+    if(n===1)d='0,'+(ht-1)+' '+d;
+    var s=document.createElementNS('http://www.w3.org/2000/svg','svg');s.setAttribute('viewBox','0 0 '+w+' '+ht);s.setAttribute('class','spark');
+    var p=document.createElementNS('http://www.w3.org/2000/svg','polyline');p.setAttribute('points',d);s.appendChild(p);
+    var t=document.createElementNS('http://www.w3.org/2000/svg','title');t.textContent='+'+c+' hub stars from '+h[0][0]+' to '+h[h.length-1][0];s.appendChild(t);
+    return s;
+  }
+  (window.hubMe=window.hubMe||fetch('/api/me',{credentials:'same-origin'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})).then(function(me){
+    if(!me||!me.enabled){lead.textContent='Sign-in is not enabled on this hub yet.';return}
+    if(!me.user)return;
+    lead.textContent='Signed in as '+me.user.login+'. Everything you starred on the hub, newest first.';
+    fetch('/api/v1/me/stars',{credentials:'same-origin'}).then(function(r){return r.json()}).then(function(r){
+      if(!r||!r.ok){lead.textContent='Could not load your stars right now.';return}
+      if(!r.enabled){lead.textContent='Hub stars are not enabled on this hub yet.';return}
+      if(!r.stars.length){box.appendChild(el('p',{'class':'note'},'No stars yet. Star a corpus or a contributor from its page.'));return}
+      var t=el('table',{'class':'mystars'}),hd=el('tr');
+      ['','starred','hub stars','since daily history began'].forEach(function(x){hd.appendChild(el('th',{},x))});t.appendChild(hd);
+      r.stars.forEach(function(s){
+        var tr=el('tr'),a=el('td');a.appendChild(el('a',{href:s.href},(s.kind==='corpus'?'corpus ':'@')+s.id));tr.appendChild(a);
+        tr.appendChild(el('td',{'class':'mono'},(s.starred_at||'').slice(0,10)));
+        tr.appendChild(el('td',{'class':'mono'},'\u2605 '+Number(s.count||0).toLocaleString('en-US')));
+        var h=el('td'),sp=spark(s.history);if(sp)h.appendChild(sp);else h.textContent=s.history?'no new stars yet':'';tr.appendChild(h);
+        t.appendChild(tr);
+      });
+      box.appendChild(t);
+    }).catch(function(){lead.textContent='Could not load your stars right now.'});
+  });
+})();
+</script>"""
+
+
+NOT_FOUND_BODY = """<section class="hero"><h1>Not found</h1>
+<p>There is no page at this address. Corpus pages live at <code>/corpus/&lt;slug&gt;</code>;
+<a href="/">the corpus list</a> and <a href="/llms.txt">llms.txt</a> name every live slug.</p></section>"""
+
+
+def page(title, desc, body, rel="", path="/", image=None, kind="WebPage", noindex=False,
+         og_title=None, og_desc=None):
     return PAGE.format(title=esc(title), desc=esc(desc), body=body, rel=rel,
-                       fonts=FONTS, stamp=STAMP, ver=STYLE_VER, navjs=NAVCTA_JS)
+                       fonts=FONTS, stamp=STAMP, ver=STYLE_VER, navjs=NAVCTA_JS, authjs=AUTH_JS,
+                       seo=seo_block(title, desc, path, rel, kind, image, noindex, og_title, og_desc),
+                       home=href(f"{rel}index.html"), people=href(f"{rel}contributors/index.html"),
+                       add=href(f"{rel}contribute.html"))
 
 
 FILTER_JS = """<script>
@@ -781,7 +1294,7 @@ document.querySelectorAll('.copy').forEach(function(b){
 </script>"""
 
 
-def render_index(corpora, g7, graded, impact, prov):
+def render_index(corpora, g7, graded, impact, prov, people=None):
     live = [c for c in corpora if c["status"] == "live"]
     total_bytes = sum(sum(r.get("bytes") or 0 for r in c["repos"]) for c in live)
     n_imp = sum(1 for c in live if impact.get(c["slug"], {}).get("status") == "measured")
@@ -816,17 +1329,23 @@ def render_index(corpora, g7, graded, impact, prov):
         band_h = max(240, min(540, round(120 + 13 * n_live + 110 * (cat_bytes / dmax) ** 0.5)))
         # The copy-prompt lists the pinned (lane-A) corpora; a lane-B curated
         # pack has no hub pack to ask, so it is left out of the prompt.
-        installable = [c for c in live_cs if corpus_stats(c)[1] > 0]
+        installable = [c for c in live_cs if corpus_stats(c)[1] > 0 and has_pack(c)]
         copy = (f'<button class="copy" data-copy="{esc(category_prompt(k, title, installable))}" '
                 f'title="Copy a prompt that tells an agent how to ask the {esc(k)} corpora with one line">COPY PROMPT</button>')
         tiles = "".join(tile(c) for c in live_cs)
         groups.append(f'''<div class="tgroup">
-<div class="thead"><a class="thword" href="category/{k}.html">{esc(k)}</a>
+<div class="thead"><a class="thword" href="category/{k}">{esc(k)}</a>
 <div class="tgright">{copy}<span class="tgmeta"><b>{n_live}</b> live · {esc(title)} · {human_bytes(cat_bytes)}</span></div></div>
 <div class="tiles" style="height:{band_h}px">{tiles}</div></div>''')
     treemap = "\n".join(groups)
     cat_chips = "".join(f'<button class="chip" data-cat="{k}">{k}</button>' for k in CATS)
     region_chips = "".join(f'<button class="chip" data-region="{esc(r)}">{esc(r)}</button>' for r in regions)
+    # owner request: real numbers instead of "registry rows" / "live corpora".
+    # Stars: distinct pinned repos with a recorded count only (never estimated).
+    stars, n_star_repos = contributors.pinned_repo_stars(people or {})
+    stars_stat = (f'<div class="stat" title="{stars:,} GitHub stars, summed over {n_star_repos:,} distinct pinned repositories '
+                  f'that have a recorded star count"><b>{contributors.compact(stars)}</b><span>GitHub stars across pinned repos</span></div>'
+                  if n_star_repos else "")
     body = f'''<main>
 <div class="kicker"><span class="accent">HUB.XERJ.ORG</span><span class="dash">·</span><span>REFERENCE MEMORY HUB FOR AI AGENTS</span></div>
 <div class="herorow">
@@ -838,12 +1357,12 @@ that loads one works like a domain expert.</p>
 </div>
 <div class="heroside">
 <div class="statgrid">
-<div class="stat"><b>{len(live)}</b><span>live corpora</span></div>
+{stars_stat}
 <div class="stat"><b>{len(CATS)}</b><span>domains</span></div>
-<div class="stat"><b>{len(corpora)}</b><span>registry rows</span></div>
+<div class="stat"><a href="contributors/"><b>{len(people or {}):,}</b><span>contributors</span></a></div>
 <div class="stat"><b>{human_bytes(total_bytes)}</b><span>pinned text</span></div>
 </div>
-<a class="cta" href="contribute.html">Add your corpus &rarr;</a>
+<a class="cta" href="contribute">Add your corpus &rarr;</a>
 </div>
 </div>
 <section class="schema" aria-label="How domain knowledge becomes agent memory">
@@ -861,15 +1380,16 @@ that loads one works like a domain expert.</p>
 </div>
 <div class="treemap" id="grid">{treemap}</div>
 </section>
+{usage.home_section()}
 </main>
 {FILTER_JS}
-{COPY_JS}'''
+{COPY_JS}{usage.USAGE_JS}'''
     return page("XERJ Corpus Hub: reference memory for AI agents",
-                "Pinned, licence-checked, measured corpora an agent downloads per task and searches instead of guessing",
-                body)
+                "Pinned, licence-checked, measured corpora an agent downloads per task and searches instead of guessing.",
+                body, path="/", kind="CollectionPage")
 
 
-def detail_body(c, g7, graded, impact, prov):
+def detail_body(c, g7, graded, impact, prov, contrib=""):
     files, nbytes, licences = corpus_stats(c)
     st, stcls = STATUSES.get(c["status"], (c["status"], "mute"))
     cat_desc = CATS.get(c["cat"], ("", ""))
@@ -885,7 +1405,11 @@ def detail_body(c, g7, graded, impact, prov):
 <td class="mono">{human_bytes(r.get('bytes'))} / {human_files(r.get('files'))}</td>
 <td class="note">{esc(plain(rv.get('note',''))[:400])}</td></tr>''')
     for s in c.get("sources", []):
-        rows.append(f'''<tr><td class="mono"><a href="{esc(s.get('url',''))}">{esc(s.get('slug', s.get('url','')))}</a></td>
+        # a backlog row's "url" can be a note ("superseded by ...", "mined from ...");
+        # link only real URLs, print the rest as text (no dead relative hrefs)
+        u, label = s.get('url', ''), esc(s.get('slug', s.get('url', '')))
+        src = f'<a href="{esc(u)}">{label}</a>' if re.match(r"^https?://", u or "") else label
+        rows.append(f'''<tr><td class="mono">{src}</td>
 <td class="mono">recipe</td><td>{esc(s.get('licence','?'))}</td><td class="mono">curated pack</td>
 <td class="note">{esc(plain(s.get('licence_hint',''))[:400])}</td></tr>''')
     g = graded.get(c["slug"])
@@ -913,9 +1437,9 @@ def detail_body(c, g7, graded, impact, prov):
         impsec = ""
     if c.get("merged_into"):
         useit = (f'<div class="kbox"><b>Withdrawn</b><br>Merged into '
-                 f'<a href="{esc(c["merged_into"])}.html"><code>{esc(c["merged_into"])}</code></a>. '
+                 f'<a href="{esc(c["merged_into"])}"><code>{esc(c["merged_into"])}</code></a>. '
                  f'Use that corpus.</div>')
-    elif c["status"] == "live" and c["lane"] == "A":
+    elif has_pack(c):
         s = esc(c["slug"])
         copybtn = (f' <button class="copy" data-copy="{esc(install_prompt(c))}" '
                    f'title="Copy a prompt that asks this corpus with one line">COPY PROMPT</button>')
@@ -940,74 +1464,76 @@ def detail_body(c, g7, graded, impact, prov):
                  f'<span class="note">This entry has no hub pack, so there is nothing to ask. '
                  f'<a href="../llms.txt">The catalogue</a> lists the corpora that can be asked.</span></div>')
     return f'''<main>
-<p><a class="backlink" href="../index.html">&larr; all corpora</a></p>
+<p><a class="backlink" href="../">&larr; all corpora</a></p>
 <h1 class="slug">{esc(c['slug'])} <span class="dot {stcls}"></span></h1>
+{contributors.star_widget("corpus", c["slug"], esc, inline=True)}
 <p class="note">{esc(c['kind'])} · status <b>{st}</b> · domain <b>{esc(c['cat'])}</b> ({esc(cat_desc[0])}) · lane {esc(c['lane'])} · refresh {esc(c['refresh'])} · tags <b>{esc(tags_txt)}</b></p>
 <section class="detail"><h2>What an agent uses it for</h2><p>{esc(c['usecase'] or 'n/a')}</p></section>
 {useit}
 <section class="detail"><h2>Sources and pins</h2><table>
 <tr><th>source</th><th>pin</th><th>licence</th><th>size</th><th>review note</th></tr>{''.join(rows)}</table>
 <p class="note">{human_bytes(nbytes)} across {human_files(files)}. Added {esc(c['added'][:10] or 'n/a')}.</p></section>
+{contrib}
 <section class="detail"><h2>Rights</h2><p>{esc(' + '.join(licences) or '?')}.
 {esc('Redistribution permitted with attribution per the licence review' if any(r.get('review',{}).get('use')=='adapt-with-attribution' for r in c['repos']) else 'See per-source review blocks')}.
 The review block records a human opening each licence file at the pin. Detector output is a hint, never the verdict.</p></section>
-{g7sec}{impsec}
+{contributors.more_block("corpus", c["slug"], esc)}
+{g7sec}{impsec}{agent_score.section(c['slug'], esc)}{usage.traffic_section(c["slug"], esc)}{usage.corpus_section(c["slug"], esc)}
 </main>
-{COPY_JS}'''
+{COPY_JS}{contributors.STARS_JS}{contributors.MORE_JS}{usage.USAGE_JS}{agent_score.PANEL_JS}'''
 
 
 def category_body(k, cs, g7, graded, impact):
     title, what = CATS[k]
-    cards = "\n".join(card(c, g7, graded, impact) for c in cs)
+    cards = "\n".join(card(c, g7, graded, impact, rel="../") for c in cs)
     n_live = sum(1 for c in cs if c["status"] == "live")
     return f'''<main>
-<p><a class="backlink" href="../index.html">&larr; all domains</a></p>
+<p><a class="backlink" href="../">&larr; all corpora</a></p>
 <div class="kicker"><span class="accent">{esc(k)}</span><span class="dash">·</span><span>DOMAIN</span></div>
 <h1 class="hero" style="font-size:clamp(56px,9vw,var(--fs-160))">{esc(k)}</h1>
 <p class="lead">{esc(title)}. Agent asks: {esc(what)}. {n_live} live of {len(cs)} entries.</p>
+{agent_score.SORT_BAR}
 <div class="grid">{cards}</div>
-</main>'''
+</main>{agent_score.CARDS_JS}'''
 
 
-ABOUT = '''<main>
-<div class="kicker"><span class="accent">ABOUT</span><span class="dash">·</span><span>THE HUB IN ONE PAGE</span></div>
-<h1 class="hero" style="font-size:clamp(48px,7vw,120px)">WHY A<br><span class="accent">CORPUS HUB</span></h1>
-<p class="lead">Agents answer from memory, and memory is stale, generic, or wrong on exactly
-the questions that matter: what the regulation says at this pin, whether this CVE is
-exploited, how this engine actually implements it. A corpus fixes that. The agent
-downloads the domain it needs, searches it, and cites what it found. This hub is the
-registry of those corpora: pinned, licence-checked, and measured.</p>
-<section class="detail"><h2>Every corpus passes seven gates</h2>
-<table>
-<tr><th>gate</th><th>what satisfies it</th></tr>
-<tr><td>G1 domain</td><td>the row finishes "an agent working on ___ would query this for ___" in one specific sentence</td></tr>
-<tr><td>G2 shape</td><td>the retrieval unit matches the question: clause-level sections for standards, function bodies for code, advisory records for precedent</td></tr>
-<tr><td>G3 un-memorisation</td><td>answer-bearing content is niche, internal, post-cutoff, or too detailed for recall. Famous-and-small is killed as retrieval theatre</td></tr>
-<tr><td>G4 licence</td><td>a human opened the licence at the pin and wrote the review block. Detector output is a hint, never the verdict</td></tr>
-<tr><td>G5 pin truth</td><td>manifest SHA equals the commit the build used. Rewrites are withdrawals, not re-pins</td></tr>
-<tr><td>G6 registry validation</td><td>validate_hub.py green in CI on the corpus-hub branch</td></tr>
-<tr><td>G7 retrieval spot-check</td><td>5 pre-registered domain queries, top-5 graded manually, median 3 or more relevant to pass</td></tr>
-</table></section>
-<section class="detail"><h2>Scores on the cards</h2>
-<p><b>G7</b> is the retrieval spot-check above. <b>A/B</b> is the drift-anchored agent
-benchmark: the same task run bare (offline, instructed to answer honestly rather than
-fabricate) and with the corpus. The badge shows pass counts, bare then corpus.
-A tie is a publishable outcome; the registry records it either way.</p></section>
-<section class="detail"><h2>Tags</h2>
-<p>Every corpus carries a region (US, UK, DE, EU, or GLOBAL) and topics. Filter the
-front page by domain and region; free-text search covers topics and subtopics.</p></section>
-<section class="detail"><h2>Rights policy</h2>
-<p>Per-source licence verdicts live in each manifest's review block. PD (US government
-works), OGL v3.0 (UK), and permissive licences ship as <code>adapt-with-attribution</code>.
-GPL, AGPL, SSPL, and other restrictive sources are <code>approach-only</code>: readable
-as design evidence, never copied. Closed families (ICC I-codes, Eurocodes, NEC, ASTM,
-ISO, DIN) are documented as closed and excluded.</p></section>
-<section class="detail"><h2>Contribute</h2>
-<p>The registry is a git branch: <a href="https://github.com/xerj-org/xerj/tree/corpus-hub">corpus-hub</a>.
-Read <a href="https://github.com/xerj-org/xerj/blob/corpus-hub/tools/xerj-code/hub/CONTRIBUTING.md">CONTRIBUTING.md</a>
-and the program doc (PROGRAM-100.md). This site is generated from the registry by
-<code>tools/corpus-hub-site/gen.py</code>. No hand-written corpus pages, ever.</p></section>
+# "What's this?" (was About; /about redirects here, see REDIRECTS). Short and
+# plain on purpose: what the hub is for, in facts the repo can back up, and
+# no numbers that are not computed from the registry at build time.
+WHATS_THIS = '''<main class="whats">
+<div class="kicker"><span class="accent">WHAT'S THIS?</span></div>
+<h1 class="hero" style="font-size:clamp(44px,6vw,var(--fs-96))">A SHARED LIBRARY<br><span class="accent">FOR AI AGENTS</span></h1>
+<p class="lead">AI agents often answer from memory, or crawl the web, or grep a repository they cloned a minute ago.
+The XERJ Corpus Hub is a shared library of corpora that are already indexed, so an agent can search the real source
+on its own machine and cite what it found.</p>
+<section class="detail"><h2>How it works</h2><ol class="steps">
+<li><b>A corpus is a pinned source.</b> A library's code at one commit, a standard, a regulation, an advisory feed.
+Each one records where it came from and the licence a person reviewed.</li>
+<li><b>It is pre-indexed and signed.</b> The hub builds a search pack for each corpus. The catalogue and the packs are
+signed (ed25519), and the <code>xerj</code> CLI refuses anything that does not verify against the hub key built into it.</li>
+<li><b>The agent searches locally.</b> <code>xerj hub pull</code> fetches a pack, then <code>xerj code &lt;corpus&gt; "question"</code>
+answers with passages headed by a file path and line, so every answer can be cited as <code>file:line</code>.
+Your queries stay on your machine.</li>
+</ol></section>
+<section class="detail"><h2>People get the credit</h2>
+<p>Corpora come from the community. Every contributor has a <a href="{rel}contributors/">profile</a> that lists
+their work and the corpora it is in, and visitors can give hub stars to contributors and corpora. Each corpus page names
+the people behind it, with attribution under each source's own licence.</p></section>
+<section class="detail"><h2>Agents say what worked</h2>
+<p>After they use a corpus, agents can send a structured review: was it useful, was the answer found, is it fresh.
+That becomes the corpus's <b>agent score</b>, shown on its page apart from the human stars.</p></section>
+<section class="detail"><h2>Start</h2>
+<p><a href="{rel}">Browse the corpora</a> · <a href="{rel}llms.txt">llms.txt</a> (the agent's guide) ·
+<a href="{rel}contribute">Add your corpus</a> · <a href="https://github.com/xerj-org/xerj/tree/corpus-hub/tools/xerj-code/hub">The registry on GitHub</a></p></section>
+''' + usage.PRIVACY + '''
 </main>'''
+
+# Cloudflare Pages _redirects: the old About URLs keep working.
+REDIRECTS = """/about /whats-this/ 301
+/about/ /whats-this/ 301
+/about.html /whats-this/ 301
+/favicon.ico /favicon.png 200
+"""
 
 
 def contribute_prompt():
@@ -1053,20 +1579,43 @@ def main():
     (OUT / "corpus").mkdir(exist_ok=True)
     (OUT / "category").mkdir(exist_ok=True)
     (OUT / "assets" / "style.css").write_text(STYLE)
+    write_brand_assets(OUT)
     corpora = load_registry()
     g7 = parse_waves_g7()
     graded = parse_graded_suites()
     impact, prov = load_impact()
-    (OUT / "index.html").write_text(render_index(corpora, g7, graded, impact, prov))
+    people = contributors.load(HUB, corpora)
+    (OUT / "index.html").write_text(render_index(corpora, g7, graded, impact, prov, people))
+    # every corpus page credits its people: signed-up contributors, the upstream
+    # owners of its pinned repositories, or the curator (contributors.credits)
+    credit, upstream = contributors.credits(corpora, people)
     for c in corpora:
+        cr = credit[c["slug"]]
+        contrib = contributors.corpus_section(cr["contributors"], esc, people, cr["upstream"], cr["curator"], cr["aggregate"])
         (OUT / "corpus" / f"{c['slug']}.html").write_text(
-            page(f"{c['slug']}: XERJ Corpus Hub", c["usecase"][:150], detail_body(c, g7, graded, impact, prov), rel="../"))
+            page(f"{c['slug']}: XERJ Corpus Hub", c["usecase"][:150], detail_body(c, g7, graded, impact, prov, contrib), rel="../",
+                 path=f"/corpus/{c['slug']}"))
     for k, (title, what) in CATS.items():
         cs = [c for c in corpora if c["cat"] == k]
         (OUT / "category" / f"{k}.html").write_text(
-            page(f"{k}: {title} domain", what, category_body(k, cs, g7, graded, impact), rel="../"))
-    (OUT / "about.html").write_text(page("About: XERJ Corpus Hub", "How corpora are gated, scored, tagged, and licenced", ABOUT, rel=""))
-    (OUT / "contribute.html").write_text(page("Contribute: XERJ Corpus Hub", "Share your knowledge: index a corpus and open a pull request", contribute_body(), rel=""))
+            page(f"{k}: {title} domain", what, category_body(k, cs, g7, graded, impact), rel="../",
+                 path=f"/category/{k}", kind="CollectionPage"))
+    (OUT / "whats-this").mkdir(exist_ok=True)
+    (OUT / "whats-this" / "index.html").write_text(page(
+        "What's this? XERJ Corpus Hub", "A shared, signed library of pre-indexed corpora that AI agents search locally, with cited file:line answers",
+        WHATS_THIS.replace("{rel}", "../"), rel="../", path="/whats-this/"))
+    (OUT / "about.html").unlink(missing_ok=True)   # replaced by whats-this/; _redirects keeps the old URL
+    (OUT / "_redirects").write_text(REDIRECTS)
+    (OUT / "me.html").write_text(page("Your hub: XERJ Corpus Hub", "Your hub stars, after you sign in", ME_BODY + ME_JS, rel="", path="/me"))
+    # 404.html: Cloudflare Pages serves it, with status 404, for any path that
+    # has no file. Without it Pages falls back to index.html with a 200, so a
+    # mistyped corpus URL, a link checker or an agent probing /corpus/<slug>
+    # took the homepage for a live page (issue #1895). Absolute links (rel="/"):
+    # it is served at every depth.
+    (OUT / "404.html").write_text(page("Not found: XERJ Corpus Hub", "This page does not exist", NOT_FOUND_BODY, rel="/",
+                                      path="/404", noindex=True))
+    (OUT / "contribute.html").write_text(page("Contribute: XERJ Corpus Hub", "Share your knowledge: index a corpus and open a pull request", contribute_body(), rel="",
+                                              path="/contribute"))
     # llms.txt - agent-facing index of the registry, generated like everything
     # else. Short first screen (study rule 7), no obligation language, every
     # step verifiable; one line per live corpus.
@@ -1203,8 +1752,19 @@ def main():
               "  withdrawn states (visible, not hidden: hub policy is honest statuses).",
               "  Browse all: https://hub.xerj.org"]
     (OUT / "llms.txt").write_text("\n".join(lines) + "\n")
+    n_people = contributors.generate(OUT, HUB, page, esc, {c["slug"] for c in live}, corpora, people, upstream)
+    n_urls = write_sitemap(OUT)
+    (OUT / "robots.txt").write_text(ROBOTS)
+    # Signed-in details: bundled into the Pages Functions, never written to out/.
+    if os.environ.get("GITHUB_ACTIONS") == "true" or os.environ.get("HUB_FUNCTION_DATA") == "1":
+        mod = private_data.module(private_data.build(ROOT, HUB, PACKS, corpora, people,
+                                                         dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d")))
+        (ROOT / "functions" / "_lib" / "hubdata.js").write_text(mod)
+        print(f"signed-in details: functions/_lib/hubdata.js, {len(mod):,} bytes")
     n = len(list((OUT / "corpus").glob("*.html")))
-    print(f"generated: index, about, {len(CATS)} category pages, {n} corpus pages -> {OUT}")
+    print(f"generated: index, whats-this, {len(CATS)} category pages, {n} corpus pages ({len(corpora)} registry), "
+          f"{n_people} contributor pages, {len(upstream)} upstream/curator pages, "
+          f"sitemap {n_urls} urls -> {OUT}")
 
 
 if __name__ == "__main__":

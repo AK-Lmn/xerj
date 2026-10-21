@@ -6,7 +6,7 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 
 ## Current state
 
-247 corpora attempted: 175 published at their latest attempt, 72 not.
+450 corpora attempted: 401 published at their latest attempt, 49 not.
 
 ### Latest attempt did not publish (fix or delist on purpose)
 
@@ -20,7 +20,6 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 | `adalflow` | `810de99d` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `agentbench` | `d1e4a10d` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `agentscope` | `812eaecd` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `agno` | `1f2aac51` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":6,"errors":true,"items":[{"index":{"_index":"xc-agno-b1792419972-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"status |
 | `aider` | `5dc9490b` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `aioquic` | `974e9349` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `alex-inclusive-language` | `9a57595d` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
@@ -45,47 +44,430 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 | `awesome-ai-system-prompts` | `74964625` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `axe-core` | `7e287a6a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `axolotl` | `e767fe07` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `biome` | `39d7595b` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":8,"errors":true,"items":[{"index":{"_index":"xc-biome-b1792419977-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"statu |
-| `boulder` | `f877538d` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":13,"errors":true,"items":[{"index":{"_index":"xc-boulder-b1792419972-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"st |
-| `cassandra` | `ec2c276b` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `cfssl` | `ab47f0d9` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":5,"errors":true,"items":[{"index":{"_index":"xc-cfssl-b1792420015-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"statu |
-| `chatdoctor` | `e77bd7eb` |  |  | failed at `build` | xerj hub build-pack: bulk /xc-chatdoctor-b1792420047-defs/_bulk -> HTTP 429: {"took":1,"errors":true,"items":[{"index":{"_index":"xc-chatdoctor-b1792420047-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no |
 | `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `containerd` | `92f321c8` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":9,"errors":true,"items":[{"index":{"_index":"xc-containerd-b1792420159-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1," |
 | `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `cri-o` | `617265f3` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":14,"errors":true,"items":[{"index":{"_index":"xc-cri-o-b1792421131-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"stat |
-| `dagger` | `96a18ac7` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":15,"errors":true,"items":[{"index":{"_index":"xc-dagger-b1792421185-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"sta |
-| `dnscrypt-proxy` | `ade0c1d6` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":6,"errors":true,"items":[{"index":{"_index":"xc-dnscrypt-proxy-b1792421374-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term" |
-| `duckdb` | `2866f801` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":7,"errors":true,"items":[{"index":{"_index":"xc-duckdb-b1792421425-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"stat |
-| `envoy` | `eb32f1f9` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":7,"errors":true,"items":[{"index":{"_index":"xc-envoy-b1792421985-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"statu |
 | `exploit-pocs-2023` | `af9e194d` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
 | `exploit-pocs-2024` | `7855e58f` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
 | `exploit-pocs-2025` | `374cf8f1` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
 | `exploit-pocs-2026` | `160f470e` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
 | `exploitdb-src` | `12879ca7` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `fluent-bit` | `3b6ce5cf` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `fory` | `9cc2a6ac` |  |  | failed at `build` | xerj hub build-pack: defs bulk index reported errors: {"took":4,"errors":true,"items":[{"index":{"_index":"xc-fory-b1792426139-defs","_id":"","_version":1,"_shards":{"total":1,"successful":1,"failed":0},"_seq_no":0,"_primary_term":1,"status |
-| `freebsd-handbook` | `3aa6b19a` |  |  | failed at `build` | xerj hub build-pack: `corpus index` failed (exit 1) |
+| `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `github-api-description` | `7bdf5f00` |  |  | cancelled at `build` | [pin] github-api-description -> 7bdf5f005536 |
-| `googleapis` | `dfaf98d4` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `goss` | `f1a60436` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `got` | `50c4ac61` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `govuk-design-system` | `9bd52fc9` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `gpt-engineer` | `a90fcd54` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `grafana-alloy` | `e5a50dfc` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `graphql-composite-schemas-spec` | `e5ce4835` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `graphql-over-http` | `d438b209` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `graphql-spec` | `3f1ef846` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `graphrag` | `5faaaf4f` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `griptape` | `aa95c599` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `grpc-gateway` | `14c1da7c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `grpc-go` | `de20bed5` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `grpc-proposals` | `6342be72` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `guardrails` | `06d0ff2c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `guidance` | `21b1d90d` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ipsum-blocklist` | `444b4802` | 26332846 | 0 | failed at `e2e` | no question from ask_for (reputation |
+| `mtl-bioinformatics-ner` | `df0df02f` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `nuclei-templates` | `24a43e14` |  |  | failed at `build` | autoindex: _bulk failed: bulk send (request timeout 300s): error sending request for url (http://127.0.0.1:19200/_bulk): operation timed out; retrying (attempt 1 of 6, 373 s in this request so far) |
+| `retext-passive` | `66ca2c56` | 111959 | 2 | failed at `e2e` | no question from ask_for (constructions |
+| `retext-profanities` | `2627fb08` | 130498 | 4 | failed at `e2e` | no question from ask_for (rephrasings |
+| `stripe-openapi` | `e73367db` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 
 ## Runs (newest first)
+
+### Run [39582439994](https://github.com/xerj-org/xerj/actions/runs/39582439994), 2026-10-21: 23 of 40 published
+
+| slug | pin8 | bytes | defs | result | error |
+|---|---|---:|---:|---|---|
+| `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `exploit-pocs-2023` | `af9e194d` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2024` | `7855e58f` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2025` | `374cf8f1` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2026` | `160f470e` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploitdb-src` | `12879ca7` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `fluent-bit` | `3b6ce5cf` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ipsum-blocklist` | `444b4802` | 26332846 | 0 | failed at `e2e` | no question from ask_for (reputation |
+| `mtl-bioinformatics-ner` | `df0df02f` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `nuclei-templates` | `24a43e14` |  |  | failed at `build` | autoindex: _bulk failed: bulk send (request timeout 300s): error sending request for url (http://127.0.0.1:19200/_bulk): operation timed out; retrying (attempt 1 of 6, 373 s in this request so far) |
+| `retext-passive` | `66ca2c56` | 111959 | 2 | failed at `e2e` | no question from ask_for (constructions |
+| `retext-profanities` | `2627fb08` | 130498 | 4 | failed at `e2e` | no question from ask_for (rephrasings |
+| `stripe-openapi` | `e73367db` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `milvus` | `b48661d3` | 283395080 | 122468 | published `pack-milvus-b48661d3` |  |
+| `rustls` | `7dcbe4c1` | 10229482 | 5070 | published `pack-rustls-7dcbe4c1` |  |
+| `s2n-tls` | `b1700000` | 58375808 | 26189 | published `pack-s2n-tls-b1700000` |  |
+| `sass-spec` | `57c81dd7` | 7385059 | 162 | published `pack-sass-spec-57c81dd7` |  |
+| `scap-security-guide` | `f0f3396f` | 108454940 | 3975 | published `pack-scap-security-guide-f0f3396f` |  |
+| `school-of-sre` | `22979a6e` | 3602564 | 0 | published `pack-school-of-sre-22979a6e` |  |
+| `scispacy` | `eacccd4e` | 1646644 | 239 | published `pack-scispacy-eacccd4e` |  |
+| `season-of-docs` | `ec6161e9` | 3736800 | 0 | published `pack-season-of-docs-ec6161e9` |  |
+| `serverless-workflow-spec` | `13b6a625` | 1695602 | 6 | published `pack-serverless-workflow-spec-13b6a625` |  |
+| `simonw-llm` | `05d7ae7d` | 6939656 | 2032 | published `pack-simonw-llm-05d7ae7d` |  |
+| `siren-hypermedia` | `c29a8784` | 143165 | 0 | published `pack-siren-hypermedia-c29a8784` |  |
+| `smallstep-certificates` | `69d3c36f` | 5941816 | 5194 | published `pack-smallstep-certificates-69d3c36f` |  |
+| `smithy` | `2a61b43f` | 66692219 | 22876 | published `pack-smithy-2a61b43f` |  |
+| `solid` | `25138e1c` | 4167902 | 1151 | published `pack-solid-25138e1c` |  |
+| `sourcegraph-handbook` | `5752928b` | 7958415 | 109 | published `pack-sourcegraph-handbook-5752928b` |  |
+| `spdx-spec` | `395d06e1` | 9482359 | 10 | published `pack-spdx-spec-395d06e1` |  |
+| `spectral` | `62527eec` | 12918859 | 5007 | published `pack-spectral-62527eec` |  |
+| `spectrum-web-components` | `be922808` | 92356834 | 11482 | published `pack-spectrum-web-components-be922808` |  |
+| `splunk-security-content` | `c653da7c` | 41621103 | 1222 | published `pack-splunk-security-content-c653da7c` |  |
+| `sqlite-src` | `9696acb0` | 114724778 | 23629 | published `pack-sqlite-src-9696acb0` |  |
+| `standard-readme` | `5d18ad4d` | 213365 | 0 | published `pack-standard-readme-5d18ad4d` |  |
+| `standard-webhooks` | `7537d2a2` | 583264 | 322 | published `pack-standard-webhooks-7537d2a2` |  |
+| `stratus-red-team` | `3ff51c44` | 11583379 | 1232 | published `pack-stratus-red-team-3ff51c44` |  |
+
+### Run [39557589186](https://github.com/xerj-org/xerj/actions/runs/39557589186), 2026-10-21: 23 of 40 published
+
+| slug | pin8 | bytes | defs | result | error |
+|---|---|---:|---:|---|---|
+| `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `exploit-pocs-2023` | `af9e194d` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2024` | `7855e58f` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2025` | `374cf8f1` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2026` | `160f470e` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploitdb-src` | `12879ca7` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `fluent-bit` | `3b6ce5cf` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ipsum-blocklist` | `444b4802` | 26384581 | 0 | failed at `e2e` | no question from ask_for (reputation |
+| `milvus` | `b48661d3` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `mtl-bioinformatics-ner` | `df0df02f` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `nuclei-templates` | `24a43e14` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `retext-passive` | `66ca2c56` | 111383 | 2 | failed at `e2e` | no question from ask_for (constructions |
+| `retext-profanities` | `2627fb08` | 131129 | 4 | failed at `e2e` | no question from ask_for (rephrasings |
+| `rabbitmq` | `f23f19da` | 91591320 | 51154 | published `pack-rabbitmq-f23f19da` |  |
+| `raft-rs` | `ad13f3d9` | 2712152 | 937 | published `pack-raft-rs-ad13f3d9` |  |
+| `react-spectrum` | `9b7a06ee` | 64114145 | 17448 | published `pack-react-spectrum-9b7a06ee` |  |
+| `redhat-vale-style` | `7cfb4abc` | 601163 | 98 | published `pack-redhat-vale-style-7cfb4abc` |  |
+| `redoc` | `2e30cabf` | 10301579 | 840 | published `pack-redoc-2e30cabf` |  |
+| `redocly-cli` | `7df8cf3c` | 55516187 | 5552 | published `pack-redocly-cli-7df8cf3c` |  |
+| `reporters-db` | `7a5b9b06` | 4795925 | 52 | published `pack-reporters-db-7a5b9b06` |  |
+| `retext-equality` | `192deddf` | 735016 | 10 | published `pack-retext-equality-192deddf` |  |
+| `retext-indefinite-article` | `960875ee` | 138940 | 9 | published `pack-retext-indefinite-article-960875ee` |  |
+| `retext-intensify` | `9450bee5` | 101862 | 1 | published `pack-retext-intensify-9450bee5` |  |
+| `retext-quotes` | `e43bb5f3` | 147342 | 5 | published `pack-retext-quotes-e43bb5f3` |  |
+| `retext-readability` | `ece96241` | 135129 | 4 | published `pack-retext-readability-ece96241` |  |
+| `retext-redundant-acronyms` | `e670637a` | 129750 | 2 | published `pack-retext-redundant-acronyms-e670637a` |  |
+| `retext-repeated-words` | `d6d53fb6` | 105449 | 2 | published `pack-retext-repeated-words-d6d53fb6` |  |
+| `retext-simplify` | `c7686ac9` | 158181 | 2 | published `pack-retext-simplify-c7686ac9` |  |
+| `rocksdb` | `4cd0450f` | 117566057 | 47679 | published `pack-rocksdb-4cd0450f` |  |
+| `rolldown` | `2d44fc3f` | 61301137 | 18497 | published `pack-rolldown-2d44fc3f` |  |
+| `rousseau` | `e7fb314d` | 312275 | 10 | published `pack-rousseau-e7fb314d` |  |
+| `rspack` | `7d83e469` | 78782047 | 35492 | published `pack-rspack-7d83e469` |  |
+| `rust-api-guidelines` | `97a0969c` | 618133 | 0 | published `pack-rust-api-guidelines-97a0969c` |  |
+| `rust-cssparser` | `9f3ceddf` | 5985677 | 500 | published `pack-rust-cssparser-9f3ceddf` |  |
+| `rust-url` | `00a6ce58` | 5606784 | 713 | published `pack-rust-url-00a6ce58` |  |
+| `rustcrypto-hashes` | `138dc5a0` | 3173331 | 1012 | published `pack-rustcrypto-hashes-138dc5a0` |  |
+
+### Run [39535889582](https://github.com/xerj-org/xerj/actions/runs/39535889582), 2026-10-21: 25 of 40 published
+
+| slug | pin8 | bytes | defs | result | error |
+|---|---|---:|---:|---|---|
+| `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `exploit-pocs-2023` | `af9e194d` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2024` | `7855e58f` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2025` | `374cf8f1` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2026` | `160f470e` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploitdb-src` | `12879ca7` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `fluent-bit` | `3b6ce5cf` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ipsum-blocklist` | `444b4802` | 26408102 | 0 | failed at `e2e` | no question from ask_for (reputation |
+| `milvus` | `b48661d3` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `mtl-bioinformatics-ner` | `df0df02f` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `nuclei-templates` | `24a43e14` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `cassandra` | `ec2c276b` | 267729959 | 111305 | published `pack-cassandra-ec2c276b` |  |
+| `pagerduty-incident-response` | `464fc9d3` | 1503555 | 0 | published `pack-pagerduty-incident-response-464fc9d3` |  |
+| `parquet-format` | `bf099392` | 1100478 | 0 | published `pack-parquet-format-bf099392` |  |
+| `parse5` | `103d9aa6` | 3186850 | 708 | published `pack-parse5-103d9aa6` |  |
+| `payloadsallthethings` | `3ac27901` | 10502050 | 92 | published `pack-payloadsallthethings-3ac27901` |  |
+| `pebble` | `e0818dd0` | 29843166 | 13823 | published `pack-pebble-e0818dd0` |  |
+| `plain-language-guidelines` | `fd769474` | 7263361 | 2 | published `pack-plain-language-guidelines-fd769474` |  |
+| `polars` | `099c2863` | 95464284 | 46897 | published `pack-polars-099c2863` |  |
+| `postcss` | `f1aca7ec` | 2376212 | 537 | published `pack-postcss-f1aca7ec` |  |
+| `postgres-src` | `50d6e533` | 349981745 | 69477 | published `pack-postgres-src-50d6e533` |  |
+| `postman-collection` | `8801e7f4` | 4336144 | 241 | published `pack-postman-collection-8801e7f4` |  |
+| `preact` | `8ff8785b` | 5605372 | 3487 | published `pack-preact-8ff8785b` |  |
+| `prism` | `2a1b2052` | 7051370 | 462 | published `pack-prism-2a1b2052` |  |
+| `prometheus-src` | `7c741e28` | 52747135 | 15251 | published `pack-prometheus-src-7c741e28` |  |
+| `prompt-engineering-guide` | `57673726` | 4247694 | 52 | published `pack-prompt-engineering-guide-57673726` |  |
+| `promptify` | `bc5ed081` | 869858 | 266 | published `pack-promptify-bc5ed081` |  |
+| `proselint` | `dbed789c` | 8110886 | 1697 | published `pack-proselint-dbed789c` |  |
+| `protobuf` | `fb0a6f67` | 136322177 | 90906 | published `pack-protobuf-fb0a6f67` |  |
+| `protovalidate` | `c550962b` | 10521984 | 8059 | published `pack-protovalidate-c550962b` |  |
+| `pubhealth-fact-checking` | `02136d3e` | 1198387 | 17 | published `pack-pubhealth-fact-checking-02136d3e` |  |
+| `pubmedqa` | `1cbae8e9` | 10747743 | 20 | published `pack-pubmedqa-1cbae8e9` |  |
+| `pysec` | `3373aa62` | 63738469 | 0 | published `pack-pysec-3373aa62` |  |
+| `quiche` | `b60aff93` | 7193128 | 6307 | published `pack-quiche-b60aff93` |  |
+| `quinn` | `7f1c6b55` | 2794340 | 2868 | published `pack-quinn-7f1c6b55` |  |
+| `qwik` | `09c73b97` | 27846285 | 11299 | published `pack-qwik-09c73b97` |  |
+
+### Run [39513172739](https://github.com/xerj-org/xerj/actions/runs/39513172739), 2026-10-21: 24 of 40 published
+
+| slug | pin8 | bytes | defs | result | error |
+|---|---|---:|---:|---|---|
+| `cassandra` | `ec2c276b` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `exploit-pocs-2023` | `af9e194d` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2024` | `7855e58f` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2025` | `374cf8f1` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2026` | `160f470e` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploitdb-src` | `12879ca7` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `fluent-bit` | `3b6ce5cf` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ipsum-blocklist` | `444b4802` | 26405336 | 0 | failed at `e2e` | no question from ask_for (reputation |
+| `milvus` | `b48661d3` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `mtl-bioinformatics-ner` | `df0df02f` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `nuclei-templates` | `24a43e14` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `nats-server` | `a44c356c` | 43216305 | 13455 | published `pack-nats-server-a44c356c` |  |
+| `navrules` | `4d535668` | 2519997 | 0 | published `pack-navrules-4d535668` |  |
+| `nghttp2` | `19d06e62` | 15574154 | 4924 | published `pack-nghttp2-19d06e62` |  |
+| `nginx` | `2b5c2b60` | 22525044 | 10876 | published `pack-nginx-2b5c2b60` |  |
+| `nigeria-standard-treatment-guidelines` | `d2be90e9` | 6000269 | 0 | published `pack-nigeria-standard-treatment-guidelines-d2be90e9` |  |
+| `oasdiff` | `b687d634` | 18149071 | 4783 | published `pack-oasdiff-b687d634` |  |
+| `openapi-moonwalk` | `62520aa3` | 670517 | 0 | published `pack-openapi-moonwalk-62520aa3` |  |
+| `openapi-overlay-spec` | `d4cc4c80` | 1590887 | 2 | published `pack-openapi-overlay-spec-d4cc4c80` |  |
+| `openapi-spec` | `447c479c` | 9414780 | 2 | published `pack-openapi-spec-447c479c` |  |
+| `openbao` | `a4f7e569` | 37949025 | 22933 | published `pack-openbao-a4f7e569` |  |
+| `openbsd-faq` | `cab1d910` | 109164459 | 491 | published `pack-openbsd-faq-cab1d910` |  |
+| `openfda` | `fdbe5432` | 67731092 | 1548 | published `pack-openfda-fdbe5432` |  |
+| `openlegaldata-oldp` | `b1c2de58` | 42894545 | 4792 | published `pack-openlegaldata-oldp-b1c2de58` |  |
+| `opennyai-legal-nlp` | `2abee8fc` | 9075069 | 703 | published `pack-opennyai-legal-nlp-2abee8fc` |  |
+| `opensanctions` | `d1619f4c` | 71791493 | 6489 | published `pack-opensanctions-d1619f4c` |  |
+| `openssl` | `7ef69a72` | 216383481 | 52319 | published `pack-openssl-7ef69a72` |  |
+| `osquery-config-examples` | `89c2ae5c` | 627706 | 0 | published `pack-osquery-config-examples-89c2ae5c` |  |
+| `oss-attribution-builder` | `c8bc98e1` | 4141565 | 404 | published `pack-oss-attribution-builder-c8bc98e1` |  |
+| `oss-license-texts` | `f717b235` | 3824218 | 49 | published `pack-oss-license-texts-f717b235` |  |
+| `oss-review-toolkit` | `b0e622b0` | 146054098 | 7971 | published `pack-oss-review-toolkit-b0e622b0` |  |
+| `otel-proto` | `b3f75588` | 16407181 | 6 | published `pack-otel-proto-b3f75588` |  |
+| `owasp-cheatsheets` | `ca1bded7` | 4684596 | 152 | published `pack-owasp-cheatsheets-ca1bded7` |  |
+| `owasp-wstg` | `8df290a3` | 8441398 | 244 | published `pack-owasp-wstg-8df290a3` |  |
+| `oxc` | `da692b86` | 184992378 | 75128 | published `pack-oxc-da692b86` |  |
+
+### Run [39482496974](https://github.com/xerj-org/xerj/actions/runs/39482496974), 2026-10-20: 25 of 40 published
+
+| slug | pin8 | bytes | defs | result | error |
+|---|---|---:|---:|---|---|
+| `cassandra` | `ec2c276b` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `exploit-pocs-2023` | `af9e194d` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2024` | `7855e58f` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2025` | `374cf8f1` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2026` | `160f470e` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploitdb-src` | `12879ca7` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `fluent-bit` | `3b6ce5cf` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ipsum-blocklist` | `444b4802` | 26404966 | 0 | failed at `e2e` | no question from ask_for (reputation |
+| `milvus` | `b48661d3` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `mtl-bioinformatics-ner` | `df0df02f` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `medqa-usmle` | `27b02f66` | 149178 | 121 | published `pack-medqa-usmle-27b02f66` |  |
+| `medquad` | `577bd37b` | 88650635 | 0 | published `pack-medquad-577bd37b` |  |
+| `medspacy` | `b7bb7d82` | 6917570 | 750 | published `pack-medspacy-b7bb7d82` |  |
+| `microsoft-seal` | `31fc3194` | 11063662 | 3558 | published `pack-microsoft-seal-31fc3194` |  |
+| `microsoft-style-vale` | `ea5fa73c` | 584457 | 10 | published `pack-microsoft-style-vale-ea5fa73c` |  |
+| `miekg-dns` | `2e4905fb` | 3378795 | 2231 | published `pack-miekg-dns-2e4905fb` |  |
+| `minify` | `eb78925d` | 7974057 | 2618 | published `pack-minify-eb78925d` |  |
+| `minisign` | `b6de4fe3` | 449876 | 161 | published `pack-minisign-b6de4fe3` |  |
+| `misp-galaxy` | `b9675983` | 110627262 | 2150 | published `pack-misp-galaxy-b9675983` |  |
+| `mitre-attck` | `ec93deaf` | 9047585 | 0 | published `pack-mitre-attck-ec93deaf` |  |
+| `mitre-capec` | `c59d35cd` | 4204893 | 9 | published `pack-mitre-capec-c59d35cd` |  |
+| `mitre-cwe` | `364b6e86` | 9267032 | 10 | published `pack-mitre-cwe-364b6e86` |  |
+| `mkcert` | `1c1dc4ed` | 312459 | 87 | published `pack-mkcert-1c1dc4ed` |  |
+| `mls-rs` | `d4c5b19f` | 29012442 | 5215 | published `pack-mls-rs-d4c5b19f` |  |
+| `monocypher` | `e65d2772` | 5208607 | 1469 | published `pack-monocypher-e65d2772` |  |
+| `mozilla-diversity` | `5e612f24` | 714054 | 0 | published `pack-mozilla-diversity-5e612f24` |  |
+| `mozilla-l10n-docs` | `b190a660` | 1171515 | 11 | published `pack-mozilla-l10n-docs-b190a660` |  |
+| `mozilla-l10n-styleguides` | `50ad513b` | 5232791 | 17 | published `pack-mozilla-l10n-styleguides-50ad513b` |  |
+| `mozilla-ssl-configs` | `34d8441d` | 181914 | 0 | published `pack-mozilla-ssl-configs-34d8441d` |  |
+| `moztw-styleguides` | `37d9832a` | 5001165 | 17 | published `pack-moztw-styleguides-37d9832a` |  |
+| `msft-api-guidelines` | `a7022a29` | 2586992 | 0 | published `pack-msft-api-guidelines-a7022a29` |  |
+| `msgpack-c` | `1cdc1b66` | 129558 | 0 | published `pack-msgpack-c-1cdc1b66` |  |
+| `mts-dialog-clinical-notes` | `3ff08019` | 33070524 | 0 | published `pack-mts-dialog-clinical-notes-3ff08019` |  |
+| `mutcd` | `b70b9188` | 23223080 | 0 | published `pack-mutcd-b70b9188` |  |
+| `nats-protocol` | `1cb267ca` | 2972212 | 11 | published `pack-nats-protocol-1cb267ca` |  |
+
+### Run [39454084138](https://github.com/xerj-org/xerj/actions/runs/39454084138), 2026-10-20: 27 of 40 published
+
+| slug | pin8 | bytes | defs | result | error |
+|---|---|---:|---:|---|---|
+| `cassandra` | `ec2c276b` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `exploit-pocs-2023` | `af9e194d` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2024` | `7855e58f` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2025` | `374cf8f1` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2026` | `160f470e` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploitdb-src` | `12879ca7` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `fluent-bit` | `3b6ce5cf` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ipsum-blocklist` | `444b4802` | 26362352 | 0 | failed at `e2e` | no question from ask_for (reputation |
+| `kyverno-policies` | `ec478cb5` | 1761922 | 0 | published `pack-kyverno-policies-ec478cb5-r2` |  |
+| `ldnoobw-bad-words` | `5faf2ba4` | 225193 | 0 | published `pack-ldnoobw-bad-words-5faf2ba4` |  |
+| `lego` | `748e608a` | 24518009 | 11869 | published `pack-lego-748e608a` |  |
+| `leveldb` | `7ee830d0` | 3708922 | 1870 | published `pack-leveldb-7ee830d0` |  |
+| `lexbuild` | `8cc0b93b` | 11085419 | 1009 | published `pack-lexbuild-8cc0b93b` |  |
+| `libcbor` | `ab8c72b1` | 3886704 | 1716 | published `pack-libcbor-ab8c72b1` |  |
+| `libhydrogen` | `264bf429` | 672746 | 351 | published `pack-libhydrogen-264bf429` |  |
+| `libopenapi` | `c4c4be74` | 62741994 | 11360 | published `pack-libopenapi-c4c4be74` |  |
+| `libsodium` | `61478971` | 11086618 | 4320 | published `pack-libsodium-61478971` |  |
+| `libuv` | `49b1c064` | 7754716 | 8259 | published `pack-libuv-49b1c064` |  |
+| `licensee` | `9261af40` | 3461400 | 588 | published `pack-licensee-9261af40` |  |
+| `lightningcss` | `ab14f90d` | 11069855 | 4088 | published `pack-lightningcss-ab14f90d` |  |
+| `lit` | `01dbc667` | 24454051 | 7300 | published `pack-lit-01dbc667` |  |
+| `llhttp` | `69936dbc` | 2027695 | 322 | published `pack-llhttp-69936dbc` |  |
+| `llm-course` | `7abd96e8` | 475872 | 0 | published `pack-llm-course-7abd96e8` |  |
+| `lmdb` | `700e10f9` | 2429570 | 873 | published `pack-lmdb-700e10f9` |  |
+| `lol-html` | `608cc4a6` | 4963167 | 1873 | published `pack-lol-html-608cc4a6` |  |
+| `loldrivers` | `6f6f5b49` | 138928678 | 283 | published `pack-loldrivers-6f6f5b49` |  |
+| `markdownlint` | `3f1f4793` | 12806147 | 262 | published `pack-markdownlint-3f1f4793` |  |
+| `mashqa` | `86e0a7d7` | 1926365 | 675 | published `pack-mashqa-86e0a7d7` |  |
+| `material-components-web` | `6ceadb81` | 26068507 | 2390 | published `pack-material-components-web-6ceadb81` |  |
+| `material-web` | `e3471c04` | 19361409 | 2514 | published `pack-material-web-e3471c04` |  |
+| `mbedtls` | `de23569a` | 22607262 | 4192 | published `pack-mbedtls-de23569a` |  |
+| `mdn-browser-compat-data` | `85c50b0b` | 72394960 | 499 | published `pack-mdn-browser-compat-data-85c50b0b` |  |
+| `mdn-data` | `2c16ea05` | 2862912 | 3 | published `pack-mdn-data-2c16ea05` |  |
+| `medical-abbreviations` | `3970d38b` | 537513 | 0 | published `pack-medical-abbreviations-3970d38b` |  |
+| `medmcqa` | `c59ef14c` | 301169 | 27 | published `pack-medmcqa-c59ef14c` |  |
+
+### Run [39419437459](https://github.com/xerj-org/xerj/actions/runs/39419437459), 2026-10-20: 26 of 40 published
+
+| slug | pin8 | bytes | defs | result | error |
+|---|---|---:|---:|---|---|
+| `cassandra` | `ec2c276b` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `exploit-pocs-2023` | `af9e194d` |  |  | cancelled at `build` | [FAIL] django-security-advisory-3.2.16: git fetch 4ac74feb7ad380decf41d37cf796b410262b64fd failed; continuing |
+| `exploit-pocs-2024` | `7855e58f` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2025` | `374cf8f1` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2026` | `160f470e` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploitdb-src` | `12879ca7` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `fluent-bit` | `3b6ce5cf` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ipsum-blocklist` | `444b4802` | 26449698 | 0 | failed at `e2e` | no question from ask_for (reputation |
+| `kyverno-policies` | `ec478cb5` | 1761907 | 0 | failed at `e2e` | release not found |
+| `joblint` | `3b3fbb4e` | 297118 | 301 | published `pack-joblint-3b3fbb4e` |  |
+| `jose-js` | `2a3a5259` | 5586921 | 704 | published `pack-jose-js-2a3a5259` |  |
+| `jsdom` | `a78f9c22` | 34917196 | 2768 | published `pack-jsdom-a78f9c22` |  |
+| `json-api-spec` | `bde79ceb` | 5621859 | 253 | published `pack-json-api-spec-bde79ceb` |  |
+| `json-schema-spec` | `4f56a990` | 3032450 | 8 | published `pack-json-schema-spec-4f56a990` |  |
+| `json-schema-test-suite` | `8568bcc4` | 4244252 | 0 | published `pack-json-schema-test-suite-8568bcc4` |  |
+| `jsonformer` | `bfad0318` | 924048 | 23 | published `pack-jsonformer-bfad0318` |  |
+| `jsonwebtoken-rust` | `11f83ab5` | 1011440 | 420 | published `pack-jsonwebtoken-rust-11f83ab5` |  |
+| `jwx` | `c4774435` | 12454487 | 3851 | published `pack-jwx-c4774435` |  |
+| `kafka-protocol` | `94ac9e02` | 6206844 | 0 | published `pack-kafka-protocol-94ac9e02` |  |
+| `kafka-src` | `d12941eb` | 190172568 | 107799 | published `pack-kafka-src-d12941eb` |  |
+| `karma` | `38fd3a9f` | 16101745 | 1733 | published `pack-karma-38fd3a9f` |  |
+| `karpenter` | `a4432485` | 23951803 | 4110 | published `pack-karpenter-a4432485` |  |
+| `keda` | `59815e11` | 26368495 | 11825 | published `pack-keda-59815e11` |  |
+| `keep-a-changelog` | `08d0df5a` | 3503911 | 288 | published `pack-keep-a-changelog-08d0df5a` |  |
+| `keywhiz` | `52e77fd9` | 7751429 | 4349 | published `pack-keywhiz-52e77fd9` |  |
+| `kics` | `bbb3c148` | 90263370 | 3867 | published `pack-kics-bbb3c148` |  |
+| `knox` | `61dd5823` | 1892732 | 848 | published `pack-knox-61dd5823` |  |
+| `kotaemon` | `9ad3e4e4` | 5614362 | 2158 | published `pack-kotaemon-9ad3e4e4` |  |
+| `kratix` | `2ed71d24` | 14161248 | 2268 | published `pack-kratix-2ed71d24` |  |
+| `kryptology` | `eef70332` | 4517679 | 4240 | published `pack-kryptology-eef70332` |  |
+| `kube-bench` | `e278a591` | 8509449 | 306 | published `pack-kube-bench-e278a591` |  |
+| `kube-hunter` | `bc47f08e` | 1565146 | 741 | published `pack-kube-hunter-bc47f08e` |  |
+| `kubernetes-community` | `585a4ac6` | 63482596 | 170 | published `pack-kubernetes-community-585a4ac6` |  |
+| `kubescape-regolibrary` | `5d5fd8fc` | 13187671 | 382 | published `pack-kubescape-regolibrary-5d5fd8fc` |  |
+| `lambdaworks` | `3a87850d` | 9444212 | 9088 | published `pack-lambdaworks-3a87850d` |  |
+
+### Run [39335555740](https://github.com/xerj-org/xerj/actions/runs/39335555740), 2026-10-19: 27 of 40 published
+
+| slug | pin8 | bytes | defs | result | error |
+|---|---|---:|---:|---|---|
+| `cassandra` | `ec2c276b` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `exploit-pocs-2023` | `af9e194d` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2024` | `7855e58f` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2025` | `374cf8f1` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2026` | `160f470e` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploitdb-src` | `12879ca7` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `fluent-bit` | `3b6ce5cf` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ipsum-blocklist` | `444b4802` | 26583768 | 0 | failed at `e2e` | no question from ask_for (reputation |
+| `biome` | `39d7595b` | 232702957 | 107317 | published `pack-biome-39d7595b` |  |
+| `googleapis` | `dfaf98d4` | 320918461 | 37 | published `pack-googleapis-dfaf98d4` |  |
+| `h2` | `e64c1662` | 66863481 | 1948 | published `pack-h2-e64c1662` |  |
+| `h2o` | `d21e7cb5` | 70215323 | 24686 | published `pack-h2o-d21e7cb5` |  |
+| `hacl-star` | `504c2987` | 62683093 | 16889 | published `pack-hacl-star-504c2987` |  |
+| `harbor` | `23bfa9a1` | 54233081 | 18043 | published `pack-harbor-23bfa9a1` |  |
+| `harper` | `6a0f42d1` | 25758119 | 13709 | published `pack-harper-6a0f42d1` |  |
+| `haystack` | `441023dc` | 38627674 | 9557 | published `pack-haystack-441023dc` |  |
+| `head-qa` | `da54ff23` | 348559 | 104 | published `pack-head-qa-da54ff23` |  |
+| `helm` | `dc56a44f` | 13864788 | 4471 | published `pack-helm-dc56a44f` |  |
+| `hivemq-mqtt-client` | `99ab2013` | 11512829 | 7434 | published `pack-hivemq-mqtt-client-99ab2013` |  |
+| `how-they-sre` | `284703b1` | 1030499 | 1 | published `pack-how-they-sre-284703b1` |  |
+| `httparse` | `a0fa552e` | 733791 | 301 | published `pack-httparse-a0fa552e` |  |
+| `httpx` | `b5addb64` | 2986507 | 1335 | published `pack-httpx-b5addb64` |  |
+| `huggingface-hub-docs` | `fa1174ae` | 16452015 | 42 | published `pack-huggingface-hub-docs-fa1174ae` |  |
+| `hyper` | `2b454af2` | 5095340 | 2176 | published `pack-hyper-2b454af2` |  |
+| `ibm-openapi-validator` | `cf6ec487` | 8770807 | 369 | published `pack-ibm-openapi-validator-cf6ec487` |  |
+| `icd10-who` | `bff0a1dc` | 2362152 | 121 | published `pack-icd10-who-bff0a1dc` |  |
+| `icd10cm-codes` | `98ad49ef` | 21156520 | 40 | published `pack-icd10cm-codes-98ad49ef` |  |
+| `icd9-icd10-hierarchy` | `1b03a8c0` | 34469561 | 0 | published `pack-icd9-icd10-hierarchy-1b03a8c0` |  |
+| `iceberg` | `8102f4cb` | 125981560 | 93392 | published `pack-iceberg-8102f4cb` |  |
+| `in-solidarity-bot` | `9f069c62` | 2790122 | 43 | published `pack-in-solidarity-bot-9f069c62` |  |
+| `influxdb` | `06200ef9` | 92123891 | 21488 | published `pack-influxdb-06200ef9` |  |
+| `infracost` | `ccc476fb` | 33012153 | 6110 | published `pack-infracost-ccc476fb` |  |
+| `inspect-ai` | `81c1668d` | 121530391 | 37678 | published `pack-inspect-ai-81c1668d` |  |
+| `instructor` | `035c77b7` | 27758641 | 5904 | published `pack-instructor-035c77b7` |  |
+| `jaeger-docs` | `231b67c0` | 23494060 | 57 | published `pack-jaeger-docs-231b67c0` |  |
+
+### Run [39306424180](https://github.com/xerj-org/xerj/actions/runs/39306424180), 2026-10-19: 26 of 40 published
+
+| slug | pin8 | bytes | defs | result | error |
+|---|---|---:|---:|---|---|
+| `biome` | `39d7595b` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `cassandra` | `ec2c276b` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `exploit-pocs-2023` | `af9e194d` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2024` | `7855e58f` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2025` | `374cf8f1` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2026` | `160f470e` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploitdb-src` | `12879ca7` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `fluent-bit` | `3b6ce5cf` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `googleapis` | `dfaf98d4` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `agno` | `1f2aac51` | 68832624 | 66626 | published `pack-agno-1f2aac51` |  |
+| `boulder` | `f877538d` | 35896597 | 155376 | published `pack-boulder-f877538d` |  |
+| `cfssl` | `ab47f0d9` | 26318594 | 111353 | published `pack-cfssl-ab47f0d9` |  |
+| `chatdoctor` | `e77bd7eb` | 87376030 | 59 | published `pack-chatdoctor-e77bd7eb-r6` |  |
+| `containerd` | `92f321c8` | 58403782 | 192996 | published `pack-containerd-92f321c8` |  |
+| `cri-o` | `617265f3` | 43852494 | 250869 | published `pack-cri-o-617265f3` |  |
+| `dagger` | `96a18ac7` | 97413863 | 156244 | published `pack-dagger-96a18ac7` |  |
+| `dnscrypt-proxy` | `ade0c1d6` | 14056698 | 108966 | published `pack-dnscrypt-proxy-ade0c1d6` |  |
+| `duckdb` | `2866f801` | 344313384 | 69666 | published `pack-duckdb-2866f801` |  |
+| `envoy` | `eb32f1f9` | 133959953 | 100656 | published `pack-envoy-eb32f1f9` |  |
+| `fory` | `9cc2a6ac` | 107175916 | 57997 | published `pack-fory-9cc2a6ac` |  |
+| `goss` | `f1a60436` | 3264112 | 1269 | published `pack-goss-f1a60436` |  |
+| `got` | `50c4ac61` | 5033166 | 1502 | published `pack-got-50c4ac61` |  |
+| `govuk-design-system` | `9bd52fc9` | 1534136 | 0 | published `pack-govuk-design-system-9bd52fc9` |  |
+| `gpt-engineer` | `a90fcd54` | 4455049 | 542 | published `pack-gpt-engineer-a90fcd54` |  |
+| `grafana-alloy` | `e5a50dfc` | 39920111 | 19977 | published `pack-grafana-alloy-e5a50dfc` |  |
+| `graphql-composite-schemas-spec` | `e5ce4835` | 1839455 | 0 | published `pack-graphql-composite-schemas-spec-e5ce4835` |  |
+| `graphql-over-http` | `d438b209` | 2160384 | 0 | published `pack-graphql-over-http-d438b209` |  |
+| `graphql-spec` | `3f1ef846` | 3245525 | 26 | published `pack-graphql-spec-3f1ef846` |  |
+| `graphrag` | `5faaaf4f` | 23759050 | 2734 | published `pack-graphrag-5faaaf4f` |  |
+| `griptape` | `aa95c599` | 33682281 | 9278 | published `pack-griptape-aa95c599` |  |
+| `grpc-gateway` | `14c1da7c` | 26435644 | 15694 | published `pack-grpc-gateway-14c1da7c` |  |
+| `grpc-go` | `de20bed5` | 18333374 | 16455 | published `pack-grpc-go-de20bed5` |  |
+| `grpc-proposals` | `6342be72` | 12072027 | 0 | published `pack-grpc-proposals-6342be72` |  |
+| `guardrails` | `06d0ff2c` | 5077419 | 2517 | published `pack-guardrails-06d0ff2c` |  |
+| `guidance` | `21b1d90d` | 4325955 | 1818 | published `pack-guidance-21b1d90d` |  |
 
 ### Run [39263621696](https://github.com/xerj-org/xerj/actions/runs/39263621696), 2026-10-19: 0 of 40 published
 

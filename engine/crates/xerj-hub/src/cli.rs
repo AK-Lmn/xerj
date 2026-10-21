@@ -400,37 +400,68 @@ fn create_defs_index(node: &HubNode, index: &str) -> Result<()> {
 /// request's intermediate heap bounded on the small CI builder node.
 const DEFS_BULK_CHUNK: usize = 10_000;
 
-/// Serialize `defs` into NDJSON `_bulk` bodies of at most `chunk` index actions
-/// each (one action = one `{"index":{}}` line plus one document line). Returns
-/// one body per chunk; empty input yields no bodies, hence no request.
-fn defs_bulk_bodies(defs: &[xerj_common::hub::DefRecord], chunk: usize) -> Vec<String> {
-    let chunk = chunk.max(1);
-    defs.chunks(chunk)
-        .map(|batch| {
-            let mut ndjson = String::with_capacity(batch.len() * 160);
-            for d in batch {
-                ndjson.push_str("{\"index\":{}}\n");
-                let doc = json!({
-                    "symbol": d.symbol,
-                    "symbol_text": d.symbol,
-                    "kind": d.kind,
-                    "lang": d.lang,
-                    "file": d.file,
-                    "line": d.line,
-                    "text": d.text,
-                    "value": d.value,
-                });
-                ndjson.push_str(&doc.to_string());
-                ndjson.push('\n');
-            }
-            ndjson
-        })
-        .collect()
+/// Stable, non-empty `_id` for a def document, derived from WHERE it lives
+/// (`file` + `line`) and WHAT it is (`kind` + `symbol`) through the same hash
+/// the ingest path uses for its doc ids (`xerj_autoindex::ids::doc_id`). Two
+/// reasons this is mandatory, not cosmetic:
+///
+///   * The builder node must never receive an EMPTY `_id`. The old action was
+///     `{"index":{}}` (no `_id`); on the backfill node that minted an empty id
+///     on the `-defs` bulk, so the FIRST def indexed under `""` and every later
+///     def collided on it — the bulk came back `errors:true` and the whole pack
+///     build failed (agno + ~6 corpora, run 39240121636). A hash is non-empty
+///     by construction: even a def with an empty symbol still hashes its
+///     file+line+kind, so no def is dropped and none yields `""`.
+///   * A deterministic id makes a pack rebuild idempotent — a re-run overwrites
+///     each def in place instead of appending a second copy under a fresh id.
+///
+/// `definitions()` already drops captures with an empty name, so an empty
+/// `symbol` should not occur in practice; synthesising (rather than skipping)
+/// keeps this robust even if that upstream guard ever changes.
+fn def_doc_id(d: &xerj_common::hub::DefRecord) -> String {
+    let locator = format!("{}\0{}\0{}", d.line, d.kind, d.symbol);
+    xerj_autoindex::ids::doc_id("defs", &d.file, &locator)
 }
 
-/// Bulk-index every def document (`symbol_text` mirrors `symbol`, analysed),
-/// split into [`DEFS_BULK_CHUNK`]-action requests so a corpus with more symbols
-/// than the engine's `max_actions_per_bulk` is not rejected whole.
+/// The `_bulk` NDJSON body for one batch of the `-defs` index: an `index`
+/// action carrying a stable, non-empty `_id` ([`def_doc_id`]) followed by the
+/// source doc, per def (`symbol_text` mirrors `symbol`, analysed). Pure, so the
+/// empty-`_id` regression is tested without a node
+/// (`defs_bulk_never_emits_empty_id`).
+fn defs_bulk_ndjson(defs: &[xerj_common::hub::DefRecord]) -> String {
+    let mut ndjson = String::with_capacity(defs.len() * 200);
+    for d in defs {
+        let action = json!({ "index": { "_id": def_doc_id(d) } });
+        ndjson.push_str(&action.to_string());
+        ndjson.push('\n');
+        let doc = json!({
+            "symbol": d.symbol,
+            "symbol_text": d.symbol,
+            "kind": d.kind,
+            "lang": d.lang,
+            "file": d.file,
+            "line": d.line,
+            "text": d.text,
+            "value": d.value,
+        });
+        ndjson.push_str(&doc.to_string());
+        ndjson.push('\n');
+    }
+    ndjson
+}
+
+/// Serialize `defs` into NDJSON `_bulk` bodies of at most `chunk` index actions
+/// each ([`defs_bulk_ndjson`] per batch: one action line carrying a stable
+/// `_id` plus one document line). Returns one body per chunk; empty input
+/// yields no bodies, hence no request.
+fn defs_bulk_bodies(defs: &[xerj_common::hub::DefRecord], chunk: usize) -> Vec<String> {
+    let chunk = chunk.max(1);
+    defs.chunks(chunk).map(defs_bulk_ndjson).collect()
+}
+
+/// Bulk-index every def document, split into [`DEFS_BULK_CHUNK`]-action
+/// requests so a corpus with more symbols than the engine's
+/// `max_actions_per_bulk` is not rejected whole.
 fn index_defs(node: &HubNode, index: &str, defs: &[xerj_common::hub::DefRecord]) -> Result<()> {
     for ndjson in defs_bulk_bodies(defs, DEFS_BULK_CHUNK) {
         let resp = node.bulk_ndjson(&format!("/{index}/_bulk"), ndjson)?;
@@ -1491,6 +1522,82 @@ fn now_rfc3339() -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use xerj_common::hub::DefRecord;
+
+    fn mk_def(symbol: &str, file: &str, line: u32, kind: &str) -> DefRecord {
+        DefRecord {
+            symbol: symbol.into(),
+            kind: kind.into(),
+            lang: "python".into(),
+            file: file.into(),
+            line,
+            text: format!("def {symbol}(): ..."),
+            value: None,
+        }
+    }
+
+    /// Regression for the backfill crash (run 39240121636: agno + ~6 corpora
+    /// failed `build` with "defs bulk index reported errors"). The `-defs` bulk
+    /// used `{"index":{}}`, so the builder node minted an empty `_id`; the first
+    /// def indexed under `""` and the rest collided on it, failing the bulk.
+    /// Every action line must now carry a present, NON-EMPTY, UNIQUE `_id`.
+    #[test]
+    fn defs_bulk_never_emits_empty_id() {
+        let defs = vec![
+            mk_def("Agent", "agno/agent.py", 10, "class"),
+            mk_def("run", "agno/agent.py", 42, "function"),
+            // No usable identifier — the pathological record. It must still get
+            // a synthesized non-empty id, not be dropped and not yield "".
+            mk_def("", "agno/weird.py", 1, "function"),
+            // Same symbol+line+kind as above but a different file: distinct id.
+            mk_def("run", "agno/other.py", 42, "function"),
+        ];
+        let body = defs_bulk_ndjson(&defs);
+
+        // Belt-and-braces: the literal that the server rejected never appears.
+        assert!(
+            !body.contains("\"_id\":\"\""),
+            "defs bulk must not contain an empty _id:\n{body}"
+        );
+
+        // action/doc lines interleave; inspect every action line.
+        let actions: Vec<&str> = body.lines().step_by(2).collect();
+        assert_eq!(actions.len(), defs.len());
+        let mut ids = std::collections::HashSet::new();
+        for line in &actions {
+            let v: Value = serde_json::from_str(line).expect("action line is JSON");
+            let id = v["index"]["_id"]
+                .as_str()
+                .expect("index action carries an _id");
+            assert!(!id.is_empty(), "def _id must never be empty: {line}");
+            assert!(ids.insert(id.to_string()), "def _id must be unique: {id}");
+        }
+        assert_eq!(ids.len(), defs.len(), "no def collapsed onto another's id");
+
+        // Deterministic: a pack rebuild overwrites in place, never duplicates.
+        assert_eq!(body, defs_bulk_ndjson(&defs));
+    }
+
+    /// The id-generation path itself: a def with an empty symbol (and otherwise
+    /// empty fields) still hashes to a stable, non-empty 32-hex id.
+    #[test]
+    fn def_doc_id_is_nonempty_even_without_a_symbol() {
+        let empty = DefRecord {
+            symbol: String::new(),
+            kind: String::new(),
+            lang: String::new(),
+            file: String::new(),
+            line: 0,
+            text: String::new(),
+            value: None,
+        };
+        let id = def_doc_id(&empty);
+        assert!(!id.is_empty(), "synthesized id must not be empty");
+        assert_eq!(id.len(), 32, "xxh3_128 hex is 32 chars");
+        assert_eq!(id, def_doc_id(&empty), "id is stable for the same record");
+        // Distinct records get distinct ids.
+        assert_ne!(def_doc_id(&mk_def("f", "a.py", 1, "function")), id);
+    }
 
     #[test]
     fn pin8_takes_eight_lowercase_hex() {
@@ -1614,9 +1721,13 @@ mod tests {
         assert_eq!(bodies.len(), 3);
         let per_body: Vec<usize> = bodies
             .iter()
-            .map(|b| b.matches("{\"index\":{}}").count())
+            .map(|b| b.matches("{\"index\":{\"_id\":").count())
             .collect();
         assert_eq!(per_body, vec![2, 2, 1]);
+        // Every chunk carries the stable, non-empty ids (#1860), and chunking
+        // does not change them: the bodies concatenate to the unchunked body.
+        assert!(!bodies.iter().any(|b| b.contains("{\"index\":{}}")));
+        assert_eq!(bodies.concat(), defs_bulk_ndjson(&defs));
         // No body exceeds the chunk, and every def is indexed exactly once.
         assert!(per_body.iter().all(|&n| n <= 2));
         assert_eq!(per_body.iter().sum::<usize>(), defs.len());
