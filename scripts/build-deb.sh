@@ -105,7 +105,8 @@ esac
 # A hyphen only inside +build metadata is not a prerelease separator.
 DEB_VERSION="$VERSION"
 if [[ "${VERSION%%+*}" == *-* ]]; then
-  DEB_VERSION="${VERSION/-/~}"
+  # Not ${VERSION/-/~}: bash tilde-expands the replacement to $HOME.
+  DEB_VERSION="${VERSION%%-*}~${VERSION#*-}"
 fi
 dpkg --compare-versions "$DEB_VERSION" eq "$DEB_VERSION" 2>/dev/null \
   || die "version '$DEB_VERSION' rejected by dpkg --compare-versions"
