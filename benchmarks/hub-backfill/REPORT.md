@@ -6,7 +6,7 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 
 ## Current state
 
-353 corpora attempted: 306 published at their latest attempt, 47 not.
+378 corpora attempted: 330 published at their latest attempt, 48 not.
 
 ### Latest attempt did not publish (fix or delist on purpose)
 
@@ -56,11 +56,57 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 | `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `ipsum-blocklist` | `444b4802` | 26404966 | 0 | failed at `e2e` | no question from ask_for (reputation |
+| `ipsum-blocklist` | `444b4802` | 26405336 | 0 | failed at `e2e` | no question from ask_for (reputation |
 | `milvus` | `b48661d3` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `mtl-bioinformatics-ner` | `df0df02f` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `nuclei-templates` | `24a43e14` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 
 ## Runs (newest first)
+
+### Run [39513172739](https://github.com/xerj-org/xerj/actions/runs/39513172739), 2026-10-21: 24 of 40 published
+
+| slug | pin8 | bytes | defs | result | error |
+|---|---|---:|---:|---|---|
+| `cassandra` | `ec2c276b` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `exploit-pocs-2023` | `af9e194d` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2024` | `7855e58f` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2025` | `374cf8f1` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2026` | `160f470e` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploitdb-src` | `12879ca7` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `fluent-bit` | `3b6ce5cf` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ipsum-blocklist` | `444b4802` | 26405336 | 0 | failed at `e2e` | no question from ask_for (reputation |
+| `milvus` | `b48661d3` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `mtl-bioinformatics-ner` | `df0df02f` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `nuclei-templates` | `24a43e14` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `nats-server` | `a44c356c` | 43216305 | 13455 | published `pack-nats-server-a44c356c` |  |
+| `navrules` | `4d535668` | 2519997 | 0 | published `pack-navrules-4d535668` |  |
+| `nghttp2` | `19d06e62` | 15574154 | 4924 | published `pack-nghttp2-19d06e62` |  |
+| `nginx` | `2b5c2b60` | 22525044 | 10876 | published `pack-nginx-2b5c2b60` |  |
+| `nigeria-standard-treatment-guidelines` | `d2be90e9` | 6000269 | 0 | published `pack-nigeria-standard-treatment-guidelines-d2be90e9` |  |
+| `oasdiff` | `b687d634` | 18149071 | 4783 | published `pack-oasdiff-b687d634` |  |
+| `openapi-moonwalk` | `62520aa3` | 670517 | 0 | published `pack-openapi-moonwalk-62520aa3` |  |
+| `openapi-overlay-spec` | `d4cc4c80` | 1590887 | 2 | published `pack-openapi-overlay-spec-d4cc4c80` |  |
+| `openapi-spec` | `447c479c` | 9414780 | 2 | published `pack-openapi-spec-447c479c` |  |
+| `openbao` | `a4f7e569` | 37949025 | 22933 | published `pack-openbao-a4f7e569` |  |
+| `openbsd-faq` | `cab1d910` | 109164459 | 491 | published `pack-openbsd-faq-cab1d910` |  |
+| `openfda` | `fdbe5432` | 67731092 | 1548 | published `pack-openfda-fdbe5432` |  |
+| `openlegaldata-oldp` | `b1c2de58` | 42894545 | 4792 | published `pack-openlegaldata-oldp-b1c2de58` |  |
+| `opennyai-legal-nlp` | `2abee8fc` | 9075069 | 703 | published `pack-opennyai-legal-nlp-2abee8fc` |  |
+| `opensanctions` | `d1619f4c` | 71791493 | 6489 | published `pack-opensanctions-d1619f4c` |  |
+| `openssl` | `7ef69a72` | 216383481 | 52319 | published `pack-openssl-7ef69a72` |  |
+| `osquery-config-examples` | `89c2ae5c` | 627706 | 0 | published `pack-osquery-config-examples-89c2ae5c` |  |
+| `oss-attribution-builder` | `c8bc98e1` | 4141565 | 404 | published `pack-oss-attribution-builder-c8bc98e1` |  |
+| `oss-license-texts` | `f717b235` | 3824218 | 49 | published `pack-oss-license-texts-f717b235` |  |
+| `oss-review-toolkit` | `b0e622b0` | 146054098 | 7971 | published `pack-oss-review-toolkit-b0e622b0` |  |
+| `otel-proto` | `b3f75588` | 16407181 | 6 | published `pack-otel-proto-b3f75588` |  |
+| `owasp-cheatsheets` | `ca1bded7` | 4684596 | 152 | published `pack-owasp-cheatsheets-ca1bded7` |  |
+| `owasp-wstg` | `8df290a3` | 8441398 | 244 | published `pack-owasp-wstg-8df290a3` |  |
+| `oxc` | `da692b86` | 184992378 | 75128 | published `pack-oxc-da692b86` |  |
 
 ### Run [39482496974](https://github.com/xerj-org/xerj/actions/runs/39482496974), 2026-10-20: 25 of 40 published
 
