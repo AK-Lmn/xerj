@@ -32,6 +32,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   whole tool result, so agents abandoned xerj for the session. HTTP
   responses, including 401, are unchanged (#2079).
 
+- `xerj autoindex` on the graph path no longer counts files that appeared
+  after the resume plan was frozen as junk. A resume whose plan predates
+  files now on disk still cannot re-cluster that plan — dataset identity and
+  graph anchors stay put, and the `--no-graph` route is what reconciles
+  additions. The resume finishes `reason=stale-resume-plan` (exit 3, recorded,
+  not a failure), leaves `junk_files` for unusable input, sets
+  `skipped_appeared` to the count on every resume while those files are
+  unindexed, and names `--fresh` as the flag that rebuilds the plan in place
+  and includes them
+  ([#2076](https://github.com/xerj-org/xerj/issues/2076)).
+
+- Playground user dashboards resolve their inherited template for chart data
+  and panel editing. Cloning a user dashboard retains the underlying template;
+  missing or cyclic template references keep the blank fallback. Custom
+  dashboard layout overrides also survive reloading the page.
+
+- Landing-page copy buttons report `COPY FAILED` when clipboard access is
+  denied or the legacy copy command fails, and retain their original label
+  after repeated clicks. A failed copy can be retried.
+
+- Playground PNG exports preserve computed SVG paint and text styles, including
+  the embedding query crosshair whose CSS-variable stroke disappeared when
+  rasterized outside the page stylesheet. The live chart is left unchanged.
+
+- Release-download snapshots now refuse malformed existing JSONL history without
+  replacing its contents. Repair the history file and rerun the snapshot command.
+
+- Playground saved views immediately restore the current dashboard, replace
+  stale URL filters when navigating, and preserve custom time-range endpoints.
+
+- Debian release-candidate package versions now sort before the corresponding
+  final release, preserving normal upgrade order without renaming release assets.
+
+- Debian Rust coverage reports now include valid zero-overlap measurements instead
+  of exiting before printing counts. Empty source indexes remain an error.
+
+- Hub pack planning reports malformed manifest JSON shapes as per-corpus warnings
+  and continues planning healthy corpora, rather than crashing on an invalid entry.
+
+- Hub re-pin automation only supersedes generated proposal branches for the
+  exact corpus, preserving proposals for corpora with longer overlapping names.
+
 - `xerj search` and a plain-string `xerj_search` rank a file that contains
   the query as an exact phrase (a pasted error message or log line) at the
   top. The bag-of-words leg alone let a short `defs` list sharing two of the

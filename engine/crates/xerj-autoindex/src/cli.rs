@@ -133,6 +133,11 @@ pub struct IndexCfg {
     /// `xerj autoindex <folder>`. `xerj corpus index` sets `corpus.json` so
     /// the hub manifest is not indexed as a document dataset.
     pub exclude_rels: Vec<String>,
+    /// `xerj corpus index` only (#1985): skip data files (CSV/HDF/simulation
+    /// output — see [`crate::CORPUS_DATA_EXTS`]) instead of indexing them as
+    /// records. `--include-data` turns it off. Never set by
+    /// `xerj autoindex <folder>`: a user's own project may want its data.
+    pub skip_corpus_data: bool,
 }
 
 #[derive(Debug, Clone)]
@@ -668,6 +673,11 @@ pub fn help_text_with(feedback: bool) -> String {
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20could not run. Read `reason` on the xerj-done line to tell the\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20two apart, and rerun the same command once the reported server\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20condition clears;\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20or stale-resume-plan — files on disk appeared after the\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20resume plan was frozen. They are not counted as junk;\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20`skipped_appeared` names them. Re-run with --fresh to\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20rebuild the plan in place and include them. Read `reason`\n\
+         \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20to tell this apart from completed-with-junk;\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x204 NEEDS A DECISION — the estimate exceeded --max-minutes, or a\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20--watch poll cost more than --max-monthly-ops; nothing was\n\
          \x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20indexed and a JSON decision request is on stdout;\n\
@@ -1738,6 +1748,7 @@ pub fn parse(args: Vec<String>) -> Result<Cmd, String> {
                     debounce_ms.unwrap_or(crate::watch::DEFAULT_DEBOUNCE_MS),
                 ),
                 exclude_rels: Vec::new(),
+                skip_corpus_data: false,
             })))
         }
         // No folder and no subcommand. This used to print the full help and
