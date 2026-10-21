@@ -6,7 +6,7 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 
 ## Current state
 
-402 corpora attempted: 355 published at their latest attempt, 47 not.
+427 corpora attempted: 378 published at their latest attempt, 49 not.
 
 ### Latest attempt did not publish (fix or delist on purpose)
 
@@ -55,12 +55,59 @@ are in `rows.jsonl`. Spec: docs/CORPUS_HUB_V2_IMPLEMENTATION.md §12.1.
 | `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
-| `ipsum-blocklist` | `444b4802` | 26408102 | 0 | failed at `e2e` | no question from ask_for (reputation |
+| `ipsum-blocklist` | `444b4802` | 26384581 | 0 | failed at `e2e` | no question from ask_for (reputation |
 | `milvus` | `b48661d3` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `mtl-bioinformatics-ner` | `df0df02f` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
 | `nuclei-templates` | `24a43e14` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `retext-passive` | `66ca2c56` | 111383 | 2 | failed at `e2e` | no question from ask_for (constructions |
+| `retext-profanities` | `2627fb08` | 131129 | 4 | failed at `e2e` | no question from ask_for (rephrasings |
 
 ## Runs (newest first)
+
+### Run [39557589186](https://github.com/xerj-org/xerj/actions/runs/39557589186), 2026-10-21: 23 of 40 published
+
+| slug | pin8 | bytes | defs | result | error |
+|---|---|---:|---:|---|---|
+| `concourse` | `6a706fb8` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `counsel-chat` | `e202e19c` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `exploit-pocs-2023` | `af9e194d` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2024` | `7855e58f` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2025` | `374cf8f1` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploit-pocs-2026` | `160f470e` |  |  | failed at `build` | xerj hub build-pack: `corpus add` failed (exit 1) |
+| `exploitdb-src` | `12879ca7` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `fluent-bit` | `3b6ce5cf` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `freebsd-handbook` | `3aa6b19a` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ghsa-db` | `4b4ac300` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `github-api-description` | `7bdf5f00` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `ipsum-blocklist` | `444b4802` | 26384581 | 0 | failed at `e2e` | no question from ask_for (reputation |
+| `milvus` | `b48661d3` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `mtl-bioinformatics-ner` | `df0df02f` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `nuclei-templates` | `24a43e14` |  |  | no result | the pack job recorded no result (pack jobs: failure, build xerj: success) |
+| `retext-passive` | `66ca2c56` | 111383 | 2 | failed at `e2e` | no question from ask_for (constructions |
+| `retext-profanities` | `2627fb08` | 131129 | 4 | failed at `e2e` | no question from ask_for (rephrasings |
+| `rabbitmq` | `f23f19da` | 91591320 | 51154 | published `pack-rabbitmq-f23f19da` |  |
+| `raft-rs` | `ad13f3d9` | 2712152 | 937 | published `pack-raft-rs-ad13f3d9` |  |
+| `react-spectrum` | `9b7a06ee` | 64114145 | 17448 | published `pack-react-spectrum-9b7a06ee` |  |
+| `redhat-vale-style` | `7cfb4abc` | 601163 | 98 | published `pack-redhat-vale-style-7cfb4abc` |  |
+| `redoc` | `2e30cabf` | 10301579 | 840 | published `pack-redoc-2e30cabf` |  |
+| `redocly-cli` | `7df8cf3c` | 55516187 | 5552 | published `pack-redocly-cli-7df8cf3c` |  |
+| `reporters-db` | `7a5b9b06` | 4795925 | 52 | published `pack-reporters-db-7a5b9b06` |  |
+| `retext-equality` | `192deddf` | 735016 | 10 | published `pack-retext-equality-192deddf` |  |
+| `retext-indefinite-article` | `960875ee` | 138940 | 9 | published `pack-retext-indefinite-article-960875ee` |  |
+| `retext-intensify` | `9450bee5` | 101862 | 1 | published `pack-retext-intensify-9450bee5` |  |
+| `retext-quotes` | `e43bb5f3` | 147342 | 5 | published `pack-retext-quotes-e43bb5f3` |  |
+| `retext-readability` | `ece96241` | 135129 | 4 | published `pack-retext-readability-ece96241` |  |
+| `retext-redundant-acronyms` | `e670637a` | 129750 | 2 | published `pack-retext-redundant-acronyms-e670637a` |  |
+| `retext-repeated-words` | `d6d53fb6` | 105449 | 2 | published `pack-retext-repeated-words-d6d53fb6` |  |
+| `retext-simplify` | `c7686ac9` | 158181 | 2 | published `pack-retext-simplify-c7686ac9` |  |
+| `rocksdb` | `4cd0450f` | 117566057 | 47679 | published `pack-rocksdb-4cd0450f` |  |
+| `rolldown` | `2d44fc3f` | 61301137 | 18497 | published `pack-rolldown-2d44fc3f` |  |
+| `rousseau` | `e7fb314d` | 312275 | 10 | published `pack-rousseau-e7fb314d` |  |
+| `rspack` | `7d83e469` | 78782047 | 35492 | published `pack-rspack-7d83e469` |  |
+| `rust-api-guidelines` | `97a0969c` | 618133 | 0 | published `pack-rust-api-guidelines-97a0969c` |  |
+| `rust-cssparser` | `9f3ceddf` | 5985677 | 500 | published `pack-rust-cssparser-9f3ceddf` |  |
+| `rust-url` | `00a6ce58` | 5606784 | 713 | published `pack-rust-url-00a6ce58` |  |
+| `rustcrypto-hashes` | `138dc5a0` | 3173331 | 1012 | published `pack-rustcrypto-hashes-138dc5a0` |  |
 
 ### Run [39535889582](https://github.com/xerj-org/xerj/actions/runs/39535889582), 2026-10-21: 25 of 40 published
 
